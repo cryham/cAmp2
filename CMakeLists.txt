@@ -1,0 +1,20 @@
+cmake_minimum_required (VERSION 3.0)
+
+project(cAmp2)
+
+#option(BUILD_TEST  "Build test."    ON)
+
+#add_subdirectory(source)
+file(GLOB SOURCES source/*.h source/*.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+#  C++17
+set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_EXTENSIONS OFF)
+#set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+
+#link_libraries(stdc++fs)
+target_link_libraries(${PROJECT_NAME} stdc++fs)
