@@ -10,6 +10,13 @@ int main()
     FileSystem::Init();
     cout << FileSystem::GetInfo();
 
+    //LogFile::Create(FileSystem::Config());
+
+    //LoadSettings(FileSystem::Settings());
+
+    //LoadTexture(FileSystem::Data());
+
+
     unique_ptr<Playlist> p = make_unique<Playlist>();
     p->AddDir("../../../zm");
 

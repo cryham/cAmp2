@@ -30,16 +30,16 @@ public:
     static std::string GetInfo();
 
     //  Paths
-    static std::string HomeDir() {         return home_dir; }
+    static std::string Home() {         return home_dir; }
 
-    static std::string UserConfigDir() {   return user_config;  }
-    static std::string GameConfigDir() {   return app_config;  }
+    static std::string Config() {       return user_config;  }
+    static std::string AppConfig() {    return app_config;  }
 
-    //static std::string CacheDir() {        return cache_dir; }
+    //static std::string Cache() {      return cache_dir; }
 
-    static std::string SettingsFile() {    return user_config + "/cAmp2.xml"; }
+    static std::string Settings() {     return user_config + "/cAmp2.xml"; }
 
-    static std::string Data() {            return app_data; }
+    static std::string Data() {         return app_data; }
 
-    //static std::string Screenshots() {     return user_data + "/screenshots";  }
+    //static std::string Screenshots() {  return user_data + "/screenshots";  }
 };

@@ -83,11 +83,11 @@ string FileSystem::GetInfo()
     string s;
     s += "Paths info\n";
     s += "-------------------------\n";
-    s += "Data:         " + Data() + "\n";
-    s += "Home:         " + home_dir + "\n";
-    s += "User cfg,log: " + UserConfigDir() + "\n";
+    s += "Data:    " + Data() + "\n";
+    s += "Home:    " + home_dir + "\n";
+    s += "Config:  " + Config() + "\n";
     //s += "User data:    " + user_data + "\n";
-    //s += "Cache:        " + CacheDir() + "\n";
+    //s += "Cache:        " + Cache() + "\n";
     s += "-------------------------\n";
     return s;
 }
