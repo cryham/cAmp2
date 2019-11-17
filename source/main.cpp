@@ -7,6 +7,9 @@ using namespace std;
 
 int main()
 {
+    FileSystem::Init();
+    cout << FileSystem::GetInfo();
+
     unique_ptr<Playlist> p = make_unique<Playlist>();
     p->AddDir("../../../zm");
 
