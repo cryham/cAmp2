@@ -18,3 +18,11 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 #link_libraries(stdc++fs)
 target_link_libraries(${PROJECT_NAME} stdc++fs)
+
+
+#  bass - sound
+set(bass_SOURCE_DIR "../../bass/src")
+ADD_LIBRARY(bass SHARED IMPORTED)
+SET_TARGET_PROPERTIES(bass PROPERTIES IMPORTED_LOCATION ${bass_SOURCE_DIR}/x64/libbass.so)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} bass)
+
