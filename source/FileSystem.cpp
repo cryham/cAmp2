@@ -50,7 +50,7 @@ vector<fs::path> FileSystem::ListDir(const fs::path dir)
         for (const auto& path: it)
             files.push_back(path);
 
-        sort(files.begin(), files.end());
+		sort(files.begin(), files.end());
     }
     catch (exception ex)
     {
@@ -104,13 +104,13 @@ void FileSystem::Init()
         home_dir = "";
         #ifndef _WIN32 // POSIX
             char *homedir = getenv("HOME");
-            if (homedir == NULL)
+            if (homedir == nullptr)
             {
                 home_dir = "/home/";
                 homedir = getenv("USER");
-                if (homedir == NULL) {
+                if (homedir == nullptr) {
                     homedir = getenv("USERNAME");
-                    if (homedir == NULL) {
+                    if (homedir == nullptr) {
                         cerr << "Could not find user's home directory!" << endl;
                         home_dir = "/tmp/";
                     }
