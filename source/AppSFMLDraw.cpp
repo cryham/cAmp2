@@ -7,7 +7,7 @@
 //  write out text
 int AppSFMLDraw::Txt(int x, int y, bool draw)
 {
-	//if (!window)  return;
+	//if (!pWindow)  return;
 	text.setString(str);
 	text.setStyle(bold ? sf::Text::Bold : sf::Text::Regular);
 	text.setColor(clr);
@@ -17,20 +17,22 @@ int AppSFMLDraw::Txt(int x, int y, bool draw)
 }
 
 //  clear rect
-void AppSFMLDraw::Rect(int x, int y,  int sx, int sy, const SClr& c)
+/*void AppSFMLDraw::Rect(int x, int y,  int u, int v, int w, int h,  const SClr& c)
 {
-	Rect(x, y,  sx, sy, c.b, c.g, c.r);
-}
-void AppSFMLDraw::Rect(int x, int y,  int sx, int sy,
-		  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
+	Rect(x, y,  u, v, w, h,  c.b, c.g, c.r);
+}*/
+void AppSFMLDraw::Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,
+	sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
 {
 	//if (!pBackgr)  return;
-	pBackgr->setScale(sx-x, sy-y);
+	pBackgr->setScale(float(w)/uw, float(h)/uh);  // stretch
+	pBackgr->setTextureRect(sf::IntRect(ux, uy, uw, uh));
 	pBackgr->setPosition(x, y);
-	pBackgr->setColor(sf::Color(b, g, r));
+	//pBackgr->setColor(sf::Color(b, g, r));
 	pWindow->draw(*pBackgr);
 }
 
+/*
 //  frame rect, inefficient
 void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,  bool le, bool ri,
 		const SClr& c)
@@ -59,3 +61,4 @@ void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,
 	Rect(x,   y,    x+d,  sy-d, r, g, b);  // left
 	Rect(sx-d,y,    sx,   sy,   r, g, b);  // right
 }
+*/

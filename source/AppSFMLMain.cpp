@@ -19,21 +19,21 @@ bool AppSFMLDraw::Run()
 		"cAmp2", // Title
 		Style::Default, ContextSettings());
 
-	//window->setVerticalSyncEnabled(true);
-	pWindow->setFramerateLimit(60);
+	pWindow->setVerticalSyncEnabled(true);
+//	pWindow->setFramerateLimit(60);
 	pWindow->setPosition(Vector2i(0, 0));
 	//window->setPosition(Vector2i(set.xwPos, set.ywPos));
 
 	
 	//  icon
 	string data = FileSystem::Data(), file;
-	/*file = data + "/icon.png";
+	file = data + "/cAmp.png";
 	Image icon;
 	if (icon.loadFromFile(file))
 	{
 		pWindow->setIcon(32, 32, icon.getPixelsPtr());
 		cout << "Can't load icon: " << file << endl;
-	}*/
+	}
 
 
 	//  Load data
@@ -114,11 +114,17 @@ bool AppSFMLDraw::Run()
 		ostringstream ss;  ss.width(2);
 		ss << fixed << setprecision(2) << 1.f/time.asSeconds();
 		str = "Fps: " + ss.str();
+		bold = false;
 		Txt(10,10);
+		bold = true;
 		
-		Clr(240,180,40);
+		Clr(180,180,40);
 		str = "Cool";
 		Txt(10,30);
+		
+		Rect(0,60,350,20, 0,70,241,10, 255,255,255);
+		
+		Rect(0,80,350,20, 0,90,251,12, 255,255,255);
 
 		//app->Graph();
 

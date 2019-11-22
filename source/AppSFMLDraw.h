@@ -60,16 +60,10 @@ public:
 	//  returns width, x advance
 	int Txt(int x, int y, bool draw=true);
 
-	//  clear rect
-	void Rect(int x, int y,  int sx, int sy,  const SClr& c);
-	void Rect(int x, int y,  int sx, int sy,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
+	//  draw textured rect, stretched
+	//  at x,y pos, width,height, texture coords start,size, color rgb
+	void Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
 	
-	//  frame rect
-	void Frame(int x, int y,  int sx, int sy,  int d,  const SClr& c);
-	void Frame(int x, int y,  int sx, int sy,  int d,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
-	void Frame(int x, int y,  int sx, int sy,  int d,  bool le, bool ri,  const SClr& c);
-	void Frame(int x, int y,  int sx, int sy,  int d,  bool le, bool ri,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
-
 public:
 	bool Run();
 };
