@@ -30,7 +30,7 @@ struct SClr
 };
 
 //------------------------------------------------
-class AppSFMLDraw //: public App
+class AppSFMLDraw : public App
 {
 	//  window and resources
 	//--------------------------
@@ -40,7 +40,7 @@ class AppSFMLDraw //: public App
 	std::unique_ptr<sf::Font> pFont = nullptr;
 	sf::Text text;
 
-public:
+protected:
 	sf::String str;
 	sf::Color clr;
 	bool bold = false;
@@ -58,11 +58,14 @@ public:
 
 	//  write out text, from str
 	//  returns width, x advance
-	int Txt(int x, int y, bool draw=true);
+	int Text(int x, int y, bool draw=true);
 
 	//  draw textured rect, stretched
 	//  at x,y pos, width,height, texture coords start,size, color rgb
 	void Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
+	
+	float dt = 0.1f;
+	void DrawPlayer();
 	
 public:
 	bool Run();

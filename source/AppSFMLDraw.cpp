@@ -1,11 +1,43 @@
 #include "AppSFMLDraw.h"
+#include <iomanip>
+using namespace std;
+
+
+void AppSFMLDraw::DrawPlayer()
+{
+//	for (const auto& e:skin)
+//		e.Draw();
+	
+	Clr(120,160,240);
+	ostringstream ss;  ss.width(2);
+	ss << fixed << setprecision(2) << 1.f / dt;
+	str = "Fps: " + ss.str();
+	bold = false;
+	Text(10,10);
+	bold = true;
+	
+	Clr(180,180,40);
+	str = "Cool";
+	Text(10,30);
+	
+	Rect(0,60,350,20, 0,70,241,10, 255,255,255);
+	
+	Rect(0,80,350,20, 0,90,251,12, 255,255,255);
+	
+	//  vis fft fake
+	for (int i=0; i<350; ++i)
+		Rect(i,110,1,rand()%90, 0,70,241,10, 255,255,255);
+	
+	for (int i=0; i<350; ++i)
+		Rect(i,210,1,rand()%290, 0,70,241,10, 255,255,255);
+}	
 
 
 //  draw utils
 //------------------------------------------------------------------
 
-//  write out text
-int AppSFMLDraw::Txt(int x, int y, bool draw)
+//  write text
+int AppSFMLDraw::Text(int x, int y, bool draw)
 {
 	//if (!pWindow)  return;
 	text.setString(str);
@@ -16,7 +48,7 @@ int AppSFMLDraw::Txt(int x, int y, bool draw)
 	return static_cast<int>(text.getLocalBounds().width);  // advance x pos
 }
 
-//  clear rect
+//  draw rect
 /*void AppSFMLDraw::Rect(int x, int y,  int u, int v, int w, int h,  const SClr& c)
 {
 	Rect(x, y,  u, v, w, h,  c.b, c.g, c.r);
@@ -31,34 +63,3 @@ void AppSFMLDraw::Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int 
 	//pBackgr->setColor(sf::Color(b, g, r));
 	pWindow->draw(*pBackgr);
 }
-
-/*
-//  frame rect, inefficient
-void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,  bool le, bool ri,
-		const SClr& c)
-{
-	Frame(x, y,  sx, sy,  d,  le, ri,  c.b, c.g, c.r);
-}
-void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,  bool le, bool ri,
-		sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
-{
-	Rect(x,   y,    sx-d, y+d,  r, g, b);  // top
-	Rect(x,   sy-d, sx-d, sy,   r, g, b);  // bottom
-	if (le)  Rect(x,   y,    x+d,  sy-d, r, g, b);  // left
-	if (ri)  Rect(sx-d,y,    sx,   sy,   r, g, b);  // right
-}
-
-void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,
-		const SClr& c)
-{
-	Frame(x, y,  sx, sy,  d,  c.b, c.g, c.r);
-}
-void AppSFMLDraw::Frame(int x, int y,  int sx, int sy,  int d,
-		sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
-{
-	Rect(x,   y,    sx-d, y+d,  r, g, b);  // top
-	Rect(x,   sy-d, sx-d, sy,   r, g, b);  // bottom
-	Rect(x,   y,    x+d,  sy-d, r, g, b);  // left
-	Rect(sx-d,y,    sx,   sy,   r, g, b);  // right
-}
-*/
