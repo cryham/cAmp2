@@ -1,25 +1,26 @@
 #include "AppSFMLDraw.h"
 #include "FileSystem.h"
 #include <memory>
+#include <iostream>
 using namespace sf;  using namespace std;
 
 
 bool AppSFMLDraw::Run()
 {
+	Init();
 
 	//  Create window
 	//------------------------------------------------
 	//VideoMode vm = VideoMode::getDesktopMode();
 
 	pWindow = make_unique<RenderWindow>(
-		VideoMode(350,1140), //set.xwSize, set.ywSize),
-		"cAmp2", // Title
+		VideoMode(set.xwSize, set.ywSize),
+		"cAmp2",  // Title
 		Style::Default, ContextSettings());
 
 	pWindow->setVerticalSyncEnabled(true);
 //	pWindow->setFramerateLimit(60);
-	pWindow->setPosition(Vector2i(0, 0));
-	//window->setPosition(Vector2i(set.xwPos, set.ywPos));
+	pWindow->setPosition(Vector2i(set.xwPos, set.ywPos));
 
 	
 	//  Load data
@@ -28,11 +29,11 @@ bool AppSFMLDraw::Run()
 	file = data + "/cAmp.png";
 	Image icon;
 	if (icon.loadFromFile(file))
-	{
 		pWindow->setIcon(32, 32, icon.getPixelsPtr());
+	else
 		cout << "Can't load icon: " << file << endl;
-	}
 
+	//  font
 	file = data + "/DejaVuLGCSans.ttf";
 	pFont = make_unique<Font>();
 	if (!pFont->loadFromFile(file))
@@ -87,8 +88,8 @@ bool AppSFMLDraw::Run()
 					sf::FloatRect vis(0, 0, e.size.width, e.size.height);
 					pWindow->setView(sf::View(vis));
 				}
-				// todo: save new size
-				//set.GetWndDim(window);
+				// save new size
+				set.GetWndDim(pWindow.get());
 				break;
 
 			case Event::Closed:
@@ -105,9 +106,10 @@ bool AppSFMLDraw::Run()
 		//------------------
 		DrawPlayer();
 		
-		//Graph();
-
 		pWindow->display();
+		set.GetWndDim(pWindow.get());
 	}
+	
+	Destroy();
 	return true;
 }

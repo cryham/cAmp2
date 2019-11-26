@@ -42,8 +42,8 @@ void AudioBass::Init()
     BOOL b = BASS_GetInfo(&in);  maxFreq = 44100;
     if (b)
     {	cout << "speakers: " << in.speakers << endl;
-        cout << "max freq: " << in.maxrate << endl;;  maxFreq = in.maxrate;
-        cout << "cur freq: " << in.freq << endl;;
+        cout << "max freq: " << in.maxrate << endl;  maxFreq = in.maxrate;
+        cout << "cur freq: " << in.freq << endl;
     }
 
 }
