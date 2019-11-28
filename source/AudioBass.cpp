@@ -57,8 +57,9 @@ void AudioBass::Destroy()
 
 void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
-    //cAmp* pAmp = (cAmp*)user;
-    //if (!pAmp->bRep1)  pAmp->Next();
+    AudioBass* ab = (AudioBass*)user;
+    //if (!ab->bRep1)  
+		//ab->Next();
 }
 
 
@@ -109,7 +110,7 @@ bool AudioBass::Play()
     //else  tkPl->dis = 0;
 
     //  sync reaching end - for play next
-    chSync = BASS_ChannelSetSync(ch(), BASS_SYNC_END/*or BASS_SYNC_FREE*/, 0, EndSync, 0/*this*/);
+    chSync = BASS_ChannelSetSync(ch(), BASS_SYNC_END/*or BASS_SYNC_FREE*/, 0, EndSync, this);
 
     //  get file info
     int bitrate = 0, size = 3200100;

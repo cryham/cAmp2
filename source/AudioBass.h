@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "Audio.h"
 #include "../../bass/src/bass.h"
 
@@ -9,6 +10,8 @@ class AudioBass : public Audio
     HMUSIC chMod = 0;   // e.g. xm mod
     DWORD ch() {  return chMod ? chMod : chPl;  }
     HSYNC chSync = 0;
+	
+	std::vector<float> fft;
 
 public:
     AudioBass();

@@ -89,7 +89,7 @@ bool AppSFMLDraw::Run()
 					pWindow->setView(sf::View(vis));
 				}
 				// save new size
-				set.GetWndDim(pWindow.get());
+				//set.GetWndDim(pWindow.get());
 				break;
 
 			case Event::Closed:
@@ -107,9 +107,9 @@ bool AppSFMLDraw::Run()
 		DrawPlayer();
 		
 		pWindow->display();
-		set.GetWndDim(pWindow.get());
 	}
 	
+	set.GetWndDim(pWindow.get());
 	Destroy();
 	return true;
 }
