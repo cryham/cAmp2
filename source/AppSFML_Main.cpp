@@ -78,8 +78,8 @@ bool AppSFMLDraw::Run()
 //			case Event::MouseButtonPressed:		mb = e.mouseButton.button + 1;  break;
 //			case Event::MouseButtonReleased:	mb = 0;  break;
 
-//			case Event::KeyPressed:		KeyDown(e.key);  break;
-//			case Event::KeyReleased:	KeyUp(e.key);  break;
+			case Event::KeyPressed:		KeyDown(e.key);  break;
+			case Event::KeyReleased:	KeyUp(e.key);  break;
 
 			case Event::Resized:
 				if (e.type == sf::Event::Resized)

@@ -3,6 +3,9 @@
 #include <deque>
 #include "Playlist.h"
 #include "Settings.h"
+#include <SFML/Window/Event.hpp>  // key,mouse
+
+class Audio;
 
 
 class App
@@ -15,7 +18,7 @@ public:
 	
 	Settings set;
 	
-	//Audio audio;
+	std::unique_ptr<Audio> audio;
 
 protected:
 
@@ -26,4 +29,6 @@ protected:
 	bool Init();
 	bool Destroy();
 
+	bool KeyDown(sf::Event::KeyEvent key);  // use own enum?
+	bool KeyUp(sf::Event::KeyEvent key);
 };
