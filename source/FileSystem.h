@@ -5,7 +5,7 @@
 namespace fs = std::filesystem;
 
 
-class FileSystem
+class FileSystem  // and ConfigPaths
 {
 private:
     static std::string
@@ -16,9 +16,11 @@ public:
     //  File system utility  ----
 
     //  List files and subdirs in path
-    static std::vector<fs::path> ListDir(const fs::path start);
+    static std::vector<fs::path> ListDir(const fs::path start, bool recursive=true);
 
     static bool Exists(const std::string & filename);
+
+	static uintmax_t Size(const std::string & filename);
 
     static bool CreateDir(const std::string& path);
 
@@ -39,6 +41,7 @@ public:
     //static std::string Cache() {      return cache_dir; }
 
     static std::string Settings() {     return user_config + "/cAmp2.xml"; }
+	static std::string Log() {          return user_config + "/cAmp2.log"; }
 
     static std::string Data() {         return app_data; }
 

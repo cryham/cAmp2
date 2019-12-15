@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 #define mia(a,b,x)  std::max(a, std::min(b, x))
 
@@ -16,8 +17,11 @@ protected:
     //  Time pos
 public:
     double timePlay = 0.0, timeTrack = 0.0; //, lastPos = 0.0;
-	float fVolume = 0.2f;
-	bool bFps = false;  // show Fps
+	int iVolume = 100;  // 1000 = 100%
+	
+	std::string sInfo;  // bitRate, freq, size MB
+	
+	bool bRep1 = false;  // repeat
 
 public:
 	//  Init
@@ -34,6 +38,9 @@ public:
 
 	bool IsPlaying() {  return bPlaying;  }
     bool IsPaused()  {  return bPaused;   }
+
+	virtual void Next() = 0;
+	virtual void Prev() = 0;
 	
 	//  change position, volume
 	virtual void getPos() = 0;  // updates timePlay

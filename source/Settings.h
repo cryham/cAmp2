@@ -1,4 +1,5 @@
 #pragma once
+#include "AppLog.h"
 #include <SFML/Config.hpp>
 
 namespace sf {  class Window;  }
@@ -7,7 +8,7 @@ typedef unsigned int uint;
 
 //  App Settings
 //------------------------------------------------
-class Settings
+class Settings : public LogErr
 {
 public:
 	const static int ver = 21;  // version of file

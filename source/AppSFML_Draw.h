@@ -1,35 +1,11 @@
 #pragma once
 #include "App.h"
+#include "AppConst.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <memory>
-//#include "List.h"
 
 
-//  Color
-struct SClr
-{
-	typedef unsigned char byte;
-	byte r,g,b;  // color
-	//float h,s,v;  //todo: use,save hsv
-
-	SClr()
-		:r(255),g(255),b(255)
-	{	}
-	SClr(byte rr, byte gg, byte bb)
-		:r(rr),g(gg),b(bb)
-	{	}
-
-	void Set(sf::Uint32 u);
-	sf::Uint32 Get();
-
-	bool operator!=(const SClr& c) const
-	{
-		return r != c.r || g != c.g || b != c.b;
-	}
-};
-
-//------------------------------------------------
 class AppSFMLDraw : public App
 {
 	//  window and resources
@@ -51,22 +27,21 @@ protected:
 	{
 		clr = sf::Color(r,g,b);
 	}
-	void Clr(const SClr& c)
-	{
-		clr = sf::Color(c.r, c.g, c.b);
-	}
+	
+	float dt = 0.1f;
+	void DrawPlayer();
 
+public:
+	bool Run();
+
+protected:
+	///  draw utils  ----
 	//  write out text, from str
 	//  returns width, x advance
 	int Text(int x, int y, bool draw=true);
 
-	//  draw textured rect, stretched
-	//  at x,y pos, width,height, texture coords start,size, color rgb
-	void Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  sf::Uint8 r, sf::Uint8 g, sf::Uint8 b);
-	
-	float dt = 0.1f;
-	void DrawPlayer();
-	
-public:
-	bool Run();
+	//  draw textured rect, stretched at
+	//  x,y pos, width,height,  texture coords uv start,size,  color rgb
+	void Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
+	void Rect(int x, int y, int w, int h,  ETexUV uv,  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
 };

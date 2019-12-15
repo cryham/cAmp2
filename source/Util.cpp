@@ -5,13 +5,11 @@
 using namespace std;
 
 
-//  string utils
-//------------------------------------------------------------------
-
-string i2s(const int v, const char width)
+//  format
+string i2s(const int v, const char width, const char fill)
 {
 	ostringstream s;
-	if (width != 0)  s.width(width);  //s.fill(fill);
+	if (width != 0)  s.width(width);  s.fill(fill);
 	s << fixed << v;
 	return s.str();
 }
@@ -24,7 +22,21 @@ string f2s(const float v, const char precision, const char width)
 	return s.str();
 }
 
+//  time
+std::string t2s(float time)
+{
+	if (time < 10.f)
+		return f2s(time,1,3);
+	int t = time,
+		s = t%60, m = t/60%60, h = t/3600;
+	if (h > 0)
+		return i2s(h,1)+":"+i2s(m,2,'0')+":"+i2s(s,2,'0');
+	
+	return i2s(m,1)+":"+i2s(s,2,'0');
+}
 
+
+//  string
 vector<string> split(const string& s, const string& reg)
 {
 	regex re(reg);

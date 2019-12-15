@@ -41,15 +41,21 @@ string FileSystem::home_dir
 
 //  List dir
 //-------------------------------------------------
-vector<fs::path> FileSystem::ListDir(const fs::path dir)
+vector<fs::path> FileSystem::ListDir(const fs::path dir, bool recursive)
 {
     vector<fs::path> files;
     try
     {
-        auto it = fs::recursive_directory_iterator(dir);
-        for (const auto& path: it)
-            files.push_back(path);
-
+		if (recursive)
+		{
+			auto it = fs::recursive_directory_iterator(dir);
+			for (const auto& path: it)
+				files.push_back(path);
+		}else{
+			auto it = fs::directory_iterator(dir);
+			for (const auto& path: it)
+				files.push_back(path);
+		}
 		sort(files.begin(), files.end());
     }
     catch (exception ex)
@@ -64,6 +70,12 @@ bool FileSystem::Exists(const string& filename)
 {
     return fs::exists(filename);
 }
+
+uintmax_t FileSystem::Size(const std::string& filename)
+{
+	return fs::file_size(filename);
+}
+
 
 bool FileSystem::CreateDir(const string& path)
 {

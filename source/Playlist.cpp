@@ -9,10 +9,10 @@ Playlist::Playlist()
 
 }
 
-bool Playlist::AddDir(fs::path dir, const EInsert& where)
+bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 {
 
-    vector<fs::path> files = FileSystem::ListDir(dir);
+    vector<fs::path> files = FileSystem::ListDir(dir, recursive);
     for (const auto& file: files)
     {
         if (fs::is_directory(file))

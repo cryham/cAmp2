@@ -6,51 +6,25 @@ using namespace std;
 
 void AppSFMLDraw::DrawPlayer()
 {
-//	for (const auto& e:skin)
-//		e.Draw();
-	int xw = set.xwSize;
+	//for (const auto& e:skin)
+	//	e.Draw();
 	
-	if (audio->bFps)
-	{
-		Clr(120,160,240);
-		str = "Fps: " + f2s(1.f / dt);
-		bold = false;
-		Text(10,10);
-	}
-	//bold = true;
-	
-	//  play info
-	Clr(180,180,40);
-	str = audio->IsPaused() ? "Pause" : audio->IsPlaying() ? "Play" : "Stop";
-	Text(10,30);
+	int xw = set.xwSize, yw = set.ywSize;
+	bool play = audio->IsPlaying();
 
-	if (audio->IsPlaying())
-	{
-		Clr(150,190,240);
-		audio->getPos();
-		str = "Time: " + f2s(audio->timePlay,0) +
-				" / " + f2s(audio->timeTrack,0);
-		Text(90,30);
+	//  params
+	int h = 140; //160;
+	const int uy=20 /*>0 darker*/, uh=112 /*112 line..fire 512*/;
 
-		Clr(120,160,240);
-		str = "Vol: " + f2s(audio->fVolume);
-		Text(xw-80,30);
-	}
+	//  backgr
+	Rect(0,0, xw,h, TX_BackPlr);
 	
-	//  cursors
-	//Rect(0,60,xw,20, 0,70,241,10, 255,255,255);
-	//Rect(0,80,xw,20, 0,90,251,12, 255,255,255);
-	
-	//  vis FFT
-	if (audio->IsPlaying())
+	//  vis FFT  ~~~~~
+	if (play)
 	{
 		audio->GetVisData(xw);
 		float* fft = audio->getFFT();
 
-		//  params
-		const float h = 190;
-		const int uy=20 /*>0 darker*/, uh=112 /*112 line..fire 512*/;
-		
 		for (int i=0; i < xw; ++i)
 		{
 			float f = fft[i];
@@ -61,42 +35,104 @@ void AppSFMLDraw::DrawPlayer()
 			r = 40+f*f*(255-60);
 			g = 100+f*(255-120);
 			b = 180+f*(255-200);
-			Rect(i, 90+h-y, 1,y, 475,uy,1,uh, r,g,b);
-
-			//Rect(i, 90+h-y, 1,y, 32,180,1,10, 80,190,255);
-			//Rect(i, 90+h-y, 1,y, 32,180,1,10, 40+f*f*(255-40),120+f*(255-120),255);
+			Rect(i, 10 + h-y, 1,y, 475,uy,1,uh, r,g,b);
 		}
 	}
-}
+	h += 10;
 
+	//  Position bar  -
+	//if (play)
+	{
+		audio->getPos();
+		
+		int yB_pos = h, yE_pos = 9;  float xW_pos = 0.03f;
 
-//  draw utils
-//------------------------------------------------------------------
+		Rect(0.f,yB_pos, xw,yE_pos, TX_PosDk);
 
-//  write text
-int AppSFMLDraw::Text(int x, int y, bool draw)
-{
-	//if (!pWindow)  return;
-	text.setString(str);
-	text.setStyle(bold ? sf::Text::Bold : sf::Text::Regular);
-	text.setColor(clr);
-	text.setPosition(x, y);
-	if (draw)  pWindow->draw(text);
-	return static_cast<int>(text.getLocalBounds().width);  // advance x pos
-}
+		if (play)
+		{
+		float xp = (audio->timePlay / audio->timeTrack) * (1.f-xW_pos), //marg,bar dim
+			x1 = xp*xw;  int xb = xW_pos*xw;
+		
+		const auto& t = ciTexUV[TX_PosBr];
+		Rect(x1, yB_pos,  xb, yE_pos, 
+			 t.x+t.w*0.48f, t.y,  t.w*0.04f, t.h);
+			 //TX_PosBr, 0.48f,0.52f); //xp,xp+xWpo);
+	}	}
 
-//  draw rect
-/*void AppSFMLDraw::Rect(int x, int y,  int u, int v, int w, int h,  const SClr& c)
-{
-	Rect(x, y,  u, v, w, h,  c.b, c.g, c.r);
-}*/
-void AppSFMLDraw::Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,
-	sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
-{
-	//if (!pBackgr)  return;
-	pBackgr->setScale(float(w)/uw, float(h)/uh);  // stretch
-	pBackgr->setTextureRect(sf::IntRect(ux, uy, uw, uh));
-	pBackgr->setPosition(x, y);
-	pBackgr->setColor(sf::Color(r, g, b));
-	pWindow->draw(*pBackgr);
+	if (bFps)
+	{
+		Clr(120,160,240);
+		str = "Fps: " + f2s(1.f / dt);
+		bold = false;
+		Text(50,5);
+	}
+	h += 10;
+
+	
+	//  play info text  * * *
+	int y = 2;
+	Clr(50,120,120);
+	str = audio->IsPaused() ? "||" : play ? "|>" : "[]";
+	//str = audio->IsPaused() ? "\u23F8" : play ? "\u23F5" : "\u23F9";
+	Text(xw/2,y);
+	
+	if (audio->bRep1)
+	{
+		Clr(120,120,50);
+		str = "@1";
+		Text(xw/2,y+25);
+	}
+
+	if (play)
+	{
+		Clr(120,160,220);
+		str = audio->sInfo;
+		Text(10,y);
+				
+		Clr(150,190,240);
+		str = t2s(audio->timePlay);
+		Text(xw-140,y);
+
+		Clr(130,160,220);
+		str = t2s(audio->timeTrack);
+		Text(xw-60,y);
+
+		Clr(120,160,240);
+		str = i2s(audio->iVolume/10) + "%";
+		Text(xw-40,y+25);
+	}
+	
+	
+	//  playlist  ===
+	const auto& tracks = pls->GetTracks();
+	int yp = h, yl = 16, t = 0;  // ofs-
+	
+	if (tracks.empty())
+	{
+		Clr(120,160,240);
+		str = "Playlist empty.";
+		// Drop or Insert files..";
+		Text(0,yp);
+	}
+	else	// dn_marg-
+	while (yp + yl*2 < yw && t < tracks.size())
+	{
+		const Track& tr = tracks[t];
+		//  name
+		Clr(120,160,240);
+		str = tr.GetName();
+		Text(0,yp);
+		
+		//  time
+		//Text(0,yp);
+		//str = tr.GetName();
+		//Text(0,yp);
+		yp += yl;  ++t;
+	}	
+	
+	//  cursors
+	//Rect(0,60,xw,20, 0,70,241,10, 255,255,255);
+	//Rect(0,80,xw,20, 0,90,251,12, 255,255,255);
+	
 }

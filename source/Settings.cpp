@@ -34,6 +34,7 @@ void Settings::Default()
 
 	xwPos = 0;  ywPos = 0;
 	xwSize = 350;  ywSize = 768;
+
 	escQuit = false;
 
 }
@@ -53,19 +54,19 @@ bool Settings::Load()
 	ifstream fi;
 	fi.open(file);
 	if (!fi.good())
-	{	cout << sErr << "Can't open file." << endl;  return false;  }
+	{	Log(sErr + "Can't open file.");  return false;  }
 	
 	XMLDocument doc;
 	XMLError er = doc.LoadFile(file.c_str());
 	if (er != XML_SUCCESS)
-	{	cout << sErr << "Can't load file." << endl;  return false;  }
+	{	Log(sErr + "Can't load file.");  return false;  }
 
 	XMLElement* root = doc.RootElement();
 	if (!root)
-	{	cout << sErr << "No root." << endl;  return false;  }
+	{	Log(sErr + "No root.");  return false;  }
 	string rn = root->Name();
 	if (rn != "cAmp2")
-	{	cout << sErr << "Root not cAmp2." << endl;  return false;  }
+	{	Log(sErr + "Root not cAmp2.");  return false;  }
 
 	XMLElement* e;  const char* a;
 
@@ -91,7 +92,7 @@ bool Settings::Load()
 	//  paths
 	//e = root->FirstChildElement("path");   if (e){  a = e->Attribute("p");  if (a)  path = a;  }
 
-	cout << "Settings Loaded OK." << endl;
+	Log("Settings Loaded OK.");
 	return true;
 }
 
@@ -127,8 +128,8 @@ bool Settings::Save()
 	string file = FileSystem::Settings();
 	bool ok = xml.SaveFile(file.c_str()) == XML_SUCCESS;
 	if (ok)
-		cout << "Settings Saved OK." << endl;
+		Log("Settings Saved OK.");
 	else
-		cout << "Error saving Settings file: " << file << endl;
+		Error("Error saving Settings file: " + file);
 	return ok;
 }

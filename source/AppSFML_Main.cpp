@@ -31,14 +31,14 @@ bool AppSFMLDraw::Run()
 	if (icon.loadFromFile(file))
 		pWindow->setIcon(32, 32, icon.getPixelsPtr());
 	else
-		cout << "Can't load icon: " << file << endl;
+		Error("Can't load icon: " + file);
 
 	//  font
 	file = data + "/DejaVuLGCSans.ttf";
 	pFont = make_unique<Font>();
 	if (!pFont->loadFromFile(file))
 	{
-		cout << "Can't load font: " << file << endl;
+		Error("Can't load font: " + file);
 		return false;
 	}
 
@@ -46,7 +46,7 @@ bool AppSFMLDraw::Run()
 	file = data + "/player.png";
 	if (!tex.loadFromFile(file))
 	{
-		cout << "Can't load texture: " << file << endl;
+		Error("Can't load texture: " + file);
 		return false;
 	}
 

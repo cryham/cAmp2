@@ -1,14 +1,17 @@
 #pragma once
-#include <memory>
-#include <deque>
 #include "Playlist.h"
 #include "Settings.h"
+#include "AppLog.h"
+
 #include <SFML/Window/Event.hpp>  // key,mouse
+#include <memory>
+#include <deque>
+#include <fstream>
 
 class Audio;
 
 
-class App
+class App : public LogErr
 {
 public:
     App();
@@ -31,4 +34,6 @@ protected:
 
 	bool KeyDown(sf::Event::KeyEvent key);  // use own enum?
 	bool KeyUp(sf::Event::KeyEvent key);
+
+	bool bFps = false;  // show Fps
 };

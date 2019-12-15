@@ -18,7 +18,7 @@ public:
 
     Playlist();
 
-    bool AddDir(fs::path dir, const EInsert& where = Ins_End);
+    bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
 
 
     const std::deque<Track>& GetTracks()
