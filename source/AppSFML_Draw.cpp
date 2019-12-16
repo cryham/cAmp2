@@ -1,7 +1,7 @@
 #include "AppSFML_Draw.h"
 #include "Audio.h"
 #include "Util.h"
-using namespace std;
+using namespace std;  using namespace sf;
 
 
 void AppSFMLDraw::DrawPlayer()
@@ -13,8 +13,8 @@ void AppSFMLDraw::DrawPlayer()
 	bool play = audio->IsPlaying();
 
 	//  params
-	int h = 140; //160;
-	const int uy=20 /*>0 darker*/, uh=112 /*112 line..fire 512*/;
+	int h = 150; //160;
+	const int uy=20 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
 
 	//  backgr
 	Rect(0,0, xw,h, TX_BackPlr);
@@ -31,7 +31,7 @@ void AppSFMLDraw::DrawPlayer()
 			int y = h - f*h;
 			f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
 			
-			sf::Uint8 r,g,b;  // clr
+			Uint8 r,g,b;  // clr
 			r = 40+f*f*(255-60);
 			g = 100+f*(255-120);
 			b = 180+f*(255-200);
@@ -40,7 +40,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 	h += 10;
 
-	//  Position bar  -
+	//  Position bar  --=---
 	//if (play)
 	{
 		audio->getPos();
@@ -63,14 +63,13 @@ void AppSFMLDraw::DrawPlayer()
 	if (bFps)
 	{
 		Clr(120,160,240);
-		str = "Fps: " + f2s(1.f / dt);
-		bold = false;
-		Text(50,5);
+		str = f2s(1.f / dt);
+		Text(60,25);
 	}
 	h += 10;
 
 	
-	//  play info text  * * *
+	//  play icons  .
 	int y = 2;
 	Clr(50,120,120);
 	str = audio->IsPaused() ? "||" : play ? "|>" : "[]";
@@ -79,19 +78,21 @@ void AppSFMLDraw::DrawPlayer()
 	
 	if (audio->bRep1)
 	{
-		Clr(120,120,50);
+		Clr(100,100,50);
 		str = "@1";
-		Text(xw/2,y+25);
+		Text(xw/2+50,y+25);
 	}
 
+	//  play info text  * * *
 	if (play)
 	{
-		Clr(120,160,220);
+		Clr(100,140,190);
 		str = audio->sInfo;
 		Text(10,y);
 				
 		Clr(150,190,240);
-		str = t2s(audio->timePlay);
+		bool below10 = audio->timeTrack < 10.0;
+		str = t2s(audio->timePlay, below10);
 		Text(xw-140,y);
 
 		Clr(130,160,220);
@@ -104,9 +105,11 @@ void AppSFMLDraw::DrawPlayer()
 	}
 	
 	
-	//  playlist  ===
+	//  playlist  ==
+	//-------------------------------
 	const auto& tracks = pls->GetTracks();
-	int yp = h, yl = 16, t = 0;  // ofs-
+	int yp = h, yl = 16,
+		it = 0;  // ofs-
 	
 	if (tracks.empty())
 	{
@@ -116,23 +119,33 @@ void AppSFMLDraw::DrawPlayer()
 		Text(0,yp);
 	}
 	else	// dn_marg-
-	while (yp + yl*2 < yw && t < tracks.size())
+	while (yp + yl*2 < yw &&
+		   it < tracks.size())
 	{
-		const Track& tr = tracks[t];
+		const Track& t = tracks[it];
+		
+		//  cursors
+		if (it == pls->play)
+		{	Uint8 c = play ? 255 : 128;
+			Rect(0,yp,xw,20, 0,90,251,12, c,c,c);
+		}
+		if (it == pls->cur)
+			Rect(0,yp,xw,20, 0,70,241,10, 255,255,255);
+		// todo: blend add
+		
 		//  name
 		Clr(120,160,240);
-		str = tr.GetName();
-		Text(0,yp);
+		str = t.GetName();
+		Text(15,yp);
 		
 		//  time
-		//Text(0,yp);
-		//str = tr.GetName();
-		//Text(0,yp);
-		yp += yl;  ++t;
+		if (t.GotTime())
+		{
+			Text(0,yp);
+			str = t2s(t.GetTime());
+			Text(xw-50,yp);
+		}
+		yp += yl;  ++it;
 	}	
-	
-	//  cursors
-	//Rect(0,60,xw,20, 0,70,241,10, 255,255,255);
-	//Rect(0,80,xw,20, 0,90,251,12, 255,255,255);
 	
 }

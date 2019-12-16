@@ -1,4 +1,5 @@
 #pragma once
+#include "Track.h"
 #include <string>
 
 #define mia(a,b,x)  std::max(a, std::min(b, x))
@@ -32,7 +33,7 @@ public:
     virtual void Destroy() = 0;
 
 	//  play
-    virtual bool Play() = 0;
+	virtual bool Play(Track& trk) = 0;
 	virtual void Pause() = 0;
     virtual void Stop() = 0;
 
@@ -51,4 +52,6 @@ public:
 	//  visualization
 	virtual float* getFFT() = 0;
 	virtual void GetVisData(int size) = 0;  // updates float*
+
+	virtual void GetTrkTime(Track& t) = 0;
 };

@@ -7,7 +7,7 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 {
 	switch (k.code)
 	{
-	case Keyboard::Z:	audio->Play();  break;
+	case Keyboard::Z:	Play();  break;
 	case Keyboard::X:	audio->Pause();  break;
 	case Keyboard::C:	audio->Stop();  break;
 	
@@ -34,4 +34,16 @@ bool App::KeyUp(sf::Event::KeyEvent key)
 {
 	
 	return true;
+}
+
+//  move to pls ..
+void App::Play()
+{
+	if (pls->IsEmpty())
+		return;
+	
+	Track& t = pls->GetTracks()[pls->cur];
+	audio->Play(t);
+	
+	pls->play = pls->cur;
 }

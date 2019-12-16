@@ -1,62 +1,39 @@
 #include "AudioBass.h"
 #include "FileSystem.h"
 #include "Util.h"
+#include "Track.h"
 #include <iostream>
 #include <cmath>
 using namespace std;
 
 
-AudioBass::AudioBass()
+///  Track
+void AudioBass::GetTrkTime(Track& t)
 {
-//	fft.resize(10240);
-//	visA.resize(10240);
-}
+	if (t.gotTime)  return;
+	bool mod = IsModFile(t.ext);
+	t.mod = mod;
 
-void AudioBass::Init()
-{
-    Log("Init Sound: bass ----");
+	//  get time length
+	DWORD chan;
+	if (mod)
+		chan = BASS_MusicLoad(FALSE, t.path.c_str(), 0,0,
+			BASS_MUSIC_NOSAMPLE | BASS_MUSIC_PRESCAN, 1);
+	else
+		chan = BASS_StreamCreateFile(FALSE, t.path.c_str(), 0,0,0);
 
-    if (HIWORD(BASS_GetVersion()) != BASSVERSION)
-        Error("Incorrect bass version");
+	QWORD bytes = BASS_ChannelGetLength(chan, BASS_POS_BYTE);
+	double time = BASS_ChannelBytes2Seconds(chan,bytes);
+	t.time = time;
 
-    //  find all devs
-    //sDevs.clear();
-    BASS_DEVICEINFO di;
-    int devs = -1;
-    for (int n=0; BASS_GetDeviceInfo(n,&di); n++)
-    if (di.flags & BASS_DEVICE_ENABLED)
-    {
-        //sDevs.push_back(di.name);
-        devs = n;
-        Log("Device " + i2s(n) + ": " + di.name +
-            (di.flags & BASS_DEVICE_DEFAULT ? " (default)": ""));
-    }
-    int nDev = 1;  /// par
-    //int nDev = devs-1;
-
-    //  Init
-    DWORD fl = BASS_DEVICE_FREQ;
-    int nFreq = 44100;  /// par
-    if (!BASS_Init(nDev,nFreq, fl, NULL,NULL))
-        Error("Can't initialize bass");
-
-    //  get freq info-
-    Log("Info ----");
-    BASS_INFO in;
-    BOOL b = BASS_GetInfo(&in);  maxFreq = 44100;
-    if (b)
-    {	Log("speakers: " + in.speakers);
-        Log("max freq: " + in.maxrate);  maxFreq = in.maxrate;
-        Log("cur freq: " + in.freq);
-    }
-
-}
-
-void AudioBass::Destroy()
-{
-	Stop();
-    BASS_Free();
-    Log("Destroyed Sound: bass ----");
+	if (mod)
+		BASS_MusicFree(chan);
+	else
+		BASS_StreamFree(chan);
+	
+	//  size
+	t.size = FileSystem::Size(t.path);
+	t.gotTime = true;
 }
 
 
@@ -68,29 +45,26 @@ void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
 		ab->Next();
 }
 
-
-bool AudioBass::Play()		/// |>
+///  Play  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+bool AudioBass::Play(Track& trk)
 {
     //  rem old
     Stop();
-
 	
-    //  get name
-//	string fname = "../../../zm/c.mp3";
-    string fname = "../../../zm/e.mod";
-//	string fname = "../../../zm/s.mp3";
+	if (!trk.gotTime)
+		GetTrkTime(trk);  // for mod and size
 
-    //if (tkPl->mod)
-    if (1)  //fname. cExt::Find(tkPl->ext) < 0)
-    {   // load mod
-        chMod = BASS_MusicLoad(FALSE, fname.c_str(), 0,0,
+	if (trk.mod)
+    {
+		// load mod
+        chMod = BASS_MusicLoad(FALSE, trk.path.c_str(), 0,0,
             BASS_MUSIC_STOPBACK | BASS_MUSIC_AUTOFREE | //?
             BASS_MUSIC_RAMPS | BASS_MUSIC_SINCINTER |  // quality todo opt
             BASS_MUSIC_FT2PAN | BASS_MUSIC_FT2MOD | //BASS_MUSIC_PT1MOD | //MODBASS_MUSIC_SURROUND |
             (bRep1 ? BASS_SAMPLE_LOOP : 0) | BASS_MUSIC_PRESCAN, 1);
     }else
     {   // create stream
-        chPl = BASS_StreamCreateFile(FALSE, fname.c_str(), 0,0,
+        chPl = BASS_StreamCreateFile(FALSE, trk.path.c_str(), 0,0,
             (bRep1 ? BASS_SAMPLE_LOOP : 0) | BASS_STREAM_AUTOFREE);
     }
 
@@ -103,7 +77,7 @@ bool AudioBass::Play()		/// |>
             case BASS_ERROR_FILEFORM:  // unsup format
             {
                 //  cant open, not found
-                //tkPl->dis = 1;
+                trk.dis = true;
                 //if (bNextPrev)  Next();  else  Prev();
                 //Log("disabled");
             }	return false;
@@ -111,22 +85,22 @@ bool AudioBass::Play()		/// |>
             default:  // other
             {
                 int er = BASS_ErrorGetCode();
-                Log("Can't play file: " + fname + "\n  error code: " + i2s(er)); // + GetErrStr(er);
+                Log("Can't play file: " + string(trk.path) + "\n  error code: " + i2s(er)); // + GetErrStr(er);
             }	return false;
         }
-    }
-    //else  tkPl->dis = 0;
+    }else
+		trk.dis = false;
 
     //  sync reaching end - for play next
     chSync = BASS_ChannelSetSync(ch(), BASS_SYNC_END/*or BASS_SYNC_FREE*/, 0, EndSync, this);
 
     //  get file info
-    int bitRate = 0, size = FileSystem::Size(fname);
+    int bitRate = 0;
     QWORD bytes = BASS_ChannelGetLength(ch(), BASS_POS_BYTE);
     if (bytes > 0)
     {
         timeTrack = BASS_ChannelBytes2Seconds(ch(), bytes);
-        bitRate = 0.008 * double(size) / timeTrack;
+        bitRate = 0.008 * double(trk.size) / timeTrack;
     }
     else
         timeTrack = 0.0;
@@ -134,22 +108,24 @@ bool AudioBass::Play()		/// |>
     //  ext  kbps  freq  size
     BASS_CHANNELINFO info;  BASS_ChannelGetInfo(ch(), &info);
 	sInfo = //"%4d %2d  %3.1f"
+		trk.ext + " " +
         i2s(bitRate/*info.origres*/) + " " +
-        i2s(info.freq/1000) + "  " +
-        f2s(double(size-44)/1000000.0, 1,3);
+        i2s(info.freq / 1000) + "  " +
+        f2s(double(trk.size - 44) / 1000000.0, 1,3);
 	//Log("play " + sInfo);
 
     //  play
     BASS_ChannelSetAttribute(ch(), BASS_ATTRIB_VOL, 0.001f * iVolume);  //,balance
     BASS_ChannelPlay(ch(), TRUE);
-    bPlaying = true;  bPaused = false;
+    
+	bPlaying = true;  bPaused = false;
     return true;
 }
 
 void AudioBass::Pause()		///  ||
 {
 	if (!bPlaying)
-	{	Play();  return;  }
+	{	/*Play();*/  return;  }
 	
 	if (bPaused)
 	{	BASS_ChannelPlay(ch(), FALSE);  bPaused = false;  }

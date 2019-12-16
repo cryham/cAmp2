@@ -1,5 +1,6 @@
 #pragma once
 #include "Audio.h"
+//#include "Track.h"
 #include "AppLog.h"
 #include "../../bass/src/bass.h"
 #include <vector>
@@ -16,14 +17,13 @@ const static uint ciFFTSize[ciFFTNum] = {
 
 class AudioBass : public Audio, public LogErr
 {
-    HSTREAM chPl = 0;   // e.g. ogg mp3
-    HMUSIC chMod = 0;   // e.g. xm mod
+    HSTREAM chPl = 0;   // ogg, mp3, etc.
+    HMUSIC chMod = 0;   // xm, mod, etc.
     DWORD ch() {  return chMod ? chMod : chPl;  }
     HSYNC chSync = 0;
 	
 	float fft[ciFFT], visA[ciFFT];
-//	std::vector<float> fft;
-//	std::vector<float> visA;
+//	std::vector<float> fft, visA;
 	
 public:
     AudioBass();
@@ -32,7 +32,7 @@ public:
     void Destroy() override;
 
     //  player
-	bool Play() override;
+	bool Play(Track& trk) override;  // can disable track
 	void Pause() override;
     void Stop() override;
 
@@ -49,4 +49,15 @@ public:
 	
 	//  get data for audio visualization
 	void GetVisData(int size) override;
+
+	void GetTrkTime(Track& t) override;  // sets time, mod, size
+
+private:
+	void InitPlugins();
+	void FillExt();
+	
+	bool IsModFile(std::string ext);
+	//  playable file extensions
+	std::vector<std::string> vExt;
+	std::vector<std::string> vExtMod;
 };
