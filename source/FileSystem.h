@@ -1,11 +1,12 @@
 #pragma once
+#include "AppLog.h"
 #include <vector>
 #include <string>
 #include <filesystem>
 namespace fs = std::filesystem;
 
 
-class FileSystem  // and ConfigPaths
+class FileSystem : public LogErr // and ConfigPaths
 {
 private:
     static std::string

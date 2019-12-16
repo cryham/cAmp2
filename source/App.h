@@ -3,10 +3,8 @@
 #include "Settings.h"
 #include "AppLog.h"
 
-#include <SFML/Window/Event.hpp>  // key,mouse
+#include <SFML/Window/Event.hpp>  // input
 #include <memory>
-#include <deque>
-#include <fstream>
 
 class Audio;
 
@@ -18,6 +16,7 @@ public:
 	virtual ~App();
 
     virtual bool Run() = 0;
+
 	
 	Settings set;
 	
@@ -28,12 +27,23 @@ protected:
 	std::unique_ptr<Playlist> pls;
 
 	//std::unique_ptr<Skin> skin;
+
 	
 	bool Init();
 	bool Destroy();
 
+	//  input
 	bool KeyDown(sf::Event::KeyEvent key);  // use own enum?
 	bool KeyUp(sf::Event::KeyEvent key);
 
+	//  mouse pos, button
+	int mx = 0, my = 0, mb = 0;
+	void Mouse(int x, int y)
+	{	mx = x;  my = y;  }
+	void Wheel(int d)
+	{	}
+	
 	bool bFps = false;  // show Fps
+	
+	void Play();
 };

@@ -60,7 +60,8 @@ vector<fs::path> FileSystem::ListDir(const fs::path dir, bool recursive)
     }
     catch (exception ex)
     {
-        cerr << ex.what() << endl;
+		cerr << ex.what() << endl;
+		Error(ex.what());
     }
     return files;
 }

@@ -35,7 +35,8 @@ public:
 	bool Run();
 
 protected:
-	///  draw utils  ----
+	///  draw utils
+	//--------------------------
 	//  write out text, from str
 	//  returns width, x advance
 	int Text(int x, int y, bool draw=true);

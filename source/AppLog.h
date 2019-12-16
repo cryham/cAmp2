@@ -20,6 +20,6 @@ public:
 class LogErr
 {
 public:
-	void Log  (std::string s) {  AppLog::Log(s);    }
-	void Error(std::string s) {  AppLog::Error(s);  }
+	static void Log  (std::string s) {  AppLog::Log(s);    }
+	static void Error(std::string s) {  AppLog::Error(s);  }
 };

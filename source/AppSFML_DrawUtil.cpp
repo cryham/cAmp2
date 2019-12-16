@@ -2,9 +2,6 @@
 using namespace std;  using namespace sf;
 
 
-//  draw utils
-//------------------------------------------------------------------
-
 //  write text
 int AppSFMLDraw::Text(int x, int y, bool draw)
 {

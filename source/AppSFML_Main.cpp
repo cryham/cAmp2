@@ -71,16 +71,22 @@ bool AppSFMLDraw::Run()
 
 			switch (e.type)
 			{
-			// todo: input
-//			case Event::MouseMoved:				Mouse(e.mouseMove.x, e.mouseMove.y);  break;
-//			case Event::MouseWheelScrolled:		Wheel(e.mouseWheelScroll.delta);  break;
+			case Event::MouseMoved:				Mouse(e.mouseMove.x, e.mouseMove.y);  break;
+			case Event::MouseWheelScrolled:		Wheel(e.mouseWheelScroll.delta);  break;
 
-//			case Event::MouseButtonPressed:		mb = e.mouseButton.button + 1;  break;
-//			case Event::MouseButtonReleased:	mb = 0;  break;
+			case Event::MouseButtonPressed:		mb = e.mouseButton.button + 1;  break;
+			case Event::MouseButtonReleased:	mb = 0;  break;
 
-			case Event::KeyPressed:		KeyDown(e.key);  break;
-			case Event::KeyReleased:	KeyUp(e.key);  break;
+			
+			case Event::KeyPressed:
+				if (set.escQuit && e.key.code == Keyboard::Escape)
+					pWindow->close();
+				KeyDown(e.key);  break;
+			
+			case Event::KeyReleased:
+				KeyUp(e.key);  break;
 
+				
 			case Event::Resized:
 				if (e.type == sf::Event::Resized)
 				{
@@ -97,13 +103,14 @@ bool AppSFMLDraw::Run()
 				break;
 			}
 		}
+
+		//  Draw
+		//------------------
 		pWindow->clear();
 		sf::Time time = timer.restart();
 		//Update(*window, time);
 		dt = time.asSeconds();
 
-		//  Draw
-		//------------------
 		DrawPlayer();
 		
 		pWindow->display();
@@ -111,5 +118,6 @@ bool AppSFMLDraw::Run()
 	
 	set.GetWndDim(pWindow.get());
 	Destroy();
+
 	return true;
 }
