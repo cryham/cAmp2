@@ -11,8 +11,19 @@ protected:
     //std::deque<Track>::iterator cur, play;
 
 public:
-	int cur = 0, play = 0;  // ids to tracks
+	//  cursor pos, playing pos, ids to tracks
+	int cur = 0, ofs = 0;  // offset view
+	int play = 0;
+	int lin = 10;  // view visible lines
 
+	//  move cur, ofs
+	void PgUp(int), PgDn(int),  // (int mul)
+		PgOfsUp(int), PgOfsDn(int),
+		Up(int), Dn(int),
+		Home(int), End(int),
+		Cur(), Ofs();
+	//int all() {  return (int)(tracks.size()-1);  }  // last
+	
     enum EInsert
     {  Ins_Cursor, Ins_Top, Ins_End  };
 

@@ -2,8 +2,6 @@
 #include "Track.h"
 #include <string>
 
-#define mia(a,b,x)  std::max(a, std::min(b, x))
-
 
 class Audio
 {

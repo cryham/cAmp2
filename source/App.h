@@ -44,6 +44,7 @@ protected:
 	{	}
 	
 	bool bFps = false;  // show Fps
+	int yL_pl = 10;  // playlist view lines
 	
 	void Play();
 };
