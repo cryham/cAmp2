@@ -1,6 +1,7 @@
 #include "AppSFML_Draw.h"
 #include "Audio.h"
 #include "Util.h"
+#include "def.h"
 using namespace std;  using namespace sf;
 
 
@@ -14,7 +15,7 @@ void AppSFMLDraw::DrawPlayer()
 
 	//  params
 	int h = 150; //160;
-	const int uy=20 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
+	const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
 
 	//  backgr
 	Rect(0,0, xw,h, TX_BackPlr);
@@ -37,7 +38,7 @@ void AppSFMLDraw::DrawPlayer()
 			b = 180+f*(255-200);
 			Rect(i, 10 + h-y, 1,y, 475,uy,1,uh, r,g,b);
 		}
-	}
+	}/**/
 	h += 10;
 
 	//  Position bar  --=---
@@ -108,9 +109,17 @@ void AppSFMLDraw::DrawPlayer()
 	//  playlist  ==
 	//-------------------------------
 	const auto& tracks = pls->GetTracks();
-	int yp = h, yl = 16,
-		it = 0;  // ofs-
+	int yp = h, yF = 16,
+		it = pls->ofs;
 	
+	//  visible lines  // dn_marg-
+	yL_pl = (yw-yF*1 - yp)/yF;
+	pls->lin = yL_pl;
+	//  dbg
+	str = "yl " + i2s(yL_pl)+" c "+i2s(pls->cur)+" o "+i2s(pls->ofs);
+	Text(50,30);
+	
+	if (yL_pl > 0)
 	if (tracks.empty())
 	{
 		Clr(120,160,240);
@@ -118,9 +127,9 @@ void AppSFMLDraw::DrawPlayer()
 		// Drop or Insert files..";
 		Text(0,yp);
 	}
-	else	// dn_marg-
-	while (yp + yl*2 < yw &&
-		   it < tracks.size())
+	else
+	for (int yi=0; yi < yL_pl; ++yi)
+	if (it < tracks.size())
 	{
 		const Track& t = tracks[it];
 		
@@ -134,18 +143,34 @@ void AppSFMLDraw::DrawPlayer()
 		// todo: blend add
 		
 		//  name
-		Clr(120,160,240);
+		const static sf::Uint8 c[chRall][3] = 
+		{
+			100,140,100, //-3
+			110,160,110, //-2
+			120,180,120, //-1
+			 90,150,190, //0
+			110,170,210, // 1
+			120,180,220, // 2
+			130,190,230, // 3
+			140,200,240, // 4
+			150,220,255, // 5
+		};
+		int r = t.rate+3;
+		Clr(c[r][0],c[r][1],c[r][2]);
 		str = t.GetName();
-		Text(15,yp);
+		Text(20,yp);
+
+		str = chFRate[r];
+		Text(3,yp);
 		
 		//  time
 		if (t.GotTime())
 		{
-			Text(0,yp);
+			Clr(180,200,240);
 			str = t2s(t.GetTime());
 			Text(xw-50,yp);
 		}
-		yp += yl;  ++it;
+		yp += yF;  ++it;
 	}	
 	
 }

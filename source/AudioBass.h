@@ -56,6 +56,7 @@ private:
 	void InitPlugins();
 	void FillExt();
 	
+	bool IsTrack(std::string ext);  // playable ext
 	bool IsModFile(std::string ext);
 	//  playable file extensions
 	std::vector<std::string> vExt;

@@ -13,6 +13,12 @@ AudioBass::AudioBass()
 }
 
 //  Ext
+bool AudioBass::IsTrack(std::string ext)
+{
+	if (find(begin(vExt), end(vExt), ext) != end(vExt))
+		return true;
+	return IsModFile(ext);
+}
 bool AudioBass::IsModFile(string ext)
 {
 	if (find(begin(vExtMod), end(vExtMod), ext) != end(vExtMod))
@@ -24,11 +30,12 @@ void AudioBass::FillExt()
 {
 	//  defaults, for bass alone
 	vector<string>
-		ve{"ogg","mp3","wav","mp2","aiff","mp1"},
-		vm{"mod","xm","it","s3m","mtm","mo3","umx"};
+		ve{"OGG","MP3","WAV","MP2","AIFF","MP1"},
+		vm{"MOD","XM","IT","S3M","MTM","MO3","UMX"};
 	vExt = ve;
 	vExtMod = vm;
 }
+
 
 //  Init Plugins
 void AudioBass::InitPlugins()
@@ -50,21 +57,20 @@ void AudioBass::InitPlugins()
 			for (int a=0; a < pinfo->formatc; ++a)
 			{
 				Log(string("    ") + pinfo->formats[a].name +" (" + pinfo->formats[a].exts + ")");
+
 				//  split Exts
 				string se = pinfo->formats[a].exts, s;
-				//cout << se << endl;
-				
+				//  clean * ;
 				copy_if(se.begin(), se.end(), back_inserter(s),
-					[](char c){  return /*c!='.'&&*/c!='*'&&c!=';';  } );
-				//cout << s << endl;
-				
+					[](char c){  return /*c!='.' &&*/ c!='*' && c!=';';  } );
+
 				//  add to vExt
 				vector<string> vs = split(s, ".");
 				for (auto& e:vs)
 				if (!e.empty())
 				{
-					//cout << e << endl;
-					//Log(e);
+					//cout << e << endl;  //Log(e);
+					strupper(e);
 					vExt.push_back(e);
 				}
 			}
