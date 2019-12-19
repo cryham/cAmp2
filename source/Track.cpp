@@ -16,6 +16,8 @@ void Track::SetNameFromPath()
     name = path.filename().filename().string();
 	//  ext
 	ext = path.extension();
+	if (ext.empty())
+		return;
 	ext = ext.substr(1);  // no .
 	strupper(ext);
 

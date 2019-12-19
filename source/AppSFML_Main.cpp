@@ -19,7 +19,7 @@ bool AppSFMLDraw::Run()
 		Style::Default, ContextSettings());
 
 	pWindow->setVerticalSyncEnabled(true);
-//	pWindow->setFramerateLimit(60);
+//	pWindow->setFramerateLimit(60);  // par
 	pWindow->setPosition(Vector2i(set.xwPos, set.ywPos));
 
 	

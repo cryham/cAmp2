@@ -116,8 +116,8 @@ void AppSFMLDraw::DrawPlayer()
 	yL_pl = (yw-yF*1 - yp)/yF;
 	pls->lin = yL_pl;
 	//  dbg
-	str = "yl " + i2s(yL_pl)+" c "+i2s(pls->cur)+" o "+i2s(pls->ofs);
-	Text(50,30);
+	/*str = "yl " + i2s(yL_pl)+" c "+i2s(pls->cur)+" o "+i2s(pls->ofs);
+	Text(50,30);/**/
 	
 	if (yL_pl > 0)
 	if (tracks.empty())

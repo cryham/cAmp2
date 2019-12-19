@@ -3,12 +3,12 @@
 #include "Track.h"
 
 
+class Audio;
+
 class Playlist
 {
 protected:
-
     std::deque<Track> tracks;
-    //std::deque<Track>::iterator cur, play;
 
 public:
 	//  cursor pos, playing pos, ids to tracks
@@ -27,12 +27,16 @@ public:
     enum EInsert
     {  Ins_Cursor, Ins_Top, Ins_End  };
 
-
+	
+	//  main
     Playlist();
 
     bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
+	
+	static Audio* audio;  // for IsPlayable
 
-
+	
+	//  get
     std::deque<Track>& GetTracks()
     {   return tracks;  }
 

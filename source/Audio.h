@@ -52,4 +52,5 @@ public:
 	virtual void GetVisData(int size) = 0;  // updates float*
 
 	virtual void GetTrkTime(Track& t) = 0;
+	virtual bool IsPlayable(std::string ext) = 0;
 };

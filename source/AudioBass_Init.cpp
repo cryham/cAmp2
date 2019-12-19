@@ -13,7 +13,7 @@ AudioBass::AudioBass()
 }
 
 //  Ext
-bool AudioBass::IsTrack(std::string ext)
+bool AudioBass::IsPlayable(std::string ext)
 {
 	if (find(begin(vExt), end(vExt), ext) != end(vExt))
 		return true;

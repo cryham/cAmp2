@@ -51,12 +51,12 @@ public:
 	void GetVisData(int size) override;
 
 	void GetTrkTime(Track& t) override;  // sets time, mod, size
+	bool IsPlayable(std::string ext) override;
 
 private:
 	void InitPlugins();
 	void FillExt();
 	
-	bool IsTrack(std::string ext);  // playable ext
 	bool IsModFile(std::string ext);
 	//  playable file extensions
 	std::vector<std::string> vExt;

@@ -32,19 +32,27 @@ bool App::Init()
 		return false;
 	
 	
+	//  audio
+	audio = make_unique<AudioBass>();
+	audio->Init();
+
+	Playlist::audio = audio.get();
+
+	
 	//  pls
 	pls = make_unique<Playlist>();
-	pls->AddDir("../../../zm", false);
-#if 1
+	//pls->AddDir("../../../zm", false);
+#if 0
 	const auto& tracks = pls->GetTracks();
 	Log("---- tracks");
 	for (const auto& trk: tracks)
 		Log(trk.GetName());
 #endif
 
-	//  audio
-	audio = make_unique<AudioBass>();
-	audio->Init();
+	//  on thread ..
+	//pls->Update();
+	for (auto& trk: pls->GetTracks())
+		audio->GetTrkTime(trk);
 
 	return true;
 }

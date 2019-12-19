@@ -31,17 +31,16 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 	case Keyboard::D:
 		audio->chVol(0, shift, ctrl);
 		
-	//  pls move  cur, ofs
-	// none- up/dn 1   ctrl- x8
-	//	alt- move1   alt-shift- move1  alt-ctrl- move1
+	//  playlist move  cursor, offset
+	//  none- up/dn 1   ctrl- x8  //  alt- move1
 	case Keyboard::Up:		/*if (alt)  pls->Move1(shift? -2: ctrl? 2: -1,0);  else*/  pls->Up(ctrl ? 8:1);  break;
 	case Keyboard::Down:	/*if (alt)  pls->Move1(shift? -2: ctrl? 2:  1,0);  else*/  pls->Dn(ctrl ? 8:1);  break;
 
-	// none- page/4  ctrl- page   alt- offset 1  ctrl-alt- ofs x8
+	//  none- page/4   ctrl- page   alt- offset 1   ctrl-alt- ofs x8
 	case Keyboard::PageUp:		if (alt)  pls->PgOfsUp(ctrl ? 8:1);  else  pls->PgUp(ctrl ? yL_pl : yL_pl/4);  break;
 	case Keyboard::PageDown:	if (alt)  pls->PgOfsDn(ctrl ? 8:1);  else  pls->PgDn(ctrl ? yL_pl : yL_pl/4);  break;
 	
-	// none- move by dir   ctrl- view   alt- list
+	//  none- move by dir   ctrl- view   alt- list
 	case Keyboard::Home:	pls->Home(alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
 	case Keyboard::End:		pls->End( alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
 

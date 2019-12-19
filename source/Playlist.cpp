@@ -1,7 +1,10 @@
 #include <vector>
 #include "FileSystem.h"
 #include "Playlist.h"
+#include "Audio.h"
 #include "def.h"
+#include "Util.h"
+#include <iostream>
 using namespace std;
 
 
@@ -9,6 +12,8 @@ Playlist::Playlist()
 {
 
 }
+
+Audio* Playlist::audio = nullptr;
 
 bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 {
@@ -19,9 +24,18 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
         if (fs::is_directory(file))
             continue;
 
-        //  check if playable ext..
-		//if (!AudioBass::IsTrack(ext))
-		//	continue;
+        //  get ext
+		string ext = file.extension();
+		if (ext.length() < 2)
+			continue;
+		ext = file.extension();
+		ext = ext.substr(1);  // no .
+		strupper(ext);
+		
+		//  skip if if unplayable
+		if (audio != nullptr &&
+			!audio->IsPlayable(ext))
+			continue;
 
         Track t(file);
         switch (where)
