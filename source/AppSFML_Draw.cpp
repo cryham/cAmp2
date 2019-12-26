@@ -131,7 +131,7 @@ void AppSFMLDraw::DrawPlayer()
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < tracks.size())
 	{
-		const Track& t = tracks[it];
+		const Track& trk = tracks[it];
 		
 		//  cursors
 		if (it == pls->play)
@@ -155,19 +155,22 @@ void AppSFMLDraw::DrawPlayer()
 			140,200,240, // 4
 			150,220,255, // 5
 		};
-		int r = t.rate+3;
+		int r = trk.rate+3;
 		Clr(c[r][0],c[r][1],c[r][2]);
-		str = t.GetName();
+		str = trk.GetName();
 		Text(20,yp);
 
 		str = chFRate[r];
 		Text(3,yp);
 		
 		//  time
-		if (t.GotTime())
+		if (trk.GotTime())
 		{
-			Clr(180,200,240);
-			str = t2s(t.GetTime());
+			float t = trk.GetTime();
+			TimeClr c = tmc.Get(t);
+			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
+			//Clr(180,200,240);
+			str = t2s(t);
 			Text(xw-50,yp);
 		}
 		yp += yF;  ++it;

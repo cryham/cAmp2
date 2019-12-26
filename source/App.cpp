@@ -31,6 +31,8 @@ bool App::Init()
 	if (!set.Load())
 		return false;
 	
+	tmc.Load();
+	
 	
 	//  audio
 	audio = make_unique<AudioBass>();
@@ -41,7 +43,7 @@ bool App::Init()
 	
 	//  pls
 	pls = make_unique<Playlist>();
-	//pls->AddDir("../../../zm", false);
+	pls->AddDir("../../../zm", false);
 #if 0
 	const auto& tracks = pls->GetTracks();
 	Log("---- tracks");

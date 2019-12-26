@@ -2,6 +2,7 @@
 #include "Playlist.h"
 #include "Settings.h"
 #include "AppLog.h"
+#include "TimeColors.h"
 
 #include <SFML/Window/Event.hpp>  // input
 #include <memory>
@@ -19,6 +20,8 @@ public:
 
 	
 	Settings set;
+	
+	TimeClrSets tmc;
 	
 	std::unique_ptr<Audio> audio;
 

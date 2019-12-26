@@ -92,7 +92,7 @@ bool Settings::Load()
 	//  paths
 	//e = root->FirstChildElement("path");   if (e){  a = e->Attribute("p");  if (a)  path = a;  }
 
-	Log("Settings Loaded OK.");
+	Log("Settings Loaded.");
 	return true;
 }
 
@@ -128,7 +128,7 @@ bool Settings::Save()
 	string file = FileSystem::Settings();
 	bool ok = xml.SaveFile(file.c_str()) == XML_SUCCESS;
 	if (ok)
-		Log("Settings Saved OK.");
+		Log("Settings Saved.");
 	else
 		Error("Error saving Settings file: " + file);
 	return ok;
