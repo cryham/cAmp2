@@ -15,8 +15,8 @@ int AppSFMLDraw::Text(EFont n, int x, int y, bool draw)
 }
 
 //  draw rect
-void AppSFMLDraw::Rect(int x, int y, int w, int h,
-	int ux, int uy, int uw, int uh,
+void AppSFMLDraw::RectUV(int x, int y, int w, int h,
+	int ux, int uy, int uw, int uh,  bool add,
 	Uint8 r, Uint8 g, Uint8 b)
 {
 	//if (!pBackgr)  return;
@@ -24,12 +24,16 @@ void AppSFMLDraw::Rect(int x, int y, int w, int h,
 	pBackgr->setTextureRect(IntRect(ux, uy, uw, uh));
 	pBackgr->setPosition(x, y);
 	pBackgr->setColor(Color(r, g, b));
-	pWindow->draw(*pBackgr);
+	if (add)
+		pWindow->draw(*pBackgr, RenderStates(BlendAdd));
+	else
+		pWindow->draw(*pBackgr);
 }
 
-void AppSFMLDraw::Rect(int x, int y, int w, int h,  ETexUV uv,
+void AppSFMLDraw::Rect(int x, int y, int w, int h,
+	ETexUV uv, bool add,
 	Uint8 r, Uint8 g, Uint8 b)
 {
 	const auto& t = ciTexUV[uv];
-	Rect(x,y, w,h,  t.x,t.y, t.w,t.h,  r,g,b);
+	RectUV(x,y, w,h,  t.x,t.y, t.w,t.h, add,  r,g,b);
 }

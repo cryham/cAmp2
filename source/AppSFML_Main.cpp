@@ -88,6 +88,7 @@ bool AppSFMLDraw::Run()
 		while (pWindow->pollEvent(e))
 		{
 			//ProcessEvent(e);
+			UpdModifiers();
 
 			switch (e.type)
 			{
@@ -102,9 +103,6 @@ bool AppSFMLDraw::Run()
 				if (set.escQuit && e.key.code == Keyboard::Escape)
 					pWindow->close();
 				KeyDown(e.key);  break;
-			
-			case Event::KeyReleased:
-				KeyUp(e.key);  break;
 
 				
 			case Event::Resized:
@@ -115,7 +113,7 @@ bool AppSFMLDraw::Run()
 					pWindow->setView(sf::View(vis));
 				}
 				// save new size
-				set.GetWndDim(pWindow.get());
+				set.SetDimFromWnd(pWindow.get());
 				UpdDim();
 				break;
 
@@ -138,7 +136,7 @@ bool AppSFMLDraw::Run()
 		pWindow->display();
 	}
 	
-	set.GetWndDim(pWindow.get());
+	set.SetDimFromWnd(pWindow.get());
 	Destroy();
 
 	return true;

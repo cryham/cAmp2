@@ -1,7 +1,8 @@
 #include "AppConst.h"
 
 
-//  size x,y, pos x,y  on player.png texture, in pixels
+//  size x,y, pos x,y
+//  on player.png texture, in pixels
 const STexUV ciTexUV[TexUVNum+1] = 
 {	
 	96, 23,		0, 20,		// prev

@@ -46,6 +46,8 @@ protected:
 
 	//  draw textured rect, stretched at
 	//  x,y pos, width,height,  texture coords uv start,size,  color rgb
-	void Rect(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
-	void Rect(int x, int y, int w, int h,  ETexUV uv,  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
+	void RectUV(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  bool add=false,
+			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
+	void Rect(int x, int y, int w, int h,  ETexUV uv,  bool add=false,
+			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
 };

@@ -52,11 +52,11 @@ void AppSFMLDraw::DrawPlayer()
 
 	
 	//  backgr  []
-	Rect(0,0, xw,h, TX_BackPlr);
+	Rect(0,0, xw,h, TX_BackPlr, false);
 	
 	
 	//  Vis FFT  ~~~~~
-	if (play)
+	if (set.view.eVis == viFFT && play)
 	{
 		audio->GetVisData(xw, set.view);
 		float* fft = audio->getFFT();
@@ -71,29 +71,25 @@ void AppSFMLDraw::DrawPlayer()
 			r = 40+f*f*(255-60);
 			g = 100+f*(255-120);
 			b = 180+f*(255-200);
-			Rect(i, yB_vis + h-y, 1,y, 475,uy,1,uh, r,g,b);
+			RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
 		}
-	}/**/
+	}
 	
 	
 	//  Position bar  --=---
-	//if (play)
+	int yH = yE_pos - yB_pos;
+	Rect(0.f,yB_pos, xw,yH, TX_PosDk, false);
+
+	if (play)
 	{
 		audio->getPos();
+		float xp = (audio->timePlay / audio->timeTrack) * (1.f-xW_pos), //marg,bar dim
+			x1 = xp*xw;  int xb = xW_pos*xw;
 		
-		int yH = yE_pos - yB_pos;
-		Rect(0.f,yB_pos, xw,yH, TX_PosDk);
-
-		if (play)
-		{
-			float xp = (audio->timePlay / audio->timeTrack) * (1.f-xW_pos), //marg,bar dim
-				x1 = xp*xw;  int xb = xW_pos*xw;
-			
-			const auto& t = ciTexUV[TX_PosBr];
-			Rect(x1, yB_pos,  xb, yH, 
-				 t.x+t.w*0.48f, t.y,  t.w*0.04f, t.h);
-				 //TX_PosBr, 0.48f,0.52f); //xp,xp+xWpo);
-	}	}
+		const auto& t = ciTexUV[TX_PosBr];
+		RectUV(x1, yB_pos,  xb, yH, 
+			 t.x+t.w*0.48f, t.y,  t.w*0.04f, t.h);
+	}
 
 	
 	if (bFps)
@@ -104,7 +100,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 
 	
-	//  play icons  .
+	//  play icons  >
 	int y = 2;
 	Clr(50,90,120);
 	//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
@@ -139,7 +135,7 @@ void AppSFMLDraw::DrawPlayer()
 		bool below10 = audio->timeTrack < 10.0;
 		s = t2s(audio->timePlay, below10);  str = s;
 		l = s.length();  w = l * w0;
-		Text(Fnt_TimeBig, xw - w - 100, y-2);
+		Text(Fnt_TimeBig, xw - w - 110, y-2);
 
 		//  Time track
 		Clr(100,140,210);
@@ -150,10 +146,10 @@ void AppSFMLDraw::DrawPlayer()
 		//  track rating
 		int rr = audio->rate, r = rr+3;
 		str = chFRateVis[r];
-		Text(Fnt_TimeBig, xw - 75, y-2);
+		Text(Fnt_TimeBig, xw - 84, y-2);
 
 		//  volume  %
-		Clr(120,160,240);
+		Clr(100,140,220);
 		str = i2s(audio->iVolume/10) + "%";
 		Text(Fnt_Info, xw-40, y+25);
 	}
@@ -175,12 +171,14 @@ void AppSFMLDraw::DrawPlayer()
 	if (bDebug)
 	{
 		Clr(120,180,240);
+		/*str = "s "+b2s(shift)+" c "+b2s(ctrl)+" a "+b2s(alt);
+		Text(Fnt_Info, 50, 10);/**/
 		str = "b "+i2s(yB_pl)+" e "+i2s(yE_pl)+" m "+i2s(ym)+" be "+i2s(yE_pl-yB_pl)+
-			" yL " + i2s(yL_pl);
+			" yL " + i2s(yL_pl);/**/
 		Text(Fnt_Info, 50, 30);
 		str = "t "+i2s(pls->GetTracks().size())+" c "+i2s(pls->cur)+
 			" o "+i2s(pls->ofs)+" oe "+i2s(pls->ofs+yL_pl);
-		Text(Fnt_Info, 50, 46);
+		Text(Fnt_Info, 50, 46);/**/
 	#if 0
 		float xk1 = (view.xSize-view.xW_plS+1),	 xk2 = view.xSize - xk1;
 		//float xp1 = (view.xSize-2*view.xW_plS/3+1),  xp2 = (view.xSize-view.xW_plS/2+1);
@@ -203,7 +201,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 	else
 	{
-		///  backgr, names  1st
+		///  backgr, Names  1st pass
 		yp = yB_pl;  it = pls->ofs;
 
 		int xws = set.view.xSize - set.view.xW_plS;
@@ -216,25 +214,16 @@ void AppSFMLDraw::DrawPlayer()
 			//  rating backgr
 			int rr = trk.rate, r = rr+3;
 			Rect(0,yp,xw,yF,
-				Tex4Rate(rr),
+				Tex4Rate(rr), false,
 				cb[r][0], cb[r][1], cb[r][2]);
 
-			//  cursors
-			if (it == pls->play)
-			{	Uint8 c = play ? 255 : 128;
-				Rect(0,yp,xws,yF, 0,90,251,12, c,c,c);
-			}
-			if (it == pls->cur)
-				Rect(0,yp,xws,yF, 0,70,241,10, 255,255,255);
-			// todo: blend add
-			
 			//  rate
+			Clr(cc[r][0],cc[r][1],cc[r][2]);
 			str = chFRateVis[r];
 			int w = Text(Fnt_Track, 0,0, false);  // center
 			Text(Fnt_Track, max(0, 5 - w/2), yp);
 
 			//  name
-			Clr(cc[r][0],cc[r][1],cc[r][2]);
 			str = trk.GetName();
 			Text(Fnt_Track, 17, yp);
 	
@@ -251,11 +240,11 @@ void AppSFMLDraw::DrawPlayer()
 		//  todo: per line..
 		float xk1 = set.view.xSize - ws - 4  //par w track|time
 			- 4 * w0,  xk2 = set.view.xSize - xk1;
-		Rect(xk1, yB_pl, xk2, yE_pl-yB_pl, TX_Black);
+		Rect(xk1, yB_pl, xk2, yE_pl-yB_pl, TX_Black, false);
 		
 		DrawSlider();
 
-		///  times  2nd
+		///  Times  2nd pass
 		yp = yB_pl;  it = pls->ofs;
 
 		for (int yi=0; yi < yL_pl; ++yi)
@@ -284,6 +273,23 @@ void AppSFMLDraw::DrawPlayer()
 			}
 			yp += yF;  ++it;
 		}		
+
+		///  cursors  3rd pass
+		yp = yB_pl;  it = pls->ofs;
+
+		for (int yi=0; yi < yL_pl; ++yi)
+		if (it < tracks.size())
+		{
+			//  cursors
+			if (it == pls->play)
+			{	Uint8 c = play ? 195 : 138;
+				Rect(0,yp,xws,yF, TX_PlsPlay/* 0,90,251,12*/, true, c,c,c);
+			}
+			if (it == pls->cur)
+				Rect(0,yp,xws,yF, TX_PlsCur /*0,70,241,10*/, true, 255,255,255);
+
+			yp += yF;  ++it;
+		}
 	}
 }
 
@@ -301,34 +307,8 @@ void AppSFMLDraw::DrawSlider()
 		xk2 = set.view.xSize - xk1;
 	//int xp1 = (view.xSize - 2*view.xW_plS/3 +1), xp2 = (view.xSize-view.xW_plS/2+1);
 
-	// rating ->
-	#if 1  //..
-		//if (view.bSlDrawR && !bShowSrch)
-		const auto& trks = pls->GetTracks();
-		for (int i=0; i < pls->Length(); i++)
-		{
-			const int rr = trks[i].rate, r = rr+3;
-			if (rr != 0)
-			{
-			//DWORD rgb = rr > 0 ? 0xFF40A0FF : 0xFF80FF00;
-
-			float fc1 = float(i) /fle, fc2 = float(i + ySr) /fle;  if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<1) c2=c1+1;
-
-			Rect(xk1, float(c1), xk2, float(c2-c1+1),
-				Tex4Rate(rr),
-				cb[r][0], cb[r][1], cb[r][2]);
-				//mia(int(TX_Rate1),int(TX_Rate5), int(TX_Rate1-1+abs(rr)) ),
-				/*rr > 0 ? 0x40 : 0x80,
-				rr > 0 ? 0xA0 : 0xFF,
-				rr > 0 ? 0xFF : 0x00);*/
-				//rgb);//, 0.15f, 0.25f);
-		}  }
-	#endif
-	
-	// search results +
-		//ySr = mia(1.f, 1.f, float(pls->Length()) / yLpl);
 	#if 0
+	// search results +
 		if (bShowSrch /*&& ySr > 0.8f*/)
 		for (int i=0; i < pls->Length(); ++i)
 		if (pls->vList[i]->srch > 0)
@@ -363,18 +343,34 @@ void AppSFMLDraw::DrawSlider()
 		//pDev->Clear(1, &rAll, clFl, 0, 1.f, 0);
 		
 		if (pls->Length() > yL_pl)
-		Rect(xk1, s1, xk2, s2-s1, TX_Slid);
-		Rect(xk1, c1, xk2, c2-c1, TX_SliC);
+		Rect(xk1, s1, xk2, s2-s1, TX_Slider, true, 180,180,180);  //par
+		Rect(xk1, c1, xk2, c2-c1, TX_SliCur, true);
 		
 	// playing _
-	#if 0
-		{
-			float fc1 = pls->idPl /fle,  fc2 = /*fc1+4.f/yw*/(pls->idPl + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;
+	{
+		float fc1 = pls->play /fle,  fc2 = /*fc1+4.f/yw*/(pls->play + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
+		int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;
 
-			Rtex(TX_SliP, xk1, float(c1), xk2, float(c2));
-		}
-	#endif
+		Rect(xk1, float(c1), xk2, float(c2-c1), TX_SliPlay);
+	}
 	// selected-
 
+	/// all tracks rating ->
+	// todo: fill texture and just draw once
+	if (set.view.bSlDrawR /*&& !bShowSrch*/)
+	{
+		const auto& trks = pls->GetTracks();
+		for (int i=0; i < pls->Length(); i++)
+		{
+			const int rr = trks[i].rate, r = rr+3;
+			if (rr != 0)
+			{
+				float fc1 = float(i) /fle, fc2 = float(i + ySr) /fle;  if (fc2>1.f) fc2=1.f;
+				int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<1) c2=c1+1;
+	
+				Rect(xk1, float(c1), xk2, float(c2-c1+1),
+					Tex4Rate(rr), true,
+					cb[r][0]*2/3, cb[r][1]*2/3, cb[r][2]*2/3);  //par
+		}  }
+	}
 }
