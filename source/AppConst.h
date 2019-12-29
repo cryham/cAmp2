@@ -13,6 +13,7 @@ enum ETexUV {
 	TX_SliB1, TX_SliB2, TX_SliB3, TX_SliB4, TX_SliB5, TX_SliB6,
 	TX_Rate1, TX_Rate2, TX_Rate3, TX_Rate4, TX_Rate5,
 	TX_TabB1, TX_TabB2, TX_TabB3, TX_TabB4, TX_TabB5, TX_TabB6,
+	TX_Black,
 	TexUVNum };
 
 //  size x,y, pos x,y  on player.png texture, in pixels
