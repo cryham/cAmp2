@@ -77,21 +77,16 @@ bool App::Destroy()
 //------------------------------------------------------------------------
 void App::UpdDim(/*float rfrFq*/)
 {
-//	v.xSize = set.xwSize;
-//	view.ySize = set.ywSize;
-//	view.visH = set.visH;  // par
-	
 	ViewSet& v = set.view;
-	if (v.visH > v.ySize)
-		v.visH = v.ySize;  //vis max
-	int Fy = v.Fy;
+	if (v.iVisH > v.ySize)
+		v.iVisH = v.ySize;  //vis max
 
 	//  file info
 	yB_finf = 0;	yE_pl_btn = 20;  // btnsH |< >|
 
 	//  visualization
 	yB_vis = 16;  //yFvi = 64;
-	yE_vis = min(v.ySize, 28 + ((v.eVis!=viNone)? v.visH: 0) );
+	yE_vis = min(v.ySize, 28 + (v.eVis!=viNone ? v.iVisH : 0) );
 	
 	//  pos bar
 	yB_pos = yE_vis;  yE_pos = yB_pos + 9;
@@ -101,16 +96,16 @@ void App::UpdDim(/*float rfrFq*/)
 	yB_tabs = yE_pos;  /*par+- +2 8pos*/
 	xW_tabs_btn = 13;  // btnsW up,dn
 		xW_tabs = (v.xSize - xW_tabs_btn) / v.xNpt;
-		yH_tabs = /*cfont[v.cfT]->*/Fy + 2;
+		yH_tabs = /*cfont[v.cfT]->*/v.Fy + 2;
 	yE_tabs = yB_tabs + v.yNpt * yH_tabs + 4;
 
 	//  playlist, tracks
 	yB_pl_inf = yE_tabs;
-	yB_pl = yB_pl_inf + /*cfont[v.cfP]->*/Fy + 2/*yHpli*/;
-	yE_pl = v.ySize - /*cfont[v.cfP]->*/Fy;
+	yB_pl = yB_pl_inf + /*cfont[v.cfP]->*/v.Fy + 2/*yHpli*/;
+	yE_pl = v.ySize - /*cfont[v.cfP]->*/v.Fy;
 	
-	yH_pl = yE_pl-1-yB_pl;  yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/Fy );
-	yE_pl = yL_pl * /*cfont[v.cfP]->*/Fy + yB_pl;
+	yH_pl = yE_pl-1-yB_pl;  yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/v.Fy );
+	yE_pl = yL_pl * /*cfont[v.cfP]->*/v.Fy + yB_pl;
 	yH_pl = yE_pl-1-yB_pl;
 
 	/*xWplS = 14;*/  xW_plSm = 40;  //|sliderW, mW
@@ -125,7 +120,7 @@ void App::UpdDim(/*float rfrFq*/)
 
 	//  gui checks pos
 	//xB_gc = 106;  yB_gc = yB_tabs+90;  xW_gc = 18;
-	//xB_gck = 170;  yH_gc = /*cfont[v.cfG]->*/Fy+6; //[0
+	//xB_gck = 170;  yH_gc = /*cfont[v.cfG]->*/v.Fy+6; //[0
 	
 	//GuiReInit();
 }

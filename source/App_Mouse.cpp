@@ -8,49 +8,36 @@ using namespace std;  using namespace sf;
 void App::Wheel(int d)
 {
 	if (d == 0)  return;
-	/*if (ym < yB_pt)  // plr vol
+	if (ym < yB_tabs)  // plr vol
 	{
-		chVol(d < 0, shift, ctrl);
+		audio->chVol(d < 0, shift, ctrl);
 		return;
 	}
-	//  plst scroll
+	//  pls scroll
 	if (pls->Length() <= yL_pl)  return;
 	int m = shift ? 1 : ctrl ? yL_pl/2 : 8;
 	if (d < 0)  pls->PgOfsDn(m);  else  pls->PgOfsUp(m);
-	bDrawPlst = true;*/
-}
-
-void App::MouseDown(int b)
-{
-	if (b==1)  bL = true;  else
-	if (b==2)  bR = true;  else
-	if (b==3)  bM = true;
-}
-void App::MouseUp(int b)
-{
-	if (b==1)  bL = false;  else
-	if (b==2)  bR = false;  else
-	if (b==3)  bM = false;
+	//bDrawPlst = true;
 }
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - -  Mouse  - - - - - - - - - - - - - - - - - - - - - - - - */
 void App::Mouse()
 {
-	xms = xm;  xm = xMpos;// - view.xPos;
-	yms = ym;  ym = yMpos;// - view.yPos;
+	xms = xm;  xm = xMpos;
+	yms = ym;  ym = yMpos;
 
 	//if (!act)  return;
 	//btnKeysOk = btnKeysOn = false;
 //	bool bMInWnd = xm >= 0 && xm < view.xSize && ym >= 0 && ym < view.ySize;
 //	if (!bMInWnd)  return;
 
-	int Fy = 16;//cfont[view.cfP]->Fy;
+	int Fy = set.view.Fy; //cfont[view.cfP]->Fy;
 
 	//  cur trk  ----
 	if (!pls)  return; //-
-	/*int cr = max(0, min(pls->Length()-1, (ym-yB_pl)/Fy + pls->lOfs));
-	pTrk dest = NULL;
+	int cr = max(0, min(pls->Length()-1, (ym-yB_pl)/Fy + pls->ofs));
+	/*pTrk dest = NULL;
 	if (alt && pls->Length() > 0)
 	{
 		if (shift) {  pls->lInsM =-1;  pls->lInsPos = pls->lOfs;  } else
@@ -75,11 +62,12 @@ void App::Mouse()
 	static bool bLbt = false;
 	if (bL && (xm != xms || !bLs) && ym < yB_tabs)  // Left
 	{
-		if (!bLs && ym < yE_pl_btn)  // prev,next  btns |< >|
+		/*if (!bLs && ym < yE_pl_btn)  // prev,next  btns |< >|
 		{
-			//if (xm < view.xSize/2)  Prev();  else  Next();
-			bLbt = true;  return;
-		}
+			pls->Next(xm < set.view.xSize/2 ? -1 : 1);
+			bLbt = true;
+			return;
+		}/*fixme..*/
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par
@@ -94,12 +82,12 @@ void App::Mouse()
 	
 	//  Mid
 	if (bM && !bMs)
-	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yMFvi = set.view.visH;  }
+	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yMFvi = set.view.iVisH;  }
 	if (shift)
 	{
 		if (bM && bMs)  // chng vis size
 		{
-			set.view.visH = mia(8, set.view.ySize/*-Fy*4*/, yMFvi + ym-yMs);
+			set.view.iVisH = mia(8, set.view.ySize/*-Fy*4*/, yMFvi + ym-yMs);
 			UpdDim();
 		}
 	}
@@ -146,25 +134,22 @@ void App::Mouse()
 	if (ym > yB_pl)
 	{
 		///  Right  Play
-		#if 0
-		if (bR && !bRs && !shift/*move wnd*/ /*&& pls->Length() > 0*/)
+		if (bR && !bRs && !shift/*move wnd-*/ /*&& pls->Length() > 0*/)
 		{
-			pTrk t = pls->vList[cr];
-			if (!t->isDir())
+			pls->play = cr;
+			pls->Play(false);
+			/*if (!t->isDir())
 			{	Stop();  //pls->idPl = cr;
 				plsPlChg(plsId);  //pls id
-				plsPl->idPl = cr;  //trk id
-				Play(0);	}
-			bDrawPlst = true;
+			bDrawPlst = true;*/
 		}
-		#endif
 		
 		///  Left
-		#if 0
-		if (bL && xm < view.xSize - xW_plSm)
+		if (bL && xm < set.view.xSize - xW_plSm)
 		{
 			if (!bLs && ym > yB_pl && ym < yE_pl)
 			{
+				#if 0
 				if (alt)		//  Move
 				{
 					int m = shift? -2: ctrl? 2: pls->lInsM;
@@ -182,13 +167,16 @@ void App::Mouse()
 				else  if (shift) pls->SelRange(cr, ctrl);  //  select range
 				else  if (ctrl)  pls->Select1(cr);  //  select 1
 				else  pls->Pick(cr);  //  pick
+				#endif
+				pls->cur = cr;
 				
+				#if 0
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/
 					updSelId(1);
 				bDrawPlst = true;
+				#endif
 			}
 		}
-		#endif
 	
 		//  slider pls |
 		if (bL && pls->Length() > yL_pl)
@@ -227,4 +215,18 @@ void App::Mouse()
 	}
 	
 	bLs = bL;  bRs = bR;  bMs = bM;  // old state
+}
+
+
+void App::MouseDown(int b)
+{
+	if (b==1)  bL = true;  else
+	if (b==2)  bR = true;  else
+	if (b==3)  bM = true;
+}
+void App::MouseUp(int b)
+{
+	if (b==1)  bL = false;  else
+	if (b==2)  bR = false;  else
+	if (b==3)  bM = false;
 }

@@ -38,8 +38,8 @@ protected:
 	
 	//  keys
 	bool alt = false, ctrl = false, shift = false;
+	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);  // use own enum?
-	bool KeyUp(sf::Event::KeyEvent key);
 
 	//  mouse pos
 	int xMpos=0,yMpos=0, xMold=0,yMold=0;  //, xWclick,yWclick
@@ -78,7 +78,4 @@ protected:
 		//xB_gc=0,xB_gck=0,yB_gc=0, xW_gc=0,yH_gc=0;
 
 	void UpdDim(/*float rfrFq=-1.f*/);
-	
-	//  player
-	void Play();
 };
