@@ -14,7 +14,7 @@ Settings::Settings()
 	Default();
 }
 
-void Settings::GetWndDim(sf::Window* wnd)
+void Settings::SetDimFromWnd(sf::Window* wnd)
 {
 	view.xPos = wnd->getPosition().x;
 	view.yPos = wnd->getPosition().y;
@@ -27,13 +27,7 @@ void Settings::GetWndDim(sf::Window* wnd)
 //------------------------------------------------------------------------------------------------
 void Settings::Default()
 {
-//	fSplit = 0.22f;
-//	iFontH = 18;
-//	iFontGui = 17;
-//	iLineH = 2;
-
-//	xPos = 0;  ywPos = 0;
-//	xSize = 350;  ywSize = 768;
+	view.Defaults();
 
 	escQuit = false;
 }
@@ -71,27 +65,17 @@ bool Settings::Load()
 	XMLElement* e;  const char* a;
 
 	//  load
-	e = root->FirstChildElement("window");
+	e = root->FirstChildElement("debug");
 	if (e)
-	{	a = e->Attribute("x");  if (a)  view.xPos = atoi(a);
-		a = e->Attribute("y");  if (a)  view.yPos = atoi(a);
-		a = e->Attribute("sx");  if (a)  view.xSize = atoi(a);
-		a = e->Attribute("sy");  if (a)  view.ySize = atoi(a);
-		a = e->Attribute("escQuit");  if (a)  escQuit = atoi(a) >0? true: false;
+	{
+		a = e->Attribute("escQuit");  if (a)  escQuit = s2b(a);
 	}
 
-//	e = root->FirstChildElement("dim");
-//	if (e)
-//	{	a = e->Attribute("fSplit");  if (a)  fSplit = atof(a);
-//		a = e->Attribute("iFontH");  if (a)  iFontH = atoi(a);
-//		a = e->Attribute("iLineH");  if (a)  iLineH = atoi(a);
-//		a = e->Attribute("iFontGui");  if (a)  iFontGui = atoi(a);
-//		//a = e->Attribute("merge");  if (a)  merge = atoi(a) > 0? true: false;
-//	}
+	e = root->FirstChildElement("view");
+	if (e)
+		view.Load(e);
 
-	//  paths
-	//e = root->FirstChildElement("path");   if (e){  a = e->Attribute("p");  if (a)  path = a;  }
-
+	
 	Log("Settings Loaded.");
 	return true;
 }
@@ -106,23 +90,15 @@ bool Settings::Save()
 	root->SetAttribute("ver", ver);
 	XMLElement* e;
 
-	e = xml.NewElement("window");
-		e->SetAttribute("x", view.xPos);
-		e->SetAttribute("y", view.yPos);
-		e->SetAttribute("sx", view.xSize);
-		e->SetAttribute("sy", view.ySize);
+	//  save
+	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
 	root->InsertEndChild(e);
 
-//	e = xml.NewElement("dim");
-//		e->SetAttribute("fSplit", f2s(fSplit,3).c_str());
-//		e->SetAttribute("iFontH", iFontH);
-//		e->SetAttribute("iLineH", iLineH);
-//		e->SetAttribute("iFontGui", iFontGui);
-//	root->InsertEndChild(e);
+	e = xml.NewElement("view");
+		view.Save(e);
+	root->InsertEndChild(e);
 
-	//  paths
-	//e = xml.NewElement("path");   e->SetAttribute("p", path);  root->InsertEndChild(e);
 	
 	xml.InsertEndChild(root);
 	

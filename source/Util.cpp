@@ -5,7 +5,7 @@
 using namespace std;
 
 
-//  format
+//  to string
 string i2s(const int v, const char width, const char fill)
 {
 	ostringstream s;
@@ -22,10 +22,14 @@ string f2s(const float v, const char precision, const char width)
 	return s.str();
 }
 
-//  time
+string b2s(const bool b)
+{
+	return b ? "1" : "0";
+}
+
 std::string t2s(float time, bool float10s)
 {
-	if (time < 10.f && float10s)
+	if (/*time < 10.f &&*/ float10s)
 		return f2s(time,1,3);
 	int t = time,
 		s = t%60, m = t/60%60, h = t/3600;
@@ -35,8 +39,24 @@ std::string t2s(float time, bool float10s)
 	return i2s(m,1)+":"+i2s(s,2,'0');
 }
 
+//  from string
+int s2i(const char* str)
+{
+	return (int)strtol(str, NULL, 0);
+}
 
-//  string
+float s2f(const char* str)
+{
+	return (float)atof(str);
+}
+
+bool s2b(const char* str)
+{
+	return ((int)strtol(str, NULL, 0) > 0) ? true : false;
+}
+
+
+//  split
 /*vector<string> split(const string& s, const string& reg)
 {
 	regex re(reg);

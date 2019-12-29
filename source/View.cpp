@@ -1,6 +1,10 @@
 #include "View.h"
 #include "def.h"  // mia
+#include "AudioBass.h"  // const
+#include "Util.h"
+
 #include "../libs/tinyxml2.h"
+using namespace std;  using namespace tinyxml2;
 
 
 ViewSet::ViewSet()
@@ -11,37 +15,42 @@ ViewSet::ViewSet()
 void ViewSet::Defaults()
 {
 	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
-	iSleep = 10;  vsync = true;  pr_fq = 100.f;
-	visH = 116;  fftSize = 1;  eVis = viFFT;  fftMul = 69.f;
+	iSleep = 10;  bVSync = true;
+	
+	iVisH = 116;  iFFTSize = 1;  fFFTMul = 69.f;
+	eVis = viFFT;  fPrtFq = 100.f;
+	
 	bSlDrawR = 1;  xW_plS = 14;
+	
 	xNpt = 5;  yNpt = 1;/*2*/  ofsTab = 0;
+	
 	Fy = 17;  ///+
 	//cfP = 1;  cfA = 0;  cfT = 1;  cfH = 1;  cfG = 1;
 }
 
 
 ///  . . .             Load             . . .
-void ViewSet::Load(const XMLElement* m)
+void ViewSet::Load(const XMLElement* e)
 {
 	Defaults();
-#if 0
+
 	const char* a;
-	a = m->Attribute("sizeX");	if (a)  xSize = mia(100, ap->xScreen, cStr::toInt(a));
-	a = m->Attribute("sizeY");	if (a)	ySize = mia(30,  ap->yScreen, cStr::toInt(a));
-	a = m->Attribute("posX");	if (a)  xPos = cStr::toInt(a);
-	a = m->Attribute("posY");	if (a)  yPos = cStr::toInt(a);
+	a = e->Attribute("sx");		if (a)  xSize = max(100, s2i(a));  //mia(100, ap->xScreen, cStr::toInt(a));
+	a = e->Attribute("sy");		if (a)	ySize = max(30, s2i(a));  //mia(30,  ap->yScreen, cStr::toInt(a));
+	a = e->Attribute("x");		if (a)  xPos = s2i(a);
+	a = e->Attribute("y");		if (a)  yPos = s2i(a);
 
-	a = m->Attribute("eVis");	if (a)  eVis = (EVis)mia(0,viALL, cStr::toInt(a));
-	a = m->Attribute("visH");	if (a)  visH = mia(0, ap->yScreen, cStr::toInt(a));
-	a = m->Attribute("ftMul");	if (a)  fftMul = cStr::toInt(a);//toFloat
-	a = m->Attribute("fft");	if (a)  fftSize = mia(0,FFTNum-1, cStr::toInt(a));
-	a = m->Attribute("vpFq");	if (a)  pr_fq = cStr::toInt(a);//toFloat
+	a = e->Attribute("sleep");	if (a)  iSleep = s2i(a);
+	a = e->Attribute("vsync");	if (a)  bVSync = s2b(a);
 
-	a = m->Attribute("sleep");	if (a)  iSleep = cStr::toInt(a);
-	a = m->Attribute("vsync");	if (a)  vsync = cStr::toBool(a);
-	
-	a = m->Attribute("sldr");	if (a)  xW_plS = max(0, cStr::toInt(a));
-	a = m->Attribute("slR");	if (a)  bSlDrawR = cStr::toBool(a);
+	a = e->Attribute("visH");	if (a)  iVisH = mia(0, ySize, s2i(a));
+	a = e->Attribute("fft");	if (a)  iFFTSize = mia(0,ciFFTNum-1, s2i(a));
+	a = e->Attribute("ftMul");	if (a)  fFFTMul = s2f(a);
+	a = e->Attribute("eVis");	if (a)  eVis = (EVis)mia(0,int(viALL), s2i(a));
+	a = e->Attribute("vpFq");	if (a)  fPrtFq = s2f(a);
+
+	a = e->Attribute("sldr");	if (a)  xW_plS = max(0, s2i(a));
+	a = e->Attribute("slR");	if (a)  bSlDrawR = s2b(a);
 
 	/*int nf = NumFnt-1;
 	a = m->Attribute("Fp");		if (a)  cfP = mia(0,nf, cStr::toInt(a));
@@ -50,41 +59,38 @@ void ViewSet::Load(const XMLElement* m)
 	a = m->Attribute("Fh");		if (a)  cfH = mia(0,nf, cStr::toInt(a));
 	a = m->Attribute("Fg");		if (a)  cfG = mia(0,nf, cStr::toInt(a));*/
 
-	a = m->Attribute("tbX");	if (a)  xNpt = max(1, cStr::toInt(a));
-	a = m->Attribute("tbY");	if (a)  yNpt = max(0, cStr::toInt(a));
-	a = m->Attribute("tbO");	if (a)  ofsTab = cStr::toInt(a);
-#endif
+	a = e->Attribute("tbX");	if (a)  xNpt = max(1, s2i(a));
+	a = e->Attribute("tbY");	if (a)  yNpt = max(0, s2i(a));
+	a = e->Attribute("tbO");	if (a)  ofsTab = s2i(a);
 }
 
 ///  . . .             Save             . . .
-void ViewSet::Save(XMLElement* m)
+void ViewSet::Save(XMLElement* e)
 {
-#if 0
-	m->SetAttribute("sizeX",	cStr::iToStr(xSize,4));
-	m->SetAttribute("sizeY",	cStr::iToStr(ySize,4));
-	m->SetAttribute("posX",		cStr::iToStr(xPos,4));
-	m->SetAttribute("posY",		cStr::iToStr(yPos,4));
+	e->SetAttribute("sx",	i2s(xSize,4,' ').c_str());
+	e->SetAttribute("sy",	i2s(ySize,4,' ').c_str());
+	e->SetAttribute("x",	i2s(xPos,4,' ').c_str());
+	e->SetAttribute("y",	i2s(yPos,4,' ').c_str());
 
-	m->SetAttribute("eVis",		cStr::strI(eVis));
-	m->SetAttribute("visH",		cStr::iToStr(visH,4));
-	m->SetAttribute("ftMul",	cStr::strF(fftMul));
-	m->SetAttribute("fft",		cStr::strI(fftSize));
-	m->SetAttribute("vpFq",		cStr::strI(pr_fq));
+	e->SetAttribute("sleep",	i2s(iSleep,2).c_str());
+	e->SetAttribute("vsync",	b2s(bVSync).c_str());
 
-	m->SetAttribute("sleep",	cStr::iToStr(iSleep,2));
-	m->SetAttribute("vsync",	cStr::strB(vsync));
+	e->SetAttribute("visH",		i2s(iVisH,4,' ').c_str());
+	e->SetAttribute("fft",		i2s(iFFTSize).c_str());
+	e->SetAttribute("ftMul",	f2s(fFFTMul).c_str());
+	e->SetAttribute("eVis",		i2s(eVis).c_str());
+	e->SetAttribute("vpFq",		f2s(fPrtFq).c_str());
 
-	m->SetAttribute("sldr",		cStr::iToStr(xW_plS,2));
-	m->SetAttribute("slR",		cStr::strB(bSlDrawR));
+	e->SetAttribute("sldr",		i2s(xW_plS,2).c_str());
+	e->SetAttribute("slR",		b2s(bSlDrawR).c_str());
 
-	/*m->SetAttribute("Fp",	cStr::strI(cfP));
-	m->SetAttribute("Fa",	cStr::strI(cfA));
-	m->SetAttribute("Ft",	cStr::strI(cfT));
-	m->SetAttribute("Fh",	cStr::strI(cfH));
-	m->SetAttribute("Fg",	cStr::strI(cfG));*/
+	/*m->SetAttribute("Fp",	i2s(cfP));
+	m->SetAttribute("Fa",	i2s(cfA));
+	m->SetAttribute("Ft",	i2s(cfT));
+	m->SetAttribute("Fh",	i2s(cfH));
+	m->SetAttribute("Fg",	i2s(cfG));*/
 
-	m->SetAttribute("tbX",	cStr::iToStr(xNpt,2));
-	m->SetAttribute("tbY",	cStr::strI(yNpt));
-	m->SetAttribute("tbO",	cStr::strI(ofsTab));
-#endif
+	e->SetAttribute("tbX",	i2s(xNpt,2).c_str());
+	e->SetAttribute("tbY",	i2s(yNpt).c_str());
+	e->SetAttribute("tbO",	i2s(ofsTab).c_str());
 }

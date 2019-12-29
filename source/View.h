@@ -1,6 +1,5 @@
 #pragma once
-class XMLElement;
-
+namespace tinyxml2 {  class XMLElement;  }
 
 enum EVis
 {
@@ -16,22 +15,22 @@ public:
 	ViewSet();
 	void Defaults();
 
-	void Load(const XMLElement* m);
-	void Save(XMLElement* m);
+	void Load(const tinyxml2::XMLElement* e);
+	void Save(tinyxml2::XMLElement* e);
 
 
 	//  window
 	int xSize,ySize, xPos,yPos;
 
 	int iSleep;  // in ms
-	bool vsync;
+	bool bVSync;
 
 	//  visualization
-	int visH;  // draw height
-	int fftSize;  // samples (fft quality)
-	float fftMul;  // multiply y (scale)
+	int iVisH;  // draw height
+	int iFFTSize;  // samples (fft quality)
+	float fFFTMul;  // multiply y (scale)
 	/*EVis*/ int eVis;
-	float pr_fq;  // voice print/spectrogram freq (speed)
+	float fPrtFq;  // voice print/spectrogram freq (speed)
 
 	//  slider
 	bool bSlDrawR;  // draw rating
