@@ -5,7 +5,7 @@ using namespace std;  using namespace sf;
 
 bool App::KeyDown(sf::Event::KeyEvent k)
 {
-	bool alt = k.alt, ctrl = k.control, shift = k.shift;
+	alt = k.alt;  ctrl = k.control;  shift = k.shift;
 	switch (k.code)
 	{
 	case Keyboard::Enter:  // |> || []
@@ -27,9 +27,9 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 			  else  audio->chPos(0, shift, ctrl);  break;
 
 	case Keyboard::E:  // vol ^ v
-		audio->chVol(1, shift, ctrl);
+		audio->chVol(0, shift, ctrl);  break;
 	case Keyboard::D:
-		audio->chVol(0, shift, ctrl);
+		audio->chVol(1, shift, ctrl);  break;
 		
 	//  playlist move  cursor, offset
 	//  none- up/dn 1   ctrl- x8  //  alt- move1
@@ -46,18 +46,22 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 
 	//  toggle
 	case Keyboard::T:	audio->bRep1 = !audio->bRep1;  break;
+	//  debug
 	case Keyboard::I:	bFps = !bFps;  break;
+	case Keyboard::U:   bDebug = !bDebug;  break;
+	case Keyboard::M:   ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  break;
 		
 	default:  break;
 	}
 	return true;
 }
 
-bool App::KeyUp(sf::Event::KeyEvent key)
+bool App::KeyUp(sf::Event::KeyEvent k)
 {
-	
+	alt = k.alt;  ctrl = k.control;  shift = k.shift;
 	return true;
 }
+
 
 //  move to pls ..
 void App::Play()
