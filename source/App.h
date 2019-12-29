@@ -3,7 +3,7 @@
 #include "Settings.h"
 #include "AppLog.h"
 #include "TimeColors.h"
-#include "View.h"
+//#include "View.h"
 
 #include <SFML/Window/Event.hpp>  // input
 #include <memory>
@@ -22,6 +22,7 @@ public:
 protected:
 	
 	Settings set;
+	//ViewSet view;  // in set
 	
 	TimeClrSets timeColors;
 	
@@ -31,8 +32,6 @@ protected:
 
 	//std::unique_ptr<Skin> skin;
 
-	ViewSet view;
-	
 	bool Init();
 	bool Destroy();
 

@@ -12,9 +12,9 @@ void ViewSet::Defaults()
 {
 	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
 	iSleep = 10;  vsync = true;  pr_fq = 100.f;
-	visH = 96;  fftSize = 1;  eVis = viFFT;  fftMul = 69.f;
+	visH = 116;  fftSize = 1;  eVis = viFFT;  fftMul = 69.f;
 	bSlDrawR = 1;  xW_plS = 14;
-	xNpt = 5;  yNpt = 2;  ofsTab = 0;
+	xNpt = 5;  yNpt = 1;/*2*/  ofsTab = 0;
 	Fy = 17;  ///+
 	//cfP = 1;  cfA = 0;  cfT = 1;  cfH = 1;  cfG = 1;
 }

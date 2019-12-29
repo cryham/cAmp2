@@ -14,13 +14,13 @@ bool AppSFMLDraw::Run()
 	//VideoMode vm = VideoMode::getDesktopMode();
 
 	pWindow = make_unique<RenderWindow>(
-		VideoMode(set.xwSize, set.ywSize),
+		VideoMode(set.view.xSize, set.view.ySize),
 		"cAmp2",  // Title
 		Style::Default, ContextSettings());
 
 	pWindow->setVerticalSyncEnabled(true);
 //	pWindow->setFramerateLimit(60);  // par
-	pWindow->setPosition(Vector2i(set.xwPos, set.ywPos));
+	pWindow->setPosition(Vector2i(set.view.xPos, set.view.yPos));
 
 	
 	//  Load data
@@ -48,8 +48,8 @@ bool AppSFMLDraw::Run()
 	
 	//  font
 	const static string sFntName[Fnt_All] = {
-		"DejaVuSans.ttf", //Fnt_Info, Fnt_Track, 
-		"DejaVuSans.ttf",
+		"DejaVuLGCSans.ttf", //Fnt_Info, Fnt_Track, 
+		"DejaVuLGCSans.ttf",
 		"NotoMono.ttf", //Fnt_Time, Fnt_TimeBig
 		"NotoMono.ttf",
 	};

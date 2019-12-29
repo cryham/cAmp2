@@ -121,6 +121,7 @@ bool AudioBass::Play(Track& trk)
     BASS_ChannelPlay(ch(), TRUE);
     
 	bPlaying = true;  bPaused = false;
+	rate = trk.rate;  //-
     return true;
 }
 
@@ -234,6 +235,7 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 
 void AudioBass::Next()
 {
+	// todo: next
 	//pls->
 }
 

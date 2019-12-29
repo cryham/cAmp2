@@ -1,5 +1,6 @@
 #pragma once
 #include "AppLog.h"
+#include "View.h"
 #include <SFML/Config.hpp>
 
 namespace sf {  class Window;  }
@@ -28,10 +29,11 @@ public:
 //	int   iFontGui = 17;    // font height for Gui
 //	int   iLineH = 2;       // line spacing
 
-
 	//  window  -----
-	int xwPos = 0, ywPos = 0;
-	uint xwSize = 350, ywSize = 768;
+//	int xwPos = 0, ywPos = 0;
+//	uint xwSize = 350, ywSize = 768;
+	ViewSet view;
+	
 	void GetWndDim(sf::Window* wnd);
 
 	bool escQuit = false;

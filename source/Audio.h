@@ -20,6 +20,7 @@ public:
 	int iVolume = 100;  // 1000 = 100%
 	
 	std::string sInfo;  // bitRate, freq, size MB
+	int rate = 0;  // cur track-
 	
 	bool bRep1 = false;  // repeat
 

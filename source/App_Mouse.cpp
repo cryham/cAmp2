@@ -83,7 +83,7 @@ void App::Mouse()
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_pt - 120)  // h par
-			audio->chPosAbs(mia(0.,1., (double(xm) / view.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
+			audio->chPosAbs(mia(0.,1., (double(xm) / set.view.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
 		return;
 	}
 	/*if (bR && !bRs && ym < yE_pl_btn && plsPl)  //  Right rating
@@ -94,12 +94,12 @@ void App::Mouse()
 	
 	//  Mid
 	if (bM && !bMs)
-	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yMFvi = view.visH;  }
+	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yMFvi = set.view.visH;  }
 	if (shift)
 	{
 		if (bM && bMs)  // chng vis size
 		{
-			view.visH = mia(8, view.ySize/*-Fy*4*/, yMFvi + ym-yMs);
+			set.view.visH = mia(8, set.view.ySize/*-Fy*4*/, yMFvi + ym-yMs);
 			UpdDim();
 		}
 	}
@@ -193,7 +193,7 @@ void App::Mouse()
 		//  slider pls |
 		if (bL && pls->Length() > yL_pl)
 		{
-			if (xm > view.xSize - xW_plSm)
+			if (xm > set.view.xSize - xW_plSm)
 			{	if (!bLs)
 				{	/*ofs*/xLs = pls->ofs;  yLs = ym;   bLsl = true;  }
 			}else

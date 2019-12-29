@@ -16,10 +16,10 @@ Settings::Settings()
 
 void Settings::GetWndDim(sf::Window* wnd)
 {
-	xwPos = wnd->getPosition().x;
-	ywPos = wnd->getPosition().y;
-	xwSize = wnd->getSize().x;
-	ywSize = wnd->getSize().y;
+	view.xPos = wnd->getPosition().x;
+	view.yPos = wnd->getPosition().y;
+	view.xSize = wnd->getSize().x;
+	view.ySize = wnd->getSize().y;
 }
 
 
@@ -32,11 +32,10 @@ void Settings::Default()
 //	iFontGui = 17;
 //	iLineH = 2;
 
-	xwPos = 0;  ywPos = 0;
-	xwSize = 350;  ywSize = 768;
+//	xPos = 0;  ywPos = 0;
+//	xSize = 350;  ywSize = 768;
 
 	escQuit = false;
-
 }
 
 
@@ -61,6 +60,7 @@ bool Settings::Load()
 	if (er != XML_SUCCESS)
 	{	Log(sErr + "Can't load file.");  return false;  }
 
+	using tinyxml2::XMLElement;
 	XMLElement* root = doc.RootElement();
 	if (!root)
 	{	Log(sErr + "No root.");  return false;  }
@@ -73,10 +73,10 @@ bool Settings::Load()
 	//  load
 	e = root->FirstChildElement("window");
 	if (e)
-	{	a = e->Attribute("x");  if (a)  xwPos = atoi(a);
-		a = e->Attribute("y");  if (a)  ywPos = atoi(a);
-		a = e->Attribute("sx");  if (a)  xwSize = atoi(a);
-		a = e->Attribute("sy");  if (a)  ywSize = atoi(a);
+	{	a = e->Attribute("x");  if (a)  view.xPos = atoi(a);
+		a = e->Attribute("y");  if (a)  view.yPos = atoi(a);
+		a = e->Attribute("sx");  if (a)  view.xSize = atoi(a);
+		a = e->Attribute("sy");  if (a)  view.ySize = atoi(a);
 		a = e->Attribute("escQuit");  if (a)  escQuit = atoi(a) >0? true: false;
 	}
 
@@ -100,16 +100,17 @@ bool Settings::Load()
 //------------------------------------------------------------------------------------------------
 bool Settings::Save()
 {
+	using tinyxml2::XMLElement;
 	XMLDocument xml;
 	XMLElement* root = xml.NewElement("cAmp2");
 	root->SetAttribute("ver", ver);
 	XMLElement* e;
 
 	e = xml.NewElement("window");
-		e->SetAttribute("x", xwPos);
-		e->SetAttribute("y", ywPos);
-		e->SetAttribute("sx", xwSize);
-		e->SetAttribute("sy", ywSize);
+		e->SetAttribute("x", view.xPos);
+		e->SetAttribute("y", view.yPos);
+		e->SetAttribute("sx", view.xSize);
+		e->SetAttribute("sy", view.ySize);
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
 	root->InsertEndChild(e);
 
