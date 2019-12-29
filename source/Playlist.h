@@ -14,7 +14,7 @@ public:
 	//  cursor pos, playing pos, ids to tracks
 	int cur = 0, ofs = 0;  // offset view
 	int play = 0;
-	int lin = 10;  // view visible lines
+	int lin = 10;  // view visible lines, for page keys
 
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int mul)
@@ -34,6 +34,11 @@ public:
     bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
 	
 	static Audio* audio;  // for IsPlayable
+	
+
+	//  play  ----
+	bool Play(bool set=false);
+	bool Next(int add=1);
 
 	
 	//  get

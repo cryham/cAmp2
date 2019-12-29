@@ -3,26 +3,36 @@
 #include "View.h"
 #include <string>
 
+class Playlist;
+
 
 class Audio
 {
 protected:
-	//  init, devices
-    int maxFreq = 0;
+    int maxFreq = 0;  // init, devices-
 
 	//  Play state
     bool bPlaying = false;
     bool bPaused  = false;
 
-    //  Time pos
+	Playlist* pls = nullptr;  // for Play, Next
+
 public:
+	//  Time pos
     double timePlay = 0.0, timeTrack = 0.0; //, lastPos = 0.0;
 	int iVolume = 100;  // 1000 = 100%
 	
 	std::string sInfo;  // bitRate, freq, size MB
 	int rate = 0;  // cur track-
 	
-	bool bRep1 = false;  // repeat
+	bool bRep1 = false;  // repeat track
+
+public:
+	bool IsPlaying() {  return bPlaying;  }
+    bool IsPaused()  {  return bPaused;   }
+
+	Playlist* GetPls() {  return pls;  }
+	void SetPls(Playlist* pl) {  pls = pl;  }
 
 public:
 	//  Init
@@ -37,12 +47,6 @@ public:
 	virtual void Pause() = 0;
     virtual void Stop() = 0;
 
-	bool IsPlaying() {  return bPlaying;  }
-    bool IsPaused()  {  return bPaused;   }
-
-	virtual void Next() = 0;
-	virtual void Prev() = 0;
-	
 	//  change position, volume
 	virtual void getPos() = 0;  // updates timePlay
 	virtual void chPos(bool back, bool slow, bool fast) = 0;

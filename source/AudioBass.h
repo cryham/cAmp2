@@ -22,7 +22,7 @@ class AudioBass : public Audio, public LogErr
     HSYNC chSync = 0;
 	
 	float fft[ciFFT], visA[ciFFT];
-//	std::vector<float> fft, visA;
+	//std::vector<float> fft, visA;
 	
 public:
     AudioBass();
@@ -35,9 +35,6 @@ public:
 	void Pause() override;
     void Stop() override;
 
-	void Next() override;
-	void Prev() override;
-	
 	void getPos() override;
 	float* getFFT() override
 	{  return visA;  }

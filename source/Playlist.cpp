@@ -8,13 +8,42 @@
 using namespace std;
 
 
+Audio* Playlist::audio = nullptr;
+
 Playlist::Playlist()
 {
 
 }
 
-Audio* Playlist::audio = nullptr;
 
+//  play
+//--------------------------------------------------------------------
+bool Playlist::Play(bool set)
+{
+	if (IsEmpty())  return false;
+	if (set)  play = cur;
+	if (play < 0 || play >= tracks.size())  return false;  //Check()
+	
+	Track& t = GetTracks()[play];
+	audio->SetPls(this);
+	bool ok = audio->Play(t);
+	return ok;
+}
+
+bool Playlist::Next(int add)
+{
+	if (IsEmpty())  return false;
+	play += add;
+	int last = tracks.size()-1;
+	if (play < 0)  play = last;
+	if (play >= last)  play = 0;
+	// todo: skip while dirs and disabled
+	return Play();
+}
+
+
+//  add dir
+//--------------------------------------------------------------------
 bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 {
 
@@ -53,8 +82,9 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
     return true;
 }
 
-//  list move (keys)  --------------------------------------------------------------------
 
+//  list move (keys)
+//--------------------------------------------------------------------
 void Playlist::Cur()
 {
 	int all = (int)(tracks.size())-1;

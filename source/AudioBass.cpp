@@ -2,6 +2,7 @@
 #include "FileSystem.h"
 #include "Util.h"
 #include "Track.h"
+#include "Playlist.h"
 
 #include <iostream>
 #include <cmath>
@@ -44,7 +45,7 @@ void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
     AudioBass* ab = (AudioBass*)user;
 	ab->Stop();
     if (!ab->bRep1)
-		ab->Next();
+		ab->GetPls()->Next();
 }
 
 ///  Play  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
@@ -151,7 +152,7 @@ void AudioBass::Stop()		///  []
 }
 
 
-///  change playing position  - - - - 
+///  seek, change playing position  - - - - 
 
 void AudioBass::getPos()
 {
@@ -161,15 +162,20 @@ void AudioBass::getPos()
 
 void AudioBass::chPos(bool back, bool slow, bool fast)  //  <<  >>
 {
-	if (!bPlaying)  return;
+	if (!bPlaying || !pls)  return;
 	//  todo:  +- % of track
 	double add = slow ? 5 : fast ? 30 : 15;  //vSpdSeek[iSpdSeek].s[slow ? 0 : fast ? 2 : 1].add;
 	double pos = BASS_ChannelBytes2Seconds(ch(), BASS_ChannelGetPosition(ch(), BASS_POS_BYTE));
 	pos += back ? -add : add;
+
 	if (pos < 0.0)
-	{	if (!bRep1) Prev();  pos += timeTrack;  }  //out exact
+	{	if (!bRep1)  pls->Next(-1);
+		pos += timeTrack;  // exact
+	}
 	if (pos > timeTrack)
-	{	pos -= timeTrack;  if (!bRep1) Next();  }
+	{	pos -= timeTrack;
+		if (!bRep1)  pls->Next();
+	}
 	BASS_ChannelSetPosition(ch(), BASS_ChannelSeconds2Bytes(ch(), pos), BASS_POS_BYTE);
 }
 
@@ -201,12 +207,12 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 	//  get data
 	if (view.eVis==viFFT)
 	{
-		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.fftSize] );
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.iFFTSize] );
 
 		for (int x=0; x < view.xSize+1; x++)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
-			float y = -log10(f) * /*view.fftMul*/69.f /255.f -0.1f;  //par
+			float y = -log10(f) * view.fFFTMul /255.f -0.1f;  //par
 
 			y = mia(0.f,1.f, y);  visA[x] = y;
 		}
@@ -230,16 +236,4 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 		float fL = LOWORD(BASS_ChannelGetLevel(chan)) / 128.f;
 		float fR = HIWORD(BASS_ChannelGetLevel(chan)) / 128.f;
 	}/**/
-}
-
-
-void AudioBass::Next()
-{
-	// todo: next
-	//pls->
-}
-
-void AudioBass::Prev()
-{
-	
 }
