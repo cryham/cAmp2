@@ -13,8 +13,11 @@ class AppSFMLDraw : public App
 	std::unique_ptr<sf::RenderWindow> pWindow = nullptr;
 	std::unique_ptr<sf::Sprite> pBackgr = nullptr;
 
-	std::unique_ptr<sf::Font> pFont = nullptr;
-	sf::Text text;
+	enum EFont
+	{	Fnt_Info=0, Fnt_Track, Fnt_Time, Fnt_TimeBig, Fnt_All  };
+
+	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
+	sf::Text text[Fnt_All];
 
 protected:
 	sf::String str;
@@ -28,8 +31,8 @@ protected:
 		clr = sf::Color(r,g,b);
 	}
 	
-	float dt = 0.1f;
 	void DrawPlayer();
+	void DrawSlider();
 
 public:
 	bool Run();
@@ -39,7 +42,7 @@ protected:
 	//--------------------------
 	//  write out text, from str
 	//  returns width, x advance
-	int Text(int x, int y, bool draw=true);
+	int Text(EFont n, int x, int y, bool draw=true);
 
 	//  draw textured rect, stretched at
 	//  x,y pos, width,height,  texture coords uv start,size,  color rgb

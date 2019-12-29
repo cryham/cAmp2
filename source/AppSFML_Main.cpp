@@ -33,15 +33,8 @@ bool AppSFMLDraw::Run()
 	else
 		Error("Can't load icon: " + file);
 
-	//  font
-	file = data + "/DejaVuLGCSans.ttf";
-	pFont = make_unique<Font>();
-	if (!pFont->loadFromFile(file))
-	{
-		Error("Can't load font: " + file);
-		return false;
-	}
-
+	
+	//  texture
 	Texture tex;
 	file = data + "/player.png";
 	if (!tex.loadFromFile(file))
@@ -52,9 +45,36 @@ bool AppSFMLDraw::Run()
 
 	pBackgr = make_unique<Sprite>(tex);
 
-	text.setFont(*pFont.get());
-	text.setCharacterSize(16);  //set.iFontH
-	//font.getLineSpacing();
+	
+	//  font
+	const static string sFntName[Fnt_All] = {
+		"DejaVuSans.ttf", //Fnt_Info, Fnt_Track, 
+		"DejaVuSans.ttf",
+		"NotoMono.ttf", //Fnt_Time, Fnt_TimeBig
+		"NotoMono.ttf",
+	};
+	const static int iFntSize[Fnt_All] = {
+		15, //14
+		14, //15
+		16, //16
+		20, //20
+	};
+	
+	for (int i=0; i < Fnt_All; ++i)
+	{
+		file = data + "/" + sFntName[i];
+		pFont[i] = make_unique<Font>();
+		if (!pFont[i]->loadFromFile(file))
+		{
+			Error("Can't load font: " + file);
+			return false;
+		}
+		//SetFont(Fnt_Info, view.Fy);
+		text[i].setFont(*pFont[i].get());
+		text[i].setCharacterSize(iFntSize[i]);  // view.Fy -3);
+		//text[i].setStyle(bold ? Text::Bold : Text::Regular);
+		//font.getLineSpacing();
+	}
 
 
 	//  Loop
@@ -74,8 +94,8 @@ bool AppSFMLDraw::Run()
 			case Event::MouseMoved:				Mouse(e.mouseMove.x, e.mouseMove.y);  break;
 			case Event::MouseWheelScrolled:		Wheel(e.mouseWheelScroll.delta);  break;
 
-			case Event::MouseButtonPressed:		mb = e.mouseButton.button + 1;  break;
-			case Event::MouseButtonReleased:	mb = 0;  break;
+			case Event::MouseButtonPressed:		MouseDown((int)e.mouseButton.button + 1);  break;
+			case Event::MouseButtonReleased:	MouseUp((int)e.mouseButton.button + 1);  break;
 
 			
 			case Event::KeyPressed:
@@ -95,7 +115,8 @@ bool AppSFMLDraw::Run()
 					pWindow->setView(sf::View(vis));
 				}
 				// save new size
-				//set.GetWndDim(pWindow.get());
+				set.GetWndDim(pWindow.get());
+				UpdDim();
 				break;
 
 			case Event::Closed:
@@ -112,6 +133,7 @@ bool AppSFMLDraw::Run()
 		dt = time.asSeconds();
 
 		DrawPlayer();
+		Mouse();		
 		
 		pWindow->display();
 	}

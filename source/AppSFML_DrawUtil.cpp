@@ -3,15 +3,15 @@ using namespace std;  using namespace sf;
 
 
 //  write text
-int AppSFMLDraw::Text(int x, int y, bool draw)
+int AppSFMLDraw::Text(EFont n, int x, int y, bool draw)
 {
 	//if (!pWindow)  return;
-	text.setString(str);
-	text.setStyle(bold ? Text::Bold : Text::Regular);
-	text.setColor(clr);
-	text.setPosition(x, y);
-	if (draw)  pWindow->draw(text);
-	return static_cast<int>(text.getLocalBounds().width);  // advance x pos
+	text[n].setString(str);
+	//text[n].setStyle(bold ? Text::Bold : Text::Regular);
+	text[n].setColor(clr);
+	text[n].setPosition(x, y);
+	if (draw)  pWindow->draw(text[n]);
+	return static_cast<int>(text[n].getLocalBounds().width);  // advance x pos
 }
 
 //  draw rect
