@@ -27,10 +27,10 @@ void Settings::GetWndDim(sf::Window* wnd)
 //------------------------------------------------------------------------------------------------
 void Settings::Default()
 {
-	fSplit = 0.22f;
-	iFontH = 18;
-	iFontGui = 17;
-	iLineH = 2;
+//	fSplit = 0.22f;
+//	iFontH = 18;
+//	iFontGui = 17;
+//	iLineH = 2;
 
 	xwPos = 0;  ywPos = 0;
 	xwSize = 350;  ywSize = 768;
@@ -80,14 +80,14 @@ bool Settings::Load()
 		a = e->Attribute("escQuit");  if (a)  escQuit = atoi(a) >0? true: false;
 	}
 
-	e = root->FirstChildElement("dim");
-	if (e)
-	{	a = e->Attribute("fSplit");  if (a)  fSplit = atof(a);
-		a = e->Attribute("iFontH");  if (a)  iFontH = atoi(a);
-		a = e->Attribute("iLineH");  if (a)  iLineH = atoi(a);
-		a = e->Attribute("iFontGui");  if (a)  iFontGui = atoi(a);
-		//a = e->Attribute("merge");  if (a)  merge = atoi(a) > 0? true: false;
-	}
+//	e = root->FirstChildElement("dim");
+//	if (e)
+//	{	a = e->Attribute("fSplit");  if (a)  fSplit = atof(a);
+//		a = e->Attribute("iFontH");  if (a)  iFontH = atoi(a);
+//		a = e->Attribute("iLineH");  if (a)  iLineH = atoi(a);
+//		a = e->Attribute("iFontGui");  if (a)  iFontGui = atoi(a);
+//		//a = e->Attribute("merge");  if (a)  merge = atoi(a) > 0? true: false;
+//	}
 
 	//  paths
 	//e = root->FirstChildElement("path");   if (e){  a = e->Attribute("p");  if (a)  path = a;  }
@@ -113,12 +113,12 @@ bool Settings::Save()
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
 	root->InsertEndChild(e);
 
-	e = xml.NewElement("dim");
-		e->SetAttribute("fSplit", f2s(fSplit,3).c_str());
-		e->SetAttribute("iFontH", iFontH);
-		e->SetAttribute("iLineH", iLineH);
-		e->SetAttribute("iFontGui", iFontGui);
-	root->InsertEndChild(e);
+//	e = xml.NewElement("dim");
+//		e->SetAttribute("fSplit", f2s(fSplit,3).c_str());
+//		e->SetAttribute("iFontH", iFontH);
+//		e->SetAttribute("iLineH", iLineH);
+//		e->SetAttribute("iFontGui", iFontGui);
+//	root->InsertEndChild(e);
 
 	//  paths
 	//e = xml.NewElement("path");   e->SetAttribute("p", path);  root->InsertEndChild(e);

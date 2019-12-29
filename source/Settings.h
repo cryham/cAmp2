@@ -11,7 +11,7 @@ typedef unsigned int uint;
 class Settings : public LogErr
 {
 public:
-	const static int ver = 21;  // version of file
+	const static int ver = 202;  // version of file
 
 	//  main  -----
 	Settings();
@@ -23,10 +23,10 @@ public:
 	//  paths  -----
 
 	//  dimensions  -----
-	float fSplit = 0.22f;   // splitter 0..1
-	int   iFontH = 18;      // font height in list
-	int   iFontGui = 17;    // font height for Gui
-	int   iLineH = 2;       // line spacing
+//	float fSplit = 0.22f;   // splitter 0..1
+//	int   iFontH = 18;      // font height in list
+//	int   iFontGui = 17;    // font height for Gui
+//	int   iLineH = 2;       // line spacing
 
 
 	//  window  -----
