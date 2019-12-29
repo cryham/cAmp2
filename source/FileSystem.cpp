@@ -20,11 +20,9 @@ using namespace std;
 #include <shlobj.h>
 #endif
 
-// Should come from CMake
-//#ifndef DATA_DIR
-#define DATA_DIR "data"
-//#endif
-#define APP_NAME "cAmp2"
+//  cAmp2 const
+#define  DATA_DIR  "data"
+#define  APP_NAME  "cAmp2"
 
 using namespace std;
 
@@ -80,7 +78,10 @@ uintmax_t FileSystem::Size(const std::string& filename)
 
 bool FileSystem::CreateDir(const string& path)
 {
-    try	{	fs::create_directories(path);	}
+    try
+	{
+		fs::create_directories(path);
+	}
     catch (...)
     {
         cerr << "Could not create directory " << path << endl;
@@ -90,12 +91,12 @@ bool FileSystem::CreateDir(const string& path)
 }
 
 
-// Print diagnostic info  ----
+//  diagnostic info  ----
 string FileSystem::GetInfo()
 {
     string s;
-    s += "Paths info\n";
-    s += "-------------------------\n";
+    s += "Paths info:\n";
+    //s += "-------------------------\n";
     s += "Data:    " + Data() + "\n";
     s += "Home:    " + home_dir + "\n";
     s += "Config:  " + Config() + "\n";

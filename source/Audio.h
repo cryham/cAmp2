@@ -1,5 +1,6 @@
 #pragma once
 #include "Track.h"
+#include "View.h"
 #include <string>
 
 
@@ -48,9 +49,9 @@ public:
 	virtual void chVol(bool back, bool slow, bool fast) = 0;
 
 	//  visualization
-	virtual float* getFFT() = 0;
-	virtual void GetVisData(int size) = 0;  // updates float*
-
+	virtual float* getFFT() = 0;   // updates float*
+	virtual void GetVisData(int size, const ViewSet &view) = 0;
+	
 	virtual void GetTrkTime(Track& t) = 0;
 	virtual bool IsPlayable(std::string ext) = 0;
 };

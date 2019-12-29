@@ -1,6 +1,5 @@
 #pragma once
 #include "Audio.h"
-//#include "Track.h"
 #include "AppLog.h"
 #include "../../bass/src/bass.h"
 #include <vector>
@@ -48,7 +47,7 @@ public:
 	void chVol(bool back, bool slow, bool fast) override;
 	
 	//  get data for audio visualization
-	void GetVisData(int size) override;
+	void GetVisData(int size, const ViewSet &view) override;
 
 	void GetTrkTime(Track& t) override;  // sets time, mod, size
 	bool IsPlayable(std::string ext) override;

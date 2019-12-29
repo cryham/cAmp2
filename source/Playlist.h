@@ -46,6 +46,8 @@ public:
 	bool IsEmpty() const
 	{	return tracks.empty();  }
 
+	int Length() const
+	{	return (int)tracks.size();  }
 
     // copy, move selected tracks from other
 

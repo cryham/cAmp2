@@ -2,6 +2,7 @@
 #include "FileSystem.h"
 #include "Util.h"
 #include "Track.h"
+
 #include <iostream>
 #include <cmath>
 #include "def.h"
@@ -191,17 +192,17 @@ void AudioBass::chVol(bool back, bool slow, bool fast)  //  ^ v
 
 ///  FFT / Osc  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 //  get data for audio visualization
-void AudioBass::GetVisData(int size)
+void AudioBass::GetVisData(int size, const ViewSet& view)
 {
 	//DWORD chan = bPlay ? ch() : chRec;
 	DWORD chan = ch();
 
 	//  get data
-	//if (view.eVis==viFFT)
+	if (view.eVis==viFFT)
 	{
-		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[/*view.fftSize*/1] );
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.fftSize] );
 
-		for (int x=0; x < /*view.xSize+1*/size+1; x++)
+		for (int x=0; x < view.xSize+1; x++)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
 			float y = -log10(f) * /*view.fftMul*/69.f /255.f -0.1f;  //par

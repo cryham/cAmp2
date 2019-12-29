@@ -82,8 +82,8 @@ void AudioBass::InitPlugins()
 ///  Init  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 void AudioBass::Init()
 {
-	Log("Init Sound: bass");
 	Log("-------------------------");
+	Log("Init Sound: bass");
 
     if (HIWORD(BASS_GetVersion()) != BASSVERSION)
         Error("Incorrect bass version");
@@ -115,7 +115,7 @@ void AudioBass::Init()
 
     //  get freq info-
 	Log("-------------------------");
-    Log("Info");
+    Log("Info bass:");
     BASS_INFO inf;
     BOOL b = BASS_GetInfo(&inf);  maxFreq = 44100;
     if (b)
@@ -125,7 +125,8 @@ void AudioBass::Init()
     }
 	
 	//  ext
-	string s = "Ext: ";
+	Log("Playable file extensions:");
+	string s;
 	for (auto e:vExt)
 		s += e+" ";
 	Log(s);
