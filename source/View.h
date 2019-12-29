@@ -2,11 +2,7 @@
 namespace tinyxml2 {  class XMLElement;  }
 
 enum EVis
-{
-	viNone=0, viFFT, viOsc, viPrint, viALL
-};
-
-const int MaxViews = 8;
+{	viNone=0, viFFT, viOsc, viPrint, viALL  };
 
 
 class ViewSet
@@ -20,17 +16,18 @@ public:
 
 
 	//  window
-	int xSize,ySize, xPos,yPos;
+	int xSize = 300, ySize = 600;
+	int xPos = 0, yPos = 0;
 
-	int iSleep;  // in ms
-	bool bVSync;
+	int iSleep = 0;  // in ms
+	bool bVSync = true;
 
 	//  visualization
-	int iVisH;  // draw height
-	int iFFTSize;  // samples (fft quality)
-	float fFFTMul;  // multiply y (scale)
-	/*EVis*/ int eVis;
-	float fPrtFq;  // voice print/spectrogram freq (speed)
+	int iVisH = 96;  // draw height
+	int iFFTSize = 1;      // FFT samples (quality)
+	float fFFTMul = 69.f;  // y multiplier (scale)
+	/*EVis*/ int eVis = viFFT;  // type
+	float fPrtFq = 100.f;  // spectrogram speed
 
 	//  slider
 	bool bSlDrawR;  // draw rating

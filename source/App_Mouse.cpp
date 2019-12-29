@@ -17,7 +17,7 @@ void App::Wheel(int d)
 	if (pls->Length() <= yL_pl)  return;
 	int m = shift ? 1 : ctrl ? yL_pl/2 : 8;
 	if (d < 0)  pls->PgOfsDn(m);  else  pls->PgOfsUp(m);
-	//bDrawPlst = true;
+	bDrawPlst = true;
 }
 
 
@@ -32,7 +32,8 @@ void App::Mouse()
 //	bool bMInWnd = xm >= 0 && xm < view.xSize && ym >= 0 && ym < view.ySize;
 //	if (!bMInWnd)  return;
 
-	int Fy = set.view.Fy; //cfont[view.cfP]->Fy;
+	ViewSet& v = set.view;
+	int Fy = v.Fy; //cfont[view.cfP]->Fy;
 
 	//  cur trk  ----
 	if (!pls)  return; //-
@@ -64,14 +65,14 @@ void App::Mouse()
 	{
 		/*if (!bLs && ym < yE_pl_btn)  // prev,next  btns |< >|
 		{
-			pls->Next(xm < set.view.xSize/2 ? -1 : 1);
+			pls->Next(xm < v.xSize/2 ? -1 : 1);
 			bLbt = true;
 			return;
 		}/*fixme..*/
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par
-			audio->chPosAbs(mia(0.,1., (double(xm) / set.view.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
+			audio->chPosAbs(mia(0.,1., (double(xm) / v.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
 		return;
 	}
 	/*if (bR && !bRs && ym < yE_pl_btn && plsPl)  //  Right rating
@@ -82,12 +83,12 @@ void App::Mouse()
 	
 	//  Mid
 	if (bM && !bMs)
-	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yMFvi = set.view.iVisH;  }
+	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yM_visH = v.iVisH;  }
 	if (shift)
 	{
 		if (bM && bMs)  // chng vis size
 		{
-			set.view.iVisH = mia(8, set.view.ySize/*-Fy*4*/, yMFvi + ym-yMs);
+			v.iVisH = mia(8, v.ySize/*-Fy*4*/, yM_visH + ym-yMs);
 			UpdDim();
 		}
 	}
@@ -124,7 +125,7 @@ void App::Mouse()
 		}
 		return;
 	}*/
-	//if (!bL && bLs)  bDrawPlst = true;
+	//? if (!bL && bLs)  bDrawPlst = true;
 
 
 	//  playlist
@@ -140,12 +141,12 @@ void App::Mouse()
 			pls->Play(false);
 			/*if (!t->isDir())
 			{	Stop();  //pls->idPl = cr;
-				plsPlChg(plsId);  //pls id
-			bDrawPlst = true;*/
+				plsPlChg(plsId);  //pls id*/
+			bDrawPlst = true;
 		}
 		
 		///  Left
-		if (bL && xm < set.view.xSize - xW_plSm)
+		if (bL && xm < v.xSize - xWex_plS)
 		{
 			if (!bLs && ym > yB_pl && ym < yE_pl)
 			{
@@ -173,26 +174,26 @@ void App::Mouse()
 				#if 0
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/
 					updSelId(1);
-				bDrawPlst = true;
 				#endif
+				bDrawPlst = true;
 			}
 		}
 	
 		//  slider pls |
 		if (bL && pls->Length() > yL_pl)
 		{
-			if (xm > set.view.xSize - xW_plSm)
+			if (xm > v.xSize - xWex_plS)
 			{	if (!bLs)
-				{	/*ofs*/xLs = pls->ofs;  yLs = ym;   bLsl = true;  }
+				{	xL_ofs = pls->ofs;  yL_sl = ym;   bL_sl = true;  }
 			}else
-				if (!bLs)  bLsl = false;
+				if (!bLs)  bL_sl = false;
 			
-			if (bLs && bLsl)
+			if (bLs && bL_sl)
 			{
 				float fle = float(pls->Length());
-				pls->ofs = float(ym-yLs)/float(yH_pl- yL_pl/fle) *fle + xLs;
-				pls->PgOfsDn(0);  pls->PgOfsUp(0);  //zOfs();  plst->zCur();  }
-				//bDrawPlst = true;
+				pls->ofs = float(ym - yL_sl) / float(yH_pl- yL_pl/fle) *fle + xL_ofs;
+				pls->PgOfsDn(0);  pls->PgOfsUp(0);
+				bDrawPlst = true;
 			}
 		}
 	}
@@ -208,7 +209,7 @@ void App::Mouse()
 			{
 				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1+ mtiv/-0.06f;
 				if (yMd > 0)  pls->PgOfsDn(m);  else  pls->PgOfsUp(m);
-				//bDrawPlst = true;
+				bDrawPlst = true;
 			}
 		}
 		mti += dt;

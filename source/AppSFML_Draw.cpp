@@ -41,7 +41,11 @@ static ETexUV Tex4Rate(int rate)
 void AppSFMLDraw::Draw()
 {
 	DrawPlayer();
-	DrawPlaylist();
+	
+	if (bDrawPlst)
+	{	bDrawPlst = false;
+		DrawPlaylist();
+	}
 }
 
 
@@ -52,10 +56,9 @@ void AppSFMLDraw::DrawPlayer()
 	//for (const auto& e:skin)
 	//	e.Draw();
 	
-	int xw = set.view.xSize, yw = set.view.ySize;
+	const ViewSet& v = set.view;
+	int xw = v.xSize, yw = v.ySize;
 	bool play = audio->IsPlaying();
-	
-	//UpdDim();  // in resize, when needed
 
 	//  params
 	int h = yE_vis - yB_vis;
@@ -63,13 +66,13 @@ void AppSFMLDraw::DrawPlayer()
 
 	
 	//  backgr  []
-	Rect(0,0, xw,h, TX_BackPlr, false);
+	Rect(0,0, xw,yE_vis, TX_BackPlr, false);
 	
 	
 	//  Vis FFT  ~~~~~
-	if (set.view.eVis == viFFT && play)
+	if (v.eVis == viFFT && play)
 	{
-		audio->GetVisData(xw, set.view);
+		audio->GetVisData(xw, v);
 		float* fft = audio->getFFT();
 
 		for (int i=0; i < xw; ++i)
@@ -198,8 +201,9 @@ void AppSFMLDraw::DrawPlaylist()
 {		
 	const auto& tracks = pls->GetTracks();
 	bool play = audio->IsPlaying();
-	int xw = set.view.xSize;
-	int yp = yB_pl, yF = set.view.Fy,
+	const ViewSet& v = set.view;
+	int xw = v.xSize;
+	int yp = yB_pl, yF = v.Fy,
 		it = pls->ofs;
 	
 	//  visible lines  // dn_marg-
@@ -219,7 +223,7 @@ void AppSFMLDraw::DrawPlaylist()
 	///  backgr, Names  1st pass
 	yp = yB_pl;  it = pls->ofs;
 
-	int xws = set.view.xSize - set.view.xW_plS;
+	int xws = v.xSize - v.xW_plS;
 
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < tracks.size())
@@ -249,12 +253,12 @@ void AppSFMLDraw::DrawPlaylist()
 	//str = t2s(600.f);  // get for 10:00
 	str = "0";
 	const int w0 = Text(Fnt_Time, 0,0, false);
-	const int ws = set.view.xW_plS + 8;  //par w time|slider
+	const int ws = v.xW_plS + 8;  //par w time|slider
 	
 	//  times backgr clear text
 	//  todo: per line..
-	float xk1 = set.view.xSize - ws - 4  //par w track|time
-		- 4 * w0,  xk2 = set.view.xSize - xk1;
+	float xk1 = v.xSize - ws - 4  //par w track|time
+		- 4 * w0,  xk2 = v.xSize - xk1;
 	Rect(xk1, yB_pl, xk2, yE_pl-yB_pl, TX_Black, false);
 	
 	DrawSlider();
@@ -322,8 +326,9 @@ void AppSFMLDraw::DrawPlaylist()
 void AppSFMLDraw::DrawSlider()
 {
 	if (!pls)  return;
-	const int xw = set.view.xSize, xs = set.view.xW_plS;
-	if (yB_pl_inf >= set.view.ySize || xs <= 0)  return;
+	const ViewSet& v = set.view;
+	const int xw = v.xSize, xs = v.xW_plS;
+	if (yB_pl_inf >= v.ySize || xs <= 0)  return;
 
 	int len = pls->Length();  float fle = len;
 	float ySr = mia(1.f, 2.f, fle / yL_pl);
@@ -385,7 +390,7 @@ void AppSFMLDraw::DrawSlider()
 	
 	///  all tracks rating ->
 	//  todo: fill texture and just draw once
-	if (set.view.bSlDrawR /*&& !bShowSrch*/)
+	if (v.bSlDrawR /*&& !bShowSrch*/)
 		for (int i=0; i < len; i++)
 		{
 			const int rr = trks[i].rate, r = rr+3;

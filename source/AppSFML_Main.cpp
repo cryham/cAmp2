@@ -56,7 +56,7 @@ bool AppSFMLDraw::Run()
 	const static int iFntSize[Fnt_All] = {
 		14, //14
 		14, //15
-		16, //16
+		15, //16
 		20, //20
 	};
 	
@@ -124,7 +124,7 @@ bool AppSFMLDraw::Run()
 
 		//  Draw
 		//------------------
-		pWindow->clear();
+		//pWindow->clear();
 		sf::Time time = timer.restart();
 		//Update(*window, time);
 		dt = time.asSeconds();

@@ -82,7 +82,8 @@ void App::UpdDim(/*float rfrFq*/)
 		v.iVisH = v.ySize;  //vis max
 
 	//  file info
-	yB_finf = 0;	yE_pl_btn = 20;  // btnsH |< >|
+	yB_inf = 0;
+	yE_plr_btn = 20;  // btnsH |< >|
 
 	//  visualization
 	yB_vis = 16;  //yFvi = 64;
@@ -104,12 +105,12 @@ void App::UpdDim(/*float rfrFq*/)
 	yB_pl = yB_pl_inf + /*cfont[v.cfP]->*/v.Fy + 2/*yHpli*/;
 	yE_pl = v.ySize - /*cfont[v.cfP]->*/v.Fy;
 	
-	yH_pl = yE_pl-1-yB_pl;  yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/v.Fy );
+	yH_pl = yE_pl-1-yB_pl;
+	yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/v.Fy );  // lines
 	yE_pl = yL_pl * /*cfont[v.cfP]->*/v.Fy + yB_pl;
 	yH_pl = yE_pl-1-yB_pl;
 
-	/*xWplS = 14;*/  xW_plSm = 40;  //|sliderW, mW
-	xTm = v.xSize - v.xW_plS-3;  //|
+	xWex_plS = 40;  // slider extra
 	//CList::Lin = yL_pl;
 
 	//if (rfrFq > 0.f)
@@ -117,10 +118,4 @@ void App::UpdDim(/*float rfrFq*/)
 	
 	// for..
 	//cfont[v.cfP]->StrCopy(" 0:00");  xt_ = cfont[v.cfP]->GetWidth();
-
-	//  gui checks pos
-	//xB_gc = 106;  yB_gc = yB_tabs+90;  xW_gc = 18;
-	//xB_gck = 170;  yH_gc = /*cfont[v.cfG]->*/v.Fy+6; //[0
-	
-	//GuiReInit();
 }
