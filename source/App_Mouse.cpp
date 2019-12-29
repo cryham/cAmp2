@@ -17,7 +17,7 @@ void App::Wheel(int d)
 	if (pls->Length() <= yL_pl)  return;
 	int m = shift ? 1 : ctrl ? yL_pl/2 : 8;
 	if (d < 0)  pls->PgOfsDn(m);  else  pls->PgOfsUp(m);
-	bDrawPlst = true;
+	bDraw = true;
 }
 
 
@@ -142,7 +142,7 @@ void App::Mouse()
 			/*if (!t->isDir())
 			{	Stop();  //pls->idPl = cr;
 				plsPlChg(plsId);  //pls id*/
-			bDrawPlst = true;
+			bDraw = true;
 		}
 		
 		///  Left
@@ -175,7 +175,7 @@ void App::Mouse()
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/
 					updSelId(1);
 				#endif
-				bDrawPlst = true;
+				bDraw = true;
 			}
 		}
 	
@@ -193,7 +193,7 @@ void App::Mouse()
 				float fle = float(pls->Length());
 				pls->ofs = float(ym - yL_sl) / float(yH_pl- yL_pl/fle) *fle + xL_ofs;
 				pls->PgOfsDn(0);  pls->PgOfsUp(0);
-				bDrawPlst = true;
+				bDraw = true;
 			}
 		}
 	}
@@ -209,7 +209,7 @@ void App::Mouse()
 			{
 				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1+ mtiv/-0.06f;
 				if (yMd > 0)  pls->PgOfsDn(m);  else  pls->PgOfsUp(m);
-				bDrawPlst = true;
+				bDraw = true;
 			}
 		}
 		mti += dt;

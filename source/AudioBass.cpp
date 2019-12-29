@@ -43,9 +43,11 @@ void AudioBass::GetTrkTime(Track& t)
 void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
     AudioBass* ab = (AudioBass*)user;
-	ab->Stop();
-    if (!ab->bRep1)
+	if (!ab->bRep1)
+	{
+		ab->Stop();
 		ab->GetPls()->Next();
+	}
 }
 
 ///  Play  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
@@ -149,6 +151,7 @@ void AudioBass::Stop()		///  []
         chPl = 0;  chMod = 0;
     }
 	bPlaying = false;  bPaused = false;
+	GetPls()->bDraw = true;  //darker cur-
 }
 
 

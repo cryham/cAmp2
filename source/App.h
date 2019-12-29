@@ -4,7 +4,7 @@
 #include "AppLog.h"
 #include "TimeColors.h"
 
-#include <SFML/Window/Event.hpp>  // input
+#include <SFML/Window/Event.hpp>  // input, use own enum?
 #include <memory>
 
 class Audio;
@@ -32,12 +32,13 @@ protected:
 	bool Destroy();
 
 	
+	///  input  ----
 	//  keys
 	bool alt = false, ctrl = false, shift = false;
 	void UpdModifiers();
-	bool KeyDown(sf::Event::KeyEvent key);  // use own enum?
+	bool KeyDown(sf::Event::KeyEvent key);
 
-	
+
 	//  mouse pos
 	int xMpos=0,yMpos=0, xMold=0,yMold=0;  //, xWclick,yWclick
 	int xm=0,ym=0, xms=0,yms=0;  // pos,old
@@ -49,7 +50,7 @@ protected:
 	//  buttons, s old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
-	bool bDrawPlst = true;
+	bool bDraw = true;  // redraw when needed
 	
 	void Mouse();  // process, update
 	void Mouse(int x, int y)
@@ -66,21 +67,24 @@ protected:
 	int iTimeTest = 0;   // test pls time colors
 
 	
-	//  dimensions
+	///  dimensions  ----
 	//  B = begin  E = end  W = width  H = height
-	float xW_pos=0.03f;  // seek, position marker
 	int yB_inf=0,  // file info
 		yE_plr_btn=0,  // player buttons |< >|
 		
 		yB_vis=0,yE_vis=0,  // visualization
-		yB_pos=0,yE_pos=0,  // seek pos bar
+		yB_pos=0,yE_pos=0;  // seek pos bar
+	float xW_pos = 0.03f;  // seek marker
 		
-		//  pls tabs, size, btns
-		yB_tabs=0,yE_tabs=0, xW_tabs=0,yH_tabs=0, xW_tabs_btn=0,
-		//  pls tracks  lines, |sliderW,mW, xTime
-		yB_pl_inf=0, yB_pl=0,yE_pl=0, yH_pl=0,
+		//  pls tabs, size
+	int yB_tabs=0,yE_tabs=0,
+		xW_tabs=0,yH_tabs=0,
+		xW_tabs_btn=0,  // tabs btns ^ v
+		
+		//  pls tracks
+		yB_pl_inf=0,
+		yB_pl=0,yE_pl=0, yH_pl=0,
 		yL_pl = 10,  // playlist view lines, auto set
-		
 		xWex_plS=0;  // extra width for slider drag
 	
 	void UpdDim(/*float rfrFq=-1.f*/);

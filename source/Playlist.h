@@ -11,11 +11,12 @@ protected:
     std::deque<Track> tracks;
 
 public:
-	//  cursor pos, playing pos, ids to tracks
-	int cur = 0, ofs = 0;  // offset view
-	int play = 0;
-	int lin = 10;  // view visible lines, for page keys
-
+	int cur = 0;   //  cursor pos   ids to tracks
+	int ofs = 0;   //  offset view start
+	int play = 0;  //  playing pos
+	int lin = 10;  //  view visible lines, for page keys
+	bool bDraw = true;  // needs redraw, changed
+	
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int mul)
 		PgOfsUp(int), PgOfsDn(int),
@@ -55,5 +56,4 @@ public:
 	{	return (int)tracks.size();  }
 
     // copy, move selected tracks from other
-
 };

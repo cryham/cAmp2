@@ -106,9 +106,9 @@ bool AppSFMLDraw::Run()
 
 				
 			case Event::Resized:
-				if (e.type == sf::Event::Resized)
+				if (e.type == Event::Resized)
 				{
-					sf::FloatRect vis(0, 0, e.size.width, e.size.height);
+					FloatRect vis(0, 0, e.size.width, e.size.height);
 					pWindow->setView(sf::View(vis));
 				}
 				// save new size
@@ -124,9 +124,7 @@ bool AppSFMLDraw::Run()
 
 		//  Draw
 		//------------------
-		//pWindow->clear();
-		sf::Time time = timer.restart();
-		//Update(*window, time);
+		Time time = timer.restart();
 		dt = time.asSeconds();
 
 		Draw();

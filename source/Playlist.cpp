@@ -12,7 +12,6 @@ Audio* Playlist::audio = nullptr;
 
 Playlist::Playlist()
 {
-
 }
 
 
@@ -23,11 +22,11 @@ bool Playlist::Play(bool set)
 	if (IsEmpty())  return false;
 	if (set)  play = cur;
 	if (play < 0 || play >= tracks.size())  return false;  //Check()
-	
+	bDraw = true;
+
 	Track& t = GetTracks()[play];
 	audio->SetPls(this);
-	bool ok = audio->Play(t);
-	return ok;
+	return audio->Play(t);
 }
 
 bool Playlist::Next(int add)
@@ -37,7 +36,8 @@ bool Playlist::Next(int add)
 	int last = tracks.size()-1;
 	if (play < 0)  play = last;
 	if (play >= last)  play = 0;
-	// todo: skip while dirs and disabled
+	bDraw = true;
+	// todo: skip while dirs or disabled
 	return Play();
 }
 
@@ -89,21 +89,23 @@ void Playlist::Cur()
 {
 	int all = (int)(tracks.size())-1;
 	cur = mia(0, all, cur);
+	bDraw = true;
 }
 void Playlist::Ofs()
 {
 	int all = (int)(tracks.size());
 	if (ofs > all-lin)  ofs = all-lin;  //  no view past last track
 	if (ofs < 0)  ofs = 0;  //  cur stays in view
+	bDraw = true;
 }
-void Playlist::Up		(int m){	cur -= m;  Cur();  int d= cur-ofs;        if (d < 0) {  ofs += d;  Ofs();  }  }
-void Playlist::Dn		(int m){	cur += m;  Cur();  int d= cur-ofs-lin+1;  if (d > 0) {  ofs += d;  Ofs();  }  }
+void Playlist::Up		(int m){  cur -= m;  Cur();  int d= cur-ofs;        if (d < 0) {  ofs += d;  Ofs();  }  }
+void Playlist::Dn		(int m){  cur += m;  Cur();  int d= cur-ofs-lin+1;  if (d > 0) {  ofs += d;  Ofs();  }  }
 
-void Playlist::PgOfsUp	(int m){	ofs -= m;  Ofs();  int d= cur-ofs-lin+1;  if (d > 0) {  cur -= d;  Cur();  }  }
-void Playlist::PgOfsDn	(int m){	ofs += m;  Ofs();  int d= cur-ofs;        if (d < 0) {  cur -= d;  Cur();  }  }
+void Playlist::PgOfsUp	(int m){  ofs -= m;  Ofs();  int d= cur-ofs-lin+1;  if (d > 0) {  cur -= d;  Cur();  }  }
+void Playlist::PgOfsDn	(int m){  ofs += m;  Ofs();  int d= cur-ofs;        if (d < 0) {  cur -= d;  Cur();  }  }
 
-void Playlist::PgUp	(int m){	cur -= m;  ofs -= m;  Cur();  Ofs();  }
-void Playlist::PgDn	(int m){	cur += m;  ofs += m;  Cur();  Ofs();  }
+void Playlist::PgUp		(int m){  cur -= m;  ofs -= m;  Cur();  Ofs();  }
+void Playlist::PgDn		(int m){  cur += m;  ofs += m;  Cur();  Ofs();  }
 
 void Playlist::Home (int m)
 {
@@ -117,6 +119,7 @@ void Playlist::Home (int m)
 		while (cur-1 > 0 && !tracks[cur]->isDir());
 		Up(0);  break;*/
 	}
+	bDraw = true;
 }
 
 void Playlist::End (int m)
@@ -132,4 +135,5 @@ void Playlist::End (int m)
 		while (cur+1 < all && !tracks[cur]->isDir());
 		Dn(0);  break;*/
 	}
+	bDraw = true;
 }

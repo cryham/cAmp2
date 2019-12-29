@@ -86,8 +86,9 @@ void App::UpdDim(/*float rfrFq*/)
 	yE_plr_btn = 20;  // btnsH |< >|
 
 	//  visualization
+	bool noVis = v.eVis == viNone;
 	yB_vis = 16;  //yFvi = 64;
-	yE_vis = min(v.ySize, 28 + (v.eVis!=viNone ? v.iVisH : 0) );
+	yE_vis = min(v.ySize, 32 + (noVis ? 0 : v.iVisH) );
 	
 	//  pos bar
 	yB_pos = yE_vis;  yE_pos = yB_pos + 9;
@@ -118,4 +119,5 @@ void App::UpdDim(/*float rfrFq*/)
 	
 	// for..
 	//cfont[v.cfP]->StrCopy(" 0:00");  xt_ = cfont[v.cfP]->GetWidth();
+	bDraw = true;
 }

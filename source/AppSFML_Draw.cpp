@@ -7,7 +7,7 @@ using namespace std;  using namespace sf;
 
 
 //  colors  // todo: in xml..
-const static sf::Uint8 cc[chRall][3] = 
+const static Uint8 cc[chRall][3] = 
 {
 	100,140,100, //-3
 	110,160,110, //-2
@@ -19,7 +19,7 @@ const static sf::Uint8 cc[chRall][3] =
 	140,200,240, // 4
 	160,210,240, // 5
 };
-const static sf::Uint8 cb[chRall][3] = 
+const static Uint8 cb[chRall][3] = 
 {
 	00, 40, 00, //-3
 	10, 60, 10, //-2
@@ -31,19 +31,28 @@ const static sf::Uint8 cb[chRall][3] =
 	40,100,140, // 4
 	60,110,140, // 5
 };
+
 static ETexUV Tex4Rate(int rate)
 {
-	return (ETexUV)mia(int(TX_Rate1),int(TX_Rate5), int(TX_Rate1-1+abs(rate)) );
+	return (ETexUV)mia(int(TX_Rate1), int(TX_Rate5),
+					   int(TX_Rate1 - 1 + abs(rate)) );
 }
 
 
 //  Draw all
 void AppSFMLDraw::Draw()
 {
+	if (pls->bDraw)
+	{	pls->bDraw = false;
+		bDraw = true;
+	}
+	if (bDraw)
+		pWindow->clear();
+	
 	DrawPlayer();
 	
-	if (bDrawPlst)
-	{	bDrawPlst = false;
+	if (bDraw)
+	{	bDraw = false;
 		DrawPlaylist();
 	}
 }
@@ -60,16 +69,16 @@ void AppSFMLDraw::DrawPlayer()
 	int xw = v.xSize, yw = v.ySize;
 	bool play = audio->IsPlaying();
 
-	//  params
-	int h = yE_vis - yB_vis;
-	const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
-
 	
 	//  backgr  []
 	Rect(0,0, xw,yE_vis, TX_BackPlr, false);
 	
 	
 	//  Vis FFT  ~~~~~
+	//  params
+	int h = yE_vis - yB_vis;
+	const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
+
 	if (v.eVis == viFFT && play)
 	{
 		audio->GetVisData(xw, v);
@@ -119,14 +128,14 @@ void AppSFMLDraw::DrawPlayer()
 	Clr(50,90,120);
 	//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
 	str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
-		: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));
+		: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
 	Text(Fnt_Info, xw/2, y);
 	
 	//  repeat  @
 	if (audio->bRep1)
 	{
 		Clr(100,100,50);
-		str = String(Uint32(0x21BB))+"1"; //"↻▶▶▮▮■"); //"@1";
+		str = String(Uint32(0x21BB))+"1";  // ↻1
 		Text(Fnt_Info, xw/2+50, y+25);  // +Fy TimeBig..
 	}
 	

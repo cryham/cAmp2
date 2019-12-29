@@ -3,7 +3,7 @@
 using namespace std;  using namespace sf;
 
 
-bool App::KeyDown(sf::Event::KeyEvent k)
+bool App::KeyDown(Event::KeyEvent k)
 {
 	switch (k.code)
 	{
@@ -25,10 +25,8 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 		if (k.alt)  audio->chVol(0, shift, ctrl);
 			  else  audio->chPos(0, shift, ctrl);  break;
 
-	case Keyboard::E:  // vol ^ v
-		audio->chVol(0, shift, ctrl);  break;
-	case Keyboard::D:
-		audio->chVol(1, shift, ctrl);  break;
+	case Keyboard::E:	audio->chVol(0, shift, ctrl);  break;  // vol ^ v
+	case Keyboard::D:	audio->chVol(1, shift, ctrl);  break;
 		
 	///  playlist  move  cursor, offset
 	//  none- up/dn 1   ctrl- x8   // alt- move1
@@ -45,11 +43,12 @@ bool App::KeyDown(sf::Event::KeyEvent k)
 
 	///  toggle
 	case Keyboard::T:	audio->bRep1 = !audio->bRep1;  break;
+	case Keyboard::P:	set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
 
 	//  debug
 	case Keyboard::I:	bFps = !bFps;  break;
-	case Keyboard::U:   bDebug = !bDebug;  break;
-	case Keyboard::M:   ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  break;
+	case Keyboard::U:	bDebug = !bDebug;  break;
+	case Keyboard::M:	++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  break;
 		
 	default:  break;
 	}
