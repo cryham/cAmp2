@@ -52,9 +52,11 @@ public:
 };
 
 
-//  rating chars in name
-const int chFnAll = 7;  //special -2 -- 
+///  rating chars in name
+const int chFnAll = 7;  // special -2 -- 
 const char cFnCharRates[chFnAll] = {'=','-', '`','^','~','+','#'};
 const char cFnNumRates[chFnAll] = {-3,-1, 1,2,3,4,5};
+
 const int cR0 = 3/*-*/, cR1 = 5/*+*/, chRall = cR0+cR1+1;
-const static std::string chFRate[chRall] = {"=","--","-","","`","^","~","+","#"};  //rename add
+const static std::string chFRateAdd[chRall] = {"=","--","-","","`","^","~","+","#"};  // rename add, file name
+const static std::string chFRateVis[chRall] = {"=","--","-","","`","^","~","+","*"};  // draw text, sybols

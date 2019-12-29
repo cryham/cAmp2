@@ -81,14 +81,13 @@ void App::UpdDim(/*float rfrFq*/)
 //	view.ySize = set.ywSize;
 //	view.visH = set.visH;  // par
 	
-	//Graphics::SetupStates(pDev);
 	ViewSet& v = set.view;
 	if (v.visH > v.ySize)
 		v.visH = v.ySize;  //vis max
 	int Fy = v.Fy;
 
 	//  file info
-	yB_fi = 0;	yE_pl_btn = 20;  // btnsH |< >|
+	yB_finf = 0;	yE_pl_btn = 20;  // btnsH |< >|
 
 	//  visualization
 	yB_vis = 16;  //yFvi = 64;
@@ -98,16 +97,16 @@ void App::UpdDim(/*float rfrFq*/)
 	yB_pos = yE_vis;  yE_pos = yB_pos + 9;
 	xW_pos = 0.03f;
 
-	//  pt = playlist tabs
-	yB_pt = yE_pos;  /*par+- +2 8pos*/
-	xW_pt_btn = 13;  // btnsW up,dn
-		xW_pt = (v.xSize - xW_pt_btn) / v.xNpt;
-		yH_pt = /*cfont[v.cfT]->*/Fy + 2;
-	yE_pt = yB_pt + v.yNpt * yH_pt + 4;
+	//  playlist tabs
+	yB_tabs = yE_pos;  /*par+- +2 8pos*/
+	xW_tabs_btn = 13;  // btnsW up,dn
+		xW_tabs = (v.xSize - xW_tabs_btn) / v.xNpt;
+		yH_tabs = /*cfont[v.cfT]->*/Fy + 2;
+	yE_tabs = yB_tabs + v.yNpt * yH_tabs + 4;
 
-	//  pl = playlist, tracks
-	yB_pli = yE_pt;
-	yB_pl = yB_pli + /*cfont[v.cfP]->*/Fy + 2/*yHpli*/;
+	//  playlist, tracks
+	yB_pl_inf = yE_tabs;
+	yB_pl = yB_pl_inf + /*cfont[v.cfP]->*/Fy + 2/*yHpli*/;
 	yE_pl = v.ySize - /*cfont[v.cfP]->*/Fy;
 	
 	yH_pl = yE_pl-1-yB_pl;  yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/Fy );
@@ -125,8 +124,8 @@ void App::UpdDim(/*float rfrFq*/)
 	//cfont[v.cfP]->StrCopy(" 0:00");  xt_ = cfont[v.cfP]->GetWidth();
 
 	//  gui checks pos
-	xB_gc = 106;  yB_gc = yB_pt+90;  xW_gc = 18;
-	xB_gck = 170;  yH_gc = /*cfont[v.cfG]->*/Fy+6; //[0
+	//xB_gc = 106;  yB_gc = yB_tabs+90;  xW_gc = 18;
+	//xB_gck = 170;  yH_gc = /*cfont[v.cfG]->*/Fy+6; //[0
 	
 	//GuiReInit();
 }

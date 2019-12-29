@@ -73,7 +73,7 @@ void App::Mouse()
 	///  player
 	//------------------------------------------------
 	static bool bLbt = false;
-	if (bL && (xm != xms || !bLs) && ym < yB_pt)  // Left
+	if (bL && (xm != xms || !bLs) && ym < yB_tabs)  // Left
 	{
 		if (!bLs && ym < yE_pl_btn)  // prev,next  btns |< >|
 		{
@@ -82,7 +82,7 @@ void App::Mouse()
 		}
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
-		if (!bLbt && ym > yB_pt - 120)  // h par
+		if (!bLbt && ym > yB_tabs - 120)  // h par
 			audio->chPosAbs(mia(0.,1., (double(xm) / set.view.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
 		return;
 	}

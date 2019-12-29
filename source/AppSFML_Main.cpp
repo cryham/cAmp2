@@ -54,7 +54,7 @@ bool AppSFMLDraw::Run()
 		"NotoMono.ttf",
 	};
 	const static int iFntSize[Fnt_All] = {
-		15, //14
+		14, //14
 		14, //15
 		16, //16
 		20, //20

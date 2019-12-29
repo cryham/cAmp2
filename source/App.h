@@ -67,15 +67,15 @@ protected:
 	//  dimensions
 	//  B = begin  E = end  W = width  H = height
 	float xW_pos=0;  // position marker
-	int yB_fi=0,  // file info
+	int yB_finf=0,  // file info
 		yB_vis=0,yE_vis=0,  // visualization
 		yB_pos=0,yE_pos=0, yE_pl_btn=0,  // posbar, btns
 		//  pls tabs, size, btns
-		yB_pt=0,yE_pt=0, xW_pt=0,yH_pt=0, xW_pt_btn=0,
-		// pls tracks  lines, |sliderW,mW, xTime
-		yB_pli=0, yB_pl=0,yE_pl=0, yH_pl=0,yL_pl=0, xW_plSm=0,xTm=0,
-		// gui checks
-		xB_gc=0,xB_gck=0,yB_gc=0, xW_gc=0,yH_gc=0;
+		yB_tabs=0,yE_tabs=0, xW_tabs=0,yH_tabs=0, xW_tabs_btn=0,
+		//  pls tracks  lines, |sliderW,mW, xTime
+		yB_pl_inf=0, yB_pl=0,yE_pl=0, yH_pl=0,yL_pl=0, xW_plSm=0,xTm=0;
+		//  gui checks
+		//xB_gc=0,xB_gck=0,yB_gc=0, xW_gc=0,yH_gc=0;
 
 	void UpdDim(/*float rfrFq=-1.f*/);
 	
