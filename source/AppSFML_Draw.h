@@ -30,8 +30,10 @@ protected:
 	{
 		clr = sf::Color(r,g,b);
 	}
-	
+
+	void Draw();
 	void DrawPlayer();
+	void DrawPlaylist();
 	void DrawSlider();
 
 public:

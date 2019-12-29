@@ -46,7 +46,7 @@ bool AppSFMLDraw::Run()
 	pBackgr = make_unique<Sprite>(tex);
 
 	
-	//  font
+	//  font  // todo: fonts in xml
 	const static string sFntName[Fnt_All] = {
 		"DejaVuLGCSans.ttf", //Fnt_Info, Fnt_Track, 
 		"DejaVuLGCSans.ttf",
@@ -67,7 +67,7 @@ bool AppSFMLDraw::Run()
 		if (!pFont[i]->loadFromFile(file))
 		{
 			Error("Can't load font: " + file);
-			return false;
+			//return false;
 		}
 		//SetFont(Fnt_Info, view.Fy);
 		text[i].setFont(*pFont[i].get());
@@ -108,7 +108,6 @@ bool AppSFMLDraw::Run()
 			case Event::Resized:
 				if (e.type == sf::Event::Resized)
 				{
-					// update the view to the new size of the window
 					sf::FloatRect vis(0, 0, e.size.width, e.size.height);
 					pWindow->setView(sf::View(vis));
 				}
@@ -130,8 +129,8 @@ bool AppSFMLDraw::Run()
 		//Update(*window, time);
 		dt = time.asSeconds();
 
-		DrawPlayer();
-		Mouse();		
+		Draw();
+		Mouse();
 		
 		pWindow->display();
 	}
