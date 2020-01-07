@@ -32,13 +32,24 @@ bool Playlist::Play(bool set)
 bool Playlist::Next(int add)
 {
 	if (IsEmpty())  return false;
-	play += add;
-	int last = tracks.size()-1;
-	if (play < 0)  play = last;
-	if (play >= last)  play = 0;
-	bDraw = true;
+
 	// todo: skip while dirs or disabled
-	return Play();
+	int last = tracks.size()-1;
+	int p = play + add;
+	if (!audio->bRepPls && (p > last || p < 0))
+		return false;
+	play = p;
+
+	bool stop = false;
+	if (play > last)  play = 0;
+	else
+	if (play < 0)  play = last;
+
+	bDraw = true;
+	if (stop)
+	{	audio->Stop();  return false;  }
+	else
+		return Play();
 }
 
 
@@ -61,7 +72,7 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 		ext = ext.substr(1);  // no .
 		strupper(ext);
 		
-		//  skip if if unplayable
+		//  skip if unplayable
 		if (audio != nullptr &&
 			!audio->IsPlayable(ext))
 			continue;

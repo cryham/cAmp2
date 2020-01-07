@@ -25,9 +25,17 @@ void AudioBass::GetTrkTime(Track& t)
 	else
 		chan = BASS_StreamCreateFile(FALSE, t.path.c_str(), 0,0,0);
 
-	QWORD bytes = BASS_ChannelGetLength(chan, BASS_POS_BYTE);
-	double time = BASS_ChannelBytes2Seconds(chan,bytes);
-	t.time = time;
+	if (chan)
+	{
+		QWORD bytes = BASS_ChannelGetLength(chan, BASS_POS_BYTE);
+		double time = BASS_ChannelBytes2Seconds(chan,bytes);
+		t.time = time;
+		t.disabled = false;
+	}else
+	{
+		t.time = 0.0;
+		t.disabled = true;
+	}
 
 	if (mod)
 		BASS_MusicFree(chan);
@@ -43,7 +51,7 @@ void AudioBass::GetTrkTime(Track& t)
 void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
     AudioBass* ab = (AudioBass*)user;
-	if (!ab->bRep1)
+	if (!ab->bRepTrk)
 	{
 		ab->Stop();
 		ab->GetPls()->Next();
@@ -66,11 +74,11 @@ bool AudioBass::Play(Track& trk)
             BASS_MUSIC_STOPBACK | BASS_MUSIC_AUTOFREE | //?
             BASS_MUSIC_RAMPS | BASS_MUSIC_SINCINTER |  // quality todo opt
             BASS_MUSIC_FT2PAN | BASS_MUSIC_FT2MOD | //BASS_MUSIC_PT1MOD | //MODBASS_MUSIC_SURROUND |
-            (bRep1 ? BASS_SAMPLE_LOOP : 0) | BASS_MUSIC_PRESCAN, 1);
+            (bRepTrk ? BASS_SAMPLE_LOOP : 0) | BASS_MUSIC_PRESCAN, 1);
     }else
     {   // create stream
         chPl = BASS_StreamCreateFile(FALSE, trk.path.c_str(), 0,0,
-            (bRep1 ? BASS_SAMPLE_LOOP : 0) | BASS_STREAM_AUTOFREE);
+            (bRepTrk ? BASS_SAMPLE_LOOP : 0) | BASS_STREAM_AUTOFREE);
     }
 
     if (!chPl && !chMod)
@@ -80,21 +88,19 @@ bool AudioBass::Play(Track& trk)
         {
             case BASS_ERROR_FILEOPEN:
             case BASS_ERROR_FILEFORM:  // unsup format
-            {
                 //  cant open, not found
-                trk.dis = true;
+                trk.disabled = true;
                 //if (bNextPrev)  Next();  else  Prev();
                 //Log("disabled");
-            }	return false;
+				return false;
 
             default:  // other
-            {
                 int er = BASS_ErrorGetCode();
                 Log("Can't play file: " + string(trk.path) + "\n  error code: " + i2s(er)); // + GetErrStr(er);
-            }	return false;
+				return false;
         }
     }else
-		trk.dis = false;
+		trk.disabled = false;
 
     //  sync reaching end - for play next
     chSync = BASS_ChannelSetSync(ch(), BASS_SYNC_END/*or BASS_SYNC_FREE*/, 0, EndSync, this);
@@ -151,7 +157,8 @@ void AudioBass::Stop()		///  []
         chPl = 0;  chMod = 0;
     }
 	bPlaying = false;  bPaused = false;
-	GetPls()->bDraw = true;  //darker cur-
+	if (GetPls() != nullptr)
+		GetPls()->bDraw = true;  //darker cur-
 }
 
 
@@ -172,12 +179,12 @@ void AudioBass::chPos(bool back, bool slow, bool fast)  //  <<  >>
 	pos += back ? -add : add;
 
 	if (pos < 0.0)
-	{	if (!bRep1)  pls->Next(-1);
+	{	if (!bRepTrk)  pls->Next(-1);
 		pos += timeTrack;  // exact
 	}
 	if (pos > timeTrack)
 	{	pos -= timeTrack;
-		if (!bRep1)  pls->Next();
+		if (!bRepTrk)  pls->Next();
 	}
 	BASS_ChannelSetPosition(ch(), BASS_ChannelSeconds2Bytes(ch(), pos), BASS_POS_BYTE);
 }

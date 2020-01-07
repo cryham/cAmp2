@@ -1,6 +1,6 @@
 #pragma once
-#include <deque>
 #include "Track.h"
+#include <deque>
 
 
 class Audio;
@@ -24,6 +24,11 @@ public:
 		Home(int), End(int),
 		Cur(), Ofs();
 	//int all() {  return (int)(tracks.size()-1);  }  // last
+
+	//  stats
+	uintmax_t allSize = 0;//, dirSize;  // sizes
+	double  allTime = 0.0;
+	int  allDirs = 0, allFiles = 0;  // all cnt
 	
     enum EInsert
     {  Ins_Cursor, Ins_Top, Ins_End  };
