@@ -53,6 +53,7 @@ void AppSFMLDraw::Draw()
 	
 	if (bDraw)
 	{	bDraw = false;
+		
 		DrawPlaylist();
 	}
 }
@@ -132,11 +133,13 @@ void AppSFMLDraw::DrawPlayer()
 	Text(Fnt_Info, xw/2, y);
 	
 	//  repeat  @
-	if (audio->bRep1)
+	if (audio->bRepTrk || audio->bRepPls)
 	{
-		Clr(100,100,50);
-		str = String(Uint32(0x21BB))+"1";  // ↻1
-		Text(Fnt_Info, xw/2+50, y+25);  // +Fy TimeBig..
+		Clr(50,100,100);
+		str = String(Uint32(0x21BB));  // ↻
+		if (audio->bRepTrk)  str += "1";
+		//else  str += "A";
+		Text(Fnt_Info, xw-75, y+25);  // +Fy TimeBig..
 	}
 	
 
@@ -170,12 +173,12 @@ void AppSFMLDraw::DrawPlayer()
 		int rr = audio->rate, r = rr+3;
 		str = chFRateVis[r];
 		Text(Fnt_TimeBig, xw - 84, y-2);
-
-		//  volume  %
-		Clr(100,140,220);
-		str = i2s(audio->iVolume/10) + "%";
-		Text(Fnt_Info, xw-40, y+25);
 	}
+	
+	//  volume  %
+	Clr(100,140,220);
+	str = i2s(audio->iVolume/10) + "%";
+	Text(Fnt_Info, xw-40, y+25);
 	
 	
 	///  debug
@@ -252,6 +255,8 @@ void AppSFMLDraw::DrawPlaylist()
 		Text(Fnt_Track, max(0, 5 - w/2), yp);
 
 		//  name
+		if (trk.IsDisabled())
+			Clr(50,80,100);
 		str = trk.GetName();
 		Text(Fnt_Track, 17, yp);
 
@@ -281,7 +286,7 @@ void AppSFMLDraw::DrawPlaylist()
 		const Track& trk = tracks[it];
 
 		//  time
-		if (trk.GotTime())
+		if (trk.GotTime() && !trk.IsDisabled())
 		{
 			float t = trk.GetTime();
 			if (iTimeTest > 0)  // time colors test

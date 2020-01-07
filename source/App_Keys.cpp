@@ -42,13 +42,14 @@ bool App::KeyDown(Event::KeyEvent k)
 	case Keyboard::End:		pls->End( alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
 
 	///  toggle
-	case Keyboard::T:	audio->bRep1 = !audio->bRep1;  break;
+	case Keyboard::T:	audio->bRepTrk = !audio->bRepTrk;  break;
+	case Keyboard::R:	audio->bRepPls = !audio->bRepPls;  break;
 	case Keyboard::P:	set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
 
 	//  debug
 	case Keyboard::I:	bFps = !bFps;  break;
 	case Keyboard::U:	bDebug = !bDebug;  break;
-	case Keyboard::M:	++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  break;
+	case Keyboard::M:	++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  bDraw = true;  break;
 		
 	default:  break;
 	}

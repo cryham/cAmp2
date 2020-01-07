@@ -23,7 +23,7 @@ protected:
 	uintmax_t size = 0;
 
 	///  extra  ----
-	bool dis = false;  // can't play, disabled
+	bool disabled = false;  // can't play
 	bool mod = false;  // xm, mod etc.
 	//byte hide, sel;
 public:
@@ -45,6 +45,9 @@ public:
 	
 	double GetTime() const
 	{	return time;  }
+	
+	bool IsDisabled() const
+	{	return disabled;  }
 	
 	void SetNameFromPath();
 	void CleanNameRating();

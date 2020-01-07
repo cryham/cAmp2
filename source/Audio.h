@@ -25,7 +25,8 @@ public:
 	std::string sInfo;  // bitRate, freq, size MB
 	int rate = 0;  // cur track-
 	
-	bool bRep1 = false;  // repeat track
+	bool bRepTrk = false;  // repeat track
+	bool bRepPls = true;  // repeat playlist
 
 public:
 	bool IsPlaying() {  return bPlaying;  }
