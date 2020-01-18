@@ -18,12 +18,12 @@ bool App::KeyDown(Event::KeyEvent k)
 
 	case Keyboard::Q:  // seek << >>
 	case Keyboard::Left:
-		if (k.alt)  audio->chVol(1, shift, ctrl);
-			  else  audio->chPos(1, shift, ctrl);  break;
+		if (alt)  audio->chVol(1, shift, ctrl);
+			else  audio->chPos(1, shift, ctrl);  break;
 	case Keyboard::W:
 	case Keyboard::Right:
-		if (k.alt)  audio->chVol(0, shift, ctrl);
-			  else  audio->chPos(0, shift, ctrl);  break;
+		if (alt)  audio->chVol(0, shift, ctrl);
+			else  audio->chPos(0, shift, ctrl);  break;
 
 	case Keyboard::E:	audio->chVol(0, shift, ctrl);  break;  // vol ^ v
 	case Keyboard::D:	audio->chVol(1, shift, ctrl);  break;
@@ -53,6 +53,10 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	//  playlist
 	case Keyboard::F4:	pls->Save();  break;
+	case Keyboard::Delete:  if (ctrl)  pls->Clear();  break;
+	//  test--
+	case Keyboard::F3:  pls->AddDir("../../../zm"/*, false*/);  break;
+		
 	default:  break;
 	}
 	return true;

@@ -34,7 +34,6 @@ public:
 	//bool dir = false;
 
 public:
-    //Track();
     Track(fs::path file);
 
 	//  get for draw

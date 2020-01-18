@@ -13,6 +13,11 @@ Audio* Playlist::audio = nullptr;
 Playlist::Playlist()
 {
 }
+Playlist::Playlist(string name1)
+	:Playlist()
+{
+	name = name1;
+}
 
 
 //  play

@@ -42,20 +42,14 @@ bool App::Init()
 
 	
 	//  pls
-	pls = make_unique<Playlist>();
-	pls->AddDir("../../../zm", false);
+	pls = make_unique<Playlist>("1");
+	pls->Load();
 	audio->SetPls(pls.get());
-#if 0
-	const auto& tracks = pls->GetTracks();
-	Log("---- tracks");
-	for (const auto& trk: tracks)
-		Log(trk.GetName());
-#endif
 
-	// todo: on thread ..
 	//pls->Update();
-	for (auto& trk: pls->GetTracks())
-		audio->GetTrkTime(trk);
+	// todo: on thread after AddDir..
+	//for (auto& trk: pls->GetTracks())
+	//	audio->GetTrkTime(trk);
 
 	return true;
 }
