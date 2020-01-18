@@ -166,6 +166,7 @@ void FileSystem::Init()
 
     // Create user's config dir  ----
     CreateDir(user_config);
+	CreateDir(user_config+"/playlists");
 
     // Find user's data dir (for additional data)
     /*#ifdef _WIN32

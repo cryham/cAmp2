@@ -257,7 +257,8 @@ void AppSFMLDraw::DrawPlaylist()
 		//  name
 		if (trk.IsDisabled())
 			Clr(50,80,100);
-		str = trk.GetName();
+		str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
+		//str = trk.GetName();
 		Text(Fnt_Track, 17, yp);
 
 		yp += yF;  ++it;

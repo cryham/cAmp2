@@ -1,11 +1,12 @@
 #pragma once
 #include "Track.h"
+#include "AppLog.h"
 #include <deque>
 
 
 class Audio;
 
-class Playlist
+class Playlist : public LogErr
 {
 protected:
     std::deque<Track> tracks;
@@ -16,6 +17,7 @@ public:
 	int play = 0;  //  playing pos
 	int lin = 10;  //  view visible lines, for page keys
 	bool bDraw = true;  // needs redraw, changed
+	int filterLow = -2, filterUp = 5;  // todo: filter lower, upper
 	
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int mul)
@@ -25,7 +27,7 @@ public:
 		Cur(), Ofs();
 	//int all() {  return (int)(tracks.size()-1);  }  // last
 
-	//  stats
+	//  stats  // todo: 
 	uintmax_t allSize = 0;//, dirSize;  // sizes
 	double  allTime = 0.0;
 	int  allDirs = 0, allFiles = 0;  // all cnt
@@ -61,4 +63,9 @@ public:
 	{	return (int)tracks.size();  }
 
     // copy, move selected tracks from other
+	
+	//  file
+	std::string name = "none";  // filename, also for tab
+	bool Load(), Save();
+	void Clear();
 };

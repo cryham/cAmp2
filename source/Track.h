@@ -7,6 +7,7 @@ namespace fs = std::filesystem;
 class Track
 {
 	friend class AudioBass;
+	friend class Playlist;
 protected:
 
     //  shown in gui,  got from path
@@ -25,7 +26,7 @@ protected:
 	///  extra  ----
 	bool disabled = false;  // can't play
 	bool mod = false;  // xm, mod etc.
-	//byte hide, sel;
+	char hide = 0, sel = 0;  // todo:
 public:
 	char rate = 0;  // rating
 	char bokm = 0;  // bookmark

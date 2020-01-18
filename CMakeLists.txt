@@ -23,8 +23,7 @@ target_link_libraries(${PROJECT_NAME} stdc++fs)
 
 
 #  bass - sound
-#set(bass_SOURCE_DIR "../../bass/src")
-set(bass_SOURCE_DIR "/home/ch/_dev/ca/bass/src")
+set(bass_SOURCE_DIR "../../bass/src")
 ADD_LIBRARY(bass SHARED IMPORTED)
 SET_TARGET_PROPERTIES(bass PROPERTIES IMPORTED_LOCATION ${bass_SOURCE_DIR}/x64/libbass.so)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} bass)

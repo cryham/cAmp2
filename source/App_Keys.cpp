@@ -50,7 +50,9 @@ bool App::KeyDown(Event::KeyEvent k)
 	case Keyboard::I:	bFps = !bFps;  break;
 	case Keyboard::U:	bDebug = !bDebug;  break;
 	case Keyboard::M:	++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  bDraw = true;  break;
-		
+	
+	//  playlist
+	case Keyboard::F4:	pls->Save();  break;
 	default:  break;
 	}
 	return true;

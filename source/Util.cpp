@@ -50,6 +50,11 @@ float s2f(const char* str)
 	return (float)atof(str);
 }
 
+double s2d(const char* str)
+{
+	return atof(str);
+}
+
 bool s2b(const char* str)
 {
 	return ((int)strtol(str, NULL, 0) > 0) ? true : false;

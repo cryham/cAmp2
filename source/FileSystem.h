@@ -35,16 +35,13 @@ public:
 
     //  Paths
     static std::string Home() {         return home_dir; }
+	//static std::string Cache() {      return cache_dir; }
 
     static std::string Config() {       return user_config;  }
     static std::string AppConfig() {    return app_config;  }
-
-    //static std::string Cache() {      return cache_dir; }
+	static std::string Data() {         return app_data; }
 
     static std::string Settings() {     return user_config + "/cAmp2.xml"; }
 	static std::string Log() {          return user_config + "/cAmp2.log"; }
-
-    static std::string Data() {         return app_data; }
-
-    //static std::string Screenshots() {  return user_data + "/screenshots";  }
+	static std::string Playlists() {    return user_config + "/playlists/"; }
 };
