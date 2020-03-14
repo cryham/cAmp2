@@ -22,8 +22,11 @@ public:
 
 
 	//  window  -----
+	
+	const static int MaxViews = 8;
 
-	ViewSet view;
+	ViewSet view, views[MaxViews];
+	
 	
 	void SetDimFromWnd(sf::Window* wnd);
 

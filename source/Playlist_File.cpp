@@ -32,11 +32,11 @@ bool Playlist::Load()
 	fs::path prevPath, a;
 	while (!fi.eof())
 	{
-		fi.getline(s,MP,'|');  /// path only, utf8
+		fi.getline(s,MP,'|');  // path, utf8
 		if (strlen(s) > 0)
 		{
 			if (s[0] == '<')  // short, add prev path
-			{	string f(s);
+			{	string f(s);  // file
 				f = f.substr(1);
 				a = prevPath / f;
 			}else
@@ -45,11 +45,11 @@ bool Playlist::Load()
 			Track t(a);
 			prevPath = t.path.parent_path();
 			
-			// time,size
+			//  time,size
 			fi.getline(s,MP,'|');  t.time = s2d(s);  t.gotTime = true;
 			fi.getline(s,MP,'|');  t.size = s2i(s);
 
-			// hide,rate,bokm,mod
+			//  hide, rate,bokm, mod
 			fi.getline(s,80);	int h=0,r=0, b=0, m=0;
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
 			t.hide=h;  t.rate=r;  t.bokm=b;  t.mod=m;
