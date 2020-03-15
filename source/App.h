@@ -26,11 +26,30 @@ protected:
 	//std::unique_ptr<Skin> skin;
 	
 	std::unique_ptr<Audio> audio;
-	std::unique_ptr<Playlist> pls;
 
 	bool Init();
 	bool Destroy();
 
+	///  PlayLists  ------------------------------------------------
+	std::vector<Playlist> vPlst;  // always at least 1
+	Playlist& Pls() {  return vPlst[plsId];  }
+	
+	int plsId = 0, plsPlId = 0,  // current, playing
+		plsSelId = -1;  // selected, copy from
+	int cntrPls=1;  //for new
+	//int nTabMov;
+
+	void TabNext(int i, bool row, bool ofs);
+	void TabMove(int n);
+	void TabNew(int m);
+	void TabClose();
+	
+	//void plsChg(int clrSel=0), plsPlChg(int id);
+	//void updSelId(int clear=0), clrSelId();
+
+	//void LoadPlsts(), DestPlsts();
+	//std::vector<SetPls> vSetPls;  //set load
+	
 	
 	///  input  ----
 	//  keys
@@ -58,7 +77,7 @@ protected:
 	void Wheel(int d);
 	void MouseDown(int b);
 	void MouseUp(int b);
-	
+
 	
 	//  toggle
 	float dt = 0.1f;   // frame time, ms

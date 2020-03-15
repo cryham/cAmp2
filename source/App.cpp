@@ -42,13 +42,15 @@ bool App::Init()
 
 	
 	//  pls
-	pls = make_unique<Playlist>("1");
-	pls->Load();
-	audio->SetPls(pls.get());
+	vPlst.clear();
+	Playlist p1("1");
+	p1.Load();
+	vPlst.push_back(move(p1));
+	audio->SetPls(&Pls());
 
-	//pls->Update();
+	//Pls().Update();
 	// todo: on thread after AddDir..
-	//for (auto& trk: pls->GetTracks())
+	//for (auto& trk: Pls().GetTracks())
 	//	audio->GetTrkTime(trk);
 
 	return true;

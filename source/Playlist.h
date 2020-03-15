@@ -19,7 +19,9 @@ public:
 	
 	int lin = 10;  //  view visible lines, for page keys
 	bool bDraw = true;  // needs redraw, changed
+
 	int filterLow = -2, filterUp = 5;  // todo: filter lower, upper
+	int bookm = 0; //  bookmark
 	
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int mul)
@@ -72,4 +74,8 @@ public:
 
 	bool Load(), Save();
 	void Clear();
+	
+	//  advanced  ----
+	void Bookm(bool pls, char add);  //  bookmarks
+
 };

@@ -127,8 +127,8 @@ void Playlist::Home (int m)
 {
 	switch(m)
 	{
-	case 2:  cur = 0;  ofs = 0;  break;  //list
-	case 1:  cur = ofs;  break;  //view
+	case 2:  cur = 0;  ofs = 0;  break;  // list top
+	case 1:  cur = ofs;  break;  // view
 
 	/*case 0:
 		do  --cur;
@@ -143,8 +143,8 @@ void Playlist::End (int m)
 	int all = (int)(tracks.size());
 	switch(m)
 	{
-	case 2:  cur = all-1;  ofs = all-1;  Cur();  Ofs();  break;  //list
-	case 1:  cur = ofs+lin-1;  Cur();  break;  //view
+	case 2:  cur = all-1;  ofs = all-1;  Cur();  Ofs();  break;  // list end
+	case 1:  cur = ofs+lin-1;  Cur();  break;  // view
 
 	/*case 0:
 		do  ++cur;
@@ -152,4 +152,20 @@ void Playlist::End (int m)
 		Dn(0);  break;*/
 	}
 	bDraw = true;
+}
+
+
+//  bookmark
+//--------------------------------------------------------------------
+void Playlist::Bookm(bool pls, char add)
+{
+	if (pls)
+	{	//  playlist
+		bookm += add;  bookm = mia(0,6, bookm);
+	}else
+	{	//  track
+		int b = tracks[cur].bookm;
+		b += add;  b = mia(0,6, b);
+		tracks[cur].bookm = b;
+	}
 }

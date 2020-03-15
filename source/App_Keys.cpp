@@ -1,5 +1,7 @@
 #include "App.h"
 #include "Audio.h"
+#include "Util.h"
+#include <SFML/Window/Event.hpp>  // input, use own enum?
 using namespace std;  using namespace sf;
 
 
@@ -11,12 +13,12 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	///  player
 	key(Enter):  // |> || []
-	key(Z):	 pls->Play(true);  break;
+	key(Z):	 if (Pls().Play(true))  plsPlId = plsId;  break;
 	key(X):	 audio->Pause();  break;
 	key(C):	 audio->Stop();  break;
 	
-	key(A):	 pls->Next(-1);  break;  // |<
-	key(S):	 pls->Next(1);  break;   // >|
+	key(A):	 Pls().Next(-1);  break;  // |<
+	key(S):	 Pls().Next(1);  break;   // >|
 
 	
 	key(Q): key(Left):  // seek << >>
@@ -32,17 +34,42 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	///  playlist  move  cursor, offset
 	//  none- up/dn 1   ctrl- x8   // alt- move1
-	key(Up):	/*if (alt)  pls->Move1(shift? -2): ctrl? 2): -1,0);  else*/  pls->Up(ctrl ? 8:1);  break;
-	key(Down):	/*if (alt)  pls->Move1(shift? -2): ctrl? 2):  1,0);  else*/  pls->Dn(ctrl ? 8:1);  break;
+	key(Up):	/*if (alt)  Pls().Move1(shift? -2): ctrl? 2): -1,0);  else*/  Pls().Up(ctrl ? 8:1);  break;
+	key(Down):	/*if (alt)  Pls().Move1(shift? -2): ctrl? 2):  1,0);  else*/  Pls().Dn(ctrl ? 8:1);  break;
 
 	//  none- page/4   ctrl- page   alt- offset 1   ctrl-alt- ofs x8
-	key(PageUp):	if (alt)  pls->PgOfsUp(ctrl ? 8:1);  else  pls->PgUp(ctrl ? yL_pl : yL_pl/4);  break;
-	key(PageDown):	if (alt)  pls->PgOfsDn(ctrl ? 8:1);  else  pls->PgDn(ctrl ? yL_pl : yL_pl/4);  break;
+	key(PageUp):	if (alt)  Pls().PgOfsUp(ctrl ? 8:1);  else  Pls().PgUp(ctrl ? yL_pl : yL_pl/4);  break;
+	key(PageDown):	if (alt)  Pls().PgOfsDn(ctrl ? 8:1);  else  Pls().PgDn(ctrl ? yL_pl : yL_pl/4);  break;
 	
 	//  none- move by dir   ctrl- view   alt- list
-	key(Home):	pls->Home(alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
-	key(End):	pls->End( alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
+	key(Home):	Pls().Home(alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
+	key(End):	Pls().End( alt ? 2: ctrl ? 1: shift ? -1 : 0);  break;
 
+	
+	///  rate file - +
+	// none- playing cur  ctrl- cursor
+	/*key(Subtract):  key(Hyphen):
+		if (ctrl) Pls().DecRate(); else  Pls().DecRatePl();  break;
+	key(Add):  key(Equal):
+		if (ctrl) Pls().IncRate(); else  Pls().IncRatePl();  break;
+
+	//  rating filter
+	key(Divide):    key(LBracket):  Pls().DecRFil(ctrl);  break;
+	key(Multiply):  key(RBracket):  Pls().IncRFil(ctrl);  break;*/
+
+	//  next/prev` tab   ctrl- dn/up row  shift- ofs row
+	key(Tilde):  TabNext(-1,ctrl,shift);  break;
+	key(Tab):    TabNext( 1,ctrl,shift);  break;
+
+	key(Backslash):  // bookmark
+		Pls().Bookm(alt, ctrl||shift ? -1 : 1);
+		bDraw = true;  break;
+
+	//  New tab
+	key(N):  TabNew(alt? -1: ctrl? 2 : shift? -2: 1);  break;
+	//  Close tab
+	key(F8): TabClose();  break;
+	
 	
 	///  toggle
 	key(T):	 audio->bRepTrk = !audio->bRepTrk;  break;
@@ -56,12 +83,12 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	
 	//  playlist
-	key(F4):	pls->Save();  break;
-	key(Delete):  if (ctrl)  pls->Clear();  break;
+	key(F4):  Pls().Save();  break;
+	key(Delete):  if (ctrl)  Pls().Clear();  break;
 	//  test--
-	key(F1):  pls->AddDir("../../../../m/spm");  break;
-	key(F2):  pls->AddDir("../../../../m/ssm/Music");  break;
-	key(F3):  pls->AddDir("../../../zm"/*, false*/);  break;
+	key(F1):  Pls().AddDir("../../../../m/spm");  bDraw = true;  break;
+	key(F2):  Pls().AddDir("../../../../m/ssm/Music");  bDraw = true;  break;
+	key(F3):  Pls().AddDir("../../m" /*, false*/);  bDraw = true;  break;
 	
 	#undef key
 	default:  break;

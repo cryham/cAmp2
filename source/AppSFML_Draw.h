@@ -33,6 +33,7 @@ protected:
 
 	void Draw();
 	void DrawPlayer();
+	void DrawTabs();
 	void DrawPlaylist();
 	void DrawSlider();
 

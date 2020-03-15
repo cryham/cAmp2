@@ -25,11 +25,11 @@ protected:
 
 	///  extra  ----
 	bool disabled = false;  // can't play
-	bool mod = false;  // xm, mod etc.
+	bool mod = false;  // xm, mod files etc.
 	char hide = 0, sel = 0;  // todo:
 public:
 	char rate = 0;  // rating
-	char bokm = 0;  // bookmark
+	char bookm = 0;  // bookmark
 	//byte srch;   // match
 	//bool dir = false;
 
@@ -51,7 +51,7 @@ public:
 	
 	void SetNameFromPath();
 	void CleanNameRating();
-	static void GetNameRating(const std::string& name, char& pRate, char& pBokm);
+	static void GetNameRating(const std::string& name, char& pRate, char& pBookm);
 };
 
 

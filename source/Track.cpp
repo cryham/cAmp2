@@ -27,7 +27,7 @@ void Track::SetNameFromPath()
 		name = name.substr(0, i);
 	
 	//  get rating, bookmark from name
-	GetNameRating(name.c_str(), rate, bokm);
+	GetNameRating(name.c_str(), rate, bookm);
 	CleanNameRating();
 }
 
@@ -43,7 +43,7 @@ void Track::CleanNameRating()
 		name.erase(p+1);  // = substr(0,p+1);
 }
 
-void Track::GetNameRating(const string& name, char& pRate, char& pBokm)
+void Track::GetNameRating(const string& name, char& pRate, char& pBookm)
 {
 	//  get rating in file name at end
 	int len = name.length();  // no ext
@@ -69,5 +69,5 @@ void Track::GetNameRating(const string& name, char& pRate, char& pBokm)
 	string s(name);
 	size_t p = s.find_last_not_of(cFnCharRates);
 	if (p != string::npos && p > 1 && s[p-1]=='%' && s[p]>='1' && s[p]<='6')
-		pBokm = s[p]-'0';
+		pBookm = s[p]-'0';
 }

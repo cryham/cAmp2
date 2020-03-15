@@ -49,10 +49,10 @@ bool Playlist::Load()
 			fi.getline(s,MP,'|');  t.time = s2d(s);  t.gotTime = true;
 			fi.getline(s,MP,'|');  t.size = s2i(s);
 
-			//  hide, rate,bokm, mod
+			//  hide, rate,bookm, mod
 			fi.getline(s,80);	int h=0,r=0, b=0, m=0;
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
-			t.hide=h;  t.rate=r;  t.bokm=b;  t.mod=m;
+			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
 			tracks.push_back(move(t));
 		}
@@ -88,7 +88,7 @@ bool Playlist::Save()
 
 		of << '|'<< t.time <<'|'<< t.size;
 		of << '|'<< (int)t.hide;
-		of << '|'<< (int)t.rate <<'|'<< (int)t.bokm;
+		of << '|'<< (int)t.rate <<'|'<< (int)t.bookm;
 		of << '|'<< t.mod ? '1':'0';
 		of << "\n";
 	}

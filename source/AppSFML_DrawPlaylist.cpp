@@ -42,16 +42,16 @@ static ETexUV Tex4Rate(int rate)
 //  Playlist  ==
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawPlaylist()
-{		
-	const auto& tracks = pls->GetTracks();
+{
+	const auto& tracks = Pls().GetTracks();
 	bool play = audio->IsPlaying();
 	const ViewSet& v = set.view;
 	int xw = v.xSize;
 	int yp = yB_pl, yF = v.Fy,
-		it = pls->ofs;
+		it = Pls().ofs;
 	
 	//  visible lines  // dn_marg-
-	pls->lin = yL_pl;
+	Pls().lin = yL_pl;
 
 
 	if (yL_pl <= 0)  return;
@@ -65,7 +65,7 @@ void AppSFMLDraw::DrawPlaylist()
 	}
 
 	///  backgr, Names  1st pass
-	yp = yB_pl;  it = pls->ofs;
+	yp = yB_pl;  it = Pls().ofs;
 
 	int xws = v.xSize - v.xW_plS;
 
@@ -111,7 +111,7 @@ void AppSFMLDraw::DrawPlaylist()
 	DrawSlider();
 
 	///  Times  2nd pass
-	yp = yB_pl;  it = pls->ofs;
+	yp = yB_pl;  it = Pls().ofs;
 
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < tracks.size())
@@ -141,7 +141,7 @@ void AppSFMLDraw::DrawPlaylist()
 	}		
 
 	///  cursors  3rd pass
-	yp = yB_pl;  it = pls->ofs;
+	yp = yB_pl;  it = Pls().ofs;
 
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < tracks.size())
@@ -150,17 +150,17 @@ void AppSFMLDraw::DrawPlaylist()
 
 		//  bookmarks
 		const Uint8 b = 150;  //par
-		if (trk.bokm > 0)
+		if (trk.bookm > 0)
 			Rect(0,yp,xws,yF,
-				ETexUV(TX_PlsB1 + trk.bokm - 1), true, b,b,b);
+				ETexUV(TX_PlsB1 + trk.bookm - 1), true, b,b,b);
 		
 		//  cursors
-		if (it == pls->play)
+		if (it == Pls().play)
 		{	const Uint8 c = play ? 195 : 138;  //par
 			Rect(0,yp,xws,yF, TX_PlsPlay, true, c,c,c);
 		}
 		const Uint8 c = 255;  //par
-		if (it == pls->cur)
+		if (it == Pls().cur)
 			Rect(0,yp,xws,yF, TX_PlsCur, true, c,c,c);
 
 		yp += yF;  ++it;
@@ -172,24 +172,24 @@ void AppSFMLDraw::DrawPlaylist()
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawSlider()
 {
-	if (!pls)  return;
+	//if (!pls)  return;
 	const ViewSet& v = set.view;
 	const int xw = v.xSize, xs = v.xW_plS;
 	if (yB_pl_inf >= v.ySize || xs <= 0)  return;
 
-	int len = pls->Length();  float fle = len;
+	int len = Pls().Length();  float fle = len;
 	float ySr = mia(1.f, 2.f, fle / yL_pl);
 	int xk1 = xw - xs +1,
 		xk2 = xw - xk1;
 	int xp1 = xw - 2*xs/3 +1,
 		xp2 = xw - xs/2 +1;
-	const auto& trks = pls->GetTracks();
+	const auto& trks = Pls().GetTracks();
 
 	#if 0
 	// search results +
 		if (bShowSrch /*&& ySr > 0.8f*/)
 		for (int i=0; i < len; ++i)
-		if (pls->vList[i]->srch > 0)
+		if (Pls().vList[i]->srch > 0)
 		{
 			float fc1 = i /fle,  fc2 = (i + ySr) /fle;		if (fc2>1.f) fc2=1.f;
 			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
@@ -202,7 +202,7 @@ void AppSFMLDraw::DrawSlider()
 	const Uint8 b = 100;  //par
 	for (int i=0; i < len; i++)
 	{
-		const int bk = trks[i].bokm;
+		const int bk = trks[i].bookm;
 		if (bk > 0)
 		{
 			float fc1 = i /fle,  fc2 = (i + ySr) /fle;		if (fc2>1.f) fc2=1.f;
@@ -215,8 +215,8 @@ void AppSFMLDraw::DrawSlider()
 	//  slider  |
 	if (len <= yL_pl/2)  return;
 
-	float fc1 = pls->cur /fle,  fc2 = (pls->cur + 1) /fle;	if (fc2>1.f) fc2=1.f;  // cursor
-	float fs1 = pls->ofs /fle,  fs2 = (pls->ofs +yL_pl) /fle;	if (fs2>1.f) fs2=1.f;  // vis list
+	float fc1 = Pls().cur /fle,  fc2 = (Pls().cur + 1) /fle;	if (fc2>1.f) fc2=1.f;  // cursor
+	float fs1 = Pls().ofs /fle,  fs2 = (Pls().ofs +yL_pl) /fle;	if (fs2>1.f) fs2=1.f;  // vis list
 	int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;  // min h = 2 pix _
 	int s1 = fs1 *yH_pl+yB_pl, s2 = fs2 *yH_pl+yB_pl;  if (s2-s1<2)  s2=s1+2;
 
@@ -227,7 +227,7 @@ void AppSFMLDraw::DrawSlider()
 		
 	//  playing _
 	{
-		float fc1 = pls->play /fle,  fc2 = /*fc1+4.f/yw*/(pls->play + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
+		float fc1 = Pls().play /fle,  fc2 = /*fc1+4.f/yw*/(Pls().play + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
 		int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;
 
 		Rect(xk1, float(c1), xk2, float(c2-c1), TX_SliPlay);
