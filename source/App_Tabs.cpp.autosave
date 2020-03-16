@@ -69,7 +69,7 @@ void App::TabMove(int n)
 		vPls.insert(vPls.begin() + n, p);  plsId = n;  }
 	//plsChg();
 
-	/**if (e==1)  plsPlChg(plsId);  else
+	/**/if (e==1)  plsPlChg(plsId);  else
 	for (int i=0; i<=l; ++i)  // find plsPl
 		if (plsPl==vPlst[i])  plsPlChg(i);
 	/**if (s==1)  updSelId(1);  else  //{  plsSelId = plsId;  plsSel = vPlst[plsPlId];  }  else
