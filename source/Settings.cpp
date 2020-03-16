@@ -28,8 +28,13 @@ void Settings::SetDimFromWnd(sf::Window* wnd)
 void Settings::Default()
 {
 	view.Defaults();
-
+	for (auto& v : views)
+		v.Defaults();
+	
 	escQuit = false;
+
+	cntrPls = 1;
+	vSetPls.clear();
 }
 
 
@@ -62,7 +67,7 @@ bool Settings::Load()
 	if (rn != "cAmp2")
 	{	Log(sErr + "Root not cAmp2.");  return false;  }
 
-	XMLElement* e;  const char* a;
+	XMLElement* e,*m;  const char* a;
 
 	//  load
 	e = root->FirstChildElement("debug");
@@ -75,6 +80,23 @@ bool Settings::Load()
 	if (e)
 		view.Load(e);
 
+	//  playlists
+	e = root->FirstChildElement("Playlists");
+	if (!e)  Log(sErr + "No <Playlists>");
+	if (e)
+	{	a = e->Attribute("counter");	if (a)  cntrPls = s2i(a);
+		
+		m = e->FirstChildElement("Pls");
+		if (!m)  Log(sErr + "No <Pls>");
+		while (m)
+		{
+			SetPls sp;
+			a = m->Attribute("name");	sp.name = a;
+			a = m->Attribute("bookm");	if (a)  sp.bookm = s2i(a);
+
+			vSetPls.push_back(sp);
+			m = m->NextSiblingElement("Pls");
+	}	}
 	
 	Log("Settings Loaded.");
 	return true;
@@ -88,7 +110,7 @@ bool Settings::Save()
 	XMLDocument xml;
 	XMLElement* root = xml.NewElement("cAmp2");
 	root->SetAttribute("ver", ver);
-	XMLElement* e;
+	XMLElement* e, *p;
 
 	//  save
 	e = xml.NewElement("debug");
@@ -99,6 +121,20 @@ bool Settings::Save()
 		view.Save(e);
 	root->InsertEndChild(e);
 
+	//  playlists
+	e = xml.NewElement("Playlists");
+	e->SetAttribute("counter", cntrPls);
+	
+	for (const auto& s: vSetPls)
+	{
+		p = xml.NewElement("Pls");
+		p->SetAttribute("name", s.name.c_str());
+		p->SetAttribute("bookm", s.bookm);
+		// idx,cur,ofs on each playlist here?
+		e->InsertEndChild(p);
+	}
+	root->InsertEndChild(e);
+	
 	
 	xml.InsertEndChild(root);
 	

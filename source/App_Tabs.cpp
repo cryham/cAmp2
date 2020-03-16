@@ -80,7 +80,7 @@ void App::TabMove(int n)
 void App::TabNew(int m)
 {
 	//Pls().Save();
-	Playlist pl(i2s(++cntrPls));
+	Playlist pl(i2s(++set.cntrPls));
 
 	if (m==2)
 	{	//  ctrl- at end

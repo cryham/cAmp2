@@ -30,13 +30,14 @@ protected:
 	bool Init();
 	bool Destroy();
 
+	
 	///  PlayLists  ------------------------------------------------
 	std::vector<Playlist> vPlst;  // always at least 1
 	Playlist& Pls() {  return vPlst[plsId];  }
+	void LoadPls(), SavePls();  // for set
 	
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1;  // selected, copy from
-	int cntrPls=1;  //for new
 	//int nTabMov;
 
 	void TabNext(int i, bool row, bool ofs);

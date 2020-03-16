@@ -24,7 +24,7 @@ public:
 	int bookm = 0; //  bookmark
 	
 	//  move cur, ofs
-	void PgUp(int), PgDn(int),  // (int mul)
+	void PgUp(int), PgDn(int),  // (int multiplier)
 		PgOfsUp(int), PgOfsDn(int),
 		Up(int), Dn(int),
 		Home(int), End(int),

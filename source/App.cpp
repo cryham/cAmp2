@@ -40,27 +40,49 @@ bool App::Init()
 
 	Playlist::audio = audio.get();
 
-	
-	//  pls
-	vPlst.clear();
-	Playlist p1("1");
-	p1.Load();
-	vPlst.push_back(move(p1));
 	audio->SetPls(&Pls());
 
+	LoadPls();
+			
+	return true;
+}
+
+void App::LoadPls()
+{
+	vPlst.clear();
+	for (const auto& sp: set.vSetPls)
+	{
+		Playlist p(sp.name);
+		p.bookm = sp.bookm;
+		p.Load();
+		vPlst.push_back(move(p));
+	}
 	//Pls().Update();
 	// todo: on thread after AddDir..
 	//for (auto& trk: Pls().GetTracks())
 	//	audio->GetTrkTime(trk);
-
-	return true;
+	
+	if (vPlst.empty())
+		vPlst.push_back(Playlist("1"));
 }
 
+void App::SavePls()
+{
+	set.vSetPls.clear();
+	for (const auto& p: vPlst)
+	{
+		SetPls s;
+		s.name = p.name;
+		s.bookm = p.bookm;
+		set.vSetPls.push_back(move(s));
+	}
+}
 
 //  Destroy
 bool App::Destroy()
 {
 	//  set
+	SavePls();
 	bool ok = set.Save();
 
 	//  audio
