@@ -32,13 +32,13 @@ protected:
 
 	
 	///  PlayLists  ------------------------------------------------
-	std::vector<Playlist> vPlst;  // always at least 1
-	Playlist& Pls() {  return vPlst[plsId];  }
+	std::vector<Playlist> vPls;  // always at least 1
+	Playlist& Pls() {  return vPls[plsId];  }
 	void LoadPls(), SavePls();  // for set
 	
 	int plsId = 0, plsPlId = 0,  // current, playing
-		plsSelId = -1;  // selected, copy from
-	//int nTabMov;
+		plsSelId = -1,  // selected, copy from
+		nTabMov = -1;
 
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);
@@ -47,9 +47,6 @@ protected:
 	
 	//void plsChg(int clrSel=0), plsPlChg(int id);
 	//void updSelId(int clear=0), clrSelId();
-
-	//void LoadPlsts(), DestPlsts();
-	//std::vector<SetPls> vSetPls;  //set load
 	
 	
 	///  input  ----
@@ -70,7 +67,7 @@ protected:
 	//  buttons, s old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
-	bool bDraw = true;  // redraw when needed
+	bool bDraw = true;  // clean and redraw, when needed
 	
 	void Mouse();  // process, update
 	void Mouse(int x, int y)

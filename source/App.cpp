@@ -49,27 +49,27 @@ bool App::Init()
 
 void App::LoadPls()
 {
-	vPlst.clear();
+	vPls.clear();
 	for (const auto& sp: set.vSetPls)
 	{
 		Playlist p(sp.name);
 		p.bookm = sp.bookm;
 		p.Load();
-		vPlst.push_back(move(p));
+		vPls.push_back(move(p));
 	}
 	//Pls().Update();
 	// todo: on thread after AddDir..
 	//for (auto& trk: Pls().GetTracks())
 	//	audio->GetTrkTime(trk);
 	
-	if (vPlst.empty())
-		vPlst.push_back(Playlist("1"));
+	if (vPls.empty())
+		vPls.push_back(Playlist("1"));
 }
 
 void App::SavePls()
 {
 	set.vSetPls.clear();
-	for (const auto& p: vPlst)
+	for (const auto& p: vPls)
 	{
 		SetPls s;
 		s.name = p.name;

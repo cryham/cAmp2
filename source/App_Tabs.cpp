@@ -8,7 +8,7 @@
 void App::TabNext(int i, bool row, bool ofs)
 {
 	const ViewSet& v = set.view;
-	const int l = vPlst.size()-1;
+	const int l = vPls.size()-1;
 	if (ofs)
 	{	int d = row ? i : v.xNpt*i;
 		//v.ofsTab += d;  if (v.ofsTab>l) v.ofsTab-=d;
@@ -52,20 +52,20 @@ void App::clrSelId()
 ///  Move tab  . . . . . . . 
 void App::TabMove(int n)
 {
-	if (vPlst.size() <= 1 || n == plsId)  return;
+	if (vPls.size() <= 1 || n == plsId)  return;
 	/**/int e=0;  if (plsPlId == plsId)  e=1;  // move pl
 	/**/int s=0;  if (plsSelId == plsId) s=1;  // move sel
 	
-	int l = vPlst.size()-1; //last
+	int l = vPls.size()-1; //last
 	if (plsId == l)
-		vPlst.pop_back();
+		vPls.pop_back();
 	else
-		vPlst.erase(vPlst.begin() + plsId);
+		vPls.erase(vPls.begin() + plsId);
 
 	if (n == l)  {
-		vPlst.push_back(Pls());  plsId = vPlst.size()-1;  }
+		vPls.push_back(Pls());  plsId = vPls.size()-1;  }
 	else  {
-		vPlst.insert(vPlst.begin() + n, Pls());  plsId = n;  }
+		vPls.insert(vPls.begin() + n, Pls());  plsId = n;  }
 	//plsChg();
 
 	/**if (e==1)  plsPlChg(plsId);  else
@@ -84,11 +84,11 @@ void App::TabNew(int m)
 
 	if (m==2)
 	{	//  ctrl- at end
-		vPlst.push_back(pl);
-		plsId = vPlst.size()-1;  //pls = vPlst[plsId];  // sel
+		vPls.push_back(pl);
+		plsId = vPls.size()-1;  //pls = vPlst[plsId];  // sel
 	}else
 	{	//  none- after cur   alt- before cur   shift- at begin
-		vPlst.insert(vPlst.begin()+ (m==-2? 0: (plsId+ (m==-1?0:1))), pl);
+		vPls.insert(vPls.begin()+ (m==-2? 0: (plsId+ (m==-1?0:1))), pl);
 			// pl +-
 		if (m==-2 || m==1 && plsId < plsPlId || m==-1 && plsId <= plsPlId)
 		{  plsPlId++;  /*plsPl = vPlst[plsPlId];*/  }  // pl
@@ -106,7 +106,7 @@ void App::TabNew(int m)
 ///  Close tab  . . . . . .
 void App::TabClose()
 {
-	if (vPlst.size() <= 1)  return;  //else plst.Clear();
+	if (vPls.size() <= 1)  return;  //else plst.Clear();
 	//Pls().Save();
 	//**/int e=0;  if (plsPl == pls)  e=1;  // close pl
 	//**/int s=0;  if (plsSel == pls) s=1;  // close sel
@@ -115,10 +115,10 @@ void App::TabClose()
 		plsId < plsSelId)  {  plsSelId--;  // sel-
 			/*plsSel = vPlst[plsSelId];*/  }
 	
-	if (plsId == vPlst.size()-1)
-	{	vPlst.pop_back();  plsId--;  }
+	if (plsId == vPls.size()-1)
+	{	vPls.pop_back();  plsId--;  }
 	else
-	{	vPlst.erase(vPlst.begin() + plsId);  }
+	{	vPls.erase(vPls.begin() + plsId);  }
 		
 	//pls = vPlst[plsId];  //plsChg(1);
 	//**/if (e==1)  plsPlId = plsId;

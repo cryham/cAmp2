@@ -184,7 +184,7 @@ void AppSFMLDraw::DrawTabs()
 	int ytb = yB_tabs+1;
 	if (ytb >= view.ySize)  return;  // fullscr vis
 	
-	int ntab = vPlst.size();
+	int ntab = vPls.size();
 	if (ntab > 0)
 	{
 		int x,y, a = view.ofsTab;
@@ -199,7 +199,7 @@ void AppSFMLDraw::DrawTabs()
 				Rect(x1, yt, x2, yH_tabs, TX_Black);  // clear backgr
 				
 				//  bookm
-				int b = vPlst[a].bookm;
+				int b = vPls[a].bookm;
 				if (b > 0)
 				{	int tex = TX_TabB1 + b-1;
 					Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
@@ -211,7 +211,7 @@ void AppSFMLDraw::DrawTabs()
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 
 				//  text
-				str = vPlst[a].name;
+				str = vPls[a].name;
 				//int w = cf->GetWidth(), o = max(0, (xW_pt-w)/2);  //center
 				//cf->xmax = (x+1)*xW_pt;
 //				if (bShowSrch && vPlst[a]->iSrch > 0)
