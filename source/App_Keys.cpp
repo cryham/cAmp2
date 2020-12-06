@@ -30,6 +30,10 @@ bool App::KeyDown(Event::KeyEvent k)
 
 	key(E):	 audio->chVol(0, shift, ctrl);  break;  // vol ^ v
 	key(D):	 audio->chVol(1, shift, ctrl);  break;
+	
+	key(Backspace):
+		if (ctrl)  plsId = plsPlId;
+		Pls().GotoPlay();  break;
 		
 	
 	///  playlist  move  cursor, offset
@@ -48,14 +52,12 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	///  rate file - +
 	// none- playing cur  ctrl- cursor
-	/*key(Subtract):  key(Hyphen):
-		if (ctrl) Pls().DecRate(); else  Pls().DecRatePl();  break;
-	key(Add):  key(Equal):
-		if (ctrl) Pls().IncRate(); else  Pls().IncRatePl();  break;
+	key(Subtract):  key(Hyphen):  Pls().Rate(!ctrl,-1);  break;
+	key(Add):       key(Equal):   Pls().Rate(!ctrl, 1);  break;
 
 	//  rating filter
-	key(Divide):    key(LBracket):  Pls().DecRFil(ctrl);  break;
-	key(Multiply):  key(RBracket):  Pls().IncRFil(ctrl);  break;*/
+	key(Divide):    key(LBracket):  Pls().Filter(!ctrl,-1);  break;
+	key(Multiply):  key(RBracket):  Pls().Filter(!ctrl, 1);  break;
 
 	//  next/prev` tab   ctrl- dn/up row  shift- ofs row
 	key(Tilde):  TabNext(-1,ctrl,shift);  break;
@@ -63,12 +65,13 @@ bool App::KeyDown(Event::KeyEvent k)
 
 	key(Backslash):  // bookmark
 		Pls().Bookm(alt, ctrl||shift ? -1 : 1);
-		bDraw = true;  break;
+		Redraw();  break;
 
 	//  New tab
 	key(N):  TabNew(alt? -1: ctrl? 2 : shift? -2: 1);  break;
 	//  Close tab
 	key(F8): TabClose();  break;
+	// todo: F2 rename ..
 	
 	
 	///  toggle
@@ -79,16 +82,15 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  debug
 	key(I):  bFps = !bFps;  break;
 	key(U):  bDebug = !bDebug;  break;
-	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  bDraw = true;  break;
+	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  Redraw();  break;
 	
 	
 	//  playlist
 	key(F4):  Pls().Save();  break;
 	key(Delete):  if (ctrl)  Pls().Clear();  break;
 	//  test--
-	key(F1):  Pls().AddDir("../../../../m/spm");  bDraw = true;  break;
-	key(F2):  Pls().AddDir("../../../../m/ssm/Music");  bDraw = true;  break;
-	key(F3):  Pls().AddDir("../../m" /*, false*/);  bDraw = true;  break;
+	key(F10):  Pls().AddDir("../../../../m" /*, false*/);  Redraw();  break;
+	key(F11):  Pls().AddDir("../../m" /*, false*/);  Redraw();  break;
 	
 	#undef key
 	default:  break;

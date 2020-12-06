@@ -27,7 +27,7 @@ bool Playlist::Load()
 	Clear();
 	
 	fi.getline(s,60);  // header vars
-	sscanf(s,"%d|%d|%d|%d|%d", &filterLow, &filterUp, &cur, &ofs, &play);
+	sscanf(s,"%d|%d|%d|%d|%d", &filterLow, &filterHigh, &cur, &ofs, &play);
 	
 	fs::path prevPath, a;
 	while (!fi.eof())
@@ -42,7 +42,7 @@ bool Playlist::Load()
 			}else
 				a = s;
 				
-			Track t(a);
+			Track t(a, false);
 			prevPath = t.path.parent_path();
 			
 			//  time,size
@@ -54,10 +54,12 @@ bool Playlist::Load()
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
 			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
-			tracks.push_back(move(t));
+			tracksAll.push_back(move(t));
 		}
 	}
 	fi.close();
+	
+	Update();
 	return true;
 }
 
@@ -75,12 +77,12 @@ bool Playlist::Save()
 	{	Error("Can't save playlist, file: "+p);  return false;  }
 	
 	of << "cAmpPls2\n";  // header vars
-	of << filterLow <<'|'<< filterUp <<'|'<< cur <<'|'<< ofs <<'|'<< play <<"\n";
+	of << filterLow <<'|'<< filterHigh <<'|'<< cur <<'|'<< ofs <<'|'<< play <<"\n";
 	
-	for (int i=0; i < Length(); ++i)
+	for (int i=0; i < LengthAll(); ++i)
 	{
-		const Track& t = tracks[i];
-		if (i > 0 && t.path.parent_path() == tracks[i-1].path.parent_path())
+		const Track& t = tracksAll[i];
+		if (i > 0 && t.path.parent_path() == tracksAll[i-1].path.parent_path())
 			//  same path, only file
 			of << '<' << t.path.filename().u8string();
 		else
@@ -99,10 +101,11 @@ bool Playlist::Save()
 //------------------------------------------------
 void Playlist::Clear()  // defaults
 {
-	tracks.clear();
+	tracksAll.clear();
+	tracksVis.clear();
 	cur = 0;  ofs = 0;  play = 0;
 	bDraw = true;
-	filterLow = -2;  filterUp = 5;
+	filterLow = -2;  filterHigh = 5;
 	
 	allSize = 0;
 	allTime = 0.0;  allDirs = 0;  allFiles = 0;

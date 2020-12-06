@@ -73,9 +73,11 @@ void AppSFMLDraw::DrawPlaylist()
 	if (it < tracks.size())
 	{
 		const Track& trk = tracks[it];
+		bool dir = trk.IsDir();
 		
 		//  rating backgr
 		int rr = trk.rate, r = rr+3;
+		if (!dir && rr)
 		Rect(0,yp,xw,yF,
 			Tex4Rate(rr), false,
 			cb[r][0], cb[r][1], cb[r][2]);
@@ -87,7 +89,9 @@ void AppSFMLDraw::DrawPlaylist()
 		Text(Fnt_Track, max(0, 5 - w/2), yp);
 
 		//  name
-		if (trk.IsDisabled())
+		if (dir)
+			Clr(140,140,200);
+		else if (trk.IsDisabled())
 			Clr(50,80,100);
 		str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
 		//str = trk.GetName();
@@ -165,6 +169,8 @@ void AppSFMLDraw::DrawPlaylist()
 
 		yp += yF;  ++it;
 	}
+	
+	DrawHeader();
 }
 
 

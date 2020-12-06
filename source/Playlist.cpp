@@ -22,14 +22,21 @@ Playlist::Playlist(string name1)
 
 //  play
 //--------------------------------------------------------------------
+void Playlist::GotoPlay()
+{
+	cur = play;
+}
+
 bool Playlist::Play(bool set)
 {
 	if (IsEmpty())  return false;
 	if (set)  play = cur;
-	if (play < 0 || play >= tracks.size())  return false;  //Check()
+	if (play < 0 || play >= tracksVis.size())  return false;  //Check()
 	bDraw = true;
 
 	Track& t = GetTracks()[play];
+	if (t.IsDir())  return false;
+	
 	audio->SetPls(this);
 	return audio->Play(t);
 }
@@ -38,23 +45,61 @@ bool Playlist::Next(int add)
 {
 	if (IsEmpty())  return false;
 
-	// todo: skip while dirs or disabled
-	int last = tracks.size()-1;
-	int p = play + add;
-	if (!audio->bRepPls && (p > last || p < 0))
-		return false;
+	//bNextPrev = add > 0;
+	bool dn = false;
+	int adds = 0, old = play;
+	int p = play, last = Length()-1;
+	while (!dn && adds < Length())
+	{
+		++adds;  p += add;
+		if (add > 0)
+		{
+			if (p > last)
+				if (!audio->bRepPls)  return false;  // no repeat
+				else  p = 0;
+		}else{
+			if (p < 0)
+				if (!audio->bRepPls)  return false;
+				else  p = last;
+		}
+		// skip while dirs or disabled or not visible..
+		if (!tracksVis[p].IsDir() &&
+			!tracksVis[p].IsDisabled())
+			dn=true;
+	}
+	if (!dn)  return false;  // looped all, none playabe
 	play = p;
-
-	bool stop = false;
-	if (play > last)  play = 0;
-	else
-	if (play < 0)  play = last;
-
+	
 	bDraw = true;
-	if (stop)
-	{	audio->Stop();  return false;  }
-	else
-		return Play();
+	return Play();
+}
+
+
+//  update
+//--------------------------------------------------------------------
+void Playlist::Update()
+{
+	tracksVis.clear();
+	fs::path prev;
+	for (int i=0; i < LengthAll(); ++i)
+	{
+		const Track& t = tracksAll[i];
+		if (t.rate < filterLow || t.rate > filterHigh)
+			continue;
+		
+		fs::path path = t.path.parent_path();
+		// todo: dir rate, dir hide
+		//map[path] dir hide
+		if (path != prev)
+		{	//  add dir
+			Track d(t.path.parent_path(), true);
+			tracksVis.push_back(move(d));
+		}
+		tracksVis.push_back(t);
+		prev = path;
+	}
+		
+	Cur();  Ofs();
 }
 
 
@@ -82,16 +127,16 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 			!audio->IsPlayable(ext))
 			continue;
 
-        Track t(file);
+        Track t(file, false);
         switch (where)
         {
         case Ins_Cursor:
             //tracks.insert(cur,t);  // insert(vec
             break;
         case Ins_Top:
-            tracks.push_front(move(t));
+            tracksAll.push_front(move(t));
         case Ins_End:
-            tracks.push_back(move(t));
+            tracksAll.push_back(move(t));
         }
     }
 
@@ -103,13 +148,13 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 //--------------------------------------------------------------------
 void Playlist::Cur()
 {
-	int all = (int)(tracks.size())-1;
+	int all = (int)(tracksVis.size())-1;
 	cur = mia(0, all, cur);
-	bDraw = true;
+	bDraw = true; 
 }
 void Playlist::Ofs()
 {
-	int all = (int)(tracks.size());
+	int all = (int)(tracksVis.size());
 	if (ofs > all-lin)  ofs = all-lin;  //  no view past last track
 	if (ofs < 0)  ofs = 0;  //  cur stays in view
 	bDraw = true;
@@ -132,7 +177,7 @@ void Playlist::Home (int m)
 
 	/*case 0:
 		do  --cur;
-		while (cur-1 > 0 && !tracks[cur]->isDir());
+		while (cur-1 > 0 && !tracksVis[cur]->isDir());
 		Up(0);  break;*/
 	}
 	bDraw = true;
@@ -140,7 +185,7 @@ void Playlist::Home (int m)
 
 void Playlist::End (int m)
 {
-	int all = (int)(tracks.size());
+	int all = (int)(tracksVis.size());
 	switch(m)
 	{
 	case 2:  cur = all-1;  ofs = all-1;  Cur();  Ofs();  break;  // list end
@@ -148,14 +193,14 @@ void Playlist::End (int m)
 
 	/*case 0:
 		do  ++cur;
-		while (cur+1 < all && !tracks[cur]->isDir());
+		while (cur+1 < all && !tracksVis[cur]->isDir());
 		Dn(0);  break;*/
 	}
 	bDraw = true;
 }
 
 
-//  bookmark
+//  advanced  bookmark, rating, filter
 //--------------------------------------------------------------------
 void Playlist::Bookm(bool pls, char add)
 {
@@ -164,8 +209,23 @@ void Playlist::Bookm(bool pls, char add)
 		bookm += add;  bookm = mia(0,6, bookm);
 	}else
 	{	//  track
-		int b = tracks[cur].bookm;
+		int b = tracksVis[cur].bookm;  // todo: on All, id ..
 		b += add;  b = mia(0,6, b);
-		tracks[cur].bookm = b;
+		tracksVis[cur].bookm = b;
 	}
+}
+
+void Playlist::Rate(bool playing, char add)
+{
+	int pos = playing ? play : cur;
+	int r = tracksVis[pos].rate;
+	r += add;  r = mia(0,6, r);
+	tracksVis[pos].rate = r;
+}
+
+void Playlist::Filter(bool lower, char add)
+{
+	int& f = lower ? filterLow : filterHigh;
+	f += add;  f = mia(cRateMin,cRateMax, f);
+	Update();
 }

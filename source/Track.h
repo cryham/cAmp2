@@ -31,10 +31,12 @@ public:
 	char rate = 0;  // rating
 	char bookm = 0;  // bookmark
 	//byte srch;   // match
-	//bool dir = false;
+	bool dir = false;
+	
+	//bool vis = true;  // visible, after filtering etc
 
 public:
-    Track(fs::path file);
+    Track(fs::path file, bool dir1);
 
 	//  get for draw
     const std::string& GetName() const
@@ -48,6 +50,9 @@ public:
 	
 	bool IsDisabled() const
 	{	return disabled;  }
+
+	bool IsDir() const
+	{	return dir;  }
 	
 	void SetNameFromPath();
 	void CleanNameRating();
@@ -60,6 +65,7 @@ const int chFnAll = 7;  // special -2 --
 const char cFnCharRates[chFnAll] = {'=','-', '`','^','~','+','#'};
 const char cFnNumRates[chFnAll] = {-3,-1, 1,2,3,4,5};
 
-const int cR0 = 3/*-*/, cR1 = 5/*+*/, chRall = cR0+cR1+1;
+const int cRmin = 3/*-*/, cRmax = 5/*+*/, chRall = cRmin+cRmax+1;
 const static std::string chFRateAdd[chRall] = {"=","--","-","","`","^","~","+","#"};  // rename add, file name
 const static std::string chFRateVis[chRall] = {"=","--","-","","`","^","~","+","*"};  // draw text, sybols
+const static int cRateMin = -cRmin, cRateMax = cRmax;

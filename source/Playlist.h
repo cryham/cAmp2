@@ -9,7 +9,8 @@ class Audio;
 class Playlist : public LogErr
 {
 protected:
-    std::deque<Track> tracks;
+	std::deque<Track> tracksAll;  // all, unfiltered
+    std::deque<Track> tracksVis;  // visible
 
 public:
 	//  vars  ----
@@ -20,7 +21,7 @@ public:
 	int lin = 10;  //  view visible lines, for page keys
 	bool bDraw = true;  // needs redraw, changed
 
-	int filterLow = -2, filterUp = 5;  // todo: filter lower, upper
+	int filterLow = cRateMin, filterHigh = cRateMax;  // lower, upper
 	int bookm = 0; //  bookmark
 	
 	//  move cur, ofs
@@ -51,21 +52,25 @@ public:
 	//  play  ----
 	bool Play(bool set=false);
 	bool Next(int add=1);
+	void GotoPlay();
 
 	
 	//  get  ----
     std::deque<Track>& GetTracks()
-    {   return tracks;  }
+    {   return tracksVis;  }
 
 	const std::deque<Track>& GetTracks() const
-    {   return tracks;  }
+    {   return tracksVis;  }
 	
 	bool IsEmpty() const
-	{	return tracks.empty();  }
+	{	return tracksVis.empty();  }
 
 	int Length() const
-	{	return (int)tracks.size();  }
+	{	return (int)tracksVis.size();  }
 
+	int LengthAll() const
+	{	return (int)tracksAll.size();  }
+	
     //  todo:  copy, move selected tracks, from other ..
 
 	
@@ -74,8 +79,12 @@ public:
 
 	bool Load(), Save();
 	void Clear();
+	void Update();  // for view, filter, add dirs etc.
 	
 	//  advanced  ----
 	void Bookm(bool pls, char add);  //  bookmarks
-
+	void Rate(bool playing, char add);
+	void Filter(bool lower, char add);
+	int GetFilter(bool lower)
+	{	return lower ? filterLow : filterHigh;  }
 };

@@ -4,8 +4,9 @@
 using namespace std;
 
 
-Track::Track(fs::path file)
+Track::Track(fs::path file, bool dir1)
 {
+	dir = dir1;
     path = file;
     SetNameFromPath();
 }

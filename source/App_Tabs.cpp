@@ -7,6 +7,7 @@
 //								. . . . .  Tabs  . . . . .
 void App::TabNext(int i, bool row, bool ofs)
 {
+	Pls().Save();
 	const ViewSet& v = set.view;
 	const int l = vPls.size()-1;
 	if (ofs)
@@ -21,7 +22,7 @@ void App::TabNext(int i, bool row, bool ofs)
 	else
 		if (plsId < 0)	plsId += l+1;
 	//plsChg();
-	bDraw = true;
+	Redraw();
 }
 
 //  util
