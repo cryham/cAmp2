@@ -84,6 +84,9 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(U):  bDebug = !bDebug;  break;
 	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  Redraw();  break;
 	
+	key(L):  bAllStats = !bAllStats;  Redraw();  break;
+	key(K):  bFullStats = !bFullStats;  Redraw();  break;
+	
 	
 	//  playlist
 	key(F4):  Pls().Save();  break;

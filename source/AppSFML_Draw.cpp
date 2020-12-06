@@ -231,7 +231,8 @@ void AppSFMLDraw::DrawHeader()
 	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
 	Clr(130,160,195);
 
-	int x = xE_pl_inf/2, y = yB_pl_inf;
+	//  filter  ` *
+	int x = xE_pl_inf*11/20, y = yB_pl_inf;
 	EFont fnt = Fnt_Info;
 
 	str = chFRateVis[low +cRmin];
@@ -239,77 +240,54 @@ void AppSFMLDraw::DrawHeader()
 	str = chFRateVis[high +cRmin];
 	Text(fnt, x +11, y);
 
-	return;
-	
 	//  info  Total dirs, files, bookm*, size, time
 	//----------------------------------------------------------------
 	bool bList = Pls().Length() > 0;
 	//if (yB_pli >= view.ySize)  return;
 	
-	//if (ed!=ED_nFind && ed!=ED_nTab)
-	{
 	//  get
-	uint aD,aF, aSi, aTm;
+	uint di, fi, si, tm;
+	const Stats& st = bAllStats ?
+		bFullStats ? allFull : all :
+		bFullStats ? Pls().stFull : Pls().stats;
 	/*if (Pls().numSel > 0)
 	{	aD = 0;  aF = Pls().numSel;
 		aSi = Pls().selSize/1000000;
 		aTm = Pls().selTime;  }
-	else if (bAllInfo)
-	{	aD= aaD;  aF= aaF;  aSi= aaSi;  aTm= aaTm;  }
 	else/**/
-	{	aD = Pls().allDirs;  aF = Pls().allFiles;
-		aSi = Pls().allSize/1000000;
-		aTm = Pls().allTime;
+	{	di = st.GetDirs();
+		fi = st.GetFiles();
+		si = st.GetSize() / 1000000;
+		tm = st.GetTime();
 	}
 	//  clr
-	EFont fnt = Fnt_Info;
-	Clr(185,210,235);
+	if (bAllStats){  if (bFullStats)  Clr(160,170,190);  else  Clr(150,150,190);  }
+	else		  {  if (bFullStats)  Clr(120,150,190);  else  Clr(100,130,160);  }
 	/*if (Pls().numSel > 0)  clr(0,1,0.9);  else
 	if (bAllInfo)  clr(1,0.7,1);  else
 	if (!bList)  clr(1,1,1);  else
 	if (!CList::bFilInf)  clr(0.7,0.8,1);  else  clr(0.65,0.75,1);/**/
 	
 	//  size
-	char st[64],s[64];
-	#define sfmt(s)  snprintf(st, sizeof(s)-1, 
-	int sg = aSi/1000;  float fsm = aSi/1000.f;
-	if (sg < 1)		sfmt(st) "%3d MB", aSi);  else
-	if (sg < 10)	sfmt(st) "%4.3f GB", fsm); else
-	if (sg < 100)	sfmt(st) "%4.2f GB", fsm);  else
-					sfmt(st) "%.1f GB", fsm);
+	string s = size2s(si);
 	
 	//*L*/sfmt(cf->s) "L ofs %3d  cur %3d  Lin %3d  all %3d", plst->lOfs, plst->lCur, yLpl, plst->listLen);  Text(0, yBpli);
 	//*M*/sfmt(cf->s) "xm %4d ym %3d %d%d%d yMd %d %6.3f", xm,ym, bL,bR,bM, yMd, mtiv);  Text(0, yBpli);
-	int y = yB_pl_inf;
-	if (aD == 0)
-	{	Format("%d  %s", aF, st);  Text(fnt, 20, y);  }
+	y = yB_pl_inf;
+	if (di == 0)
+	{	str = i2s(fi) +"  "+ s;  Text(fnt, 20, y);  }
 	else
-	{	Format("%d  %d  %s", aD, aF, st);  Text(fnt, 0, y);  }
+	{	str = i2s(di) +"  "+ i2s(fi) +"  "+ s;  Text(fnt, 0, y);  }
 //	if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {
 //		Format("%6.1f%%", 100.f*Pls().itu/float(Pls().listLen));  Text(fnt, xwr, y);  }//-
 	
-	//  total time  once, str fun..
-	uint t = aTm, ts,tm,th,td;
-	ts= t%60;  t/=60;  tm= t%60;  t/=60;  th= t%24;  td= t/24;
-	
-	sfmt(st) "%c%c", tm%10+'0', tm/10+'0');  strcpy(s,st);
-	if (th > 0 || td > 0) {  
-	  sfmt(st) " h%c%c", th%10+'0', th>9? th/10+'0': td>0?'0':' ');  strcat(s,st);
-	  if (td > 0) {  
-		sfmt(st) " d%c%c%c", td%10+'0', td>9? td/10%10+'0':' ', td>99? td/100%10+'0':' ');  strcat(s,st);
-	  }  }
-	string ss{s};  reverse(ss.begin(), ss.end());
-	str = ss;
-	int x = xE_pl_inf;
-	int w = Text(fnt, x, y);
+	//  total time
+	str = time2s(tm);
+	x = xE_pl_inf;
+	int w = Text(fnt, x, y, false);
 	Text(fnt, x - w, y);
-	#undef sfmt
 	
 	//  num sel
 	//if (Pls().numSel > 0)
 	//{	clr(0,1,0.9);  cf->Format("%d", Pls().numSel);  Text(view.xSize/2+20,yBpli);  }  //Sel:
-	
-	/*clr(1,1,1);  cf->dir = 1;
-	cf->Fs[' '] = cf->Fs['0']/2;/**/
-	}
 }

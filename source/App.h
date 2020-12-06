@@ -6,6 +6,7 @@
 
 #include <SFML/Window/Event.hpp>  // input, use own enum?
 #include <memory>
+#include <vector>
 
 class Audio;
 
@@ -35,6 +36,7 @@ protected:
 	std::vector<Playlist> vPls;  // always at least 1
 	Playlist& Pls() {  return vPls[plsId];  }
 	void LoadPls(), SavePls();  // for set
+	Stats all, allFull;
 	
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1,  // selected, copy from
@@ -83,7 +85,8 @@ protected:
 	bool bFps = false;   // show Fps
 	bool bDebug = false; // show debug text
 	int iTimeTest = 0;   // test pls time colors
-
+	bool bAllStats = false;  // all playlists
+	bool bFullStats = false;  // unfiltered
 	
 	///  dimensions  ----
 	//  B = begin  E = end  W = width  H = height
@@ -105,5 +108,5 @@ protected:
 		yL_pl = 10,  // playlist view lines, auto set
 		xWex_plS=0;  // extra width for slider drag
 	
-	void UpdDim(/*float rfrFq=-1.f*/);
+	void UpdDim();
 };

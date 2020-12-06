@@ -9,7 +9,8 @@ using namespace std;
 string i2s(const int v, const char width, const char fill)
 {
 	ostringstream s;
-	if (width != 0)  s.width(width);  s.fill(fill);
+	if (width != 0)  s.width(width);
+	s.fill(fill);
 	s << fixed << v;
 	return s.str();
 }
@@ -27,7 +28,9 @@ string b2s(const bool b)
 	return b ? "1" : "0";
 }
 
-std::string t2s(float time, bool float10s)
+
+//  advanced
+string t2s(const float time, bool float10s)
 {
 	if (/*time < 10.f &&*/ float10s)
 		return f2s(time,1,3);
@@ -38,6 +41,34 @@ std::string t2s(float time, bool float10s)
 	
 	return i2s(m,1)+":"+i2s(s,2,'0');
 }
+
+string time2s(const uint time)
+{
+	uint t = time, ts,tm,th,td;
+	ts = t%60;  t /= 60;  tm = t%60;  t /= 60;  th = t%24;  td = t/24;
+
+	string s;
+	s = tm%10+'0';  s += tm/10+'0';
+	if (th > 0 || td > 0)
+	{	s += " h";  s += th%10+'0';  s += th>9? th/10+'0': td>0?'0':' ';
+		if (td > 0)
+		{	s += " d";  s += td%10+'0';  s += td>9? td/10%10+'0':' ';  s += td>99? td/100%10+'0':' ';
+	}	}
+	reverse(s.begin(), s.end());
+	return s;
+}
+
+string size2s(const uint si)
+{
+	int sg = si/1000;  float fsm = si/1000.f;
+	string s;
+	if (sg < 1)		s = i2s(si, 3) + " MB";  else
+	if (sg < 10)	s = f2s(fsm,3,4) + " GB"; else
+	if (sg < 100)	s = f2s(fsm,2,4) + " GB";  else
+					s = f2s(fsm,1) + " GB";
+	return s;
+}
+
 
 //  from string
 int s2i(const char* str)

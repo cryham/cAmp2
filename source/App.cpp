@@ -49,12 +49,16 @@ bool App::Init()
 
 void App::LoadPls()
 {
+	all.Clear();
+	allFull.Clear();
 	vPls.clear();
+	
 	for (const auto& sp: set.vSetPls)
 	{
 		Playlist p(sp.name);
 		p.bookm = sp.bookm;
 		p.Load();
+		all += p.stats;  allFull += p.stFull;
 		vPls.push_back(move(p));
 	}
 	//Pls().Update();
@@ -94,7 +98,7 @@ bool App::Destroy()
 
 //  Update dims
 //------------------------------------------------------------------------
-void App::UpdDim(/*float rfrFq*/)
+void App::UpdDim()
 {
 	ViewSet& v = set.view;
 	if (v.iVisH > v.ySize)
@@ -131,13 +135,7 @@ void App::UpdDim(/*float rfrFq*/)
 	yH_pl = yE_pl-1-yB_pl;
 
 	xWex_plS = 40;  // slider extra
-	xE_pl_inf = v.xSize-1;
-	//CList::Lin = yL_pl;
+	xE_pl_inf = v.xSize-21;
 
-	//if (rfrFq > 0.f)
-	//	tmD = int(rfrFq*1.f);	clear=1;
-	
-	// for..
-	//cfont[v.cfP]->StrCopy(" 0:00");  xt_ = cfont[v.cfP]->GetWidth();
 	Redraw();
 }

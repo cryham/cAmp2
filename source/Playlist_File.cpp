@@ -39,6 +39,7 @@ bool Playlist::Load()
 			{	string f(s);  // file
 				f = f.substr(1);
 				a = prevPath / f;
+				stFull.AddDir();
 			}else
 				a = s;
 				
@@ -54,6 +55,7 @@ bool Playlist::Load()
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
 			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
+			stFull.Add(&t);
 			tracksAll.push_back(move(t));
 		}
 	}
@@ -103,10 +105,11 @@ void Playlist::Clear()  // defaults
 {
 	tracksAll.clear();
 	tracksVis.clear();
+	stats.Clear();
+	stFull.Clear();
+
 	cur = 0;  ofs = 0;  play = 0;
 	bDraw = true;
-	filterLow = -2;  filterHigh = 5;
-	
-	allSize = 0;
-	allTime = 0.0;  allDirs = 0;  allFiles = 0;
+	filterLow = cRateMin;  filterHigh = cRateMax;
+	lin = 10;  bookm = 0;
 }
