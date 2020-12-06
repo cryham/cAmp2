@@ -25,6 +25,8 @@ Playlist::Playlist(string name1)
 void Playlist::GotoPlay()
 {
 	cur = play;
+	ofs = cur - lin/2;
+	Ofs();  Cur();
 }
 
 bool Playlist::Play(bool set)
