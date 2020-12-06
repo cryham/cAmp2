@@ -131,6 +131,7 @@ void App::UpdDim(/*float rfrFq*/)
 	yH_pl = yE_pl-1-yB_pl;
 
 	xWex_plS = 40;  // slider extra
+	xE_pl_inf = v.xSize-1;
 	//CList::Lin = yL_pl;
 
 	//if (rfrFq > 0.f)
@@ -138,5 +139,5 @@ void App::UpdDim(/*float rfrFq*/)
 	
 	// for..
 	//cfont[v.cfP]->StrCopy(" 0:00");  xt_ = cfont[v.cfP]->GetWidth();
-	bDraw = true;
+	Redraw();
 }

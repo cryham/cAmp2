@@ -67,7 +67,8 @@ protected:
 	//  buttons, s old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
-	bool bDraw = true;  // clean and redraw, when needed
+	int iDraw = 2;  // clean and redraw, when needed
+	void Redraw() {  iDraw = 2;  }
 	
 	void Mouse();  // process, update
 	void Mouse(int x, int y)
@@ -99,7 +100,7 @@ protected:
 		xW_tabs_btn=0,  // tabs btns ^ v
 		
 		//  pls tracks
-		yB_pl_inf=0,
+		yB_pl_inf=0, xE_pl_inf=0,
 		yB_pl=0,yE_pl=0, yH_pl=0,
 		yL_pl = 10,  // playlist view lines, auto set
 		xWex_plS=0;  // extra width for slider drag

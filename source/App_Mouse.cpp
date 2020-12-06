@@ -17,7 +17,7 @@ void App::Wheel(int d)
 	if (Pls().Length() <= yL_pl)  return;
 	int m = shift ? 1 : ctrl ? yL_pl/2 : 8;
 	if (d < 0)  Pls().PgOfsDn(m);  else  Pls().PgOfsUp(m);
-	bDraw = true;
+	Redraw();
 }
 
 
@@ -105,7 +105,7 @@ void App::Mouse()
 	}
 	if (bL && !bLs && ym > yB_tabs && ym < yE_tabs)
 	{
-		bDraw = true;
+		Redraw();
 		if (xm > v.xSize-xW_tabs_btn)  // ofs btns up,dn
 		{	if (ym-yB_tabs < (yE_tabs-yB_tabs)/2)
 			{	//  dec/inc tab x,y Num
@@ -144,7 +144,7 @@ void App::Mouse()
 			/*if (!t->isDir())
 			{	Stop();  //Pls().idPl = cr;
 				plsPlChg(plsId);  //pls id*/
-			bDraw = true;
+			Redraw();
 		}
 		
 		///  Left
@@ -177,7 +177,7 @@ void App::Mouse()
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/
 					updSelId(1);
 				#endif
-				bDraw = true;
+				Redraw();
 			}
 		}
 	
@@ -195,7 +195,7 @@ void App::Mouse()
 				float fle = float(Pls().Length());
 				Pls().ofs = float(ym - yL_sl) / float(yH_pl- yL_pl/fle) *fle + xL_ofs;
 				Pls().PgOfsDn(0);  Pls().PgOfsUp(0);
-				bDraw = true;
+				Redraw();
 			}
 		}
 	}
@@ -211,7 +211,7 @@ void App::Mouse()
 			{
 				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1+ mtiv/-0.06f;
 				if (yMd > 0)  Pls().PgOfsDn(m);  else  Pls().PgOfsUp(m);
-				bDraw = true;
+				Redraw();
 			}
 		}
 		mti += dt;

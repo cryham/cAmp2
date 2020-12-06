@@ -1,6 +1,19 @@
 #include "AppSFML_Draw.h"
+#include "stdarg.h"
 using namespace std;  using namespace sf;
 
+
+void AppSFMLDraw::Format(const char* format, ...)
+{
+	const int strSize = 256;
+	char s[strSize];
+	va_list args;
+	va_start(args, format);
+	snprintf(s, strSize-1, format, args);
+	s[strSize-1] = 0;
+	str = s;
+	va_end(args);
+}
 
 //  write text
 int AppSFMLDraw::Text(EFont n, int x, int y, bool draw)

@@ -35,6 +35,7 @@ protected:
 	void DrawPlayer();
 	void DrawTabs();
 	void DrawPlaylist();
+	void DrawHeader();
 	void DrawSlider();
 
 public:
@@ -47,6 +48,8 @@ protected:
 	//  returns width, x advance
 	int Text(EFont n, int x, int y, bool draw=true);
 
+	void Format(const char* format, ...);
+	
 	//  draw textured rect, stretched at
 	//  x,y pos, width,height,  texture coords uv start,size,  color rgb
 	void RectUV(int x, int y, int w, int h,  int ux, int uy, int uw, int uh,  bool add=false,

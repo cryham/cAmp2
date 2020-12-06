@@ -3,6 +3,7 @@
 #include "Util.h"
 #include "def.h"
 #include <cmath>
+#include <cstring>
 using namespace std;  using namespace sf;
 
 
@@ -11,16 +12,16 @@ void AppSFMLDraw::Draw()
 {
 	if (Pls().bDraw)
 	{	Pls().bDraw = false;
-		bDraw = true;
+		iDraw = 2;
 	}
-	if (bDraw)
+	if (iDraw > 0)
 		pWindow->clear();
 	
 	DrawPlayer();
 	DrawTabs();
 	
-	if (bDraw)
-	{	bDraw = false;
+	if (iDraw > 0)
+	{	--iDraw;
 		
 		DrawPlaylist();
 	}
@@ -212,11 +213,12 @@ void AppSFMLDraw::DrawTabs()
 
 				//  text
 				str = vPls[a].name;
-				//int w = cf->GetWidth(), o = max(0, (xW_pt-w)/2);  //center
+				const int w = Text(Fnt_Track, 0,0, false);
+				int xc = max(0, (xW_tabs - w)/2);  //center
 				//cf->xmax = (x+1)*xW_pt;
 //				if (bShowSrch && vPlst[a]->iSrch > 0)
 //					cf->Fclr = D3DXCOLOR(0.4,1,0.2,1);  else  cf->Fclr = D3DXCOLOR(0.7,0.8,1,1);  // search..
-				Text(Fnt_Track, x*xW_tabs/*+o*/, ytb+y*yH_tabs);
+				Text(Fnt_Track, x*xW_tabs + xc, ytb+y*yH_tabs);
 			}
 			a++;
 		}
@@ -224,70 +226,90 @@ void AppSFMLDraw::DrawTabs()
 }
 
 
-#if 0
 void AppSFMLDraw::DrawHeader()
 {
+	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
+	Clr(130,160,195);
 
+	int x = xE_pl_inf/2, y = yB_pl_inf;
+	EFont fnt = Fnt_Info;
+
+	str = chFRateVis[low +cRmin];
+	Text(fnt, x -11, y);
+	str = chFRateVis[high +cRmin];
+	Text(fnt, x +11, y);
+
+	return;
+	
 	//  info  Total dirs, files, bookm*, size, time
 	//----------------------------------------------------------------
-	bool bList = Pls().listLen > 0;
-	if (yB_pli >= view.ySize)  return;
+	bool bList = Pls().Length() > 0;
+	//if (yB_pli >= view.ySize)  return;
 	
-	if (ed!=ED_nFind && ed!=ED_nTab)
+	//if (ed!=ED_nFind && ed!=ED_nTab)
 	{
 	//  get
-	DWORD  aD,aF, aSi, aTm;
-	if (Pls().numSel > 0)
+	uint aD,aF, aSi, aTm;
+	/*if (Pls().numSel > 0)
 	{	aD = 0;  aF = Pls().numSel;
 		aSi = Pls().selSize/1000000;
 		aTm = Pls().selTime;  }
 	else if (bAllInfo)
 	{	aD= aaD;  aF= aaF;  aSi= aaSi;  aTm= aaTm;  }
-	else
+	else/**/
 	{	aD = Pls().allDirs;  aF = Pls().allFiles;
 		aSi = Pls().allSize/1000000;
 		aTm = Pls().allTime;
 	}
 	//  clr
-	if (Pls().numSel > 0)  clr(0,1,0.9);  else
+	EFont fnt = Fnt_Info;
+	Clr(185,210,235);
+	/*if (Pls().numSel > 0)  clr(0,1,0.9);  else
 	if (bAllInfo)  clr(1,0.7,1);  else
 	if (!bList)  clr(1,1,1);  else
-	if (!CList::bFilInf)  clr(0.7,0.8,1);  else  clr(0.65,0.75,1);
+	if (!CList::bFilInf)  clr(0.7,0.8,1);  else  clr(0.65,0.75,1);/**/
 	
 	//  size
-	char st[60];
-	#define sfmt(s)  sprintf_s(st,sizeof(st)-1, 
+	char st[64],s[64];
+	#define sfmt(s)  snprintf(st, sizeof(s)-1, 
 	int sg = aSi/1000;  float fsm = aSi/1000.f;
 	if (sg < 1)		sfmt(st) "%3d MB", aSi);  else
 	if (sg < 10)	sfmt(st) "%4.3f GB", fsm); else
 	if (sg < 100)	sfmt(st) "%4.2f GB", fsm);  else
 					sfmt(st) "%.1f GB", fsm);
 	
-	//*L*/sfmt(cf->s) "L ofs %3d  cur %3d  Lin %3d  all %3d", plst->lOfs, plst->lCur, yLpl, plst->listLen);  cf->Write(0, yBpli);
-	//*M*/sfmt(cf->s) "xm %4d ym %3d %d%d%d yMd %d %6.3f", xm,ym, bL,bR,bM, yMd, mtiv);  cf->Write(0, yBpli);
+	//*L*/sfmt(cf->s) "L ofs %3d  cur %3d  Lin %3d  all %3d", plst->lOfs, plst->lCur, yLpl, plst->listLen);  Text(0, yBpli);
+	//*M*/sfmt(cf->s) "xm %4d ym %3d %d%d%d yMd %d %6.3f", xm,ym, bL,bR,bM, yMd, mtiv);  Text(0, yBpli);
+	int y = yB_pl_inf;
 	if (aD == 0)
-	{	cf->Format("%d  %s", aF, st);  cf->Write(20, yB_pli);  }
+	{	Format("%d  %s", aF, st);  Text(fnt, 20, y);  }
 	else
-	{	cf->Format("%d  %d  %s", aD, aF, st);  cf->Write(0, yB_pli);  }
-	if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {
-		cf->Format("%6.1f%%", 100.f*Pls().itu/float(Pls().listLen));  cf->Write(cf->xwr, yB_pli);  }//-
+	{	Format("%d  %d  %s", aD, aF, st);  Text(fnt, 0, y);  }
+//	if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {
+//		Format("%6.1f%%", 100.f*Pls().itu/float(Pls().listLen));  Text(fnt, xwr, y);  }//-
 	
 	//  total time  once, str fun..
-	DWORD t = aTm, ts,tm,th,td;
+	uint t = aTm, ts,tm,th,td;
 	ts= t%60;  t/=60;  tm= t%60;  t/=60;  th= t%24;  td= t/24;
 	
-		sfmt(st) "%c%c", tm%10+'0', tm/10+'0');  cf->StrCopy(st);	if (th > 0 || td > 0) {  
-	  sfmt(st) " h%c%c", th%10+'0', th>9? th/10+'0': td>0?'0':' ');  cf->StrAdd(st);	if (td > 0) {  
-	sfmt(st) " d%c%c%c", td%10+'0', td>9? td/10%10+'0':' ', td>99? td/100%10+'0':' ');  cf->StrAdd(st);	 }  }
-	cf->dir = -1;  cf->Write(xTm, yB_pli);  cf->dir = 1;
+	sfmt(st) "%c%c", tm%10+'0', tm/10+'0');  strcpy(s,st);
+	if (th > 0 || td > 0) {  
+	  sfmt(st) " h%c%c", th%10+'0', th>9? th/10+'0': td>0?'0':' ');  strcat(s,st);
+	  if (td > 0) {  
+		sfmt(st) " d%c%c%c", td%10+'0', td>9? td/10%10+'0':' ', td>99? td/100%10+'0':' ');  strcat(s,st);
+	  }  }
+	string ss{s};  reverse(ss.begin(), ss.end());
+	str = ss;
+	int x = xE_pl_inf;
+	int w = Text(fnt, x, y);
+	Text(fnt, x - w, y);
 	#undef sfmt
 	
 	//  num sel
 	//if (Pls().numSel > 0)
-	//{	clr(0,1,0.9);  cf->Format("%d", Pls().numSel);  cf->Write(view.xSize/2+20,yBpli);  }  //Sel:
+	//{	clr(0,1,0.9);  cf->Format("%d", Pls().numSel);  Text(view.xSize/2+20,yBpli);  }  //Sel:
 	
-	clr(1,1,1);  cf->dir = 1;
-	cf->Fs[' '] = cf->Fs['0']/2;
+	/*clr(1,1,1);  cf->dir = 1;
+	cf->Fs[' '] = cf->Fs['0']/2;/**/
 	}
 }
-#endif
