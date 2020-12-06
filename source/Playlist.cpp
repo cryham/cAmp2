@@ -2,6 +2,7 @@
 #include "FileSystem.h"
 #include "Playlist.h"
 #include "Audio.h"
+#include "Stats.h"
 #include "def.h"
 #include "Util.h"
 #include <iostream>
@@ -47,7 +48,7 @@ bool Playlist::Next(int add)
 {
 	if (IsEmpty())  return false;
 
-	//bNextPrev = add > 0;
+	audio->bNextPrev = add > 0;
 	bool dn = false;
 	int adds = 0, old = play;
 	int p = play, last = Length()-1;
@@ -64,7 +65,7 @@ bool Playlist::Next(int add)
 				if (!audio->bRepPls)  return false;
 				else  p = last;
 		}
-		// skip while dirs or disabled or not visible..
+		//  skip while dirs or disabled or not visible..
 		if (!tracksVis[p].IsDir() &&
 			!tracksVis[p].IsDisabled())
 			dn=true;
@@ -81,24 +82,34 @@ bool Playlist::Next(int add)
 //--------------------------------------------------------------------
 void Playlist::Update()
 {
+	bool emptyDirs = false;
+
 	tracksVis.clear();
+	stats.Clear();
 	fs::path prev;
+	
 	for (int i=0; i < LengthAll(); ++i)
 	{
 		const Track& t = tracksAll[i];
-		if (t.rate < filterLow || t.rate > filterHigh)
+		bool out = t.rate < filterLow || t.rate > filterHigh;
+		if (out && !emptyDirs)
 			continue;
 		
 		fs::path path = t.path.parent_path();
-		// todo: dir rate, dir hide
-		//map[path] dir hide
+		//  todo: dir rate, dir hide  map[path]..
 		if (path != prev)
 		{	//  add dir
 			Track d(t.path.parent_path(), true);
 			tracksVis.push_back(move(d));
+			stats.AddDir();
 		}
-		tracksVis.push_back(t);
 		prev = path;
+		if (out)
+			continue;
+		
+		//  add file
+		tracksVis.push_back(t);
+		stats.Add(&t);
 	}
 		
 	Cur();  Ofs();
@@ -177,10 +188,10 @@ void Playlist::Home (int m)
 	case 2:  cur = 0;  ofs = 0;  break;  // list top
 	case 1:  cur = ofs;  break;  // view
 
-	/*case 0:
+	case 0:
 		do  --cur;
-		while (cur-1 > 0 && !tracksVis[cur]->isDir());
-		Up(0);  break;*/
+		while (cur-1 > 0 && !tracksVis[cur].IsDir());
+		Up(0);  break;
 	}
 	bDraw = true;
 }
@@ -193,10 +204,10 @@ void Playlist::End (int m)
 	case 2:  cur = all-1;  ofs = all-1;  Cur();  Ofs();  break;  // list end
 	case 1:  cur = ofs+lin-1;  Cur();  break;  // view
 
-	/*case 0:
+	case 0:
 		do  ++cur;
-		while (cur+1 < all && !tracksVis[cur]->isDir());
-		Dn(0);  break;*/
+		while (cur+1 < all && !tracksVis[cur].IsDir());
+		Dn(0);  break;
 	}
 	bDraw = true;
 }

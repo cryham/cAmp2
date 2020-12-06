@@ -23,20 +23,23 @@ protected:
 	double time = 0.0;  // in seconds
 	uintmax_t size = 0;
 
-	///  extra  ----
+	//  flags
+	bool dir = false;
 	bool disabled = false;  // can't play
+
+	///  extra  ----
 	bool mod = false;  // xm, mod files etc.
 	char hide = 0, sel = 0;  // todo:
+
 public:
 	char rate = 0;  // rating
 	char bookm = 0;  // bookmark
 	//byte srch;   // match
-	bool dir = false;
 	
 	//bool vis = true;  // visible, after filtering etc
 
 public:
-    Track(fs::path file, bool dir1);
+    Track(fs::path file, bool dir1=false);
 
 	//  get for draw
     const std::string& GetName() const
@@ -47,6 +50,9 @@ public:
 	
 	double GetTime() const
 	{	return time;  }
+
+	double GetSize() const
+	{	return size;  }
 	
 	bool IsDisabled() const
 	{	return disabled;  }

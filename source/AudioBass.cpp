@@ -90,7 +90,7 @@ bool AudioBass::Play(Track& trk)
             case BASS_ERROR_FILEFORM:  // unsup format
                 //  cant open, not found
                 trk.disabled = true;
-                //if (bNextPrev)  Next();  else  Prev();
+                //if (bNextPrev)  Next();  else  Prev();  //pls-> ..
                 //Log("disabled");
 				return false;
 

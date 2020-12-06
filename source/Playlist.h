@@ -1,6 +1,7 @@
 #pragma once
 #include "Track.h"
 #include "AppLog.h"
+#include "Stats.h"
 #include <deque>
 
 
@@ -11,6 +12,7 @@ class Playlist : public LogErr
 protected:
 	std::deque<Track> tracksAll;  // all, unfiltered
     std::deque<Track> tracksVis;  // visible
+	std::deque<int> vis2all;  // from vis to all ids
 
 public:
 	//  vars  ----
@@ -31,10 +33,8 @@ public:
 		Home(int), End(int),
 		Cur(), Ofs();
 
-	//  stats, total  ----  // todo: 
-	uintmax_t allSize = 0;
-	double  allTime = 0.0;
-	int  allDirs = 0, allFiles = 0;  // count
+	//  stats
+	Stats stats, stFull;  // full = not filtered
 	
     enum EInsert
     {  Ins_Cursor, Ins_Top, Ins_End  };
@@ -50,8 +50,8 @@ public:
 	
 
 	//  play  ----
-	bool Play(bool set=false);
-	bool Next(int add=1);
+	bool Play(bool set = false);
+	bool Next(int add = 1);
 	void GotoPlay();
 
 	
@@ -81,9 +81,11 @@ public:
 	void Clear();
 	void Update();  // for view, filter, add dirs etc.
 	
+	
 	//  advanced  ----
 	void Bookm(bool pls, char add);  //  bookmarks
 	void Rate(bool playing, char add);
+	
 	void Filter(bool lower, char add);
 	int GetFilter(bool lower)
 	{	return lower ? filterLow : filterHigh;  }

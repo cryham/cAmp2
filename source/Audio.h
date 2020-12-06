@@ -27,6 +27,7 @@ public:
 	
 	bool bRepTrk = false;  // repeat track
 	bool bRepPls = true;  // repeat playlist
+	bool bNextPrev = true;  // false back, prev
 
 public:
 	bool IsPlaying() {  return bPlaying;  }
