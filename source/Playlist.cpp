@@ -141,6 +141,7 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 			continue;
 
         Track t(file, false);
+		audio->GetTrkTime(t);  // todo: on thread ..
         switch (where)
         {
         case Ins_Cursor:
@@ -152,6 +153,7 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
             tracksAll.push_back(move(t));
         }
     }
+	Update();
 
     return true;
 }

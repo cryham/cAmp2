@@ -73,7 +73,7 @@ void App::Mouse()
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par
 			audio->chPosAbs(mia(0.,1., (double(xm) / v.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
-		return;
+		//return;
 	}
 	/*if (bR && !bRs && ym < yE_pl_btn && plsPl)  //  Right rating
 	{	// prev,next  btns |< >|
@@ -125,7 +125,7 @@ void App::Mouse()
 			else
 			{	/*Pls().Save();*/  plsId = nTabMov;  /*plsChg();*/	}
 		}
-		return;
+		//return;
 	}
 	//? if (!bL && bLs)  bDrawPlst = true;
 

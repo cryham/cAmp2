@@ -35,7 +35,7 @@ void Track::SetNameFromPath()
 
 void Track::CleanNameRating()
 {
-	size_t p = name.find_last_not_of(cFnCharRates);
+	size_t p = name.find_last_not_of(cFnStrRates);
 	if (p == string::npos)  return;
 	
 	if (p > 1 && name[p-1]=='%')

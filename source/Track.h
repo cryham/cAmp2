@@ -69,6 +69,7 @@ public:
 ///  rating chars in name
 const int chFnAll = 7;  // special -2 -- 
 const char cFnCharRates[chFnAll] = {'=','-', '`','^','~','+','#'};
+const static char* cFnStrRates = "=-`^~+#";
 const char cFnNumRates[chFnAll] = {-3,-1, 1,2,3,4,5};
 
 const int cRmin = 3/*-*/, cRmax = 5/*+*/, chRall = cRmin+cRmax+1;
