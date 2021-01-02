@@ -93,13 +93,27 @@ void AppSFMLDraw::DrawPlayer()
 	}
 
 	
-	//  play icons  >
+	//  prev, next  |< >|  hover
 	int y = 2;
-	Clr(50,90,120);
-	//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
-	str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
-		: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
-	Text(Fnt_Info, xw/2, y);
+	if (ym > 0 && ym < yE_plr_btn)  // prev,next  btns |< >|
+	{
+		if (xm < v.xSize/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		str = String(Uint32(0x25AE)) + String(Uint32(0x25C0));
+		Text(Fnt_Info, xw/2 - 30, y);
+
+		if (xm > v.xSize/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		str = String(Uint32(0x25B6)) + String(Uint32(0x25AE));
+		Text(Fnt_Info, xw/2 + 10, y);
+	}else
+	{
+		//  play icons  >
+		y = 2;
+		Clr(50,90,120);
+		//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
+		str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
+			: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
+		Text(Fnt_Info, xw/2, y);
+	}
 	
 	//  repeat  @
 	if (audio->bRepTrk || audio->bRepPls)

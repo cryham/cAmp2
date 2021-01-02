@@ -50,7 +50,7 @@ bool Playlist::Next(int add)
 
 	audio->bNextPrev = add > 0;
 	bool dn = false;
-	int adds = 0, old = play;
+	int adds = 0;
 	int p = play, last = Length()-1;
 	while (!dn && adds < Length())
 	{
@@ -68,7 +68,7 @@ bool Playlist::Next(int add)
 		//  skip while dirs or disabled or not visible..
 		if (!tracksVis[p].IsDir() &&
 			!tracksVis[p].IsDisabled())
-			dn=true;
+			dn = true;
 	}
 	if (!dn)  return false;  // looped all, none playabe
 	play = p;
