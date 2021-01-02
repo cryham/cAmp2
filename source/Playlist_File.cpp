@@ -27,7 +27,8 @@ bool Playlist::Load()
 	Clear();
 	
 	fi.getline(s,60);  // header vars
-	sscanf(s,"%d|%d|%d|%d|%d", &filterLow, &filterHigh, &cur, &ofs, &play);
+	sscanf(s,"%d|%d|%d|%d|%d|%d", &filterLow, &filterHigh,
+								  &cur, &ofs, &play, &bookm);
 	
 	fs::path prevPath, a;
 	while (!fi.eof())
@@ -79,7 +80,8 @@ bool Playlist::Save()
 	{	Error("Can't save playlist, file: "+p);  return false;  }
 	
 	of << "cAmpPls2\n";  // header vars
-	of << filterLow <<'|'<< filterHigh <<'|'<< cur <<'|'<< ofs <<'|'<< play <<"\n";
+	of << filterLow <<'|'<< filterHigh <<'|'<<
+		  cur <<'|'<< ofs <<'|'<< play <<'|'<< bookm <<"\n";
 	
 	for (int i=0; i < LengthAll(); ++i)
 	{
@@ -108,7 +110,7 @@ void Playlist::Clear()  // defaults
 	stats.Clear();
 	stFull.Clear();
 
-	cur = 0;  ofs = 0;  play = 0;
+	cur = 0;  ofs = 0;  play = 0;  bookm = 0;
 	bDraw = true;
 	filterLow = cRateMin;  filterHigh = cRateMax;
 	lin = 10;  bookm = 0;

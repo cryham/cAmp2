@@ -106,7 +106,7 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Info, xw/2 + 10, y);
 	}else
 	{
-		//  play icons  >
+		//  play icons  |>
 		y = 2;
 		Clr(50,90,120);
 		//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
