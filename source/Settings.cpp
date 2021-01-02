@@ -25,6 +25,13 @@ void Settings::SetDimFromWnd(sf::Window* wnd)
 
 //  Defaults
 //------------------------------------------------------------------------------------------------
+void SetState::Default()
+{
+	bPlay = false;
+	iVolume = 500;
+	idPls = 0;  idPlay = 0;
+}
+
 void Settings::Default()
 {
 	view.Defaults();
@@ -35,6 +42,8 @@ void Settings::Default()
 
 	cntrPls = 1;
 	vSetPls.clear();
+	
+	st.Default();
 }
 
 
@@ -69,11 +78,20 @@ bool Settings::Load()
 
 	XMLElement* e,*m;  const char* a;
 
-	//  load
+	//  load  ..
 	e = root->FirstChildElement("debug");
 	if (e)
 	{
 		a = e->Attribute("escQuit");  if (a)  escQuit = s2b(a);
+	}
+	//  state
+	e = root->FirstChildElement("state");
+	if (e)
+	{
+		a = e->Attribute("bPlay");    if (a)  st.bPlay = s2b(a);
+		a = e->Attribute("iVolume");  if (a)  st.iVolume = s2i(a);
+		a = e->Attribute("idPls");    if (a)  st.idPls = s2i(a);
+		a = e->Attribute("idPlay");   if (a)  st.idPlay = s2i(a);
 	}
 
 	e = root->FirstChildElement("view");
@@ -112,9 +130,17 @@ bool Settings::Save()
 	root->SetAttribute("ver", ver);
 	XMLElement* e, *p;
 
-	//  save
+	//  save  ..
 	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
+	root->InsertEndChild(e);
+
+	//  state
+	e = xml.NewElement("state");
+		e->SetAttribute("bPlay",   st.bPlay ? 1 : 0);
+		e->SetAttribute("iVolume", st.iVolume);
+		e->SetAttribute("idPls",   st.idPls);
+		e->SetAttribute("idPlay",  st.idPlay);
 	root->InsertEndChild(e);
 
 	e = xml.NewElement("view");

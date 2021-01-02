@@ -41,6 +41,7 @@ protected:
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1,  // selected, copy from
 		nTabMov = -1;
+	void LoadState(), SaveState();  // set.st
 
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);

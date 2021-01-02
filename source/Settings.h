@@ -15,13 +15,22 @@ struct SetPls
 	char bookm = 0;
 };
 
+//  old player state
+struct SetState
+{
+	bool bPlay = false;
+	int iVolume = 500;
+	int idPls = 0, idPlay = 0;
+	void Default();
+};
+
 
 //  App Settings
 //------------------------------------------------
 class Settings : public LogErr
 {
 public:
-	const static int ver = 203;  // version of file
+	const static int ver = 205;  // version of file
 
 	//  main  -----
 	Settings();
@@ -45,4 +54,8 @@ public:
 	int cntrPls = 1;  // new playlist counter
 
 	std::vector<SetPls> vSetPls;
+	
+	
+	//  old state
+	SetState st;
 };

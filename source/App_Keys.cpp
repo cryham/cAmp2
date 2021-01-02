@@ -89,7 +89,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	
 	//  playlist
-	key(F4):  Pls().Save();  break;
+	key(F4):  Pls().Save();  SaveState();  set.Save();  break;
 	key(F5):  Pls().Load();  break;
 	key(Delete):  if (ctrl)  Pls().Clear();  break;
 	//  test--

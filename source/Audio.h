@@ -20,7 +20,7 @@ protected:
 public:
 	//  Time pos
     double timePlay = 0.0, timeTrack = 0.0; //, lastPos = 0.0;
-	int iVolume = 900;  // 1000 = 100%
+	int iVolume = 500;  // 1000 = 100%
 	
 	std::string sInfo;  // bitRate, freq, size MB
 	int rate = 0;  // cur track-

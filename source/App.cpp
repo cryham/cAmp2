@@ -43,10 +43,31 @@ bool App::Init()
 	audio->SetPls(&Pls());
 
 	LoadPls();
-			
+	
+	LoadState();
+	
 	return true;
 }
 
+//  apply set State to player
+void App::LoadState()
+{
+	audio->iVolume = set.st.iVolume;
+	plsId = set.st.idPls;
+	plsPlId = set.st.idPlay;
+	if (set.st.bPlay && plsPlId < vPls.size())
+		vPls[plsPlId].Play(false);
+}
+
+void App::SaveState()
+{
+	set.st.bPlay = audio->IsPlaying();
+	set.st.iVolume = audio->iVolume;
+	set.st.idPls = plsId;
+	set.st.idPlay = plsPlId;
+}
+
+//  Playlists
 void App::LoadPls()
 {
 	all.Clear();
