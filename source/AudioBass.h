@@ -35,13 +35,13 @@ public:
 	void Pause() override;
     void Stop() override;
 
-	void getPos() override;
-	float* getFFT() override
+	void GetPos() override;
+	float* GetFFT() override
 	{  return visA;  }
 
-	void chPos(bool back, bool slow, bool fast) override;
-	void chPosAbs(double pos) override;
-	void chVol(bool back, bool slow, bool fast) override;
+	void SetPos(bool back, bool slow, bool fast) override;
+	void SetPosAbs(double pos) override;
+	void SetVol(bool back, bool slow, bool fast) override;
 	
 	//  get data for audio visualization
 	void GetVisData(int size, const ViewSet &view) override;

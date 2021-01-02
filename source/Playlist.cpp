@@ -33,13 +33,16 @@ void Playlist::GotoPlay()
 bool Playlist::Play(bool set)
 {
 	if (IsEmpty())  return false;
+	auto old = play;
 	if (set)  play = cur;
 	if (play < 0 || play >= tracksVis.size())  return false;  //Check()
 	bDraw = true;
 
 	Track& t = GetTracks()[play];
-	if (t.IsDir())  return false;
-	
+	if (t.IsDir())
+	{	play = old;
+		return false;
+	}
 	audio->SetPls(this);
 	return audio->Play(t);
 }

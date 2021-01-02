@@ -10,7 +10,7 @@ void App::Wheel(int d)
 	if (d == 0)  return;
 	if (ym < yB_tabs)  // plr vol
 	{
-		audio->chVol(d < 0, shift, ctrl);
+		audio->SetVol(d < 0, shift, ctrl);
 		return;
 	}
 	//  pls scroll
@@ -72,7 +72,7 @@ void App::Mouse()
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par
-			audio->chPosAbs(mia(0.,1., (double(xm) / v.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
+			audio->SetPosAbs(mia(0.,1., (double(xm) / v.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
 		//return;
 	}
 	/*if (bR && !bRs && ym < yE_pl_btn && plsPl)  //  Right rating
@@ -139,8 +139,10 @@ void App::Mouse()
 		///  Right  Play
 		if (bR && !bRs && !shift/*move wnd-*/ /*&& Pls().Length() > 0*/)
 		{
+			auto old = Pls().play;
 			Pls().play = cr;
 			if (Pls().Play(false))  plsPlId = plsId;
+			else  Pls().play = old;
 			/*if (!t->isDir())
 			{	Stop();  //Pls().idPl = cr;
 				plsPlChg(plsId);  //pls id*/

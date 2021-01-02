@@ -22,14 +22,14 @@ bool App::KeyDown(Event::KeyEvent k)
 
 	
 	key(Q): key(Left):  // seek << >>
-		if (alt)  audio->chVol(1, shift, ctrl);
-			else  audio->chPos(1, shift, ctrl);  break;
+		if (alt)  audio->SetVol(1, shift, ctrl);
+			else  audio->SetPos(1, shift, ctrl);  break;
 	key(W):	key(Right):
-		if (alt)  audio->chVol(0, shift, ctrl);
-			else  audio->chPos(0, shift, ctrl);  break;
+		if (alt)  audio->SetVol(0, shift, ctrl);
+			else  audio->SetPos(0, shift, ctrl);  break;
 
-	key(E):	 audio->chVol(0, shift, ctrl);  break;  // vol ^ v
-	key(D):	 audio->chVol(1, shift, ctrl);  break;
+	key(E):	 audio->SetVol(0, shift, ctrl);  break;  // vol ^ v
+	key(D):	 audio->SetVol(1, shift, ctrl);  break;
 	
 	key(Backspace):
 		if (ctrl)  plsId = plsPlId;
@@ -94,7 +94,6 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(Delete):  if (ctrl)  Pls().Clear();  break;
 	//  test--
 	key(F10):  Pls().AddDir("../../../../m" /*, false*/);  Redraw();  break;
-	key(F11):  Pls().AddDir("../../m" /*, false*/);  Redraw();  break;
 	
 	#undef key
 	default:  break;

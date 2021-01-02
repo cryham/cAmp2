@@ -52,7 +52,7 @@ void AppSFMLDraw::DrawPlayer()
 	if (v.eVis == viFFT && play)
 	{
 		audio->GetVisData(xw, v);
-		float* fft = audio->getFFT();
+		float* fft = audio->GetFFT();
 
 		for (int i=0; i < xw; ++i)
 		{
@@ -75,7 +75,7 @@ void AppSFMLDraw::DrawPlayer()
 
 	if (play)
 	{
-		audio->getPos();
+		audio->GetPos();
 		float xp = (audio->timePlay / audio->timeTrack) * (1.f-xW_pos), //marg,bar dim
 			x1 = xp*xw;  int xb = xW_pos*xw;
 		

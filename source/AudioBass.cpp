@@ -164,13 +164,13 @@ void AudioBass::Stop()		///  []
 
 ///  seek, change playing position  - - - - 
 
-void AudioBass::getPos()
+void AudioBass::GetPos()
 {
 	if (!bPlaying)  return;  //timePlay = 0.0;
 	timePlay = BASS_ChannelBytes2Seconds(ch(), BASS_ChannelGetPosition(ch(), BASS_POS_BYTE));
 }
 
-void AudioBass::chPos(bool back, bool slow, bool fast)  //  <<  >>
+void AudioBass::SetPos(bool back, bool slow, bool fast)  //  <<  >>
 {
 	if (!bPlaying || !pls)  return;
 	//  todo:  +- % of track
@@ -189,7 +189,7 @@ void AudioBass::chPos(bool back, bool slow, bool fast)  //  <<  >>
 	BASS_ChannelSetPosition(ch(), BASS_ChannelSeconds2Bytes(ch(), pos), BASS_POS_BYTE);
 }
 
-void AudioBass::chPosAbs(double pos)	//  <<| >>
+void AudioBass::SetPosAbs(double pos)	//  <<| >>
 {
 	if (!bPlaying)  return;
 	if (pos > 0.999)  pos = 0.999; //-
@@ -197,7 +197,7 @@ void AudioBass::chPosAbs(double pos)	//  <<| >>
 }
 
 //  volume
-void AudioBass::chVol(bool back, bool slow, bool fast)  //  ^ v
+void AudioBass::SetVol(bool back, bool slow, bool fast)  //  ^ v
 {
 	float add = slow ? 10 : fast ? 100 : 20;  //vSpdVol[iSpdVol].v[slow ? 0 : fast ? 2 : 1] * 0.01f;
 	iVolume += back ? -add : add;
