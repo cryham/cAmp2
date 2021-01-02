@@ -43,7 +43,7 @@ void Settings::Default()
 	cntrPls = 1;
 	vSetPls.clear();
 	
-	st.Default();
+	state.Default();
 }
 
 
@@ -88,10 +88,10 @@ bool Settings::Load()
 	e = root->FirstChildElement("state");
 	if (e)
 	{
-		a = e->Attribute("bPlay");    if (a)  st.bPlay = s2b(a);
-		a = e->Attribute("iVolume");  if (a)  st.iVolume = s2i(a);
-		a = e->Attribute("idPls");    if (a)  st.idPls = s2i(a);
-		a = e->Attribute("idPlay");   if (a)  st.idPlay = s2i(a);
+		a = e->Attribute("bPlay");    if (a)  state.bPlay = s2b(a);
+		a = e->Attribute("iVolume");  if (a)  state.iVolume = s2i(a);
+		a = e->Attribute("idPls");    if (a)  state.idPls = s2i(a);
+		a = e->Attribute("idPlay");   if (a)  state.idPlay = s2i(a);
 	}
 
 	e = root->FirstChildElement("view");
@@ -137,10 +137,10 @@ bool Settings::Save()
 
 	//  state
 	e = xml.NewElement("state");
-		e->SetAttribute("bPlay",   st.bPlay ? 1 : 0);
-		e->SetAttribute("iVolume", st.iVolume);
-		e->SetAttribute("idPls",   st.idPls);
-		e->SetAttribute("idPlay",  st.idPlay);
+		e->SetAttribute("bPlay",   state.bPlay ? 1 : 0);
+		e->SetAttribute("iVolume", state.iVolume);
+		e->SetAttribute("idPls",   state.idPls);
+		e->SetAttribute("idPlay",  state.idPlay);
 	root->InsertEndChild(e);
 
 	e = xml.NewElement("view");

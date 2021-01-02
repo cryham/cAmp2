@@ -52,19 +52,19 @@ bool App::Init()
 //  apply set State to player
 void App::LoadState()
 {
-	audio->iVolume = set.st.iVolume;
-	plsId = set.st.idPls;
-	plsPlId = set.st.idPlay;
-	if (set.st.bPlay && plsPlId < vPls.size())
+	audio->iVolume = set.state.iVolume;
+	plsId = set.state.idPls;
+	plsPlId = set.state.idPlay;
+	if (set.state.bPlay && plsPlId < vPls.size())
 		vPls[plsPlId].Play(false);
 }
 
 void App::SaveState()
 {
-	set.st.bPlay = audio->IsPlaying();
-	set.st.iVolume = audio->iVolume;
-	set.st.idPls = plsId;
-	set.st.idPlay = plsPlId;
+	set.state.bPlay = audio->IsPlaying();
+	set.state.iVolume = audio->iVolume;
+	set.state.idPls = plsId;
+	set.state.idPlay = plsPlId;
 }
 
 //  Playlists

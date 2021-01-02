@@ -57,5 +57,5 @@ public:
 	
 	
 	//  old state
-	SetState st;
+	SetState state;
 };
