@@ -63,12 +63,12 @@ void App::Mouse()
 	static bool bLbt = false;
 	if (bL && (xm != xms || !bLs) && ym < yB_tabs)  // Left
 	{
-		/*if (!bLs && ym < yE_pl_btn)  // prev,next  btns |< >|
+		if (!bLs && ym < yE_plr_btn)  // prev,next  btns |< >|
 		{
 			Pls().Next(xm < v.xSize/2 ? -1 : 1);
 			bLbt = true;
-			return;
-		}/*fixme..*/
+			//return;
+		}
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par

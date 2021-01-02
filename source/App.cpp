@@ -127,7 +127,7 @@ void App::UpdDim()
 
 	//  file info
 	yB_inf = 0;
-	yE_plr_btn = 20;  // btnsH |< >|
+	yE_plr_btn = 30;  // btnsH |< >|
 
 	//  visualization
 	bool noVis = v.eVis == viNone;
