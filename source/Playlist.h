@@ -11,13 +11,12 @@ class Playlist : public LogErr
 {
 protected:
 	std::deque<Track> tracksAll;  // all, unfiltered
-    std::deque<Track> tracksVis;  // visible
-	std::deque<int> vis2all;  // from vis to all ids
+    std::deque<Track> tracksVis;  // only visible
 
 public:
 	//  vars  ----
-	int cur = 0;   //  cursor pos   ids to tracks
-	int ofs = 0;   //  offset view start
+	int cur = 0;   //  cursor pos   :ids to tracks
+	int ofs = 0;   //  offset, view start
 	int play = 0;  //  playing pos
 	
 	int lin = 10;  //  view visible lines, for page keys
@@ -34,7 +33,7 @@ public:
 		Cur(), Ofs();
 
 	//  stats
-	Stats stats, stFull;  // full = not filtered
+	Stats stats, stAll;  // All = not filtered
 	
     enum EInsert
     {  Ins_Cursor, Ins_Top, Ins_End  };
@@ -63,7 +62,7 @@ public:
     {   return tracksVis;  }
 	
 	bool IsEmpty() const
-	{	return tracksVis.empty();  }
+	{	return tracksAll.empty();  }
 
 	int Length() const
 	{	return (int)tracksVis.size();  }
@@ -79,7 +78,9 @@ public:
 
 	bool Load(), Save();
 	void Clear();
+	
 	void Update();  // for view, filter, add dirs etc.
+	//  fills tracksVis from tracksAll
 	
 	
 	//  advanced  ----

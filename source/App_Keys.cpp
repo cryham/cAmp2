@@ -13,7 +13,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	///  player
 	key(Enter):  // |> || []
-	key(Z):	 if (Pls().Play(true))  plsPlId = plsId;  break;
+			 if (Pls().Play(true))  plsPlId = plsId;  break;
+	key(Z):	 if (Pls().Play(false))  plsPlId = plsId;  break;
 	key(X):	 audio->Pause();  break;
 	key(C):	 audio->Stop();  break;
 	
@@ -28,7 +29,7 @@ bool App::KeyDown(Event::KeyEvent k)
 		if (alt)  audio->SetVol(0, shift, ctrl);
 			else  audio->SetPos(0, shift, ctrl);  break;
 
-	key(E):	 audio->SetVol(0, shift, ctrl);  break;  // vol ^ v
+	key(E):	 audio->SetVol(0, shift, ctrl);  break;  // volume ^ v
 	key(D):	 audio->SetVol(1, shift, ctrl);  break;
 	
 	key(Backspace):
@@ -59,6 +60,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(Divide):    key(LBracket):  Pls().Filter(!ctrl,-1);  break;
 	key(Multiply):  key(RBracket):  Pls().Filter(!ctrl, 1);  break;
 
+	
 	//  next/prev` tab   ctrl- dn/up row  shift- ofs row
 	key(Tilde):  TabNext(-1,ctrl,shift);  break;
 	key(Tab):    TabNext( 1,ctrl,shift);  break;
@@ -91,9 +93,16 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  playlist
 	key(F4):  Pls().Save();  SaveState();  set.Save();  break;
 	key(F5):  Pls().Load();  break;
-	key(Delete):  if (ctrl)  Pls().Clear();  break;
+	key(Delete):
+		if (ctrl)  Pls().Clear();
+		else if (shift)
+		break;
 	//  test--
 	key(F10):  Pls().AddDir("../../../../m" /*, false*/);  Redraw();  break;
+	
+	//  view modes
+	key(Num2):  set.NextDirView(shift ? -1 : 1);  Redraw();  break;
+	key(Num3):  set.bFileInfo = !set.bFileInfo;  Redraw();  break;
 	
 	#undef key
 	default:  break;

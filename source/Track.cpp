@@ -14,7 +14,12 @@ Track::Track(fs::path file, bool dir1)
 void Track::SetNameFromPath()
 {
     //name = path.generic_wstring();
-    name = path.filename().filename().string();
+    name = path.filename().filename().string();  // u8string?
+	//  path -1
+	auto p1 = path.parent_path();
+	parent = p1.filename();
+	parent2 = p1.parent_path().filename();
+
 	//  ext
 	ext = path.extension();
 	if (ext.empty())
@@ -27,7 +32,7 @@ void Track::SetNameFromPath()
 	if (i != string::npos)
 		name = name.substr(0, i);
 	
-	//  get rating, bookmark from name
+	//  get rating, bookmark from name  // todo: for dirs too
 	GetNameRating(name.c_str(), rate, bookm);
 	CleanNameRating();
 }

@@ -39,11 +39,21 @@ void Settings::Default()
 		v.Defaults();
 	
 	escQuit = false;
+	bFileInfo = false;
+	eDirView = DV_Path;
 
 	cntrPls = 1;
 	vSetPls.clear();
 	
 	state.Default();
+}
+
+
+//  cycle dir view modes  /
+void Settings::NextDirView(int i)
+{
+	int dv = ((int)eDirView + i + DV_All) % DV_All;
+	eDirView = (EDirView)dv;
 }
 
 
@@ -83,6 +93,7 @@ bool Settings::Load()
 	if (e)
 	{
 		a = e->Attribute("escQuit");  if (a)  escQuit = s2b(a);
+		a = e->Attribute("dirView");  if (a)  eDirView = (EDirView)s2i(a);
 	}
 	//  state
 	e = root->FirstChildElement("state");
@@ -133,6 +144,7 @@ bool Settings::Save()
 	//  save  ..
 	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
+		e->SetAttribute("dirView", eDirView);
 	root->InsertEndChild(e);
 
 	//  state

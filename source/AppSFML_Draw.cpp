@@ -65,6 +65,7 @@ void AppSFMLDraw::DrawPlayer()
 			g = 100+f*(255-120);
 			b = 180+f*(255-200);
 			RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
+			// todo: fill texture and use shader
 		}
 	}
 	
@@ -115,6 +116,7 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Info, xw/2, y);
 	}
 	
+	
 	//  repeat  @
 	if (audio->bRepTrk || audio->bRepPls)
 	{
@@ -124,6 +126,11 @@ void AppSFMLDraw::DrawPlayer()
 		//else  str += "A";
 		Text(Fnt_Info, xw-75, y+25);  // +Fy TimeBig..
 	}
+	
+	//  volume  %
+	Clr(100,140,220);
+	str = i2s(audio->iVolume/10) + "%";
+	Text(Fnt_Info, xw-40, y+25);
 	
 
 	//  player  info text  * * *
@@ -157,12 +164,15 @@ void AppSFMLDraw::DrawPlayer()
 		str = chFRateVis[r];
 		Text(Fnt_TimeBig, xw - 84, y-2);
 	}
-	
-	//  volume  %
-	Clr(100,140,220);
-	str = i2s(audio->iVolume/10) + "%";
-	Text(Fnt_Info, xw-40, y+25);
-	
+
+	//  file info  ----
+	if (set.bFileInfo)
+	{
+		const Track& trk = Pls().GetTracks()[Pls().cur];
+		str = Str(trk.GetPath());
+		Clr(120,180,240);
+		Text(Fnt_Info, 10, 46);  // todo: wrap text..?
+	}
 	
 	///  debug
 	///==================
@@ -220,9 +230,10 @@ void AppSFMLDraw::DrawTabs()
 					Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
 				}
 				//  cur, add
-				if (a==plsId)    Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);
-				if (a==plsPlId)	 Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true);  // playing
-				if (a==plsSelId) Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  // selected
+				Clr(120,170,220);
+				if (a==plsId)   {  Clr(140,190,240);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
+				if (a==plsPlId)	{  Clr(170,210,250);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
+				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 
 				//  text
@@ -263,7 +274,7 @@ void AppSFMLDraw::DrawHeader()
 	uint di, fi, si, tm;
 	const Stats& st = bAllStats ?
 		bFullStats ? allFull : all :
-		bFullStats ? Pls().stFull : Pls().stats;
+		bFullStats ? Pls().stAll : Pls().stats;
 	/*if (Pls().numSel > 0)
 	{	aD = 0;  aF = Pls().numSel;
 		aSi = Pls().selSize/1000000;

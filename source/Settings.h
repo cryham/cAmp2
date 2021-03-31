@@ -8,6 +8,11 @@
 namespace sf {  class Window;  }
 
 
+enum EDirView
+{
+	DV_Fullpath, DV_Path, DV_Path2, DV_Path3, /*DV_None,*/ DV_All
+};
+
 //  settings only playlist
 struct SetPls
 {
@@ -49,6 +54,10 @@ public:
 
 
 	bool escQuit = false;
+	bool bFileInfo = false;
+
+	EDirView eDirView = DV_Path;
+	void NextDirView(int i);
 
 	//  playlists
 	int cntrPls = 1;  // new playlist counter

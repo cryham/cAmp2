@@ -55,7 +55,7 @@ void AppSFMLDraw::DrawPlaylist()
 
 
 	if (yL_pl <= 0)  return;
-	if (tracks.empty())
+	if (Pls().IsEmpty())
 	{
 		Clr(120,160,240);
 		str = "Playlist empty.";
@@ -88,14 +88,25 @@ void AppSFMLDraw::DrawPlaylist()
 		int w = Text(Fnt_Track, 0,0, false);  // center
 		Text(Fnt_Track, max(0, 5 - w/2), yp);
 
-		//  name
+		//  dir / path
 		if (dir)
-			Clr(140,140,200);
-		else if (trk.IsDisabled())
-			Clr(50,80,100);
-		str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
-		//str = trk.GetName();
-		Text(Fnt_Track, 17, yp);
+		{	Clr(140,140,200);
+			switch (set.eDirView)
+			{
+			case DV_Fullpath:  str = Str(trk.GetPath());  break;
+			case DV_Path:  str = Str(trk.GetName());  break;
+			case DV_Path2:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent());  break;
+			case DV_Path3:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent()) + " / " + Str(trk.GetParent2());  break;
+			default:  str = "";
+			}
+			Text(Fnt_Track, 17, yp);
+		}
+		else  //  name
+		{	if (trk.IsDisabled())
+				Clr(50,80,100);
+			str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
+			Text(Fnt_Track, 17, yp);
+		}
 
 		yp += yF;  ++it;
 	}
@@ -123,7 +134,7 @@ void AppSFMLDraw::DrawPlaylist()
 		const Track& trk = tracks[it];
 
 		//  time
-		if (trk.GotTime() && !trk.IsDisabled())
+		if (trk.HasTime() && !trk.IsDisabled())
 		{
 			float t = trk.GetTime();
 			if (iTimeTest > 0)  // time colors test

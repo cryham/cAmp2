@@ -10,16 +10,17 @@ class Track
 	friend class Playlist;
 protected:
 
-    //  shown in gui,  got from path
+    //  shown in gui,  got from path with SetNameFromPath
+	//e.g.  /parent2/parent/name.ext
     std::string name;  // no rating, bookm
 	std::string ext;   // uppercase, no dot .
 
     //  file on disk, saved in playlist
     fs::path path;
-	//std::string path2;  // subdir-1
+	std::string parent, parent2;  // subdir-1, -2
 	
 	//  time
-	bool gotTime = false;  // needs update
+	bool hasTime = false;  // needs update
 	double time = 0.0;  // in seconds
 	uintmax_t size = 0;
 
@@ -32,9 +33,10 @@ protected:
 	char hide = 0, sel = 0;  // todo:
 
 public:
-	char rate = 0;  // rating
+	int idAll = 0;   // id back in unfiltered list tracksAll
+	char rate = 0;   // rating
 	char bookm = 0;  // bookmark
-	//byte srch;   // match
+	//byte srch;     // match
 	
 	//bool vis = true;  // visible, after filtering etc
 
@@ -45,8 +47,18 @@ public:
     const std::string& GetName() const
     {   return name;  }
 
-	bool GotTime() const
-	{	return gotTime;  }
+	const std::string GetPath() const
+    {   return path.u8string();  }
+
+	const std::string& GetParent() const
+    {   return parent;  }
+
+	const std::string& GetParent2() const
+    {   return parent2;  }
+	
+	
+	bool HasTime() const
+	{	return hasTime;  }
 	
 	double GetTime() const
 	{	return time;  }
@@ -54,11 +66,13 @@ public:
 	double GetSize() const
 	{	return size;  }
 	
+	
 	bool IsDisabled() const
 	{	return disabled;  }
 
 	bool IsDir() const
 	{	return dir;  }
+	
 	
 	void SetNameFromPath();
 	void CleanNameRating();
