@@ -13,7 +13,7 @@ using namespace std;
 ///  Track
 void AudioBass::GetTrkTime(Track& t)
 {
-	if (t.gotTime)  return;
+	if (t.hasTime)  return;
 	bool mod = IsModFile(t.ext);
 	t.mod = mod;
 
@@ -44,7 +44,7 @@ void AudioBass::GetTrkTime(Track& t)
 	
 	//  size
 	t.size = FileSystem::Size(t.path);
-	t.gotTime = true;
+	t.hasTime = true;
 }
 
 
@@ -64,7 +64,7 @@ bool AudioBass::Play(Track& trk)
     //  rem old
     Stop();
 	
-	if (!trk.gotTime)
+	if (!trk.hasTime)
 		GetTrkTime(trk);  // for mod and size
 
 	if (trk.mod)

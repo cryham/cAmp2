@@ -52,13 +52,6 @@ void ViewSet::Load(const XMLElement* e)
 	a = e->Attribute("sldr");	if (a)  xW_plS = max(0, s2i(a));
 	a = e->Attribute("slR");	if (a)  bSlDrawR = s2b(a);
 
-	/*int nf = NumFnt-1;
-	a = m->Attribute("Fp");		if (a)  cfP = mia(0,nf, cStr::toInt(a));
-	a = m->Attribute("Fa");		if (a)  cfA = mia(0,nf, cStr::toInt(a));
-	a = m->Attribute("Ft");		if (a)  cfT = mia(0,nf, cStr::toInt(a));
-	a = m->Attribute("Fh");		if (a)  cfH = mia(0,nf, cStr::toInt(a));
-	a = m->Attribute("Fg");		if (a)  cfG = mia(0,nf, cStr::toInt(a));*/
-
 	a = e->Attribute("tbX");	if (a)  xNpt = max(1, s2i(a));
 	a = e->Attribute("tbY");	if (a)  yNpt = max(0, s2i(a));
 	a = e->Attribute("tbO");	if (a)  ofsTab = s2i(a);
@@ -83,12 +76,6 @@ void ViewSet::Save(XMLElement* e)
 
 	e->SetAttribute("sldr",		i2s(xW_plS,2).c_str());
 	e->SetAttribute("slR",		b2s(bSlDrawR).c_str());
-
-	/*m->SetAttribute("Fp",	i2s(cfP));
-	m->SetAttribute("Fa",	i2s(cfA));
-	m->SetAttribute("Ft",	i2s(cfT));
-	m->SetAttribute("Fh",	i2s(cfH));
-	m->SetAttribute("Fg",	i2s(cfG));*/
 
 	e->SetAttribute("tbX",	i2s(xNpt,2).c_str());
 	e->SetAttribute("tbY",	i2s(yNpt).c_str());

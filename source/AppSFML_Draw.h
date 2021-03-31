@@ -30,6 +30,7 @@ protected:
 	{
 		clr = sf::Color(r,g,b);
 	}
+	sf::String Str(const std::string& s);
 
 	void Draw();
 	void DrawPlayer();

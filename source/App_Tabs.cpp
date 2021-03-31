@@ -127,4 +127,3 @@ void App::TabClose()
 	//**/if (s==1)  updSelId(1);
 	//plsPl = vPlst[plsPlId];
 }		
-

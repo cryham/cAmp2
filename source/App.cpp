@@ -79,7 +79,7 @@ void App::LoadPls()
 		Playlist p(sp.name);
 		p.bookm = sp.bookm;
 		p.Load();
-		all += p.stats;  allFull += p.stFull;
+		all += p.stats;  allFull += p.stAll;
 		vPls.push_back(move(p));
 	}
 	//Pls().Update();

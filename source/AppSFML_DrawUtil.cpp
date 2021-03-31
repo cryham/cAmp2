@@ -15,6 +15,11 @@ void AppSFMLDraw::Format(const char* format, ...)
 	va_end(args);
 }
 
+String AppSFMLDraw::Str(const std::string& s)
+{
+	return String::fromUtf8(s.begin(), s.end());
+}
+
 //  write text
 int AppSFMLDraw::Text(EFont n, int x, int y, bool draw)
 {

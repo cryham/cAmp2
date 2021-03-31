@@ -24,7 +24,7 @@ protected:
 	Settings set;
 	//ViewSet view;  // in set
 	TimeClrSets timeColors;
-	//std::unique_ptr<Skin> skin;
+	//std::unique_ptr<Skin> skin;  // todo:
 	
 	std::unique_ptr<Audio> audio;
 
@@ -42,7 +42,7 @@ protected:
 		plsSelId = -1,  // selected, copy from
 		nTabMov = -1;
 	void LoadState(), SaveState();  // set.st
-
+	
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);
 	void TabNew(int m);

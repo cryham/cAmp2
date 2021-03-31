@@ -40,7 +40,7 @@ bool Playlist::Load()
 			{	string f(s);  // file
 				f = f.substr(1);
 				a = prevPath / f;
-				stFull.AddDir();
+				stAll.AddDir();
 			}else
 				a = s;
 				
@@ -48,7 +48,7 @@ bool Playlist::Load()
 			prevPath = t.path.parent_path();
 			
 			//  time,size
-			fi.getline(s,MP,'|');  t.time = s2d(s);  t.gotTime = true;
+			fi.getline(s,MP,'|');  t.time = s2d(s);  t.hasTime = true;
 			fi.getline(s,MP,'|');  t.size = s2i(s);
 
 			//  hide, rate,bookm, mod
@@ -56,7 +56,7 @@ bool Playlist::Load()
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
 			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
-			stFull.Add(&t);
+			stAll.Add(&t);
 			tracksAll.push_back(move(t));
 		}
 	}
@@ -108,7 +108,7 @@ void Playlist::Clear()  // defaults
 	tracksAll.clear();
 	tracksVis.clear();
 	stats.Clear();
-	stFull.Clear();
+	stAll.Clear();
 
 	cur = 0;  ofs = 0;  play = 0;  bookm = 0;
 	bDraw = true;

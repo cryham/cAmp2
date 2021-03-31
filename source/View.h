@@ -38,7 +38,6 @@ public:
 
 	//  font sizes
 	int Fy;
-	//int cfP,cfA,cfT,cfH,cfG;  // pls,amp,tabs,hlp,gui
 
 	// CList::bFilInf  CList::iDirView
 };
