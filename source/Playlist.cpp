@@ -33,16 +33,17 @@ void Playlist::GotoPlay()
 bool Playlist::Play(bool set)
 {
 	if (IsEmpty())  return false;
+	
 	auto old = play;
 	if (set)  play = cur;
-	if (play < 0 || play >= tracksVis.size())  return false;  //Check()
+	if (play < 0 || play >= tracksVis.size())
+		return false;  //Check()
 	bDraw = true;
 
 	Track& t = GetTracks()[play];
 	if (t.IsDir())
-	{	play = old;
-		return false;
-	}
+	{	play = old;  return false;  }
+
 	audio->SetPls(this);
 	return audio->Play(t);
 }
@@ -87,13 +88,26 @@ void Playlist::Update()
 {
 	bool emptyDirs = false;
 
+	int i2v = 0,
+		//l2 = lin/2,   // zoom to middle
+		zoomTo = cur - ofs,  // zoom to cursor
+		iAll = LengthAll(), iVis = (int)tracksVis.size(),
+		i2 = 0;
+	bool sh = iAll < lin || iVis == 0;  // short pls
+	if (!sh)
+		i2 = tracksVis[min(iVis-1, ofs + zoomTo)].idAll;
+
 	tracksVis.clear();
 	stats.Clear();
 	fs::path prev;
 	
-	for (int i=0; i < LengthAll(); ++i)
+	for (int i=0; i < iAll; ++i)
 	{
-		const Track& t = tracksAll[i];
+		//  id
+		if (i == i2)
+			i2v = tracksVis.size();
+
+		/*const*/ Track& t = tracksAll[i];
 		bool out = t.rate < filterLow || t.rate > filterHigh;
 		if (out && !emptyDirs)
 			continue;
@@ -111,11 +125,24 @@ void Playlist::Update()
 			continue;
 		
 		//  add file
+		t.idAll = i;
 		tracksVis.push_back(t);
 		stats.Add(&t);
 	}
 		
-	Cur();  Ofs();
+	cur = i2v;
+	//  adjust ofs
+	if (sh)
+		ofs = 0;
+	else
+		ofs = i2v - zoomTo;
+		
+	int all = (int)(tracksVis.size());
+	cur = mia(0, all, cur);
+	if (ofs > all-lin)  ofs = all-lin;  //  no view past last track
+	if (ofs < 0)  ofs = 0;  //  cur stays in view
+	bDraw = true; 
+	//Cur();  Ofs();
 }
 
 
