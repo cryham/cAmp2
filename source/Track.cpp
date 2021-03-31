@@ -28,7 +28,7 @@ void Track::SetNameFromPath()
 	strupper(ext);
 
 	//  rem ext from name
-	size_t i = name.find_last_of(".");
+	auto i = name.find_last_of(".");
 	if (i != string::npos)
 		name = name.substr(0, i);
 	
@@ -40,7 +40,7 @@ void Track::SetNameFromPath()
 
 void Track::CleanNameRating()
 {
-	size_t p = name.find_last_not_of(cFnStrRates);
+	auto p = name.find_last_not_of(cFnStrRates);
 	if (p == string::npos)  return;
 	
 	if (p > 1 && name[p-1]=='%')

@@ -169,7 +169,16 @@ void AppSFMLDraw::DrawPlayer()
 	if (set.bFileInfo)
 	{
 		const Track& trk = Pls().GetTracks()[Pls().cur];
-		str = Str(trk.GetPath());
+		string s = trk.GetPath();
+		
+		auto f = s.find('/', 12);  // add \n in 3rd /
+		if (f != string::npos)
+			s.insert(s.begin() + f, '\n');
+		f = s.find_last_of('/');  // add \n in last /
+		if (f != string::npos)
+			s.insert(s.begin() + f, '\n');
+
+		str = Str(s);
 		Clr(120,180,240);
 		Text(Fnt_Info, 10, 46);  // todo: wrap text..?
 	}
