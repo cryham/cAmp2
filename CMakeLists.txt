@@ -2,10 +2,6 @@ cmake_minimum_required (VERSION 3.0)
 
 project(cAmp2)
 
-#  library for graphics and window - pick one
-option(USE_SFML  "Build with graphics using SFML."  ON)
-option(USE_BGFX  "Build with graphics using BGFX and SDL2."  OFF)
-
 
 file(GLOB SOURCES
     source/*.h source/*.cpp
@@ -30,12 +26,11 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME} bass)
 
 
 #  SFML - graphics
-if (USE_SFML)
-    find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
-    target_link_libraries(${PROJECT_NAME} sfml-graphics)
-endif(USE_SFML)
+find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+target_link_libraries(${PROJECT_NAME} sfml-graphics)
 
-#  BGFX - graphics
-if (USE_BGFX)
-    
-endif(USE_BGFX)
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} "-lopengl32 -lglu32 -lgdi32")
+else()
+    target_link_libraries(${PROJECT_NAME} "-lGL")
+endif()
