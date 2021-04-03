@@ -5,10 +5,11 @@
 Using:
 * for Audio: [bass](https://www.un4seen.com/bass.html) (NOT FOSS)
 * for Graphics: [SFML](https://www.sfml-dev.org/) 2.5.1
+
 Also using (included in `libs/`):
 * for Gui: [ImGui](https://github.com/ocornut/imgui) 1.82 and [ImGui-SFML](https://github.com/eliasdaler/imgui-sfml) 2.2
 * [TinyXML-2](https://github.com/leethomason/tinyxml2)
-* [Native File Dialog](https://github.com/mlabbe/nativefiledialog) - todo
+* [Native File Dialog](https://github.com/mlabbe/nativefiledialog)
 
 # Building
 Uses C++17 and CMake to build.
@@ -29,4 +30,6 @@ cmake ..
 make -j
 ```
 
-I'm testing on Debian 10 and building with CMake in Qt Creator.
+I'm testing on Debian 10  
+and building with CMake in Qt Creator.  
+With some more effort, building from VSCodium / VS Code is possible (needs C++ and CMake extensions at least).
