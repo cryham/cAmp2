@@ -1,6 +1,7 @@
 #include "App.h"
 #include "AudioBass.h"
 #include "FileSystem.h"
+#include "../libs/nfd.h"
 #include <memory>
 #include <fstream>
 #include <iostream>
@@ -159,4 +160,38 @@ void App::UpdDim()
 	xE_pl_inf = v.xSize-21;
 
 	Redraw();
+}
+
+
+//  Insert dir or files, add to Pls
+//------------------------------------------------------------------------
+void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL par?*/)
+{
+	if (files)
+	{
+		auto exts = audio->GetAllExtStr();
+		nfdpathset_t paths;
+		auto r = NFD_OpenDialogMultiple(exts, NULL, &paths);
+		if (r != NFD_OKAY)
+			return;
+
+		size_t cnt = NFD_PathSet_GetCount(&paths);
+		for (size_t i=0; i < paths.count; ++i)
+		{
+			char* file = NFD_PathSet_GetPath(&paths, i);
+			Pls().AddFile(file, where);
+			Pls().Update();
+		}
+		NFD_PathSet_Free(&paths);
+	}
+	else
+	{
+		char* outPath = 0;
+		auto r = NFD_PickFolder(NULL, &outPath);
+		if (r != NFD_OKAY)
+			return;
+
+		Pls().AddDir(outPath, where);
+		free(outPath);
+	}
 }

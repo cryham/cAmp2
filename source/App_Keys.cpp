@@ -93,9 +93,12 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  playlist
 	key(F4):  Pls().Save();  SaveState();  set.Save();  break;
 	key(F5):  Pls().Load();  break;
+	key(Insert):  OpenDirFile(shift);
+		break;
 	key(Delete):
 		if (ctrl)  Pls().Clear();
-		else if (shift)
+		/*else if (shift)
+			Pls().DeleteCur();/**/
 		break;
 	//  test--
 	key(F10):  Pls().AddDir("../../../../m" /*, false*/);  Redraw();  break;

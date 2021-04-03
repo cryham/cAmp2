@@ -47,7 +47,11 @@ public:
 	void GetVisData(int size, const ViewSet &view) override;
 
 	void GetTrkTime(Track& t) override;  // sets time, mod, size
+	
 	bool IsPlayable(std::string ext) override;
+	
+	const char* GetAllExtStr() override  // for file open dialog
+	{	return sAllExt.c_str();  }
 
 private:
 	void InitPlugins();
@@ -57,4 +61,5 @@ private:
 	//  playable file extensions
 	std::vector<std::string> vExt;
 	std::vector<std::string> vExtMod;
+	std::string sAllExt;
 };

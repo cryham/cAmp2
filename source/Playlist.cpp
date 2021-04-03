@@ -150,42 +150,47 @@ void Playlist::Update()
 //--------------------------------------------------------------------
 bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 {
-
-    vector<fs::path> files = FileSystem::ListDir(dir, recursive);
+    auto files = FileSystem::ListDir(dir, recursive);
     for (const auto& file: files)
     {
-        if (fs::is_directory(file))
-            continue;
-
-        //  get ext
-		string ext = file.extension();
-		if (ext.length() < 2)
-			continue;
-		ext = file.extension();
-		ext = ext.substr(1);  // no .
-		strupper(ext);
-		
-		//  skip if unplayable
-		if (audio != nullptr &&
-			!audio->IsPlayable(ext))
-			continue;
-
-        Track t(file, false);
-		audio->GetTrkTime(t);  // todo: on thread ..
-        switch (where)
-        {
-        case Ins_Cursor:
-            //tracks.insert(cur,t);  // insert(vec
-            break;
-        case Ins_Top:
-            tracksAll.push_front(move(t));
-        case Ins_End:
-            tracksAll.push_back(move(t));
-        }
+		AddFile(file, where);
     }
 	Update();
 
     return true;
+}
+
+bool Playlist::AddFile(fs::path file, const EInsert &where)
+{
+	if (fs::is_directory(file))
+		return false;
+
+	//  get ext
+	string ext = file.extension();
+	if (ext.length() < 2)
+		return false;
+	ext = file.extension();
+	ext = ext.substr(1);  // no .
+	strupper(ext);
+	
+	//  skip if unplayable
+	if (audio != nullptr &&
+		!audio->IsPlayable(ext))
+		return false;
+
+	Track t(file, false);
+	audio->GetTrkTime(t);  // todo: on thread ..
+	switch (where)
+	{
+	case Ins_Cursor:
+		//tracks.insert(cur,t);  // insert(vec
+		break;
+	case Ins_Top:
+		tracksAll.push_front(move(t));
+	case Ins_End:
+		tracksAll.push_back(move(t));
+	}
+	return true;
 }
 
 

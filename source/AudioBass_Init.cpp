@@ -136,6 +136,16 @@ void AudioBass::Init()
 		s += e+" ";
 	Log(s);
 	Log("-------------------------");
+	
+	//  sAllExt for open file dialog
+	sAllExt.clear();
+	for (auto e:vExt)
+		sAllExt += e+",";
+	for (auto e:vExtMod)
+		sAllExt += e+",";
+	
+	strlower(sAllExt);
+	sAllExt.pop_back();
 }
 
 void AudioBass::Destroy()

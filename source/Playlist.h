@@ -44,6 +44,7 @@ public:
     Playlist(std::string name1);
 
     bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
+	bool AddFile(fs::path file, const EInsert& where = Ins_End);
 	
 	static Audio* audio;  // for IsPlayable
 	

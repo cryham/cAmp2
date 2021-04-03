@@ -93,8 +93,7 @@ bool Playlist::Save()
 			of << t.path.u8string();
 
 		of << '|'<< t.time <<'|'<< t.size;
-		of << '|'<< (int)t.hide;
-		of << '|'<< (int)t.rate <<'|'<< (int)t.bookm;
+		of << '|'<< (int)t.hide << '|'<< (int)t.rate <<'|'<< (int)t.bookm;
 		of << '|'<< t.mod ? '1':'0';
 		of << "\n";
 	}
