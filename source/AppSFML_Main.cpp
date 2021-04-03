@@ -1,3 +1,6 @@
+#include "../libs/imgui.h"
+#include "../libs/imgui-SFML.h"
+
 #include "AppSFML_Draw.h"
 #include "FileSystem.h"
 #include <memory>
@@ -5,12 +8,29 @@
 using namespace sf;  using namespace std;
 
 
+//  Run
+//------------------------------------------------
 bool AppSFMLDraw::Run()
 {
 	Init();
+	
+	CreateWindow();
+	
+	if (!LoadResources())
+		return false;
 
-	//  Create window
-	//------------------------------------------------
+	LoopMain();
+
+	DestroyAll();
+
+	return true;
+}
+
+
+//  Create window
+//------------------------------------------------------------------------------------------------
+void AppSFMLDraw::CreateWindow()
+{
 	//VideoMode vm = VideoMode::getDesktopMode();
 
 	pWindow = make_unique<RenderWindow>(
@@ -23,8 +43,21 @@ bool AppSFMLDraw::Run()
 	pWindow->setPosition(Vector2i(set.view.xPos, set.view.yPos));
 
 	
-	//  Load data
-	//------------------------------------------------
+	/*pWindow2 = make_unique<RenderWindow>(
+		VideoMode(400, 300),
+		"cAmp Options",  // Title
+		Style::Default, ContextSettings());
+	
+	pWindow2->setPosition(Vector2i(set.view.xPos, set.view.yPos));
+				
+	ImGui::SFML::Init(*pWindow2.get());
+	SetupGuiStyle();/**/
+}
+	
+//  Load data
+//------------------------------------------------------------------------------------------------
+bool AppSFMLDraw::LoadResources()
+{
 	string data = FileSystem::Data(), file;
 	file = data + "/cAmp.png";
 	Image icon;
@@ -35,15 +68,15 @@ bool AppSFMLDraw::Run()
 
 	
 	//  texture
-	Texture tex;
+	pTexture = make_unique<Texture>();
 	file = data + "/player.png";
-	if (!tex.loadFromFile(file))
+	if (!pTexture->loadFromFile(file))
 	{
 		Error("Can't load texture: " + file);
 		return false;
 	}
 
-	pBackgr = make_unique<Sprite>(tex);
+	pBackgr = make_unique<Sprite>(*pTexture.get());
 
 	
 	//  font  // todo: fonts in xml
@@ -75,18 +108,39 @@ bool AppSFMLDraw::Run()
 		//text[i].setStyle(bold ? Text::Bold : Text::Regular);
 		//font.getLineSpacing();
 	}
+	return true;
+}
 
 
-	//  Loop
-	//------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//  Loop
+//------------------------------------------------------------------------------------------------
+void AppSFMLDraw::LoopMain()
+{
 	Clock timer;
 	while (pWindow->isOpen())
 	{
 		//  Process events
 		//------------------
 		Event e;
+		if (pWindow2 && pWindow2->isOpen())
+		while (pWindow2->pollEvent(e))
+		{
+			ImGui::SFML::ProcessEvent(e);
+
+			switch (e.type)
+			{
+			case Event::Closed:
+				pWindow2->close();
+				break;
+			}
+		}
+
+		
 		while (pWindow->pollEvent(e))
 		{
+			//ImGui::SFML::ProcessEvent(e);
+
 			//ProcessEvent(e);
 			UpdModifiers();
 
@@ -127,14 +181,42 @@ bool AppSFMLDraw::Run()
 		Time time = timer.restart();
 		dt = time.asSeconds();
 
-		Draw();
+		DrawAll();
 		Mouse();
-		
+
 		pWindow->display();
+
+		
+		//  Draw2 Gui
+		//------------------
+		if (pWindow2 && pWindow2->isOpen())
+		{
+			ImGui::SFML::Update(*pWindow2.get(), time);
+
+//			ImGui::Begin("Hello");
+			ImGui::Button("Button");
+			static bool b = 1;
+			ImGui::Checkbox("Check", &b);
+			static int i = 3;
+			ImGui::SliderInt("int", &i, 0,10);
+//			ImGui::End();
+
+			pWindow2->clear();
+			ImGui::SFML::Render(*pWindow2.get());
+
+			pWindow2->display();
+		}
 	}
+}
+
+
+//  Destroy All
+//------------------------------------------------------------------------------------------------
+void AppSFMLDraw::DestroyAll()
+{
+	if (pWindow2)
+		ImGui::SFML::Shutdown();
 	
 	set.SetDimFromWnd(pWindow.get());
 	Destroy();
-
-	return true;
 }

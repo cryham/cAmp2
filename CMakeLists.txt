@@ -30,14 +30,14 @@ target_link_libraries(${PROJECT_NAME} bass)
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 target_link_libraries(${PROJECT_NAME} sfml-graphics)
 
-if (WIN32)
+if(WIN32)
     target_link_libraries(${PROJECT_NAME} "-lopengl32 -lglu32 -lgdi32")
 else()
     target_link_libraries(${PROJECT_NAME} "-lGL")
 endif()
 
 
-# GTK for nfd (nativefiledialog)
+#  GTK for NFD (nativefiledialog)
 if(UNIX)
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(GTK REQUIRED gtk+-3.0)

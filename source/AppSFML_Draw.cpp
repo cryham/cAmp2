@@ -8,7 +8,8 @@ using namespace std;  using namespace sf;
 
 
 //  Draw all
-void AppSFMLDraw::Draw()
+//----------------------------------------------------
+void AppSFMLDraw::DrawAll()
 {
 	if (Pls().bDraw)
 	{	Pls().bDraw = false;

@@ -8,9 +8,35 @@
 
 class AppSFMLDraw : public App
 {
-	//  window and resources
+public:
+	bool Run();
+
+protected:
+	//  Run stages
+	void CreateWindow();
+	bool LoadResources();
+	void LoopMain();
+	void DestroyAll();
+
+	//  Draw stages
+	void DrawAll();
+	void DrawPlayer();
+	void DrawTabs();
+	void DrawPlaylist();
+	void DrawHeader();
+	void DrawSlider();
+
+	//----------------------------------------------------
+
+	//  windows
 	//--------------------------
-	std::unique_ptr<sf::RenderWindow> pWindow = nullptr;
+	typedef std::unique_ptr<sf::RenderWindow> PWindow;
+	PWindow pWindow = nullptr;
+	PWindow pWindow2 = nullptr;
+
+	//  resources
+	//--------------------------
+	std::unique_ptr<sf::Texture> pTexture = nullptr;
 	std::unique_ptr<sf::Sprite> pBackgr = nullptr;
 
 	enum EFont
@@ -18,31 +44,20 @@ class AppSFMLDraw : public App
 
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];
-
-protected:
+	void SetupGuiStyle();  // ImGui theme
+	
+	//  text and color
+	//--------------------------
 	sf::String str;
 	sf::Color clr;
 	bool bold = false;
 
-	//  set text color
-	//--------------------------
 	void Clr(sf::Uint8 r, sf::Uint8 g, sf::Uint8 b)
 	{
 		clr = sf::Color(r,g,b);
 	}
 	sf::String Str(const std::string& s);
 
-	void Draw();
-	void DrawPlayer();
-	void DrawTabs();
-	void DrawPlaylist();
-	void DrawHeader();
-	void DrawSlider();
-
-public:
-	bool Run();
-
-protected:
 	///  draw utils
 	//--------------------------
 	//  write out text, from str

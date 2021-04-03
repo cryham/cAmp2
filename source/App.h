@@ -32,7 +32,7 @@ protected:
 	bool Destroy();
 
 	
-	///  PlayLists  ------------------------------------------------
+	///  PlayLists Tabs  ------------------------------------------------
 	std::vector<Playlist> vPls;  // always at least 1
 	Playlist& Pls() {  return vPls[plsId];  }
 	void LoadPls(), SavePls();  // for set
@@ -53,7 +53,7 @@ protected:
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	
 	
-	///  input  ----
+	///  Input  ------------------------------------------------
 	//  keys
 	bool alt = false, ctrl = false, shift = false;
 	void UpdModifiers();
@@ -71,6 +71,7 @@ protected:
 	//  buttons, s old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
+	
 	int iDraw = 2;  // clean and redraw, when needed
 	void Redraw() {  iDraw = 2;  }
 	
@@ -82,15 +83,17 @@ protected:
 	void MouseUp(int b);
 
 	
-	//  toggle
+	//  Toggle
 	float dt = 0.1f;   // frame time, ms
 	bool bFps = false;   // show Fps
 	bool bDebug = false; // show debug text
 	int iTimeTest = 0;   // test pls time colors
+
 	bool bAllStats = false;  // all playlists
 	bool bFullStats = false;  // unfiltered
 	
-	///  dimensions  ----
+	
+	///  Dimensions  ------------------------------------------------
 	//  B = begin  E = end  W = width  H = height
 	int yB_inf=0,  // file info
 		yE_plr_btn=0,  // player buttons |< >|
