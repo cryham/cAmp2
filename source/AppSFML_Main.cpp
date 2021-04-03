@@ -41,17 +41,6 @@ void AppSFMLDraw::CreateWindow()
 	pWindow->setVerticalSyncEnabled(true);
 //	pWindow->setFramerateLimit(60);  // par
 	pWindow->setPosition(Vector2i(set.view.xPos, set.view.yPos));
-
-	
-	/*pWindow2 = make_unique<RenderWindow>(
-		VideoMode(400, 300),
-		"cAmp Options",  // Title
-		Style::Default, ContextSettings());
-	
-	pWindow2->setPosition(Vector2i(set.view.xPos, set.view.yPos));
-				
-	ImGui::SFML::Init(*pWindow2.get());
-	SetupGuiStyle();/**/
 }
 	
 //  Load data
@@ -60,7 +49,7 @@ bool AppSFMLDraw::LoadResources()
 {
 	string data = FileSystem::Data(), file;
 	file = data + "/cAmp.png";
-	Image icon;
+
 	if (icon.loadFromFile(file))
 		pWindow->setIcon(32, 32, icon.getPixelsPtr());
 	else
@@ -122,21 +111,9 @@ void AppSFMLDraw::LoopMain()
 	{
 		//  Process events
 		//------------------
+		WndProcessAll();
+
 		Event e;
-		if (pWindow2 && pWindow2->isOpen())
-		while (pWindow2->pollEvent(e))
-		{
-			ImGui::SFML::ProcessEvent(e);
-
-			switch (e.type)
-			{
-			case Event::Closed:
-				pWindow2->close();
-				break;
-			}
-		}
-
-		
 		while (pWindow->pollEvent(e))
 		{
 			//ImGui::SFML::ProcessEvent(e);
@@ -186,26 +163,7 @@ void AppSFMLDraw::LoopMain()
 
 		pWindow->display();
 
-		
-		//  Draw2 Gui
-		//------------------
-		if (pWindow2 && pWindow2->isOpen())
-		{
-			ImGui::SFML::Update(*pWindow2.get(), time);
-
-//			ImGui::Begin("Hello");
-			ImGui::Button("Button");
-			static bool b = 1;
-			ImGui::Checkbox("Check", &b);
-			static int i = 3;
-			ImGui::SliderInt("int", &i, 0,10);
-//			ImGui::End();
-
-			pWindow2->clear();
-			ImGui::SFML::Render(*pWindow2.get());
-
-			pWindow2->display();
-		}
+		WndDrawAll(time);
 	}
 }
 
@@ -214,7 +172,7 @@ void AppSFMLDraw::LoopMain()
 //------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DestroyAll()
 {
-	if (pWindow2)
+	//if (pWindowOpt)  // todo: fix if none
 		ImGui::SFML::Shutdown();
 	
 	set.SetDimFromWnd(pWindow.get());

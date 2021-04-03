@@ -59,6 +59,13 @@ protected:
 	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);
 
+	enum EWndOpt
+	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab,
+		WO_AppShow, WO_AppAudio, WO_AppVis, WO_AppTest,
+		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
+		WO_All  };
+	virtual void WndOpen(EWndOpt type) = 0;
+
 
 	//  mouse pos
 	int xMpos=0,yMpos=0, xMold=0,yMold=0;  //, xWclick,yWclick

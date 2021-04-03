@@ -215,7 +215,7 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 	DWORD chan = ch();
 
 	//  get data
-	if (view.eVis==viFFT)
+	if (view.eVis == viFFT)
 	{
 		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.iFFTSize] );
 
@@ -227,7 +227,7 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 			y = mia(0.f,1.f, y);  visA[x] = y;
 		}
 	}/*else
-	if (view.eVis==viOsc)
+	if (view.eVis == viOsc)
 	{
 		BASS_ChannelGetData(chan, wav, 2*2*(view.xSize+1)*sizeof(short));
 		uint a = 0;  int w = 1;

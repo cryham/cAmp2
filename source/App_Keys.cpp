@@ -77,8 +77,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	
 	///  toggle
-	key(T):	 audio->bRepTrk = !audio->bRepTrk;  break;
-	key(R):  audio->bRepPls = !audio->bRepPls;  break;
+	key(T):	 audio->bRepTrk = !audio->bRepTrk;  Osd("Repeat track: " + b2on(audio->bRepTrk));  break;
+	key(R):  audio->bRepPls = !audio->bRepPls;  Osd("Repeat playlist: " + b2on(audio->bRepPls));  break;
 	key(P):  set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
 
 	//  debug
@@ -93,8 +93,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	
 	//  playlist
-	key(F4):  Pls().Save();  SaveState();  set.Save();  Osd("Saved.");  break;
-	key(F5):  Pls().Load();  Osd("Pls reloaded.");  break;
+	key(F4):  Pls().Save();  SaveState();  set.Save();  Osd("Saved all.");  break;
+	key(F5):  Pls().Load();  Osd("Playlist reloaded.");  break;
 	key(Insert):  OpenDirFile(shift);  Osd("Inserted.");
 		break;
 	key(Delete):
@@ -104,9 +104,15 @@ bool App::KeyDown(Event::KeyEvent k)
 		break;
 	
 	//  view modes
-	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(SDirView[set.eDirView]));  Redraw();  break;
+	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(sDirView[set.eDirView]));  Redraw();  break;
 	key(Num3):  set.bFileInfo = !set.bFileInfo;  Osd("FileInfo: " + b2on(set.bFileInfo));  break;
 	
+	//  gui
+	key(F1):  WndOpen(ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
+	key(F2):  WndOpen(alt ? WO_AppVis : WO_PlsTab);  break;
+	key(F3):  WndOpen(alt ? WO_AppTest : WO_AppShow);  break;
+	// todo: all in popup, or tabs, rmb areas^
+
 	#undef key
 	default:  break;
 	}

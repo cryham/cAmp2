@@ -9,6 +9,7 @@
 class AppSFMLDraw : public App
 {
 public:
+	AppSFMLDraw();
 	bool Run();
 
 protected:
@@ -26,14 +27,35 @@ protected:
 	void DrawPlsHeader();
 	void DrawPlsSlider();
 
+	
+	//  Windows Gui
 	//----------------------------------------------------
-
-	//  windows
-	//--------------------------
 	typedef std::unique_ptr<sf::RenderWindow> PWindow;
-	PWindow pWindow = nullptr;
-	PWindow pWindow2 = nullptr;
+	PWindow pWindow = nullptr;  // main window
 
+	//  Options windows
+	struct SWndOpt
+	{
+		PWindow ptr = nullptr;
+		std::string title;
+		int width=400, height=300;
+	};
+	std::vector<SWndOpt> vWindows;
+	
+	void WndOpen(EWndOpt type) override;
+	bool WndVisible(EWndOpt w);
+	void WndProcessAll();
+	
+	void WndDrawAll(sf::Time time);
+	void WndDraw_PlsFind();
+	void WndDraw_PlsFilter();
+	void WndDraw_PlsTab();
+	void WndDraw_AppShow();
+	void WndDraw_AppAudio();
+	void WndDraw_AppVis();
+	void WndDraw_AppTest();
+	
+	
 	//  resources
 	//--------------------------
 	std::unique_ptr<sf::Texture> pTexture = nullptr;
@@ -44,6 +66,7 @@ protected:
 
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];
+	sf::Image icon;
 	void SetupGuiStyle();  // ImGui theme
 	
 	//  text and color

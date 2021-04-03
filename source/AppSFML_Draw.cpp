@@ -191,7 +191,7 @@ void AppSFMLDraw::DrawPlayer()
 		str = osdStr;
 		float f = dtOsd / dtOsdShow;
 		Clr(160*f,250*f,250*f);
-		Text(Fnt_Info, 10, 32);
+		Text(Fnt_Info, 10, v.eVis == viNone ? 22 : 32);
 	}
 	
 	///  debug

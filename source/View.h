@@ -33,7 +33,7 @@ public:
 	bool bSlDrawR;  // draw rating
 	int xW_plS;  // width
 	
-	//  tabs count
+	//  tabs counts: colums,rows, offset
 	int xNpt, yNpt, ofsTab;
 
 	//  font sizes

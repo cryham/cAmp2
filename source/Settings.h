@@ -12,10 +12,13 @@ enum EDirView
 {
 	DV_Fullpath, DV_Path, DV_Path2, DV_Path3, /*DV_None,*/ DV_All
 };
-const static char* SDirView[DV_All] =
+const static char* sDirView[DV_All] =
 {
 	"Fullpath", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
 };
+const static char* sTimesTest[3] =
+{	"off", "short", "long"  };
+
 
 //  settings only playlist
 struct SetPls
