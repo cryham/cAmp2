@@ -273,7 +273,7 @@ void AppSFMLDraw::DrawTabs()
 
 //  Pls header
 //------------------------------------------------------------------------------------------------------------
-void AppSFMLDraw::DrawHeader()
+void AppSFMLDraw::DrawPlsHeader()
 {
 	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
 	Clr(130,160,195);

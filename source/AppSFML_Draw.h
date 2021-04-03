@@ -23,8 +23,8 @@ protected:
 	void DrawPlayer();
 	void DrawTabs();
 	void DrawPlaylist();
-	void DrawHeader();
-	void DrawSlider();
+	void DrawPlsHeader();
+	void DrawPlsSlider();
 
 	//----------------------------------------------------
 

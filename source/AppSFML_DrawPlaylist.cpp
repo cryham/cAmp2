@@ -123,7 +123,7 @@ void AppSFMLDraw::DrawPlaylist()
 		- 4 * w0,  xk2 = v.xSize - xk1;
 	Rect(xk1, yB_pl, xk2, yE_pl-yB_pl, TX_Black, false);
 	
-	DrawSlider();
+	DrawPlsSlider();
 
 	///  Times  2nd pass
 	yp = yB_pl;  it = Pls().ofs;
@@ -181,13 +181,13 @@ void AppSFMLDraw::DrawPlaylist()
 		yp += yF;  ++it;
 	}
 	
-	DrawHeader();
+	DrawPlsHeader();
 }
 
 
-//  Slider  |
+//  Pls Slider  |
 //------------------------------------------------------------------------------------------------------------
-void AppSFMLDraw::DrawSlider()
+void AppSFMLDraw::DrawPlsSlider()
 {
 	//if (!pls)  return;
 	const ViewSet& v = set.view;
