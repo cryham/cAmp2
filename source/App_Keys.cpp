@@ -82,30 +82,30 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(P):  set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
 
 	//  debug
-	key(I):  bFps = !bFps;  break;
-	key(U):  bDebug = !bDebug;  break;
-	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;  Redraw();  break;
+	key(I):  bFps = !bFps;  Osd("Fps: " + b2on(bFps));  break;
+	key(U):  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  break;
+	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;
+			 Osd("Time test: " + !iTimeTest ? "off" : i2s(iTimeTest));  Redraw();  break;
 	
-	key(L):  bAllStats = !bAllStats;  Redraw();  break;
-	key(K):  bFullStats = !bFullStats;  Redraw();  break;
+	#define OsdStats  Osd("Stats  Full: " + b2on(bFullStats) + "  All: " + b2on(bAllStats))
+	key(L):  bAllStats = !bAllStats;  OsdStats;  Redraw();  break;
+	key(K):  bFullStats = !bFullStats;  OsdStats;  Redraw();  break;
 	
 	
 	//  playlist
-	key(F4):  Pls().Save();  SaveState();  set.Save();  break;
-	key(F5):  Pls().Load();  break;
-	key(Insert):  OpenDirFile(shift);
+	key(F4):  Pls().Save();  SaveState();  set.Save();  Osd("Saved.");  break;
+	key(F5):  Pls().Load();  Osd("Pls reloaded.");  break;
+	key(Insert):  OpenDirFile(shift);  Osd("Inserted.");
 		break;
 	key(Delete):
-		if (ctrl)  Pls().Clear();
+		if (ctrl)  {  Pls().Clear();  Osd("Pls cleared.");  }
 		/*else if (shift)
 			Pls().DeleteCur();/**/
 		break;
-	//  test--
-	key(F10):  Pls().AddDir("../../../../m" /*, false*/);  Redraw();  break;
 	
 	//  view modes
-	key(Num2):  set.NextDirView(shift ? -1 : 1);  Redraw();  break;
-	key(Num3):  set.bFileInfo = !set.bFileInfo;  Redraw();  break;
+	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(SDirView[set.eDirView]));  Redraw();  break;
+	key(Num3):  set.bFileInfo = !set.bFileInfo;  Osd("FileInfo: " + b2on(set.bFileInfo));  break;
 	
 	#undef key
 	default:  break;

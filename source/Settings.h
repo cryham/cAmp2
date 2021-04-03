@@ -12,6 +12,10 @@ enum EDirView
 {
 	DV_Fullpath, DV_Path, DV_Path2, DV_Path3, /*DV_None,*/ DV_All
 };
+const static char* SDirView[DV_All] =
+{
+	"Fullpath", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
+};
 
 //  settings only playlist
 struct SetPls

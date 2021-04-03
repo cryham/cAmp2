@@ -92,6 +92,13 @@ protected:
 	bool bAllStats = false;  // all playlists
 	bool bFullStats = false;  // unfiltered
 	
+
+	//  Osd  ----
+	//  short info msg on player
+	std::string osdStr = "";
+	float dtOsd = 0.f, dtOsdShow = 2.f;
+	void Osd(std::string msg);
+	
 	
 	///  Dimensions  ------------------------------------------------
 	//  B = begin  E = end  W = width  H = height

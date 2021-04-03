@@ -184,6 +184,16 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Info, 10, 46);  // todo: wrap text..?
 	}
 	
+	//  osd  ----
+	if (dtOsd > 0.f)
+	{
+		dtOsd -= dt;
+		str = osdStr;
+		float f = dtOsd / dtOsdShow;
+		Clr(160*f,250*f,250*f);
+		Text(Fnt_Info, 10, 32);
+	}
+	
 	///  debug
 	///==================
 	if (bDebug)
@@ -261,6 +271,8 @@ void AppSFMLDraw::DrawTabs()
 }
 
 
+//  Pls header
+//------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawHeader()
 {
 	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);

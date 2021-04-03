@@ -27,6 +27,10 @@ string b2s(const bool b)
 {
 	return b ? "1" : "0";
 }
+string b2on(const bool b)
+{
+	return b ? "on" : "off";
+}
 
 
 //  advanced

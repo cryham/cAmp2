@@ -8,16 +8,8 @@
 using namespace std;  using namespace sf;
 
 
-App::App()
-{
-}
-
-App::~App()
-{
-}
-
-
 //  Init
+//------------------------------------------------------------------------
 bool App::Init()
 {
 	FileSystem::Init();
@@ -48,6 +40,14 @@ bool App::Init()
 	LoadState();
 	
 	return true;
+}
+
+App::App()
+{
+}
+
+App::~App()
+{
 }
 
 //  apply set State to player
@@ -160,6 +160,15 @@ void App::UpdDim()
 	xE_pl_inf = v.xSize-21;
 
 	Redraw();
+}
+
+
+//  Osd
+//------------------------------------------------------------------------
+void App::Osd(std::string msg)
+{
+	osdStr = msg;
+	dtOsd = dtOsdShow;
 }
 
 
