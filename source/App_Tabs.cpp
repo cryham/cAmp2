@@ -65,7 +65,7 @@ void App::TabMove(int n)
 		vPls.erase(vPls.begin() + plsId);
 
 	if (n == l)  {
-		vPls.push_back(p);  plsId = vPls.size()-1;  }
+		vPls.emplace_back(p);  plsId = vPls.size()-1;  }
 	else  {
 		vPls.insert(vPls.begin() + n, p);  plsId = n;  }
 	//plsChg();
@@ -86,7 +86,7 @@ void App::TabNew(int m)
 
 	if (m==2)
 	{	//  ctrl- at end
-		vPls.push_back(pl);
+		vPls.emplace_back(pl);
 		plsId = vPls.size()-1;  //pls = vPlst[plsId];  // sel
 	}else
 	{	//  none- after cur   alt- before cur   shift- at begin

@@ -48,11 +48,11 @@ vector<fs::path> FileSystem::ListDir(const fs::path dir, bool recursive)
 		{
 			auto it = fs::recursive_directory_iterator(dir);
 			for (const auto& path: it)
-				files.push_back(path);
+				files.emplace_back(path);
 		}else{
 			auto it = fs::directory_iterator(dir);
 			for (const auto& path: it)
-				files.push_back(path);
+				files.emplace_back(path);
 		}
 		sort(files.begin(), files.end());
     }
@@ -195,18 +195,18 @@ void FileSystem::Init()
 
         // Adding relative path for running from sources
         fs::path exe = ExecName();
-        dirs.push_back(exe.parent_path().parent_path() / "data");
-        dirs.push_back(exe.parent_path().parent_path());
-        dirs.push_back(exe.parent_path() / "data");
-        dirs.push_back(exe.parent_path());
+        dirs.emplace_back(exe.parent_path().parent_path() / "data");
+        dirs.emplace_back(exe.parent_path().parent_path());
+        dirs.emplace_back(exe.parent_path() / "data");
+        dirs.emplace_back(exe.parent_path());
         // Adding relative path from installed executable
-        dirs.push_back(exe.parent_path().parent_path() / shareDir);
+        dirs.emplace_back(exe.parent_path().parent_path() / shareDir);
         #ifndef _WIN32
         // Adding XDG_DATA_DIRS
         {
             char const* xdg_data_dirs = getenv("XDG_DATA_DIRS");
             istringstream iss(xdg_data_dirs ? xdg_data_dirs : "/usr/local/share/:/usr/share/");
-            for (string p; getline(iss, p, ':'); dirs.push_back(p / appname)) {}
+            for (string p; getline(iss, p, ':'); dirs.emplace_back(p / appname)) {}
         }
         #endif
 

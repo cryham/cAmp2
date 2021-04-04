@@ -71,7 +71,7 @@ void AudioBass::InitPlugins()
 				{
 					//cout << e << endl;  //Log(e);
 					strupper(e);
-					vExt.push_back(e);
+					vExt.emplace_back(e);
 				}
 			}
 		}else
@@ -96,7 +96,7 @@ void AudioBass::Init()
     for (int n=0; BASS_GetDeviceInfo(n,&di); ++n)
     if (di.flags & BASS_DEVICE_ENABLED)
     {
-        //sDevs.push_back(di.name);
+        //sDevs.emplace_back(di.name);
         devs = n;
         Log(i2s(n,3) + ": " + di.name +
             (di.flags & BASS_DEVICE_DEFAULT ? " (default)": ""));

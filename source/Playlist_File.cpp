@@ -57,7 +57,7 @@ bool Playlist::Load()
 			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
 			stAll.Add(&t);
-			tracksAll.push_back(move(t));
+			tracksAll.emplace_back(move(t));
 		}
 	}
 	fi.close();
