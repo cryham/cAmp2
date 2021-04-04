@@ -6,6 +6,9 @@
 using namespace std;
 
 
+const uint AudioBass::ciFFTSize[ViewSet::ciFFTNum] = {
+	BASS_DATA_FFT512, BASS_DATA_FFT1024, BASS_DATA_FFT2048, BASS_DATA_FFT4096, BASS_DATA_FFT8192};
+
 AudioBass::AudioBass()
 {
 //	fft.resize(10240);

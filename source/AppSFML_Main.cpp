@@ -172,7 +172,7 @@ void AppSFMLDraw::LoopMain()
 //------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DestroyAll()
 {
-	//if (pWindowOpt)  // todo: fix if none
+	if (wndInited)
 		ImGui::SFML::Shutdown();
 	
 	set.SetDimFromWnd(pWindow.get());

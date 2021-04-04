@@ -42,9 +42,11 @@ protected:
 	};
 	std::vector<SWndOpt> vWindows;
 	
+	bool wndInited = false;
 	void WndOpen(EWndOpt type) override;
 	bool WndVisible(EWndOpt w);
 	void WndProcessAll();
+	void WndClose(int w);
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_PlsFind();
@@ -54,6 +56,9 @@ protected:
 	void WndDraw_AppAudio();
 	void WndDraw_AppVis();
 	void WndDraw_AppTest();
+
+	void Sep(int h);  // Gui separators
+	void Line();
 	
 	
 	//  resources

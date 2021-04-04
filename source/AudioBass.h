@@ -9,10 +9,6 @@ const static int
 	ciWAV = 4096,   // wav data, max screen width
 	ciFFT = 10240;  // fft data, max fft size
 
-const static int ciFFTNum = 5;
-const static uint ciFFTSize[ciFFTNum] = {
-	BASS_DATA_FFT512, BASS_DATA_FFT1024, BASS_DATA_FFT2048, BASS_DATA_FFT4096, BASS_DATA_FFT8192};
-
 
 class AudioBass : public Audio, public LogErr
 {
@@ -53,6 +49,8 @@ public:
 	const char* GetAllExtStr() override  // for file open dialog
 	{	return sAllExt.c_str();  }
 
+	const static uint ciFFTSize[ViewSet::ciFFTNum];
+	
 private:
 	void InitPlugins();
 	void FillExt();

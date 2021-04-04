@@ -109,7 +109,7 @@ void AppSFMLDraw::DrawPlaylist()
 		{
 			++iFindVis;
 			if (bFind)
-				Clr(50,240,50);
+				Clr(70,240,70);
 		}
 		Text(Fnt_Track, 17, yp);
 

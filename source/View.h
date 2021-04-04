@@ -24,6 +24,7 @@ public:
 
 	//  visualization
 	int iVisH = 96;  // draw height
+	const static int ciFFTNum = 5;
 	int iFFTSize = 1;      // FFT samples (quality)
 	float fFFTMul = 69.f;  // y multiplier (scale)
 	/*EVis*/ int eVis = viFFT;  // type

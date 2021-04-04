@@ -189,17 +189,16 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		dtOsd -= dt;
 		str = osdStr;
-		float f = dtOsd / dtOsdShow;
+		float f = 0.7f * dtOsd / dtOsdShow + 0.3f;
 		Clr(160*f,250*f,250*f);
 		Text(Fnt_Info, 10, v.eVis == viNone ? 22 : 32);
 	}
-	else //?
-
+	else
 	//  Find  ----
-	if (bFind /*&& iFoundAll > 0*/)
+	if (bFind && iFoundAll > 0)
 	{
-		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().iFound)+" / All "+i2s(iFoundAll);
-		Clr(100,210,100);  // center par
+		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().iFound)+"  All "+i2s(iFoundAll);
+		Clr(100,220,100);  // center par
 		Text(Fnt_Info, (set.view.xSize - 140) / 2, v.eVis == viNone ? 22 : 32);
 	}
 	
@@ -266,7 +265,7 @@ void AppSFMLDraw::DrawTabs()
 				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 				if (bFind && pls.iFound > 0)
-					Clr(120,250,120);
+					Clr(70,240,70);
 
 				//  text
 				str = pls.name;

@@ -109,7 +109,7 @@ protected:
 	//  Osd  ----
 	//  short info msg on player
 	std::string osdStr = "";
-	float dtOsd = 0.f, dtOsdShow = 2.f;
+	float dtOsd = 0.f, dtOsdShow = 1.f;
 	void Osd(std::string msg);
 	
 	

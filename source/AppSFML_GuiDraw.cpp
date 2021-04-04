@@ -3,6 +3,7 @@
 #include "AppSFML_Draw.h"
 #include "Audio.h"
 #include "Util.h"
+#include "Settings.h"
 using namespace sf;  using namespace std;  using namespace ImGui;
 #define TextG  ImGui::Text
 
@@ -27,19 +28,20 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	// todo: goto next,prev
 	// todo: trk time range
 
-	TextG("");
+	Sep(10);
 	if (!sFind.empty())
 	{	if (!iFoundAll)
 			TextG("Not found.");
 		else
-			TextG("Found:  %d visible of %d / All %d", iFoundVis, Pls().iFound, iFoundAll);
-	}
-	TextG("");
+			TextG("Found:  %d visible of %d  All %d", iFoundVis, Pls().iFound, iFoundAll);
+	}else
+		Sep(10);
+	Sep(10);
 	auto& f = set.find;
 	e = false;
-	e |= Checkbox("Case sens", &f.bCaseSens);
-	e |= Checkbox("Full path", &f.bFullPath);  // only path, fname?
-	e |= Checkbox("Full, unfiltered", &f.bUnfiltered);
+	e |= Checkbox("Case sensitive", &f.bCaseSens);
+	e |= Checkbox("In full path", &f.bFullPath);  // only path, fname?
+	e |= Checkbox("Full playlist, unfiltered", &f.bUnfiltered);
 	e |= Checkbox("All playlists", &f.bAllPls);
 	if (e)  Find();
 }
@@ -72,7 +74,7 @@ void AppSFMLDraw::WndDraw_PlsTab()
 	strcpy(t, Pls().name.c_str());  TextG("Rename tab:");
 	e = InputText("Tbn", t, sizeof(t));  if (e) Pls().name = t;
 
-	TextG("");
+	Sep(10);
 	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s.c_str());
 	PushItemWidth(140);  e = SliderInt("Tbk", &i, 0, 6, "");  PopItemWidth();
 	if (e) {  Pls().bookm = i;  Redraw();  }
@@ -82,7 +84,7 @@ void AppSFMLDraw::WndDraw_PlsTab()
 //	ColorPicker3("Tclr", hsv, ImGuiColorEditFlags_PickerHueBar|ImGuiColorEditFlags_InputHSV);
 	//ColorConvertHSVtoRGB();
 
-	TextG("");
+	Sep(10);
 	TextG("Tabs counts:");
 	i = set.view.xNpt;  s = "columns: " + i2s(i);  TextG(s.c_str());
 	PushItemWidth(140);  e = SliderInt("Tbx", &i, 0, 30, "");  PopItemWidth();
@@ -100,14 +102,14 @@ void AppSFMLDraw::WndDraw_AppShow()
 	bool e;  string s;
 	Checkbox("File Info (from cursor)", &set.bFileInfo);
 	
-	TextG("");
+	Sep(10);
 	int i = set.eDirView;
 	s = string("Dir View: ") + sDirView[i];
 	TextG(s.c_str());
 	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
 	
-	TextG("");
+	Line();
 	TextG("Playlists Statistics:");
 	e = Checkbox("All playlists", &bAllStats);  if (e) Redraw();
 	e = Checkbox("Full unfiltered", &bFullStats);  if (e) Redraw();
@@ -139,17 +141,39 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	PushItemWidth(240);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
 	if (e) {  audio->iVolume = i;  Redraw();  }
 	
+	Sep(10);
 	TextG("Repeat");
-	Checkbox("Track", &audio->bRepTrk);
+	Checkbox("Track", &audio->bRepTrk);  SameLine(150);
 	Checkbox("Playlist", &audio->bRepPls);
+	
+	i = 0;  // play controls meh
+	Sep(10);
+	e = Button("|<");  i += 80;  SameLine(i);  if (e)  Pls().Next(-1);
+	e = Button("|>");  i += 60;  SameLine(i);  if (e)  if (Pls().Play(false))  plsPlId = plsId;
+	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
+	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
+	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);
 }
 
-//  Vis
+//  Visualization
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppVis()
 {
-	// todo:  vis type  size  sleep ms
-	//set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();
+	bool e;  string s;
+	int i = set.view.iFFTSize;
+	s = string("FFT size: ") + i2s(i);  TextG(s.c_str());
+	PushItemWidth(240);  e = SliderInt("fftsi", &i, 0, ViewSet::ciFFTNum-1, "");  PopItemWidth();
+	if (e)  set.view.iFFTSize = i;
+
+	float f = set.view.fFFTMul;
+	s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s.c_str());
+	PushItemWidth(240);  e = SliderFloat("fftmul", &f, 0, 200.f, "");  PopItemWidth();
+	if (e)  set.view.fFFTMul = f;
+//	int eVis = viFFT;  // todo: type
+//	int iSleep = 0;  // in ms
+//	bool bVSync = true;
+//	int iVisH = 96;  // draw height
+//	float fPrtFq = 100.f;  // spectrogram speed
 }
 
 //  Test

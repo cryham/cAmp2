@@ -44,7 +44,7 @@ void ViewSet::Load(const XMLElement* e)
 	a = e->Attribute("vsync");	if (a)  bVSync = s2b(a);
 
 	a = e->Attribute("visH");	if (a)  iVisH = mia(0, ySize, s2i(a));
-	a = e->Attribute("fft");	if (a)  iFFTSize = mia(0,ciFFTNum-1, s2i(a));
+	a = e->Attribute("fft");	if (a)  iFFTSize = mia(0,ViewSet::ciFFTNum-1, s2i(a));
 	a = e->Attribute("ftMul");	if (a)  fFFTMul = s2f(a);
 	a = e->Attribute("eVis");	if (a)  eVis = (EVis)mia(0,int(viALL), s2i(a));
 	a = e->Attribute("vpFq");	if (a)  fPrtFq = s2f(a);

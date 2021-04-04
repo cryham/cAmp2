@@ -77,8 +77,7 @@ void App::LoadPls()
 	
 	for (const auto& sp: set.vSetPls)
 	{
-		Playlist p(sp.name);
-		p.bookm = sp.bookm;
+		Playlist p(sp);
 		p.Load();
 		all += p.stats;  allFull += p.stAll;
 		vPls.emplace_back(move(p));
@@ -97,10 +96,7 @@ void App::SavePls()
 	set.vSetPls.clear();
 	for (const auto& p: vPls)
 	{
-		SetPls s;
-		s.name = p.name;
-		s.bookm = p.bookm;
-		set.vSetPls.emplace_back(move(s));
+		set.vSetPls.emplace_back(p.name);
 	}
 }
 

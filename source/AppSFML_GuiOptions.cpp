@@ -6,6 +6,25 @@
 using namespace sf;  using namespace std;  using namespace ImGui;
 
 
+bool AppSFMLDraw::WndVisible(EWndOpt w)
+{
+	return vWindows[w].ptr && vWindows[w].ptr->isOpen();
+}
+
+//  gui util  -----
+const ImVec4 clr1(0.2f,0.2f,0.7f, 0.5f);
+const ImVec4 clr0(0.2f,0.2f,0.7f, 0.3f);
+
+//  separators
+void AppSFMLDraw::Sep(int h)
+{
+	Dummy(ImVec2(50, h));
+}
+void AppSFMLDraw::Line()
+{
+	Sep(5);  Separator();  Sep(5);
+}
+
 //  ctor
 //------------------------------------------------------------------
 AppSFMLDraw::AppSFMLDraw()
@@ -30,15 +49,15 @@ AppSFMLDraw::AppSFMLDraw()
 	}
 }
 
-bool AppSFMLDraw::WndVisible(EWndOpt w)
-{
-	return vWindows[w].ptr && vWindows[w].ptr->isOpen();
-}
-
 //  Wnd Open
 //------------------------------------------------------------------
 void AppSFMLDraw::WndOpen(EWndOpt w)
 {
+	if (wndInited)  //return;  // todo: many opened windows..
+	{
+		for (int i=0; i < WO_All; ++i)
+			WndClose(i);
+	}
 	if (w < 0 || w >= WO_All)  return;
 	auto& wnd = vWindows[w];
 	if (wnd.ptr)  return;
@@ -58,6 +77,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 				
 	//  ImGui Font
 	//------------------
+	wndInited = true;
 	ImGui::SFML::Init(*wnd.ptr.get(), false);
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = 0;  io.LogFilename = 0;  // none
@@ -68,6 +88,18 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 	ImGui::SFML::UpdateFontTexture();
 
 	SetupGuiStyle();
+}
+
+void AppSFMLDraw::WndClose(int i)
+{
+	auto& wnd = vWindows[i];
+	if (!wnd.ptr)  return;
+	
+	wnd.ptr->close();
+	wnd.ptr = nullptr;  // deletes
+
+	ImGui::SFML::Shutdown();
+	wndInited = false;
 }
 
 //  Process All
@@ -90,8 +122,7 @@ void AppSFMLDraw::WndProcessAll()
 				if (e.key.code != Keyboard::Escape)
 					break;
 			case Event::Closed:
-				wnd.ptr->close();
-				wnd.ptr = nullptr;  // deletes
+				WndClose(i);
 				return;
 			}
 		}
