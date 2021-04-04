@@ -39,7 +39,7 @@ AppSFMLDraw::AppSFMLDraw()
 		{
 		case WO_PlsFind:	w.title = "Playlist Find";  break;
 		case WO_PlsFilter:	w.title = "Playlist Filter";  break;
-		case WO_PlsTab:		w.title = "Playlist Tab";  break;
+		case WO_PlsTab:		w.title = "Playlist Tab";  w.height = 600;  break;
 		case WO_AppShow:	w.title = "Player Show";  /*w.height = 400;*/  break;
 		case WO_AppAudio:	w.title = "Player Audio";  break;
 		case WO_AppVis:		w.title = "Player Visualization";  break;

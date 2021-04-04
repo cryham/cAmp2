@@ -28,12 +28,13 @@ bool Playlist::Load()
 	Clear();
 	
 	fi.getline(s,60);  // header vars
-	sscanf(s,"%d|%d|%d|%d|%d|%d",//|%f|%f|%f",
+	sscanf(s,"%d|%d|%d|%d|%d|%d|%f|%f|%f",
 		&filterLow, &filterHigh,
-		&cur, &ofs, &play, &bookm);
-		//&hue, &sat, &val);
+		&cur, &ofs, &play, &bookm,
+		&hue, &sat, &val);
 	bookm = mia(0,6, bookm);
 	hue = mia(0.f,1.f, hue);  sat = mia(0.f,1.f, sat);  val = mia(0.f,1.f, val);
+	UpdateColor();
 	
 	fs::path prevPath, a;
 	while (!fi.eof())

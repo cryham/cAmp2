@@ -256,8 +256,11 @@ void AppSFMLDraw::DrawTabs()
 				int b = pls.bookm;
 				if (b > 0)
 				{	int tex = TX_TabB1 + b-1;
-					Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
+					//Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
 				}
+				int tex = TX_Rate1 + b;
+				Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false, pls.r, pls.g, pls.b);
+				
 				//  cur, add
 				Clr(120,170,220);
 				if (a==plsId)   {  Clr(140,190,240);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }

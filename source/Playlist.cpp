@@ -5,6 +5,7 @@
 #include "Stats.h"
 #include "def.h"
 #include "Util.h"
+#include "../libs/imgui.h"  // ColorConvert
 #include <iostream>
 using namespace std;
 
@@ -324,4 +325,14 @@ void Playlist::Find(std::string& find, const SetFind& opt)
 			trk.found = f;
 		}
 	Update();  //-
+}
+
+
+void Playlist::UpdateColor()
+{
+	float fr=0, fg=0, fb=0;
+	ImGui::ColorConvertHSVtoRGB(hue, sat, val, fr, fg, fb);
+	r = fr*255.f;
+	g = fg*255.f;
+	b = fb*255.f;
 }

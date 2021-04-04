@@ -25,7 +25,10 @@ public:
 
 	int filterLow = cRateMin, filterHigh = cRateMax;  // lower, upper
 	int bookm = 0;  //  bookmark
+	
 	float hue = 0.f, sat = 0.f, val = 0.f;  // tab color
+	uint8_t r = 0, g = 0, b = 0;
+	void UpdateColor();
 	
 	int iFound = 0;  //  find count
 	

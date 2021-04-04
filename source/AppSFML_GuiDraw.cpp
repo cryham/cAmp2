@@ -79,20 +79,20 @@ void AppSFMLDraw::WndDraw_PlsTab()
 	PushItemWidth(140);  e = SliderInt("Tbk", &i, 0, 6, "");  PopItemWidth();
 	if (e) {  Pls().bookm = i;  Redraw();  }
 	
-	// todo: h,s,v
-//	static float hsv[3] ={0.f};
-//	ColorPicker3("Tclr", hsv, ImGuiColorEditFlags_PickerHueBar|ImGuiColorEditFlags_InputHSV);
-	//ColorConvertHSVtoRGB();
+	// h,s,v
+	float hsv[3] = {Pls().hue, Pls().sat, Pls().val};
+	e = ColorPicker3("Tclr", hsv, ImGuiColorEditFlags_PickerHueBar|ImGuiColorEditFlags_InputHSV);
+	if (e) {  Pls().hue = hsv[0];  Pls().sat = hsv[1];  Pls().val = hsv[2];  Pls().UpdateColor();  }
 
 	Sep(10);
 	TextG("Tabs counts:");
 	i = set.view.xNpt;  s = "columns: " + i2s(i);  TextG(s.c_str());
-	PushItemWidth(140);  e = SliderInt("Tbx", &i, 0, 30, "");  PopItemWidth();
-	if (e) {  set.view.xNpt = i;  Redraw();  }
+	PushItemWidth(140);  e = SliderInt("Tbx", &i, 1, 30, "");  PopItemWidth();
+	if (e) {  set.view.xNpt = i;  UpdDim();  }
 	
 	i = set.view.yNpt;  s = "rows: " + i2s(i);  TextG(s.c_str());
-	PushItemWidth(140);  e = SliderInt("Tby", &i, 0, 30, "");  PopItemWidth();
-	if (e) {  set.view.yNpt = i;  Redraw();  }
+	PushItemWidth(140);  e = SliderInt("Tby", &i, 1, 30, "");  PopItemWidth();
+	if (e) {  set.view.yNpt = i;  UpdDim();  }
 }
 
 //  App Show
