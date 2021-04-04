@@ -1,6 +1,7 @@
 #include "../libs/imgui.h"
 #include "../libs/imgui-SFML.h"
 #include "AppSFML_Draw.h"
+#include "FileSystem.h"
 #include "Util.h"
 using namespace sf;  using namespace std;  using namespace ImGui;
 
@@ -55,7 +56,17 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 	wnd.ptr->setVerticalSyncEnabled(true);
 	wnd.ptr->setIcon(32, 32, icon.getPixelsPtr());
 				
-	ImGui::SFML::Init(*wnd.ptr.get());
+	//  ImGui Font
+	//------------------
+	ImGui::SFML::Init(*wnd.ptr.get(), false);
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = 0;  io.LogFilename = 0;  // none
+	io.Fonts->ClearFonts();
+
+	string p = FileSystem::Data() + "/DejaVuLGCSans.ttf";
+	ImFont* fnt = io.Fonts->AddFontFromFileTTF(p.c_str(), 17);  // par size
+	ImGui::SFML::UpdateFontTexture();
+
 	SetupGuiStyle();
 }
 
