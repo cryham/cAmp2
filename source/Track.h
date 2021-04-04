@@ -36,7 +36,7 @@ public:
 	int idAll = 0;   // id back in unfiltered list tracksAll
 	char rate = 0;   // rating
 	char bookm = 0;  // bookmark
-	//byte srch;     // match
+	bool found = false;     // match
 	
 	//bool vis = true;  // visible, after filtering etc
 

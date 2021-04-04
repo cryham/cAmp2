@@ -36,6 +36,16 @@ struct SetState
 	void Default();
 };
 
+//  find in pls opts
+struct SetFind
+{
+	bool bCaseSens = false;
+	bool bFullPath = false;  // todo: only fname, path..
+	bool bUnfiltered = true;
+	bool bAllPls = true;
+	void Default();
+};
+
 
 //  App Settings
 //------------------------------------------------
@@ -71,6 +81,7 @@ public:
 
 	std::vector<SetPls> vSetPls;
 	
+	SetFind find;
 	
 	//  old state
 	SetState state;

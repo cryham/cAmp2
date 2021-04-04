@@ -52,6 +52,9 @@ protected:
 	//void updSelId(int clear=0), clrSelId();
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	
+	void Find();
+	std::string sFind;
+	
 	
 	///  Input  ------------------------------------------------
 	//  keys
@@ -61,7 +64,7 @@ protected:
 
 	enum EWndOpt
 	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab,
-		WO_AppShow, WO_AppAudio, WO_AppVis, WO_AppTest,
+		WO_AppShow, WO_AppAudio, WO_AppVis, WO_AppTest, WO_About,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
 		WO_All  };
 	virtual void WndOpen(EWndOpt type) = 0;

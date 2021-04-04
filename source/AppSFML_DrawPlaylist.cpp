@@ -99,14 +99,14 @@ void AppSFMLDraw::DrawPlaylist()
 			case DV_Path3:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent()) + " / " + Str(trk.GetParent2());  break;
 			default:  str = "";
 			}
-			Text(Fnt_Track, 17, yp);
-		}
-		else  //  name
+		}else  //  name
 		{	if (trk.IsDisabled())
 				Clr(50,80,100);
 			str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
-			Text(Fnt_Track, 17, yp);
 		}
+		if (trk.found)
+			Clr(50,240,50);
+		Text(Fnt_Track, 17, yp);
 
 		yp += yF;  ++it;
 	}

@@ -81,7 +81,7 @@ void App::LoadPls()
 		p.bookm = sp.bookm;
 		p.Load();
 		all += p.stats;  allFull += p.stAll;
-		vPls.push_back(move(p));
+		vPls.emplace_back(move(p));
 	}
 	//Pls().Update();
 	// todo: on thread after AddDir..
@@ -89,7 +89,7 @@ void App::LoadPls()
 	//	audio->GetTrkTime(trk);
 	
 	if (vPls.empty())
-		vPls.push_back(Playlist("1"));
+		vPls.emplace_back(Playlist("1"));
 }
 
 void App::SavePls()
@@ -100,7 +100,7 @@ void App::SavePls()
 		SetPls s;
 		s.name = p.name;
 		s.bookm = p.bookm;
-		set.vSetPls.push_back(move(s));
+		set.vSetPls.emplace_back(move(s));
 	}
 }
 
@@ -181,8 +181,7 @@ void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL pa
 		auto exts = audio->GetAllExtStr();
 		nfdpathset_t paths;
 		auto r = NFD_OpenDialogMultiple(exts, NULL, &paths);
-		if (r != NFD_OKAY)
-			return;
+		if (r != NFD_OKAY)  return;
 
 		size_t cnt = NFD_PathSet_GetCount(&paths);
 		for (size_t i=0; i < paths.count; ++i)
@@ -197,10 +196,21 @@ void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL pa
 	{
 		char* outPath = 0;
 		auto r = NFD_PickFolder(NULL, &outPath);
-		if (r != NFD_OKAY)
-			return;
+		if (r != NFD_OKAY)  return;
 
 		Pls().AddDir(outPath, where);
 		free(outPath);
 	}
+}
+
+//  Find
+//------------------------------------------------------------------------
+void App::Find()
+{
+	if (set.find.bAllPls)
+		for (auto& pls : vPls)
+			pls.Find(sFind, set.find);
+	else
+		Pls().Find(sFind, set.find);
+	Redraw();
 }

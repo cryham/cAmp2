@@ -2,6 +2,7 @@
 #include "Track.h"
 #include "AppLog.h"
 #include "Stats.h"
+#include "Settings.h"  // for SetFind
 #include <deque>
 
 
@@ -91,4 +92,7 @@ public:
 	void Filter(bool lower, char add);
 	int GetFilter(bool lower)
 	{	return lower ? filterLow : filterHigh;  }
+	
+	void Find(std::string &find, const SetFind& opt);
+	void FindClear();
 };

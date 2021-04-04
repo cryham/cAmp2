@@ -17,30 +17,28 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	//Sep(5);  Line(cl0);  Sep(5);
 	
 	//Sep(10);  Line(cl0);  Sep(10);
-	static bool findCase=false, findWhole=false, findUnfiltered=true, findAllPls=true, findFullPath=false;
-	static char sFind[1024]={0};
 
 	/*if (findFocus)  // after alt-F
 	{	findFocus = false;  SetKeyboardFocusHere();
 	}*/
 	bool e;
-	PushItemWidth(140);  e = InputText("find", sFind, sizeof(sFind));  PopItemWidth();
-	//SameLine();  //if (e)  DoFind();
-	e = Button("X Hide");  //if (e) {  sFind[0]=0;  DoFind();  }
+	char s[1024]={0};
+	strcpy(s, sFind.c_str());
+	PushItemWidth(140);  e = InputText("find", s, sizeof(s));  PopItemWidth();
+	if (e)  {  sFind = s;  Find();  }
+	e = Button("X Hide");  if (e) {  sFind.clear();  Find();  }
 	SameLine(110);  e = Button("< Prev");  //if (e)  NextFind(-dFind);
-	SameLine(180);  e = Button("Next >");  //if (e)  NextFind( dFind);
+	SameLine(190);  e = Button("Next >");  //if (e)  NextFind( dFind);
 
 	//if (sFind[0]) {  SameLine(140);  Text("Found: %d  visible: %d", iFoundAll, iFound);  }
 	e = false;
 	TextG("");
-	e |= Checkbox("Case sens", &findCase);
-	e |= Checkbox("Whole words", &findWhole);
-	e |= Checkbox("Full path", &findFullPath);
-	TextG("");
-	// parent parent2  full path  only fname?
-	e |= Checkbox("Full, unfiltered", &findUnfiltered);
-	e |= Checkbox("All playlists", &findAllPls);
-	//if (e)  DoFind();
+	auto& f = set.find;
+	e |= Checkbox("Case sens", &f.bCaseSens);
+	e |= Checkbox("Full path", &f.bFullPath);  // only path, fname?
+	e |= Checkbox("Full, unfiltered", &f.bUnfiltered);
+	e |= Checkbox("All playlists", &f.bAllPls);
+	if (e)  Find();
 }
 
 //  Pls Filter

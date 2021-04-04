@@ -32,6 +32,14 @@ void SetState::Default()
 	idPls = 0;  idPlay = 0;
 }
 
+void SetFind::Default()
+{
+	bCaseSens = false;
+	bFullPath = false;
+	bUnfiltered = true;
+	bAllPls = true;
+}
+
 void Settings::Default()
 {
 	view.Defaults();
@@ -44,6 +52,7 @@ void Settings::Default()
 
 	cntrPls = 1;
 	vSetPls.clear();
+	find.Default();
 	
 	state.Default();
 }
@@ -88,7 +97,8 @@ bool Settings::Load()
 
 	XMLElement* e,*m;  const char* a;
 
-	//  load  ..
+	//  load  .......
+	//  debug
 	e = root->FirstChildElement("debug");
 	if (e)
 	{
@@ -104,7 +114,17 @@ bool Settings::Load()
 		a = e->Attribute("idPls");    if (a)  state.idPls = s2i(a);
 		a = e->Attribute("idPlay");   if (a)  state.idPlay = s2i(a);
 	}
+	//  find
+	e = root->FirstChildElement("find");
+	if (e)
+	{
+		a = e->Attribute("case");    if (a)  find.bCaseSens = s2b(a);  
+		a = e->Attribute("path");    if (a)  find.bFullPath = s2b(a);  
+		a = e->Attribute("unfilt");  if (a)  find.bUnfiltered = s2b(a);
+		a = e->Attribute("all");     if (a)  find.bAllPls = s2b(a);    
+	}
 
+	//  view
 	e = root->FirstChildElement("view");
 	if (e)
 		view.Load(e);
@@ -123,7 +143,7 @@ bool Settings::Load()
 			a = m->Attribute("name");	sp.name = a;
 			a = m->Attribute("bookm");	if (a)  sp.bookm = s2i(a);
 
-			vSetPls.push_back(sp);
+			vSetPls.emplace_back(sp);
 			m = m->NextSiblingElement("Pls");
 	}	}
 	
@@ -141,7 +161,8 @@ bool Settings::Save()
 	root->SetAttribute("ver", ver);
 	XMLElement* e, *p;
 
-	//  save  ..
+	//  save  .......
+	//  debug
 	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
 		e->SetAttribute("dirView", eDirView);
@@ -154,7 +175,16 @@ bool Settings::Save()
 		e->SetAttribute("idPls",   state.idPls);
 		e->SetAttribute("idPlay",  state.idPlay);
 	root->InsertEndChild(e);
+	
+	//  find
+	e = xml.NewElement("find");
+		e->SetAttribute("case",   find.bCaseSens ? 1 : 0);
+		e->SetAttribute("path",   find.bFullPath ? 1 : 0);
+		e->SetAttribute("unfilt", find.bUnfiltered ? 1 : 0);
+		e->SetAttribute("all",    find.bAllPls ? 1 : 0);
+	root->InsertEndChild(e);
 
+	//  view
 	e = xml.NewElement("view");
 		view.Save(e);
 	root->InsertEndChild(e);

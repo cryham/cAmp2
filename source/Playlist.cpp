@@ -117,7 +117,7 @@ void Playlist::Update()
 		if (path != prev)
 		{	//  add dir
 			Track d(t.path.parent_path(), true);
-			tracksVis.push_back(move(d));
+			tracksVis.emplace_back(move(d));
 			stats.AddDir();
 		}
 		prev = path;
@@ -126,7 +126,7 @@ void Playlist::Update()
 		
 		//  add file
 		t.idAll = i;
-		tracksVis.push_back(t);
+		tracksVis.emplace_back(t);
 		stats.Add(&t);
 	}
 		
@@ -188,7 +188,7 @@ bool Playlist::AddFile(fs::path file, const EInsert &where)
 	case Ins_Top:
 		tracksAll.push_front(move(t));
 	case Ins_End:
-		tracksAll.push_back(move(t));
+		tracksAll.emplace_back(move(t));
 	}
 	return true;
 }
@@ -278,4 +278,42 @@ void Playlist::Filter(bool lower, char add)
 	int& f = lower ? filterLow : filterHigh;
 	f += add;  f = mia(cRateMin,cRateMax, f);
 	Update();
+}
+
+
+//  Find
+//--------------------------------------------------------------------
+void Playlist::FindClear()
+{
+	//  clear marks
+	for (auto& trk : tracksAll)
+		trk.found = false;
+	Update();  //-
+}
+void Playlist::Find(std::string& find, const SetFind& opt)
+{
+	if (find.empty())
+	{
+		FindClear();
+		return;
+	}
+	bool low = !opt.bCaseSens;
+	if (low)
+		strlower(find);
+		
+	auto& trks = opt.bUnfiltered ? tracksAll : tracksVis;
+	if (!low)
+		for (auto& trk : trks)
+		{
+			auto& name = opt.bFullPath ? trk.GetPath() : trk.GetName();
+			trk.found = name.find(find) != string::npos;
+		}
+	else
+		for (auto& trk : trks)
+		{
+			auto name = opt.bFullPath ? trk.GetPath() : trk.GetName();
+			strlower(name);
+			trk.found = name.find(find) != string::npos;
+		}
+	Update();  //-
 }
