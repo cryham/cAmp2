@@ -207,10 +207,18 @@ void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL pa
 //------------------------------------------------------------------------
 void App::Find()
 {
+	iFoundAll = 0;
 	if (set.find.bAllPls)
 		for (auto& pls : vPls)
+		{
 			pls.Find(sFind, set.find);
+			iFoundAll += pls.iFound;
+		}
 	else
+	{
 		Pls().Find(sFind, set.find);
+		iFoundAll += Pls().iFound;
+	}
+	bFind = true;
 	Redraw();
 }

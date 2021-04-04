@@ -95,7 +95,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 
 	
-	//  prev, next  |< >|  hover
+	//  Prev, Next  |< >|  hover
 	int y = 2;
 	if (ym > 0 && ym < yE_plr_btn)  // prev,next  btns |< >|
 	{
@@ -118,7 +118,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 	
 	
-	//  repeat  @
+	//  Repeat  @
 	if (audio->bRepTrk || audio->bRepPls)
 	{
 		Clr(50,100,100);
@@ -128,13 +128,13 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Info, xw-75, y+25);  // +Fy TimeBig..
 	}
 	
-	//  volume  %
+	//  Volume  %
 	Clr(100,140,220);
 	str = i2s(audio->iVolume/10) + "%";
 	Text(Fnt_Info, xw-40, y+25);
 	
 
-	//  player  info text  * * *
+	//  player  info Text  * * *
 	if (play)
 	{
 		//  ext bitrate freq size
@@ -166,7 +166,7 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_TimeBig, xw - 84, y-2);
 	}
 
-	//  file info  ----
+	//  File info  ----
 	if (set.bFileInfo)
 	{
 		const Track& trk = Pls().GetTracks()[Pls().cur];
@@ -184,7 +184,7 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Info, 10, 46);  // todo: wrap text..?
 	}
 	
-	//  osd  ----
+	//  Osd  ----
 	if (dtOsd > 0.f)
 	{
 		dtOsd -= dt;
@@ -193,8 +193,17 @@ void AppSFMLDraw::DrawPlayer()
 		Clr(160*f,250*f,250*f);
 		Text(Fnt_Info, 10, v.eVis == viNone ? 22 : 32);
 	}
+	else //?
+
+	//  Find  ----
+	if (bFind /*&& iFoundAll > 0*/)
+	{
+		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().iFound)+" / All "+i2s(iFoundAll);
+		Clr(100,210,100);  // center par
+		Text(Fnt_Info, (set.view.xSize - 140) / 2, v.eVis == viNone ? 22 : 32);
+	}
 	
-	///  debug
+	///  Debug
 	///==================
 	if (bDebug)
 	{
@@ -238,13 +247,14 @@ void AppSFMLDraw::DrawTabs()
 		{
 			if (a < ntab)
 			{
+				const auto& pls = vPls[a];
 				float yt = yB_tabs + y*yH_tabs;
 				float x1 = x*xW_tabs, x2 = xW_tabs;
 				
 				Rect(x1, yt, x2, yH_tabs, TX_Black);  // clear backgr
 				
 				//  bookm
-				int b = vPls[a].bookm;
+				int b = pls.bookm;
 				if (b > 0)
 				{	int tex = TX_TabB1 + b-1;
 					Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
@@ -255,9 +265,11 @@ void AppSFMLDraw::DrawTabs()
 				if (a==plsPlId)	{  Clr(170,210,250);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
 				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
+				if (bFind && pls.iFound > 0)
+					Clr(120,250,120);
 
 				//  text
-				str = vPls[a].name;
+				str = pls.name;
 				const int w = Text(Fnt_Track, 0,0, false);
 				int xc = max(0, (xW_tabs - w)/2);  //center
 				//cf->xmax = (x+1)*xW_pt;
@@ -282,9 +294,9 @@ void AppSFMLDraw::DrawPlsHeader()
 	int x = xE_pl_inf*11/20, y = yB_pl_inf;
 	EFont fnt = Fnt_Info;
 
-	str = chFRateVis[low +cRmin];
+	str = GetRateStr(low);
 	Text(fnt, x -11, y);
-	str = chFRateVis[high +cRmin];
+	str = GetRateStr(high);
 	Text(fnt, x +11, y);
 
 	//  info  Total dirs, files, bookm*, size, time

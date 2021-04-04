@@ -90,6 +90,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	#define OsdStats  Osd("Stats  Full: " + b2on(bFullStats) + "  All: " + b2on(bAllStats))
 	key(L):  bAllStats = !bAllStats;  OsdStats;  Redraw();  break;
 	key(K):  bFullStats = !bFullStats;  OsdStats;  Redraw();  break;
+	key(F):  bFind = !bFind;  Redraw();  break;
 	
 	
 	//  playlist
@@ -110,7 +111,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  gui
 	key(F1):  WndOpen(ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
 	key(F2):  WndOpen(alt ? WO_AppVis : WO_PlsTab);  break;
-	key(F3):  WndOpen(alt ? WO_AppTest : WO_AppShow);  break;
+	key(F3):  WndOpen(ctrl ? WO_About : alt ? WO_AppTest : WO_AppShow);  break;
 	// todo: all in popup, or tabs, rmb areas^
 
 	#undef key

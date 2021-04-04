@@ -16,15 +16,17 @@ protected:
 
 public:
 	//  vars  ----
-	int cur = 0;   //  cursor pos   :ids to tracks
-	int ofs = 0;   //  offset, view start
-	int play = 0;  //  playing pos
+	int cur = 0;    //  cursor pos   :ids to tracks
+	int ofs = 0;    //  offset, view start
+	int play = 0;   //  playing pos
 	
-	int lin = 10;  //  view visible lines, for page keys
+	int lin = 10;   //  view visible lines, for page keys
 	bool bDraw = true;  // needs redraw, changed
 
 	int filterLow = cRateMin, filterHigh = cRateMax;  // lower, upper
-	int bookm = 0; //  bookmark
+	int bookm = 0;  //  bookmark
+	int iFound = 0;  //  find count
+	float hue, sat, val;  // tab color
 	
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int multiplier)

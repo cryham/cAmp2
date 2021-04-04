@@ -13,9 +13,8 @@ Track::Track(fs::path file, bool dir1)
 
 void Track::SetNameFromPath()
 {
-    //name = path.generic_wstring();
     name = path.filename().filename().string();  // u8string?
-	//  path -1
+	//  parent dirs
 	auto p1 = path.parent_path();
 	parent = p1.filename();
 	parent2 = p1.parent_path().filename();

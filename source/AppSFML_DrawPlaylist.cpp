@@ -69,6 +69,7 @@ void AppSFMLDraw::DrawPlaylist()
 
 	int xws = v.xSize - v.xW_plS;
 
+	int iFindVis = 0;
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < tracks.size())
 	{
@@ -76,7 +77,7 @@ void AppSFMLDraw::DrawPlaylist()
 		bool dir = trk.IsDir();
 		
 		//  rating backgr
-		int rr = trk.rate, r = rr+3;
+		int rr = trk.rate, r = rr + cRmin;
 		if (!dir && rr)
 		Rect(0,yp,xw,yF,
 			Tex4Rate(rr), false,
@@ -84,7 +85,7 @@ void AppSFMLDraw::DrawPlaylist()
 
 		//  rate
 		Clr(cc[r][0],cc[r][1],cc[r][2]);
-		str = chFRateVis[r];
+		str = GetRateStr(rr);
 		int w = Text(Fnt_Track, 0,0, false);  // center
 		Text(Fnt_Track, max(0, 5 - w/2), yp);
 
@@ -104,12 +105,17 @@ void AppSFMLDraw::DrawPlaylist()
 				Clr(50,80,100);
 			str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
 		}
-		if (trk.found)
-			Clr(50,240,50);
+		if (trk.found)  // find
+		{
+			++iFindVis;
+			if (bFind)
+				Clr(50,240,50);
+		}
 		Text(Fnt_Track, 17, yp);
 
 		yp += yF;  ++it;
 	}
+	iFoundVis = iFindVis;
 	
 	//  const width
 	//str = t2s(600.f);  // get for 10:00
@@ -202,22 +208,20 @@ void AppSFMLDraw::DrawPlsSlider()
 		xp2 = xw - xs/2 +1;
 	const auto& trks = Pls().GetTracks();
 
-	#if 0
-	// search results +
-		if (bShowSrch /*&& ySr > 0.8f*/)
-		for (int i=0; i < len; ++i)
-		if (Pls().vList[i]->srch > 0)
+	//  find results  -
+	if (bFind)
+	for (int i=0; i < len; ++i)
+		if (trks[i].found)
 		{
 			float fc1 = i /fle,  fc2 = (i + ySr) /fle;		if (fc2>1.f) fc2=1.f;
 			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
 
-			Rtex(TX_SliF, xk1, float(c1), xp2, float(c2));
+			Rect(xk1, float(c1), xp2, float(c2-c1), TX_SliF);
 		}
-	#endif
 
 	//  bookmarks  *
 	const Uint8 b = 100;  //par
-	for (int i=0; i < len; i++)
+	for (int i=0; i < len; ++i)
 	{
 		const int bk = trks[i].bookm;
 		if (bk > 0)
@@ -255,9 +259,9 @@ void AppSFMLDraw::DrawPlsSlider()
 	///  all tracks rating ->
 	//  todo: fill texture and just draw once
 	if (v.bSlDrawR /*&& !bShowSrch*/)
-		for (int i=0; i < len; i++)
+		for (int i=0; i < len; ++i)
 		{
-			const int rr = trks[i].rate, r = rr+3;
+			const int rr = trks[i].rate, r = rr+3.;
 			if (rr != 0)
 			{
 				float fc1 = float(i) /fle, fc2 = float(i + ySr) /fle;  if (fc2>1.f) fc2=1.f;

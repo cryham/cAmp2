@@ -7,33 +7,36 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 #define TextG  ImGui::Text
 
 
-//  Pls Find
+///  Pls Find
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_PlsFind()
 {
-	//  tabs
-	//Sep(5);
-	//TabLabels(Tab_ALL, tabNames, tab, true);
-	//Sep(5);  Line(cl0);  Sep(5);
-	
-	//Sep(10);  Line(cl0);  Sep(10);
-
+	//Sep(10);  Line(cl0);
 	/*if (findFocus)  // after alt-F
-	{	findFocus = false;  SetKeyboardFocusHere();
-	}*/
+	{	findFocus = false;  SetKeyboardFocusHere();  }*/
 	bool e;
-	char s[1024]={0};
+	static char s[1024]={0};
 	strcpy(s, sFind.c_str());
 	PushItemWidth(140);  e = InputText("find", s, sizeof(s));  PopItemWidth();
 	if (e)  {  sFind = s;  Find();  }
-	e = Button("X Hide");  if (e) {  sFind.clear();  Find();  }
-	SameLine(110);  e = Button("< Prev");  //if (e)  NextFind(-dFind);
-	SameLine(190);  e = Button("Next >");  //if (e)  NextFind( dFind);
+	SameLine(200);
+	e = Button("X Clear");  if (e) {  sFind.clear();  Find();  }
+	e = Checkbox("Show", &bFind);  if (e)  Redraw();
+	SameLine(120);  e = Button("< Prev");  //if (e)  NextFind(-dFind);
+	SameLine(200);  e = Button("Next >");  //if (e)  NextFind( dFind);
+	// todo: goto next,prev
+	// todo: trk time range
 
-	//if (sFind[0]) {  SameLine(140);  Text("Found: %d  visible: %d", iFoundAll, iFound);  }
-	e = false;
+	TextG("");
+	if (!sFind.empty())
+	{	if (!iFoundAll)
+			TextG("Not found.");
+		else
+			TextG("Found:  %d visible of %d / All %d", iFoundVis, Pls().iFound, iFoundAll);
+	}
 	TextG("");
 	auto& f = set.find;
+	e = false;
 	e |= Checkbox("Case sens", &f.bCaseSens);
 	e |= Checkbox("Full path", &f.bFullPath);  // only path, fname?
 	e |= Checkbox("Full, unfiltered", &f.bUnfiltered);
@@ -45,7 +48,18 @@ void AppSFMLDraw::WndDraw_PlsFind()
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_PlsFilter()
 {
-	// todo:  lower  upper  -show empty dirs  `dir2 separator lines
+	bool e;  string s;  int i;
+
+	TextG("Rating filter:");
+	i = Pls().filterLow;  s = "Low: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
+	PushItemWidth(140);  e = SliderInt("rFl", &i, cRateMin, cRateMax, "");  PopItemWidth();
+	if (e) {  Pls().filterLow = i;  Redraw();  }
+	
+	i = Pls().filterHigh;  s = "High: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
+	PushItemWidth(140);  e = SliderInt("rFh", &i, cRateMin, cRateMax, "");  PopItemWidth();
+	if (e) {  Pls().filterHigh = i;  Redraw();  }
+
+	// todo:  -show empty dirs  `dir2 separator lines
 }
 
 //  Tabs
@@ -54,6 +68,7 @@ void AppSFMLDraw::WndDraw_PlsTab()
 {
 	bool e;  string s;  int i;
 	static char t[1024]={0};
+
 	strcpy(t, Pls().name.c_str());  TextG("Rename tab:");
 	e = InputText("Tbn", t, sizeof(t));  if (e) Pls().name = t;
 
@@ -62,7 +77,10 @@ void AppSFMLDraw::WndDraw_PlsTab()
 	PushItemWidth(140);  e = SliderInt("Tbk", &i, 0, 6, "");  PopItemWidth();
 	if (e) {  Pls().bookm = i;  Redraw();  }
 	
-	// todo: h,s,v sldr color
+	// todo: h,s,v
+//	static float hsv[3] ={0.f};
+//	ColorPicker3("Tclr", hsv, ImGuiColorEditFlags_PickerHueBar|ImGuiColorEditFlags_InputHSV);
+	//ColorConvertHSVtoRGB();
 
 	TextG("");
 	TextG("Tabs counts:");
@@ -115,6 +133,12 @@ void AppSFMLDraw::WndDraw_AppAudio()
 {
 	// todo:  freq  snd device  volume  balance-
 	bool e;  string s;
+	
+	int i = audio->iVolume;
+	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s.c_str());
+	PushItemWidth(240);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
+	if (e) {  audio->iVolume = i;  Redraw();  }
+	
 	TextG("Repeat");
 	Checkbox("Track", &audio->bRepTrk);
 	Checkbox("Playlist", &audio->bRepPls);

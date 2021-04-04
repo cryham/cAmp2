@@ -48,12 +48,15 @@ protected:
 	void TabNew(int m);
 	void TabClose();
 	
+	
 	//void plsChg(int clrSel=0), plsPlChg(int id);
 	//void updSelId(int clear=0), clrSelId();
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	
-	void Find();
 	std::string sFind;
+	bool bFind = false;  // hide
+	int iFoundAll = 0, iFoundVis = 0;
+	void Find();
 	
 	
 	///  Input  ------------------------------------------------

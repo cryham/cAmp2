@@ -17,7 +17,7 @@ protected:
 
     //  file on disk, saved in playlist
     fs::path path;
-	std::string parent, parent2;  // subdir-1, -2
+	std::string parent, parent2;  // parent dirs
 	
 	//  time
 	bool hasTime = false;  // needs update
@@ -90,3 +90,6 @@ const int cRmin = 3/*-*/, cRmax = 5/*+*/, chRall = cRmin+cRmax+1;
 const static std::string chFRateAdd[chRall] = {"=","--","-","","`","^","~","+","#"};  // rename add, file name
 const static std::string chFRateVis[chRall] = {"=","--","-","","`","^","~","+","*"};  // draw text, sybols
 const static int cRateMin = -cRmin, cRateMax = cRmax;
+
+inline static std::string GetRateStr(int rate)
+{	return chFRateVis[rate + cRmin];  }

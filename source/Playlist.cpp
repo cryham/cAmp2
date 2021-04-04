@@ -281,15 +281,18 @@ void Playlist::Filter(bool lower, char add)
 }
 
 
-//  Find
+//  Find  clear marks
 //--------------------------------------------------------------------
 void Playlist::FindClear()
 {
-	//  clear marks
 	for (auto& trk : tracksAll)
 		trk.found = false;
+	iFound = 0;
 	Update();  //-
 }
+
+//  Find
+//--------------------------------------------------------------------
 void Playlist::Find(std::string& find, const SetFind& opt)
 {
 	if (find.empty())
@@ -300,20 +303,25 @@ void Playlist::Find(std::string& find, const SetFind& opt)
 	bool low = !opt.bCaseSens;
 	if (low)
 		strlower(find);
+	iFound = 0;
 		
 	auto& trks = opt.bUnfiltered ? tracksAll : tracksVis;
 	if (!low)
 		for (auto& trk : trks)
 		{
 			auto& name = opt.bFullPath ? trk.GetPath() : trk.GetName();
-			trk.found = name.find(find) != string::npos;
+			bool f = name.find(find) != string::npos;
+			if (f)  ++iFound;
+			trk.found = f;
 		}
 	else
 		for (auto& trk : trks)
 		{
 			auto name = opt.bFullPath ? trk.GetPath() : trk.GetName();
 			strlower(name);
-			trk.found = name.find(find) != string::npos;
+			bool f = name.find(find) != string::npos;
+			if (f)  ++iFound;
+			trk.found = f;
 		}
 	Update();  //-
 }
