@@ -139,11 +139,8 @@ bool Settings::Load()
 		if (!m)  Log(sErr + "No <Pls>");
 		while (m)
 		{
-			SetPls sp;
-			a = m->Attribute("name");	sp.name = a;
-			a = m->Attribute("bookm");	if (a)  sp.bookm = s2i(a);
-
-			vSetPls.emplace_back(sp);
+			a = m->Attribute("name");
+			if (a)  vSetPls.emplace_back(a);
 			m = m->NextSiblingElement("Pls");
 	}	}
 	
@@ -196,9 +193,7 @@ bool Settings::Save()
 	for (const auto& s: vSetPls)
 	{
 		p = xml.NewElement("Pls");
-		p->SetAttribute("name", s.name.c_str());
-		p->SetAttribute("bookm", s.bookm);
-		// idx,cur,ofs on each playlist here?
+		p->SetAttribute("name", s.c_str());
 		e->InsertEndChild(p);
 	}
 	root->InsertEndChild(e);

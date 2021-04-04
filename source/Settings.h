@@ -14,18 +14,11 @@ enum EDirView
 };
 const static char* sDirView[DV_All] =
 {
-	"Fullpath", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
+	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
 };
 const static char* sTimesTest[3] =
 {	"off", "short", "long"  };
 
-
-//  settings only playlist
-struct SetPls
-{
-	std::string name;
-	char bookm = 0;
-};
 
 //  old player state
 struct SetState
@@ -79,7 +72,7 @@ public:
 	//  playlists
 	int cntrPls = 1;  // new playlist counter
 
-	std::vector<SetPls> vSetPls;
+	std::vector<std::string> vSetPls;
 	
 	SetFind find;
 	

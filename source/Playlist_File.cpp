@@ -1,6 +1,7 @@
 #include "Playlist.h"
 #include "FileSystem.h"
 #include "Util.h"
+#include "def.h"
 #include <string.h>
 #include <stdio.h>
 using namespace std;
@@ -27,8 +28,12 @@ bool Playlist::Load()
 	Clear();
 	
 	fi.getline(s,60);  // header vars
-	sscanf(s,"%d|%d|%d|%d|%d|%d", &filterLow, &filterHigh,
-								  &cur, &ofs, &play, &bookm);
+	sscanf(s,"%d|%d|%d|%d|%d|%d",//|%f|%f|%f",
+		&filterLow, &filterHigh,
+		&cur, &ofs, &play, &bookm);
+		//&hue, &sat, &val);
+	bookm = mia(0,6, bookm);
+	hue = mia(0.f,1.f, hue);  sat = mia(0.f,1.f, sat);  val = mia(0.f,1.f, val);
 	
 	fs::path prevPath, a;
 	while (!fi.eof())
@@ -81,7 +86,8 @@ bool Playlist::Save()
 	
 	of << "cAmpPls2\n";  // header vars
 	of << filterLow <<'|'<< filterHigh <<'|'<<
-		  cur <<'|'<< ofs <<'|'<< play <<'|'<< bookm <<"\n";
+		cur <<'|'<< ofs <<'|'<< play <<'|'<< bookm <<'|'<<
+		f2s(hue,3,5) <<'|'<< f2s(sat,3,5) <<'|'<< f2s(val,3,5) <<"\n";
 	
 	for (int i=0; i < LengthAll(); ++i)
 	{
@@ -109,8 +115,10 @@ void Playlist::Clear()  // defaults
 	stats.Clear();
 	stAll.Clear();
 
-	cur = 0;  ofs = 0;  play = 0;  bookm = 0;
-	bDraw = true;
+	cur = 0;  ofs = 0;  play = 0;
+	lin = 10;  bDraw = true;
 	filterLow = cRateMin;  filterHigh = cRateMax;
-	lin = 10;  bookm = 0;
+	bookm = 0;
+	hue = 0.f;  sat = 0.f;  val = 0.f;
+	iFound = 0;
 }

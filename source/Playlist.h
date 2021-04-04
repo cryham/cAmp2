@@ -25,8 +25,9 @@ public:
 
 	int filterLow = cRateMin, filterHigh = cRateMax;  // lower, upper
 	int bookm = 0;  //  bookmark
+	float hue = 0.f, sat = 0.f, val = 0.f;  // tab color
+	
 	int iFound = 0;  //  find count
-	float hue, sat, val;  // tab color
 	
 	//  move cur, ofs
 	void PgUp(int), PgDn(int),  // (int multiplier)
