@@ -13,8 +13,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	///  player
 	key(Enter):  // |> || []
-			 if (Pls().Play(true))  plsPlId = plsId;  break;
-	key(Z):	 if (Pls().Play(false))  plsPlId = plsId;  break;
+			 Play(true);  break;
+	key(Z):	 Play(false);  break;
 	key(X):	 audio->Pause();  break;
 	key(C):	 audio->Stop();  break;
 	

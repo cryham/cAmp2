@@ -50,6 +50,15 @@ App::~App()
 {
 }
 
+
+bool App::Play(bool set)
+{
+	bool b = Pls().Play(set);
+	if (b)
+		plsPlId = plsId;
+	return b;
+}
+
 //  apply set State to player
 void App::LoadState()
 {
@@ -85,7 +94,7 @@ void App::LoadPls()
 	//Pls().Update();
 	// todo: on thread after AddDir..
 	//for (auto& trk: Pls().GetTracks())
-	//	audio->GetTrkTime(trk);
+	//	audio->GetTrackTime(trk);
 	
 	if (vPls.empty())
 		vPls.emplace_back(Playlist("1"));
@@ -154,6 +163,7 @@ void App::UpdDim()
 
 	xWex_plS = 40;  // slider extra
 	xE_pl_inf = v.xSize-21;
+	xM_pl_filt = xE_pl_inf*11/20;
 
 	Redraw();
 }
@@ -184,7 +194,7 @@ void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL pa
 		{
 			char* file = NFD_PathSet_GetPath(&paths, i);
 			Pls().AddFile(file, where);
-			Pls().Update();
+			Pls().UpdateVis();
 		}
 		NFD_PathSet_Free(&paths);
 	}
@@ -208,12 +218,11 @@ void App::Find()
 		for (auto& pls : vPls)
 		{
 			pls.Find(sFind, set.find);
-			iFoundAll += pls.iFound;
+			iFoundAll += pls.GetFound();
 		}
 	else
-	{
-		Pls().Find(sFind, set.find);
-		iFoundAll += Pls().iFound;
+	{	Pls().Find(sFind, set.find);
+		iFoundAll += Pls().GetFound();
 	}
 	bFind = true;
 	Redraw();

@@ -30,7 +30,7 @@ bool Playlist::Load()
 	fi.getline(s,60);  // header vars
 	sscanf(s,"%d|%d|%d|%d|%d|%d|%f|%f|%f",
 		&filterLow, &filterHigh,
-		&cur, &ofs, &play, &bookm,
+		&iCur, &iOfs, &iPlay, &bookm,
 		&hue, &sat, &val);
 	bookm = mia(0,6, bookm);
 	hue = mia(0.f,1.f, hue);  sat = mia(0.f,1.f, sat);  val = mia(0.f,1.f, val);
@@ -68,7 +68,7 @@ bool Playlist::Load()
 	}
 	fi.close();
 	
-	Update();
+	UpdateVis();
 	return true;
 }
 
@@ -87,12 +87,12 @@ bool Playlist::Save()
 	
 	of << "cAmpPls2\n";  // header vars
 	of << filterLow <<'|'<< filterHigh <<'|'<<
-		cur <<'|'<< ofs <<'|'<< play <<'|'<< bookm <<'|'<<
+		iCur <<'|'<< iOfs <<'|'<< iPlay <<'|'<< bookm <<'|'<<
 		f2s(hue,3,5) <<'|'<< f2s(sat,3,5) <<'|'<< f2s(val,3,5) <<"\n";
 	
 	for (int i=0; i < LengthAll(); ++i)
 	{
-		const Track& t = tracksAll[i];
+		const Track& t = GetTrackAll(i);
 		if (i > 0 && t.path.parent_path() == tracksAll[i-1].path.parent_path())
 			//  same path, only file
 			of << '<' << t.path.filename().u8string();
@@ -116,8 +116,8 @@ void Playlist::Clear()  // defaults
 	stats.Clear();
 	stAll.Clear();
 
-	cur = 0;  ofs = 0;  play = 0;
-	lin = 10;  bDraw = true;
+	iCur = 0;  iOfs = 0;  iPlay = 0;
+	iLinVis = 10;  bDraw = true;
 	filterLow = cRateMin;  filterHigh = cRateMax;
 	bookm = 0;
 	hue = 0.f;  sat = 0.f;  val = 0.f;

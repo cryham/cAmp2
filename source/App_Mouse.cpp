@@ -14,7 +14,7 @@ void App::Wheel(int d)
 		return;
 	}
 	//  pls scroll
-	if (Pls().Length() <= yL_pl)  return;
+	if (Pls().LengthVis() <= yL_pl)  return;
 	int m = shift ? 1 : ctrl ? yL_pl/2 : 8;
 	if (d < 0)  Pls().PgOfsDn(m);  else  Pls().PgOfsUp(m);
 	Redraw();
@@ -36,8 +36,7 @@ void App::Mouse()
 	int Fy = v.Fy; //cfont[v.cfP]->Fy;
 
 	//  cur trk  ----
-	//if (!pls)  return; //-
-	int cr = max(0, min(Pls().Length()-1, (ym-yB_pl)/Fy + Pls().ofs));
+	int cur = max(0, min(Pls().LengthVis()-1, (ym-yB_pl)/Fy + Pls().iOfs));
 	/*pTrk dest = NULL;
 	if (alt && Pls().Length() > 0)
 	{
@@ -45,17 +44,17 @@ void App::Mouse()
 		if (ctrl)  {  Pls().lInsM = 1;  Pls().lInsPos = Pls().lOfs+yL_pl-1;  } else
 		if (cr < int(Pls().vList.size()))
 		{
-			dest = Pls().vList[cr];
-			Pls().lInsPos = cr;  //ins bar vis
+			dest = Pls().vList[cur];
+			Pls().lInsPos = cur;  //ins bar vis
 			Pls().lInsM = (ym-yB_pl)%Fy >= Fy/2 ? 1 : -1;
-			if (cr==Pls().Length()-1)  Pls().lInsM = 1;
+			if (cur==Pls().Length()-1)  Pls().lInsM = 1;
 			//  restrictions
 			if (dest->sel > 0 || dest->isDir())  Pls().lInsPos = -1;
-			if (Pls().numSel==0 && (cr==Pls().lCur ||
-				(cr-Pls().lCur== 1 && Pls().lInsM==-1) ||
-				(cr-Pls().lCur==-1 && Pls().lInsM== 1)))  Pls().lInsPos = -1;  // not near sel1
+			if (Pls().numSel==0 && (cur==Pls().lCur ||
+				(cur-Pls().lCur== 1 && Pls().lInsM==-1) ||
+				(cur-Pls().lCur==-1 && Pls().lInsM== 1)))  Pls().lInsPos = -1;  // not near sel1
 		}
-	}	*/
+	}*/
 		
 
 	///  player
@@ -103,10 +102,11 @@ void App::Mouse()
 		if (y < v.yNpt && x < v.xNpt && n < int(vPls.size()))
 			nTabMov = n;
 	}
+	int xBtnUpDn = v.xSize-xW_tabs_btn;
 	if (bL && !bLs && ym > yB_tabs && ym < yE_tabs)
 	{
 		Redraw();
-		if (xm > v.xSize-xW_tabs_btn)  // ofs btns up,dn
+		if (xm > xBtnUpDn)  // ofs btns up,dn
 		{	if (ym-yB_tabs < (yE_tabs-yB_tabs)/2)
 			{	//  dec/inc tab x,y Num
 				if (ctrl) {  if (v.yNpt > 1)  v.yNpt--;  } else
@@ -129,6 +129,12 @@ void App::Mouse()
 	}
 	//? if (!bL && bLs)  bDrawPlst = true;
 
+	if (bR && !bRs && ym > yB_tabs && ym < yE_tabs)
+		if (xm > xBtnUpDn)
+			WndOpen(WO_AppTabs);
+		else
+			WndOpen(WO_PlsTab);
+
 
 	//  playlist
 	//------------------------------------------------------------------------------------------------
@@ -137,17 +143,18 @@ void App::Mouse()
 	if (ym > yB_pl)
 	{
 		///  Right  Play
-		if (bR && !bRs && !shift/*move wnd-*/ /*&& Pls().Length() > 0*/)
+		if (bR && !bRs && !shift/*move wnd-*/ && !Pls().IsEmpty())
 		{
-			auto old = Pls().play;
-			Pls().play = cr;
-			if (Pls().Play(false))  plsPlId = plsId;
-			else  Pls().play = old;
-			/*if (!t->isDir())
-			{	Stop();  //Pls().idPl = cr;
-				plsPlChg(plsId);  //pls id*/
-			Redraw();
-		}
+			auto old = Pls().iPlay;
+			int id = Pls().GetTrackVisId(cur);
+			if (id != -1)
+			{
+				Pls().iPlay = id;
+				if (!Play(false))
+				{	Pls().iPlay = old;
+					Pls().UpdPlayVis();
+				}
+		}	}
 		
 		///  Left
 		if (bL && xm < v.xSize - xWex_plS)
@@ -169,11 +176,11 @@ void App::Mouse()
 					else
 						Pls().Move1(m, dest);
 				}
-				else  if (shift) Pls().SelRange(cr, ctrl);  //  select range
-				else  if (ctrl)  Pls().Select1(cr);  //  select 1
-				else  Pls().Pick(cr);  //  pick
+				else  if (shift) Pls().SelRange(cur, ctrl);  //  select range
+				else  if (ctrl)  Pls().Select1(cur);  //  select 1
+				else  Pls().Pick(cur);  //  pick
 				#endif
-				Pls().cur = cr;
+				Pls().iCur = cur;
 				
 				#if 0
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/
@@ -184,18 +191,18 @@ void App::Mouse()
 		}
 	
 		//  slider pls |
-		if (bL && Pls().Length() > yL_pl)
+		if (bL && Pls().LengthVis() > yL_pl)
 		{
 			if (xm > v.xSize - xWex_plS)
 			{	if (!bLs)
-				{	xL_ofs = Pls().ofs;  yL_sl = ym;   bL_sl = true;  }
+				{	xL_ofs = Pls().iOfs;  yL_sl = ym;   bL_sl = true;  }
 			}else
 				if (!bLs)  bL_sl = false;
 			
 			if (bLs && bL_sl)
 			{
-				float fle = float(Pls().Length());
-				Pls().ofs = float(ym - yL_sl) / float(yH_pl- yL_pl/fle) *fle + xL_ofs;
+				float fle = float(Pls().LengthVis());
+				Pls().iOfs = float(ym - yL_sl) / float(yH_pl- yL_pl/fle) *fle + xL_ofs;
 				Pls().PgOfsDn(0);  Pls().PgOfsUp(0);
 				Redraw();
 			}
@@ -203,7 +210,7 @@ void App::Mouse()
 	}
 	
 	///  Mid  move pls
-	if (bM && bMs && Pls().Length() > yL_pl && !shift)
+	if (bM && bMs && Pls().LengthVis() > yL_pl && !shift)
 	{
 		int yMd = ym - yMs;
 		if (abs(yMd) > 15)

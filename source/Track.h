@@ -33,12 +33,13 @@ protected:
 	char hide = 0, sel = 0;  // todo:
 
 public:
-	int idAll = 0;   // id back in unfiltered list tracksAll
 	char rate = 0;   // rating
 	char bookm = 0;  // bookmark
 	bool found = false;     // match
 	
-	//bool vis = true;  // visible, after filtering etc
+	//  set in UpdateVis
+	bool vis = true;  // visible, after filtering etc.
+	int idPlayVis = 0;  // id to tracksVis
 
 public:
     Track(fs::path file, bool dir1=false);

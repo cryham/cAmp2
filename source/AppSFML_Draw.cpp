@@ -169,7 +169,7 @@ void AppSFMLDraw::DrawPlayer()
 	//  File info  ----
 	if (set.bFileInfo)
 	{
-		const Track& trk = Pls().GetTracks()[Pls().cur];
+		const Track& trk = Pls().GetTrackVis(Pls().iCur);
 		string s = trk.GetPath();
 		
 		auto f = s.find('/', 12);  // add \n in 3rd /
@@ -197,33 +197,24 @@ void AppSFMLDraw::DrawPlayer()
 	//  Find  ----
 	if (bFind && iFoundAll > 0)
 	{
-		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().iFound)+"  All "+i2s(iFoundAll);
+		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
 		Clr(100,220,100);  // center par
 		Text(Fnt_Info, (set.view.xSize - 140) / 2, v.eVis == viNone ? 22 : 32);
 	}
 	
-	///  Debug
-	///==================
+	///  Debug  ~~~~
 	if (bDebug)
 	{
 		Clr(120,180,240);
-		/*str = "s "+b2s(shift)+" c "+b2s(ctrl)+" a "+b2s(alt);
-		Text(Fnt_Info, 50, 10);/**/
-		str = "b "+i2s(yB_pl)+" e "+i2s(yE_pl)+" m "+i2s(ym)+" be "+i2s(yE_pl-yB_pl)+
-			" yL " + i2s(yL_pl);/**/
+		int ymc = (ym - yB_pl)/set.view.Fy;  ymc = max(0, min(ymc, yL_pl-1));
+		str = "curId "+i2s(Pls().GetTrackVisIdAll(Pls().iCur))
+			+" cur-ofs "+i2s(Pls().iCur-Pls().iOfs)+" len "+i2s(Pls().LengthVis());
 		Text(Fnt_Info, 50, 30);
-		str = "t "+i2s(Pls().GetTracks().size())+" c "+i2s(Pls().cur)+
-			" o "+i2s(Pls().ofs)+" oe "+i2s(Pls().ofs+yL_pl);
-		Text(Fnt_Info, 50, 46);/**/
-	#if 0
-		float xk1 = (view.xSize-view.xW_plS+1),	 xk2 = view.xSize - xk1;
-		//float xp1 = (view.xSize-2*view.xW_plS/3+1),  xp2 = (view.xSize-view.xW_plS/2+1);
-		str = f2s(xk1)+" "+i2s(yB_pl)+" "+f2s(xk2)+" "+i2s(yE_pl);
-		Text(50,30);
-
-		//str = "l " + i2s(bL?1:0)+" m "+i2s(bM?1:0)+" y "+i2s(ym)+" iv "+f2s(mtiv);
-		//Text(50,50);
-	#endif
+		str = "mId "+i2s(Pls().GetTrackVisIdAll( min(Pls().iOfs+ymc, Pls().LengthVis()-1) ))
+			+" ym "+i2s(ymc)+" / yL " + i2s(yL_pl);
+		Text(Fnt_Info, 50, 46);
+		str = "pl "+i2s(Pls().iPlay)+" plVis "+i2s(Pls().iPlayVis)+" " + b2s(Pls().bPlayVisOut);
+		Text(Fnt_Info, 50, 62);
 	}
 }
 
@@ -253,23 +244,23 @@ void AppSFMLDraw::DrawTabs()
 				Rect(x1, yt, x2, yH_tabs, TX_Black);  // clear backgr
 				
 				//  bookm
-				int b = pls.bookm;
+				int b = pls.bookm, d;
 				if (b > 0)
 				{	int tex = TX_TabB1 + b-1;
-					int d = set.dimTabBck;
+					d = set.dimTabBck;
 					Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false,
-						 pls.rB*d/16, pls.gB*d/16, pls.bB*d/16);
+						 pls.bck[0]*d/16, pls.bck[1]*d/16, pls.bck[2]*d/16);
 				}
 				
 				//  cur, add
 				//Clr(120,170,220);
-				int d = set.dimTabTxt;
-				Clr(pls.rT*d/16, pls.gT*d/16, pls.bT*d/16);
+				d = set.dimTabTxt;
+				Clr(pls.txt[0]*d/16, pls.txt[1]*d/16, pls.txt[2]*d/16);
 				if (a==plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
 				if (a==plsPlId)	{  Clr(240,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
 				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
-				if (bFind && pls.iFound > 0)
+				if (bFind && pls.GetFound() > 0)
 					Clr(70,240,70);
 
 				//  text
@@ -295,7 +286,7 @@ void AppSFMLDraw::DrawPlsHeader()
 	Clr(130,160,195);
 
 	//  filter  ` *
-	int x = xE_pl_inf*11/20, y = yB_pl_inf;
+	int x = xM_pl_filt, y = yB_pl_inf;
 	EFont fnt = Fnt_Info;
 
 	str = GetRateStr(low);
@@ -305,7 +296,7 @@ void AppSFMLDraw::DrawPlsHeader()
 
 	//  info  Total dirs, files, bookm*, size, time
 	//----------------------------------------------------------------
-	bool bList = Pls().Length() > 0;
+	//bool bList = Pls().LengthAll() > 0;
 	//if (yB_pli >= view.ySize)  return;
 	
 	//  get
@@ -326,17 +317,10 @@ void AppSFMLDraw::DrawPlsHeader()
 	//  clr
 	if (bAllStats){  if (bFullStats)  Clr(160,170,190);  else  Clr(150,150,190);  }
 	else		  {  if (bFullStats)  Clr(120,150,190);  else  Clr(100,130,160);  }
-	/*if (Pls().numSel > 0)  clr(0,1,0.9);  else
-	if (bAllInfo)  clr(1,0.7,1);  else
-	if (!bList)  clr(1,1,1);  else
-	if (!CList::bFilInf)  clr(0.7,0.8,1);  else  clr(0.65,0.75,1);/**/
 	
 	//  size
-	string s = size2s(si);
-	
-	//*L*/sfmt(cf->s) "L ofs %3d  cur %3d  Lin %3d  all %3d", plst->lOfs, plst->lCur, yLpl, plst->listLen);  Text(0, yBpli);
-	//*M*/sfmt(cf->s) "xm %4d ym %3d %d%d%d yMd %d %6.3f", xm,ym, bL,bR,bM, yMd, mtiv);  Text(0, yBpli);
 	y = yB_pl_inf;
+	string s = size2s(si);
 	if (di == 0)
 	{	str = i2s(fi) +"  "+ s;  Text(fnt, 20, y);  }
 	else

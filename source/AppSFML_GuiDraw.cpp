@@ -33,7 +33,7 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	{	if (!iFoundAll)
 			TextG("Not found.");
 		else
-			TextG("Found:  %d visible of %d  All %d", iFoundVis, Pls().iFound, iFoundAll);
+			TextG("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
 	}else
 		Sep(10);
 	Sep(10);
@@ -174,7 +174,7 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	i = 0;  // play controls meh
 	Sep(10);
 	e = Button("|<");  i += 80;  SameLine(i);  if (e)  Pls().Next(-1);
-	e = Button("|>");  i += 60;  SameLine(i);  if (e)  if (Pls().Play(false))  plsPlId = plsId;
+	e = Button("|>");  i += 60;  SameLine(i);  if (e)  Play(false);
 	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
 	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
 	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);

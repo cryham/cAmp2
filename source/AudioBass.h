@@ -42,7 +42,7 @@ public:
 	//  get data for audio visualization
 	void GetVisData(int size, const ViewSet &view) override;
 
-	void GetTrkTime(Track& t) override;  // sets time, mod, size
+	void GetTrackTime(Track& t) override;  // sets time, mod, size
 	
 	bool IsPlayable(std::string ext) override;
 	

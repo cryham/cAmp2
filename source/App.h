@@ -41,7 +41,9 @@ protected:
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1,  // selected, copy from
 		nTabMov = -1;
+	
 	void LoadState(), SaveState();  // set.st
+	bool Play(bool set);
 	
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);
@@ -101,7 +103,7 @@ protected:
 	//  Toggle
 	float dt = 0.1f;   // frame time, ms
 	bool bFps = false;   // show Fps
-	bool bDebug = false; // show debug text
+	bool bDebug = true; // show debug text
 	int iTimeTest = 0;   // test pls time colors
 
 	bool bAllStats = false;  // all playlists
@@ -129,8 +131,10 @@ protected:
 		xW_tabs=0,yH_tabs=0,
 		xW_tabs_btn=0,  // tabs btns ^ v
 		
+		//  pls header
+		yB_pl_inf=0, xE_pl_inf=0,  // info
+		xM_pl_filt=0,  // filter / * middle
 		//  pls tracks
-		yB_pl_inf=0, xE_pl_inf=0,
 		yB_pl=0,yE_pl=0, yH_pl=0,
 		yL_pl = 10,  // playlist view lines, auto set
 		xWex_plS=0;  // extra width for slider drag

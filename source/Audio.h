@@ -59,7 +59,7 @@ public:
 	virtual float* GetFFT() = 0;   // updates float*
 	virtual void GetVisData(int size, const ViewSet &view) = 0;
 	
-	virtual void GetTrkTime(Track& t) = 0;
+	virtual void GetTrackTime(Track& t) = 0;
 	virtual bool IsPlayable(std::string ext) = 0;
 	virtual const char* GetAllExtStr() = 0;  // for file open dialog
 };
