@@ -253,7 +253,6 @@ void AppSFMLDraw::DrawTabs()
 				}
 				
 				//  cur, add
-				//Clr(120,170,220);
 				d = set.dimTabTxt;
 				Clr(pls.txt[0]*d/16, pls.txt[1]*d/16, pls.txt[2]*d/16);
 				if (a==plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
@@ -261,15 +260,12 @@ void AppSFMLDraw::DrawTabs()
 				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 				if (bFind && pls.GetFound() > 0)
-					Clr(70,240,70);
+								{	Clr(70,240,70);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }  // find
 
 				//  text
 				str = pls.name;
 				const int w = Text(Fnt_Track, 0,0, false);
 				int xc = max(0, (xW_tabs - w)/2);  //center
-				//cf->xmax = (x+1)*xW_pt;
-//				if (bShowSrch && vPlst[a]->iSrch > 0)
-//					cf->Fclr = D3DXCOLOR(0.4,1,0.2,1);  else  cf->Fclr = D3DXCOLOR(0.7,0.8,1,1);  // search..
 				Text(Fnt_Track, x*xW_tabs + xc, ytb+y*yH_tabs);
 			}
 			a++;

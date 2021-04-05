@@ -51,7 +51,7 @@ AppSFMLDraw::AppSFMLDraw()
 
 //  Wnd Open
 //------------------------------------------------------------------
-void AppSFMLDraw::WndOpen(EWndOpt w)
+void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 {
 	if (wndInited)  //return;  // todo: many opened windows..
 	{
@@ -69,9 +69,13 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 	wnd->clear();
 	
 	VideoMode vm = VideoMode::getDesktopMode();
-	int width = (vm.width - wc.width) / 2,  // center screen
-		height = (vm.height - wc.height) / 2;
-	wnd->setPosition(Vector2i(width, height));
+	if (center)
+	{
+		int width = (vm.width - wc.width) / 2,  // center screen
+			height = (vm.height - wc.height) / 2;
+		wnd->setPosition(Vector2i(width, height));
+	}else
+		wnd->setPosition(Vector2i(xm+10, max(ym - wc.height/2, 0)));
 	
 	wnd->setVerticalSyncEnabled(true);
 	wnd->setIcon(32, 32, icon.getPixelsPtr());
@@ -158,7 +162,7 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		case WO_PlsTab:		WndDraw_PlsTab();  break;
 		case WO_AppTabs:	WndDraw_AppTabs();  break;
 
-		case WO_AppShow:	WndDraw_AppShow();  break;
+		case WO_AppViewStats:	WndDraw_AppShow();  break;
 		case WO_AppAudio:	WndDraw_AppAudio();  break;
 		case WO_AppVis:		WndDraw_AppVis();  break;
 

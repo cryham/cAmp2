@@ -113,7 +113,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  gui
 	key(F1):  WndOpen(shift ? WO_Main : ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
 	key(F2):  WndOpen(ctrl ? WO_AppVis : alt ? WO_AppTabs : WO_PlsTab);  break;
-	key(F3):  WndOpen(ctrl ? WO_AppAbout : alt ? WO_AppTest : WO_AppShow);  break;
+	key(F3):  WndOpen(ctrl ? WO_AppAbout : alt ? WO_AppTest : WO_AppViewStats);  break;
 	// todo: all in popup, or tabs, rmb areas^
 
 	#undef key

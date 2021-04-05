@@ -50,11 +50,9 @@ protected:
 	void TabNew(int m);
 	void TabClose();
 	
-	
-	//void plsChg(int clrSel=0), plsPlChg(int id);
-	//void updSelId(int clear=0), clrSelId();
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	
+	//  find
 	std::string sFind;
 	bool bFind = false;  // hide
 	int iFoundAll = 0, iFoundVis = 0;
@@ -69,12 +67,12 @@ protected:
 
 	enum EWndOpt
 	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,
-		WO_AppShow, WO_AppAudio, WO_AppVis,
-		WO_AppTest, WO_AppAbout, WO_Main,
+		WO_AppViewStats, WO_AppAudio, WO_AppVis,
+		WO_AppTest, WO_AppAbout, /*WO_Help,*/ WO_Main,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
 		// todo: theme, time colors,
 		WO_All  };
-	virtual void WndOpen(EWndOpt type) = 0;
+	virtual void WndOpen(EWndOpt type, bool center = true) = 0;
 
 
 	//  mouse pos
@@ -103,7 +101,7 @@ protected:
 	//  Toggle
 	float dt = 0.1f;   // frame time, ms
 	bool bFps = false;   // show Fps
-	bool bDebug = true; // show debug text
+	bool bDebug = false; // show debug text
 	int iTimeTest = 0;   // test pls time colors
 
 	bool bAllStats = false;  // all playlists

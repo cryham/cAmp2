@@ -129,11 +129,31 @@ void App::Mouse()
 	}
 	//? if (!bL && bLs)  bDrawPlst = true;
 
-	if (bR && !bRs && ym > yB_tabs && ym < yE_tabs)
-		if (xm > xBtnUpDn)
-			WndOpen(WO_AppTabs);
-		else
-			WndOpen(WO_PlsTab);
+	
+	///  Right  Wnd Open  areas
+	///------------------------------------------------
+	if (bR && !bRs)
+	{
+		/*if (ym < yE_plr_btn)  // bookm - +
+			WndOpen(WO_AppAudio, false);
+		else if (ym < yE_pos)
+			WndOpen(WO_AppVis, false);*/
+		if (ym > yE_plr_btn && ym < yE_pos)
+			WndOpen(WO_AppAudio, false);
+		
+		if (ym > yB_tabs && ym < yE_tabs)
+			if (xm > xBtnUpDn)
+				WndOpen(WO_AppTabs, false);
+			else  // set cur tab ..
+				WndOpen(WO_PlsTab, false);
+
+		if (ym > yB_pl_inf && ym < yB_pl)
+			if (xm > xM_pl_filt - 21 && xm < xM_pl_filt + 21)
+				WndOpen(WO_PlsFilter, false);
+			else
+				WndOpen(WO_AppViewStats, false);
+		// main, find, vis ..?
+	}
 
 
 	//  playlist

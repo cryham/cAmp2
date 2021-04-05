@@ -42,7 +42,7 @@ protected:
 	bool wndInited = false;
 	EWndOpt wndOpen = WO_All;  // open next from Main
 
-	void WndOpen(EWndOpt type) override;
+	void WndOpen(EWndOpt type, bool center = true) override;
 	bool WndVisible(EWndOpt w);
 	void WndProcessAll();
 	void WndClose(int w);
