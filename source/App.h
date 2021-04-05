@@ -66,9 +66,11 @@ protected:
 	bool KeyDown(sf::Event::KeyEvent key);
 
 	enum EWndOpt
-	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab,
-		WO_AppShow, WO_AppAudio, WO_AppVis, WO_AppTest, WO_About,
+	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,
+		WO_AppShow, WO_AppAudio, WO_AppVis,
+		WO_AppTest, WO_AppAbout, WO_Main,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
+		// todo: theme, time colors,
 		WO_All  };
 	virtual void WndOpen(EWndOpt type) = 0;
 

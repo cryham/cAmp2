@@ -8,7 +8,7 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 
 bool AppSFMLDraw::WndVisible(EWndOpt w)
 {
-	return vWindows[w].ptr && vWindows[w].ptr->isOpen();
+	return vWindows[w] && vWindows[w]->isOpen();
 }
 
 //  gui util  -----
@@ -25,28 +25,28 @@ void AppSFMLDraw::Line()
 	Sep(5);  Separator();  Sep(5);
 }
 
+//  const
+const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
+	{"Playlist Find", 400,300},
+	{"Playlist Filter", 400,200},
+	{"Playlist Tab", 400,510},
+	{"Player Tabs", 400,300},
+	
+	{"Player View & Statistics", 400,350},
+	{"Player Audio", 400,300},
+	{"Player Visualization", 400,300},
+	
+	{"Player Test", 300,200},
+	{"About", 450,320},
+	{"All Options windows", 300,400},
+};
+
 //  ctor
 //------------------------------------------------------------------
 AppSFMLDraw::AppSFMLDraw()
 {
-	vWindows.reserve(WO_All);
 	for (int i=0; i < WO_All; ++i)
-	{
-		SWndOpt w;
-		w.width = 400;  // dim
-		w.height = 300;
-		switch (i)
-		{
-		case WO_PlsFind:	w.title = "Playlist Find";  break;
-		case WO_PlsFilter:	w.title = "Playlist Filter";  break;
-		case WO_PlsTab:		w.title = "Playlist Tab";  w.height = 600;  break;
-		case WO_AppShow:	w.title = "Player Show";  /*w.height = 400;*/  break;
-		case WO_AppAudio:	w.title = "Player Audio";  break;
-		case WO_AppVis:		w.title = "Player Visualization";  break;
-		case WO_AppTest:	w.title = "Player Test";  break;
-		}
-		vWindows.emplace_back(move(w));
-	}
+		vWindows[i] = nullptr;
 }
 
 //  Wnd Open
@@ -60,25 +60,26 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 	}
 	if (w < 0 || w >= WO_All)  return;
 	auto& wnd = vWindows[w];
-	if (wnd.ptr)  return;
+	if (wnd)  return;
+	const auto& wc = wndConst[w];
 	
-	wnd.ptr = make_unique<RenderWindow>(
-		VideoMode(wnd.width, wnd.height),
-		wnd.title,
+	wnd = make_unique<RenderWindow>(
+		VideoMode(wc.width, wc.height), wc.title,
 		Style::Default, ContextSettings());
+	wnd->clear();
 	
 	VideoMode vm = VideoMode::getDesktopMode();
-	int width = (vm.width - wnd.width) / 2,  // center screen
-		height = (vm.height - wnd.height) / 2;
-	wnd.ptr->setPosition(Vector2i(width, height));
+	int width = (vm.width - wc.width) / 2,  // center screen
+		height = (vm.height - wc.height) / 2;
+	wnd->setPosition(Vector2i(width, height));
 	
-	wnd.ptr->setVerticalSyncEnabled(true);
-	wnd.ptr->setIcon(32, 32, icon.getPixelsPtr());
+	wnd->setVerticalSyncEnabled(true);
+	wnd->setIcon(32, 32, icon.getPixelsPtr());
 				
 	//  ImGui Font
 	//------------------
 	wndInited = true;
-	ImGui::SFML::Init(*wnd.ptr.get(), false);
+	ImGui::SFML::Init(*wnd.get(), false);
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = 0;  io.LogFilename = 0;  // none
 	io.Fonts->ClearFonts();
@@ -93,10 +94,10 @@ void AppSFMLDraw::WndOpen(EWndOpt w)
 void AppSFMLDraw::WndClose(int i)
 {
 	auto& wnd = vWindows[i];
-	if (!wnd.ptr)  return;
+	if (!wnd)  return;
 	
-	wnd.ptr->close();
-	wnd.ptr = nullptr;  // deletes
+	wnd->close();
+	wnd = nullptr;  // deletes
 
 	ImGui::SFML::Shutdown();
 	wndInited = false;
@@ -112,7 +113,7 @@ void AppSFMLDraw::WndProcessAll()
 		auto& wnd = vWindows[i];
 
 		Event e;
-		while (wnd.ptr->pollEvent(e))
+		while (wnd->pollEvent(e))
 		{
 			ImGui::SFML::ProcessEvent(e);
 		
@@ -138,32 +139,44 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		if (!WndVisible((EWndOpt)i))  continue;
 		
 		auto& wnd = vWindows[i];
-		ImGui::SFML::Update(*wnd.ptr, time);
+		auto& wc = wndConst[i];
+		ImGui::SFML::Update(*wnd, time);
 
 		//  controls  wnd  =====
 		SetNextWindowPos( ImVec2(0, 0),  ImGuiCond_Always);
-		SetNextWindowSize(ImVec2(wnd.width, wnd.height), ImGuiCond_Always);
+		SetNextWindowSize(ImVec2(wc.width, wc.height), ImGuiCond_Always);
 	
 		bool open = true;
 		const int wfl = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
 		Begin("Controls", &open, wfl);
+		Sep(5);
 
 		switch (i)
 		{
 		case WO_PlsFind:	WndDraw_PlsFind();  break;
 		case WO_PlsFilter:	WndDraw_PlsFilter();  break;
 		case WO_PlsTab:		WndDraw_PlsTab();  break;
+		case WO_AppTabs:	WndDraw_AppTabs();  break;
+
 		case WO_AppShow:	WndDraw_AppShow();  break;
 		case WO_AppAudio:	WndDraw_AppAudio();  break;
 		case WO_AppVis:		WndDraw_AppVis();  break;
+
 		case WO_AppTest:	WndDraw_AppTest();  break;
+		case WO_AppAbout:   WndDraw_AppAbout();  break;
+		case WO_Main:		WndDraw_Main();  break;
 		}
 
 		End();
 
-		wnd.ptr->clear();
-		ImGui::SFML::Render(*wnd.ptr.get());
+		wnd->clear();
+		ImGui::SFML::Render(*wnd.get());
 	
-		wnd.ptr->display();
+		wnd->display();
+	}
+	if (wndOpen != WO_All)
+	{
+		WndOpen(wndOpen);
+		wndOpen = WO_All;
 	}
 }

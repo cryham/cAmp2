@@ -21,11 +21,8 @@ protected:
 
 	//  Draw stages
 	void DrawAll();
-	void DrawPlayer();
-	void DrawTabs();
-	void DrawPlaylist();
-	void DrawPlsHeader();
-	void DrawPlsSlider();
+	void DrawPlayer(), DrawTabs(), DrawPlaylist();
+	void DrawPlsHeader(), DrawPlsSlider();
 
 	
 	//  Windows Gui
@@ -34,31 +31,28 @@ protected:
 	PWindow pWindow = nullptr;  // main window
 
 	//  Options windows
-	struct SWndOpt
+	PWindow vWindows[WO_All] = {nullptr,};
+	struct SWndConst
 	{
-		PWindow ptr = nullptr;
-		std::string title;
-		int width=400, height=300;
+		std::string title = "no title";
+		int width = 400, height = 300;
 	};
-	std::vector<SWndOpt> vWindows;
-	
+	const static SWndConst wndConst[WO_All];
+
 	bool wndInited = false;
+	EWndOpt wndOpen = WO_All;  // open next from Main
+
 	void WndOpen(EWndOpt type) override;
 	bool WndVisible(EWndOpt w);
 	void WndProcessAll();
 	void WndClose(int w);
 	
 	void WndDrawAll(sf::Time time);
-	void WndDraw_PlsFind();
-	void WndDraw_PlsFilter();
-	void WndDraw_PlsTab();
-	void WndDraw_AppShow();
-	void WndDraw_AppAudio();
-	void WndDraw_AppVis();
-	void WndDraw_AppTest();
+	void WndDraw_PlsFind(), WndDraw_PlsFilter(), WndDraw_PlsTab(), WndDraw_AppTabs();
+	void WndDraw_AppShow(), WndDraw_AppAudio(), WndDraw_AppVis();
+	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
-	void Sep(int h);  // Gui separators
-	void Line();
+	void Sep(int h), Line();  // separators
 	
 	
 	//  resources
