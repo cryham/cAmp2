@@ -27,7 +27,8 @@ public:
 	int bookm = 0;  //  bookmark
 	
 	float hue = 0.f, sat = 0.f, val = 0.f;  // tab color
-	uint8_t r = 0, g = 0, b = 0;
+	uint8_t rB = 0, gB = 0, bB = 0;  // bck
+	uint8_t rT = 0, gT = 0, bT = 0;  // txt
 	void UpdateColor();
 	
 	int iFound = 0;  //  find count

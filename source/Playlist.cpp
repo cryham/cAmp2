@@ -332,7 +332,7 @@ void Playlist::UpdateColor()
 {
 	float fr=0, fg=0, fb=0;
 	ImGui::ColorConvertHSVtoRGB(hue, sat, val, fr, fg, fb);
-	r = fr*255.f;
-	g = fg*255.f;
-	b = fb*255.f;
+	rB = fr*255.f;  gB = fg*255.f;  bB = fb*255.f;  // par _
+	ImGui::ColorConvertHSVtoRGB(hue, max(0.f, sat-0.3f), min(1.f, val+0.2f), fr, fg, fb);
+	rT = fr*255.f;  gT = fg*255.f;  bT = fb*255.f;
 }

@@ -256,15 +256,17 @@ void AppSFMLDraw::DrawTabs()
 				int b = pls.bookm;
 				if (b > 0)
 				{	int tex = TX_TabB1 + b-1;
-					//Rect(x1, yt, x2, yH_tabs, ETexUV(tex));
+					int d = set.dimTabBck;
+					Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false,
+						 pls.rB*d/16, pls.gB*d/16, pls.bB*d/16);
 				}
-				int tex = TX_Rate1 + b;
-				Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false, pls.r, pls.g, pls.b);
 				
 				//  cur, add
-				Clr(120,170,220);
-				if (a==plsId)   {  Clr(140,190,240);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
-				if (a==plsPlId)	{  Clr(170,210,250);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
+				//Clr(120,170,220);
+				int d = set.dimTabTxt;
+				Clr(pls.rT*d/16, pls.gT*d/16, pls.bT*d/16);
+				if (a==plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
+				if (a==plsPlId)	{  Clr(240,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
 				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
 				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 				if (bFind && pls.iFound > 0)

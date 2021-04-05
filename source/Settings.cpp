@@ -55,6 +55,7 @@ void Settings::Default()
 	find.Default();
 	
 	state.Default();
+	dimTabTxt = 16;  dimTabBck = 16;
 }
 
 
@@ -103,7 +104,14 @@ bool Settings::Load()
 	if (e)
 	{
 		a = e->Attribute("escQuit");  if (a)  escQuit = s2b(a);
+	}
+	//  app view
+	e = root->FirstChildElement("appView");
+	if (e)
+	{
 		a = e->Attribute("dirView");  if (a)  eDirView = (EDirView)s2i(a);
+		a = e->Attribute("tbBck");  if (a)  dimTabBck = s2i(a);
+		a = e->Attribute("tbTxt");  if (a)  dimTabTxt = s2i(a);
 	}
 	//  state
 	e = root->FirstChildElement("state");
@@ -162,9 +170,15 @@ bool Settings::Save()
 	//  debug
 	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
-		e->SetAttribute("dirView", eDirView);
 	root->InsertEndChild(e);
 
+	//  app view
+	e = xml.NewElement("appView");
+		e->SetAttribute("dirView", eDirView);
+		e->SetAttribute("tbBck", dimTabBck);
+		e->SetAttribute("tbTxt", dimTabTxt);
+	root->InsertEndChild(e);
+	
 	//  state
 	e = xml.NewElement("state");
 		e->SetAttribute("bPlay",   state.bPlay ? 1 : 0);

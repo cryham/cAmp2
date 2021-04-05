@@ -45,7 +45,7 @@ struct SetFind
 class Settings : public LogErr
 {
 public:
-	const static int ver = 205;  // version of file
+	const static int ver = 208;  // version of file
 
 	//  main  -----
 	Settings();
@@ -78,4 +78,6 @@ public:
 	
 	//  old state
 	SetState state;
+
+	int dimTabTxt = 16, dimTabBck = 16;  // in viewSet?
 };
