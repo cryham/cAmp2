@@ -178,8 +178,10 @@ void AppSFMLDraw::DrawPlaylist()
 		
 		//  cursors
 		if (it == Pls().iPlayVis)
-		{	const Uint8 c = play ? 195 : 138;  //par
-			Rect(0,yp,xws, Pls().bPlayVisOut ? yF/3 : yF, TX_PlsPlay, true, c,c,c);
+		{	bool sh = Pls().bPlayVisOut;  // out shorter
+			const auto& t = ciTexUV[TX_PlsPlay];
+			const Uint8 c = play ? 195 : 138;  //par
+			RectUV(0,yp, xws, sh ? yF/3 : yF,  t.x,t.y, t.w,sh ? t.h/3 : t.h,  true, c,c,c);
 		}
 		const Uint8 c = 255;  //par
 		if (it == Pls().iCur)

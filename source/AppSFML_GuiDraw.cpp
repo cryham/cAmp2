@@ -55,11 +55,11 @@ void AppSFMLDraw::WndDraw_PlsFilter()
 	PushItemWidth(300);
 	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
 	e = SliderInt("rFl", &i, cRateMin, cRateMax, "");
-	if (e) {  Pls().filterLow = i;  Redraw();  }
+	if (e) {  Pls().filterLow = i;  Pls().UpdateVis();  }
 	
 	i = Pls().filterHigh;  s = "Rating High: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
 	e = SliderInt("rFh", &i, cRateMin, cRateMax, "");
-	if (e) {  Pls().filterHigh = i;  Redraw();  }
+	if (e) {  Pls().filterHigh = i;  Pls().UpdateVis();  }
 	PopItemWidth();
 
 	// todo:  -show empty dirs  `dir2 separator lines

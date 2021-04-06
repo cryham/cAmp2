@@ -288,7 +288,13 @@ void AppSFMLDraw::DrawPlsHeader()
 	str = GetRateStr(low);
 	Text(fnt, x -11, y);
 	str = GetRateStr(high);
-	Text(fnt, x +11, y);
+	Text(fnt, x +13, y);
+
+	Clr(50,80,115);
+	str = String(Uint32(0x25BE));  // Y icon
+	Text(fnt, x + 2, y-5);
+	str = "I";  // V
+	Text(fnt, x + 3, y-1);
 
 	//  info  Total dirs, files, bookm*, size, time
 	//----------------------------------------------------------------

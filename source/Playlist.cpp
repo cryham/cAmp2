@@ -140,6 +140,8 @@ void Playlist::UpdateVis()
 			VisId id;  id.dir = true;  id.i = tracksDirs.size()-1;
 			id.iAll = i;  // closest track
 			tracksVis.emplace_back(move(id));
+
+			t.idPlayVis = iVis+1;
 			
 			stats.AddDir();
 		}
@@ -301,7 +303,8 @@ void Playlist::Rate(bool playing, char add)
 {
 	auto& t = playing ? GetTrackAll(iPlay) : GetTrackVis(iCur);
 	char& r = t.rate;
-	r += add;  r = mia(char(0),char(6), r);
+	r += add;  r = mia(char(cRateMin),char(cRateMax), r);
+	bDraw = true;
 }
 
 void Playlist::Filter(bool lower, char add)
