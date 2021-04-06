@@ -16,6 +16,8 @@ protected:
 	//  Run stages
 	void CreateWindow();
 	bool LoadResources();
+	bool LoadFonts();
+	
 	void LoopMain();
 	void DestroyAll();
 
@@ -60,7 +62,7 @@ protected:
 	std::unique_ptr<sf::Sprite> pBackgr = nullptr;
 
 	enum EFont
-	{	Fnt_Info=0, Fnt_Track, Fnt_Time, Fnt_TimeBig, Fnt_All  };
+	{	Fnt_Info, Fnt_Track, Fnt_Time, Fnt_TimeBig, Fnt_All  };
 
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];

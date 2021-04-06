@@ -11,12 +11,11 @@ void App::TabNext(int i, bool row, bool ofs)
 	const ViewSet& v = set.view;
 	const int l = vPls.size()-1;
 	if (ofs)
-	{	int d = row ? i : v.xNpt*i;
-		//v.ofsTab += d;  if (v.ofsTab>l) v.ofsTab-=d;
+	{	int d = row ? i : v.tabs.xCols*i;
 		return;
 	}
 	//Pls().Save();
-	plsId += (row && l > v.xNpt) ? v.xNpt*i : i;
+	plsId += (row && l > v.tabs.xCols) ? v.tabs.xCols*i : i;
 	if (i > 0)
 	{	if (plsId > l)  plsId -= l+1;  }
 	else

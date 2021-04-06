@@ -28,15 +28,15 @@ void AppSFMLDraw::TextG(string s)      {  ImGui::Text(s.c_str());  }
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
 	{"Playlist Find", 400,300},
 	{"Playlist Filter", 400,200},
-	{"Playlist Tab", 400,510},
-	{"Player Tabs", 400,300},
+	{"Playlist Tab", 400,520},
+	{"Player Tabs", 400,320},
 	
 	{"Player View & Statistics", 400,350},
 	{"Player Audio", 400,300},
 	{"Player Visualization", 400,300},
 	
 	{"Player Test", 300,200},
-	{"About", 450,320},
+	{"About", 450,340},
 	{"All Options windows", 300,400},
 };
 

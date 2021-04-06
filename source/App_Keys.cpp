@@ -78,7 +78,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	///  toggle
 	key(T):	 audio->bRepTrk = !audio->bRepTrk;  Osd("Repeat track: " + b2on(audio->bRepTrk));  break;
 	key(R):  audio->bRepPls = !audio->bRepPls;  Osd("Repeat playlist: " + b2on(audio->bRepPls));  break;
-	key(P):  set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
+	key(P):  NextVis();  break;
 
 	//  debug
 	key(I):  bFps = !bFps;      Osd("Fps: " + b2on(bFps));  break;

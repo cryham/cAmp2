@@ -47,8 +47,8 @@ void AppSFMLDraw::DrawPlaylist()
 	int len = Pls().LengthVis();
 	bool play = audio->IsPlaying();
 	const ViewSet& v = set.view;
-	int xw = v.xSize;
-	int yp = yB_pl, yF = v.Fy,
+	int xw = v.wnd.xSize;
+	int yp = yB_pl, yF = v.fnt.Fy,
 		it = Pls().iOfs;
 	
 	//  visible lines  // dn_marg-
@@ -68,7 +68,7 @@ void AppSFMLDraw::DrawPlaylist()
 	///  backgr, Names  1st pass
 	yp = yB_pl;  it = Pls().iOfs;
 
-	int xws = v.xSize - v.xW_plS;
+	int xws = v.wnd.xSize - v.pls.xW_slider;
 
 	int iFindVis = 0;
 	for (int yi=0; yi < yL_pl; ++yi)
@@ -95,10 +95,10 @@ void AppSFMLDraw::DrawPlaylist()
 		{	Clr(140,140,200);
 			switch (set.eDirView)
 			{
-			case DV_Fullpath:  str = Str(trk.GetPath());  break;
-			case DV_Path:  str = Str(trk.GetName());  break;
-			case DV_Path2:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent());  break;
-			case DV_Path3:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent()) + " / " + Str(trk.GetParent2());  break;
+			case DirV_Fullpath:  str = Str(trk.GetPath());  break;
+			case DirV_Path:  str = Str(trk.GetName());  break;
+			case DirV_Path2:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent());  break;
+			case DirV_Path3:  str = Str(trk.GetName()) + " / " + Str(trk.GetParent()) + " / " + Str(trk.GetParent2());  break;
 			default:  str = "";
 			}
 		}else  //  name
@@ -122,12 +122,12 @@ void AppSFMLDraw::DrawPlaylist()
 	//str = t2s(600.f);  // get for 10:00
 	str = "0";
 	const int w0 = Text(Fnt_Time, 0,0, false);
-	const int ws = v.xW_plS + 8;  //par w time|slider
+	const int ws = v.pls.xW_slider + 8;  //par w time|slider
 	
 	//  times backgr clear text
 	//  todo: per line..
-	float xk1 = v.xSize - ws - 4  //par w track|time
-		- 4 * w0,  xk2 = v.xSize - xk1;
+	float xk1 = v.wnd.xSize - ws - 4  //par w track|time
+		- 4 * w0,  xk2 = v.wnd.xSize - xk1;
 	Rect(xk1, yB_pl, xk2, yE_pl-yB_pl, TX_Black, false);
 	
 	DrawPlsSlider();
@@ -183,7 +183,7 @@ void AppSFMLDraw::DrawPlaylist()
 			const Uint8 c = play ? 195 : 138;  //par
 			RectUV(0,yp, xws, sh ? yF/3 : yF,  t.x,t.y, t.w,sh ? t.h/3 : t.h,  true, c,c,c);
 		}
-		const Uint8 c = 255;  //par
+		const Uint8 c = 255;  //par dim
 		if (it == Pls().iCur)
 			Rect(0,yp,xws,yF, TX_PlsCur, true, c,c,c);
 
@@ -200,8 +200,8 @@ void AppSFMLDraw::DrawPlsSlider()
 {
 	//if (!pls)  return;
 	const ViewSet& v = set.view;
-	const int xw = v.xSize, xs = v.xW_plS;
-	if (yB_pl_inf >= v.ySize || xs <= 0)  return;
+	const int xw = v.wnd.xSize, xs = v.pls.xW_slider;
+	if (yB_pl_inf >= v.wnd.ySize || xs <= 0)  return;
 
 	int len = Pls().LengthVis();  float fle = len;
 	float ySr = mia(1.f, 2.f, fle / yL_pl);
@@ -261,7 +261,7 @@ void AppSFMLDraw::DrawPlsSlider()
 	
 	///  all tracks rating ->
 	//  todo: fill texture in Update() and just draw once
-	if (v.bSlDrawR /*&& !bShowSrch*/)
+	if (v.pls.bSliderRate /*&& !bShowSrch*/)
 		for (int i=0; i < len; ++i)
 		{
 			const int rr = Pls().GetTrackVis(i).rate, r = rr+3.;

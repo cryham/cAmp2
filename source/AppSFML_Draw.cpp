@@ -19,11 +19,11 @@ void AppSFMLDraw::DrawAll()
 		pWindow->clear();
 	
 	DrawPlayer();
-	DrawTabs();
 	
 	if (iDraw > 0)
 	{	--iDraw;
 		
+		DrawTabs();
 		DrawPlaylist();
 	}
 }
@@ -37,7 +37,7 @@ void AppSFMLDraw::DrawPlayer()
 	//	e.Draw();
 	
 	const ViewSet& v = set.view;
-	int xw = v.xSize, yw = v.ySize;
+	int xw = v.wnd.xSize, yw = v.wnd.ySize;
 	bool play = audio->IsPlaying();
 
 	
@@ -50,7 +50,7 @@ void AppSFMLDraw::DrawPlayer()
 	int h = yE_vis - yB_vis;
 	const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
 
-	if (v.eVis == viFFT && play)
+	if (v.vis.eType == VisT_FFT && play)
 	{
 		audio->GetVisData(xw, v);
 		float* fft = audio->GetFFT();
@@ -99,11 +99,11 @@ void AppSFMLDraw::DrawPlayer()
 	int y = 2;
 	if (ym > 0 && ym < yE_plr_btn)  // prev,next  btns |< >|
 	{
-		if (xm < v.xSize/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		if (xm < xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25AE)) + String(Uint32(0x25C0));
 		Text(Fnt_Info, xw/2 - 30, y);
 
-		if (xm > v.xSize/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		if (xm > xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25B6)) + String(Uint32(0x25AE));
 		Text(Fnt_Info, xw/2 + 10, y);
 	}else
@@ -191,7 +191,7 @@ void AppSFMLDraw::DrawPlayer()
 		str = osdStr;
 		float f = 0.7f * dtOsd / dtOsdShow + 0.3f;
 		Clr(160*f,250*f,250*f);
-		Text(Fnt_Info, 10, v.eVis == viNone ? 22 : 32);
+		Text(Fnt_Info, 10, v.vis.eType == VisT_None ? 22 : 32);
 	}
 	else
 	//  Find  ----
@@ -199,14 +199,14 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
 		Clr(100,220,100);  // center par
-		Text(Fnt_Info, (set.view.xSize - 140) / 2, v.eVis == viNone ? 22 : 32);
+		Text(Fnt_Info, (xw - 140) / 2, v.vis.eType == VisT_None ? 22 : 32);
 	}
 	
 	///  Debug  ~~~~
 	if (bDebug)
 	{
 		Clr(120,180,240);
-		int ymc = (ym - yB_pl)/set.view.Fy;  ymc = max(0, min(ymc, yL_pl-1));
+		int ymc = (ym - yB_pl) / v.fnt.Fy;  ymc = max(0, min(ymc, yL_pl-1));
 		str = "curId "+i2s(Pls().GetTrackVisIdAll(Pls().iCur))
 			+" cur-ofs "+i2s(Pls().iCur-Pls().iOfs)+" len "+i2s(Pls().LengthVis());
 		Text(Fnt_Info, 50, 30);
@@ -223,53 +223,56 @@ void AppSFMLDraw::DrawPlayer()
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawTabs()
 {
+	const ViewSet& v = set.view;
+	
+	Clr(50,80,115);  // ^ v btns
+	str = String(Uint32(0x25B4));
+	Text(Fnt_Track, v.wnd.xSize - 14, yB_tabs +1);
+	str = String(Uint32(0x25BE));
+	Text(Fnt_Track, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
+
 	/* multi line  up,dn */
-	const ViewSet& view = set.view;
 	int ytb = yB_tabs+1;
-	if (ytb >= view.ySize)  return;  // fullscr vis
+	if (ytb >= v.wnd.ySize)  return;  // fullscr vis
 	
 	int ntab = vPls.size();
-	if (ntab > 0)
-	{
-		int x,y, a = view.ofsTab;
-		for (y=0; y < view.yNpt; y++)
-		for (x=0; x < view.xNpt; x++)
-		{
-			if (a < ntab)
-			{
-				const auto& pls = vPls[a];
-				float yt = yB_tabs + y*yH_tabs;
-				float x1 = x*xW_tabs, x2 = xW_tabs;
-				
-				Rect(x1, yt, x2, yH_tabs, TX_Black);  // clear backgr
-				
-				//  bookm
-				int b = pls.bookm, d;
-				if (b > 0)
-				{	int tex = TX_TabB1 + b-1;
-					d = set.dimTabBck;
-					Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false,
-						 pls.bck[0]*d/16, pls.bck[1]*d/16, pls.bck[2]*d/16);
-				}
-				
-				//  cur, add
-				d = set.dimTabTxt;
-				Clr(pls.txt[0]*d/16, pls.txt[1]*d/16, pls.txt[2]*d/16);
-				if (a==plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
-				if (a==plsPlId)	{  Clr(240,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
-				if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
-				//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
-				if (bFind && pls.GetFound() > 0)
-								{	Clr(70,240,70);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }  // find
+	if (ntab == 0)  return;
 
-				//  text
-				str = pls.name;
-				const int w = Text(Fnt_Track, 0,0, false);
-				int xc = max(0, (xW_tabs - w)/2);  //center
-				Text(Fnt_Track, x*xW_tabs + xc, ytb+y*yH_tabs);
-			}
-			a++;
+	int x,y, a = v.tabs.ofs;
+	for (y=0; y < v.tabs.yRows; ++y)
+	for (x=0; x < v.tabs.xCols; ++x,++a)
+	if (a < ntab)
+	{
+		const auto& pls = vPls[a];
+		float yt = yB_tabs + y*yH_tabs;
+		float x1 = x*xW_tabs, x2 = xW_tabs;
+		
+		Rect(x1, yt, x2, yH_tabs, TX_Black);  // clear backgr
+		
+		//  bookm
+		int b = pls.bookm, d;
+		if (b > 0)
+		{	int tex = TX_TabB1 + b-1;
+			d = set.dimTabBck;
+			Rect(x1, yt, x2, yH_tabs, ETexUV(tex), false,
+				 pls.bck[0]*d/16, pls.bck[1]*d/16, pls.bck[2]*d/16);
 		}
+		
+		//  cur, add
+		d = set.dimTabTxt;
+		Clr(pls.txt[0]*d/16, pls.txt[1]*d/16, pls.txt[2]*d/16);
+		if (a==plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
+		if (a==plsPlId)	{  Clr(240,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
+		if (a==plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
+		//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
+		if (bFind && pls.GetFound() > 0)
+						{	Clr(70,240,70);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }  // find
+
+		//  text
+		str = pls.name;
+		const int w = Text(Fnt_Track, 0,0, false);
+		int xc = max(0, (xW_tabs - w)/2);  //center
+		Text(Fnt_Track, x*xW_tabs + xc, ytb+y*yH_tabs);
 	}
 }
 
@@ -286,15 +289,14 @@ void AppSFMLDraw::DrawPlsHeader()
 	EFont fnt = Fnt_Info;
 
 	str = GetRateStr(low);
-	Text(fnt, x -11, y);
+	Text(fnt, x -11-2, y+1);
 	str = GetRateStr(high);
-	Text(fnt, x +13, y);
+	Text(fnt, x +13+2, y+1);
 
-	Clr(50,80,115);
-	str = String(Uint32(0x25BE));  // Y icon
-	Text(fnt, x + 2, y-5);
-	str = "I";  // V
-	Text(fnt, x + 3, y-1);
+	Clr(50,80,115);  //  Y icon
+	str = String(Uint32(0x25BE));
+	Text(fnt, x + 2, y-4);  str = "Y";
+	Text(fnt, x + 1, y-1);
 
 	//  info  Total dirs, files, bookm*, size, time
 	//----------------------------------------------------------------
@@ -338,5 +340,5 @@ void AppSFMLDraw::DrawPlsHeader()
 	
 	//  num sel
 	//if (Pls().numSel > 0)
-	//{	clr(0,1,0.9);  cf->Format("%d", Pls().numSel);  Text(view.xSize/2+20,yBpli);  }  //Sel:
+	//{	clr(0,1,0.9);  cf->Format("%d", Pls().numSel);  Text(view.wnd.xSize/2+20,yBpli);  }  //Sel:
 }

@@ -4,6 +4,9 @@ namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
 enum EVisType
 {	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect, VisT_ALL  };
 
+const static char* SVisType[VisT_ALL] =
+{	"None", "FFT", "Oscilloscope", "Spectrogram" };
+
 
 class ViewSet
 {
@@ -27,7 +30,7 @@ public:
 	//  visualizations
 	const static int FFTSizes = 5;
 	struct VS_Vis {
-		int yH = 129;  // draw height, top
+		int yH = 130;  // draw height, top
 
 		/*EVisType*/ int eType = VisT_FFT;
 		int iFFT_Size = 1;      // FFT samples (quality)

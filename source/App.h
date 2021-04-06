@@ -65,8 +65,10 @@ protected:
 	bool alt = false, ctrl = false, shift = false;
 	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);
+	
+	void NextVis();
 
-	enum EWndOpt
+	enum EWndOpt  // options windows
 	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,
 		WO_AppViewStats, WO_AppAudio, WO_AppVis,
 		WO_AppTest, WO_AppAbout, /*WO_Help,*/ WO_Main,

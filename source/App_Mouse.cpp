@@ -33,7 +33,7 @@ void App::Mouse()
 //	if (!bMInWnd)  return;
 
 	ViewSet& v = set.view;
-	int Fy = v.Fy; //cfont[v.cfP]->Fy;
+	int Fy = v.fnt.Fy; //cfont[v.cfP]->Fy;
 
 	//  cur trk  ----
 	int cur = max(0, min(Pls().LengthVis()-1, (ym-yB_pl)/Fy + Pls().iOfs));
@@ -64,14 +64,14 @@ void App::Mouse()
 	{
 		if (!bLs && ym < yE_plr_btn)  // prev,next  btns |< >|
 		{
-			PlsPl().Next(xm < v.xSize/2 ? -1 : 1);
+			PlsPl().Next(xm < v.wnd.xSize/2 ? -1 : 1);
 			bLbt = true;
 			//return;
 		}
 		//  change pos <<| >>
 		if (!bLs)  bLbt = false;
 		if (!bLbt && ym > yB_tabs - 120)  // h par
-			audio->SetPosAbs(mia(0.,1., (double(xm) / v.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
+			audio->SetPosAbs(mia(0.,1., (double(xm) / v.wnd.xSize - xW_pos*0.5) / (1.0-xW_pos) ));
 		//return;
 	}
 	/*if (bR && !bRs && ym < yE_pl_btn && plsPl)  //  Right rating
@@ -82,12 +82,12 @@ void App::Mouse()
 	
 	//  Mid
 	if (bM && !bMs)
-	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yM_visH = v.iVisH;  }
+	{	xMs = xm;  yMs = ym;  /*mti = 0.f;*/  yM_visH = v.vis.yH;  }
 	if (shift)
 	{
 		if (bM && bMs)  // chng vis size
 		{
-			v.iVisH = mia(8, v.ySize/*-Fy*4*/, yM_visH + ym-yMs);
+			v.vis.yH = mia(8, v.wnd.ySize/*-Fy*4*/, yM_visH + ym-yMs);
 			UpdDim();
 		}
 	}
@@ -95,26 +95,26 @@ void App::Mouse()
 
 	//  tabs  ------------------------------------------------
 	nTabMov = -1;
-	if (yB_tabs >= v.ySize)  return;  // not visible
+	if (yB_tabs >= v.wnd.ySize)  return;  // not visible
 
 	if (ym > yB_tabs && ym < yE_tabs)
-	{	int y = (ym-yB_tabs)/yH_tabs, x = xm/xW_tabs, n = y*v.xNpt+x +v.ofsTab;
-		if (y < v.yNpt && x < v.xNpt && n < int(vPls.size()))
+	{	int y = (ym-yB_tabs)/yH_tabs, x = xm/xW_tabs, n = y*v.tabs.xCols+x +v.tabs.ofs;
+		if (y < v.tabs.yRows && x < v.tabs.xCols && n < int(vPls.size()))
 			nTabMov = n;
 	}
-	int xBtnUpDn = v.xSize-xW_tabs_btn;
+	int xBtnUpDn = v.wnd.xSize - xW_tabs_btn;
 	if (bL && !bLs && ym > yB_tabs && ym < yE_tabs)
 	{
 		Redraw();
 		if (xm > xBtnUpDn)  // ofs btns up,dn
 		{	if (ym-yB_tabs < (yE_tabs-yB_tabs)/2)
 			{	//  dec/inc tab x,y Num
-				if (ctrl) {  if (v.yNpt > 1)  v.yNpt--;  } else
-				if (shift){  if (v.xNpt > 1)  v.xNpt--;  }
+				if (ctrl) {  if (v.tabs.yRows > 1)  v.tabs.yRows--;  } else
+				if (shift){  if (v.tabs.xCols > 1)  v.tabs.xCols--;  }
 				else  {  TabNext(-1,0,1);  return;  }
 			}else
-				if (ctrl)  v.yNpt++;  else
-				if (shift)  v.xNpt++;
+				if (ctrl)  v.tabs.yRows++;  else
+				if (shift)  v.tabs.xCols++;
 				else  {  TabNext( 1,0,1);  return;  }
 			UpdDim();
 		}else
@@ -177,7 +177,7 @@ void App::Mouse()
 		}	}
 		
 		///  Left
-		if (bL && xm < v.xSize - xWex_plS)
+		if (bL && xm < v.wnd.xSize - xWex_plS)
 		{
 			if (!bLs && ym > yB_pl && ym < yE_pl)
 			{
@@ -213,7 +213,7 @@ void App::Mouse()
 		//  slider pls |
 		if (bL && Pls().LengthVis() > yL_pl)
 		{
-			if (xm > v.xSize - xWex_plS)
+			if (xm > v.wnd.xSize - xWex_plS)
 			{	if (!bLs)
 				{	xL_ofs = Pls().iOfs;  yL_sl = ym;   bL_sl = true;  }
 			}else

@@ -34,7 +34,7 @@ void AppSFMLDraw::WndDraw_PlsFind()
 		else
 			ImGui::Text("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
 	}else
-		Sep(10);
+		TextG("");
 	Sep(10);
 	auto& f = set.find;
 	e = false;
@@ -94,26 +94,39 @@ void AppSFMLDraw::WndDraw_PlsTab()
 void AppSFMLDraw::WndDraw_AppTabs()
 {
 	bool e;  string s;  int i;
+	auto& t = set.view.tabs;
+
 	PushItemWidth(300);  
 	Sep(10);
-	i = set.view.xNpt;  s = "Columns: " + i2s(i);  TextG(s);
+	i = t.xCols;  s = "Columns: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbx", &i, 1, 30, "");
-	if (e) {  set.view.xNpt = i;  UpdDim();  }
+	if (e) {  t.xCols = i;  UpdDim();  }
 	
-	i = set.view.yNpt;  s = "Rows: " + i2s(i);  TextG(s);
+	i = t.yRows;  s = "Rows: " + i2s(i);  TextG(s);
 	e = SliderInt("Tby", &i, 1, 30, "");
-	if (e) {  set.view.yNpt = i;  UpdDim();  }
+	if (e) {  t.yRows = i;  UpdDim();  }
 
-	Sep(10);
+	i = t.ofs;  s = "offset: " + i2s(i);  TextG(s);
+	e = SliderInt("Tbo", &i, 0, vPls.size()-1, "");
+	if (e) {  t.ofs = i;  Redraw();  }
+
 	auto fp = [](int i){  return f2s(100.f*i/16.f,0,3) + " %%";  };
+	Sep(10);
 	i = set.dimTabBck;  s = "Dim background: " + fp(i);  TextG(s);
 	e = SliderInt("Tdb", &i, 1, 16, "");
-	if (e) {  set.dimTabBck = i;  }
+	if (e) {  set.dimTabBck = i;  Redraw();  }
 
 	i = set.dimTabTxt;  s = "Dim text: " + fp(i);  TextG(s);
 	e = SliderInt("Tdt", &i, 1, 16, "");
-	if (e) {  set.dimTabTxt = i;  }
+	if (e) {  set.dimTabTxt = i;  Redraw();  }
 	PopItemWidth();
+
+/*	set.view.pls.xW_plS  todo: ...
+	set.view.pls.bSlDrawR
+	set.view.fnt.Fy = 17;  /// pls font size+
+*/
+//  app dim?
+//	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
 }
 
 
@@ -129,7 +142,7 @@ void AppSFMLDraw::WndDraw_AppViewStats()
 	int i = set.eDirView;
 	s = string("Dir View: ") + sDirView[i];
 	TextG(s);
-	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DV_All-1, "");  PopItemWidth();
+	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
 	
 	Line();
@@ -192,26 +205,41 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
 	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
 	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);
+	// todo: pls dir play next/prev
 }
 
 //  Visualization
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppVis()
 {
-	bool e;  string s;
-	int i = set.view.iFFTSize;
-	s = string("FFT size: ") + i2s(i);  TextG(s);
-	PushItemWidth(240);  e = SliderInt("fftsi", &i, 0, ViewSet::ciFFTNum-1, "");  PopItemWidth();
-	if (e)  set.view.iFFTSize = i;
+	bool e;  string s;  float f;  int i;
+	auto& v = set.view.vis;
+	PushItemWidth(350);
 
-	float f = set.view.fFFTMul;
+	i = v.eType;
+	s = string("Type: ") + SVisType[i];  TextG(s);
+	e = SliderInt("visT", &i, 0, VisT_ALL-1, "");
+	if (e) {  v.eType = i;  UpdDim();  }
+	
+	f = v.yH; // / set.view.wnd.ySize;  %
+	s = string("Height: ") + f2s(f, 0, 4);  TextG(s);
+	e = SliderFloat("visH", &f, 0, set.view.wnd.ySize, "");
+	if (e) {  v.yH = f;  UpdDim();  }
+
+	Sep(10);
+	i = v.iFFT_Size;
+	s = string("FFT size: ") + i2s(i);  TextG(s);
+	e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
+	if (e)  v.iFFT_Size = i;
+
+	f = v.fFFT_Mul;
 	s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
-	PushItemWidth(240);  e = SliderFloat("fftmul", &f, 0, 200.f, "");  PopItemWidth();
-	if (e)  set.view.fFFTMul = f;
-//	int eVis = viFFT;  // todo: type
+	e = SliderFloat("fftmul", &f, 0, 200.f, "");
+	if (e)  v.fFFT_Mul = f;
+
+	PopItemWidth();
 //	int iSleep = 0;  // in ms
 //	bool bVSync = true;
-//	int iVisH = 96;  // draw height
 //	float fPrtFq = 100.f;  // spectrogram speed
 }
 
@@ -225,6 +253,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Fps, frames per second drawn", &bFps);
 	Checkbox("Debug text", &bDebug);
 	
+	Sep(10);
 	s = string("Time colors: ") + sTimesTest[iTimeTest];  TextG(s);
 	PushItemWidth(140);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
 }
@@ -243,10 +272,13 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	//TextG(Settings::ver);
 	Sep(40);
 	PushItemWidth(400);
+	// todo: open url? or copy..
+	TextG("Sources, Issues etc.");
 	TextG("https://github.com/cryham/cAmp2");
 //	auto fl = ImGuiInputTextFlags_ReadOnly;
 //	InputText("Url1", url1, sizeof(url1), fl);
 	Sep(10);
+	TextG("Project description");
 	TextG("http://cryham.tuxfamily.org/portfolio/2010_camp/");
 	PopItemWidth();
 }
