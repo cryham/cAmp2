@@ -97,7 +97,6 @@ void AppSFMLDraw::WndDraw_AppTabs()
 	auto& t = set.view.tabs;
 
 	PushItemWidth(300);  
-	Sep(10);
 	i = t.xCols;  s = "Columns: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbx", &i, 1, 30, "");
 	if (e) {  t.xCols = i;  UpdDim();  }
@@ -145,8 +144,9 @@ void AppSFMLDraw::WndDraw_AppViewStats()
 	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
 	
-	Line();
+	Sep(5);  Line();
 	TextG("Playlists Statistics:");
+	Sep(5);
 	e = Checkbox("All playlists", &bAllStats);  if (e) Redraw();
 	e = Checkbox("Full unfiltered", &bFullStats);  if (e) Redraw();
 	

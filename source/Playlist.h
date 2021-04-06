@@ -99,7 +99,9 @@ public:
 	
 	//  basic  ----
 	//  todo:  copy, move selected tracks, from other ..
+	void DeleteCur();
 
+	
 	//  change  ----
 	void Bookm(bool pls, char add);  //  bookmarks
 	void Rate(bool playing, char add);
@@ -110,8 +112,10 @@ public:
 
 	
 	//  advanced  ----
+	bool DeleteCurFile(bool playNext);
 	void Find(std::string &find, const SetFind& opt);
 	void FindClear();
+	int RenameRate(bool playing);
 
 	
 //  getters	etc.  ----

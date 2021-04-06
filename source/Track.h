@@ -32,6 +32,8 @@ protected:
 	bool mod = false;  // xm, mod files etc.
 	char hide = 0, sel = 0;  // todo:
 
+	char rateInName = 0;
+	char bookmInName = 0;
 public:
 	char rate = 0;   // rating
 	char bookm = 0;  // bookmark
@@ -94,3 +96,5 @@ const static int cRateMin = -cRmin, cRateMax = cRmax;
 
 inline static std::string GetRateStr(int rate)
 {	return chFRateVis[rate + cRmin];  }
+
+const int cBookmarkMax = 6;  // %1..%6

@@ -198,7 +198,6 @@ void AppSFMLDraw::DrawPlaylist()
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawPlsSlider()
 {
-	//if (!pls)  return;
 	const ViewSet& v = set.view;
 	const int xw = v.wnd.xSize, xs = v.pls.xW_slider;
 	if (yB_pl_inf >= v.wnd.ySize || xs <= 0)  return;
@@ -209,7 +208,6 @@ void AppSFMLDraw::DrawPlsSlider()
 		xk2 = xw - xk1;
 	int xp1 = xw - 2*xs/3 +1,
 		xp2 = xw - xs/2 +1;
-	//const auto& trks = Pls().GetTracksAll();
 
 	//  find results  -
 	if (bFind)
@@ -261,7 +259,7 @@ void AppSFMLDraw::DrawPlsSlider()
 	
 	///  all tracks rating ->
 	//  todo: fill texture in Update() and just draw once
-	if (v.pls.bSliderRate /*&& !bShowSrch*/)
+	if (v.pls.bSliderRate && !bFind)
 		for (int i=0; i < len; ++i)
 		{
 			const int rr = Pls().GetTrackVis(i).rate, r = rr+3.;

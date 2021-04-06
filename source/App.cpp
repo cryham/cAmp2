@@ -235,3 +235,18 @@ void App::Find()
 	bFind = true;
 	Redraw();
 }
+
+
+//  Rename
+//------------------------------------------------------------------------
+int App::RenameRate(bool allPls)
+{
+	int ntab = vPls.size();
+	int all = 0;
+	if (allPls)
+		for (int i=0; i < ntab; ++i)
+			all += vPls[i].RenameRate(i == plsPlId && audio->IsPlaying());
+	else
+		all += Pls().RenameRate(plsId == plsPlId && audio->IsPlaying());
+	return all;
+}

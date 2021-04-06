@@ -95,14 +95,22 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	
 	//  playlist
-	key(F4):  Pls().Save();  SaveState();  set.Save();  Osd("Saved all.");  break;
-	key(F5):  Pls().Load();  Osd("Playlist reloaded.");  break;
+	key(F4):  // todo: autosave
+	{	int r = 0;  r = RenameRate(!shift);
+		Pls().Save();  SaveState();  set.Save();
+		string s = "Saved all.";  if (r)  s += "  Renamed: "+i2s(r);
+		Osd(s);
+	}	break;
+	key(F5):
+		Pls().Load();  Osd("Playlist reloaded.");  break;
+	
+	//  ins, del
 	key(Insert):  OpenDirFile(shift);  Osd("Inserted.");
 		break;
 	key(Delete):
-		if (ctrl)  {  Pls().Clear();  Osd("Pls cleared.");  }
-		/*else if (shift)
-			Pls().DeleteCur();/**/
+		if (ctrl) {  Pls().Clear();  Osd("Pls cleared.");  }
+		else if (shift) {  if (Pls().DeleteCurFile(plsId == plsPlId))  Osd("File deleted.");  }
+		else  Pls().DeleteCur();
 		break;
 	
 	//  view modes
@@ -110,10 +118,11 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(Num3):  set.bFileInfo = !set.bFileInfo;  Osd("FileInfo: " + b2on(set.bFileInfo));  break;
 	
 	//  gui
+	//key(F1):  WndOpen(alt ? WO_PlsFilter : WO_Main);  break;
 	key(F1):  WndOpen(shift ? WO_Main : ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
 	key(F2):  WndOpen(ctrl ? WO_AppVis : alt ? WO_AppTabs : WO_PlsTab);  break;
 	key(F3):  WndOpen(ctrl ? WO_AppAbout : alt ? WO_AppTest : WO_AppViewStats);  break;
-	// todo: all in popup, or tabs, rmb areas^
+	// todo: F6..F12
 
 	#undef key
 	default:  break;

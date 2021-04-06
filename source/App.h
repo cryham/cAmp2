@@ -51,13 +51,16 @@ protected:
 	void TabNew(int m);
 	void TabClose();
 	
-	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
-	
+
 	//  find
 	std::string sFind;
 	bool bFind = false;  // hide
 	int iFoundAll = 0, iFoundVis = 0;
 	void Find();
+
+	//  file operations
+	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
+	int RenameRate(bool allPls=false);
 	
 	
 	///  Input  ------------------------------------------------

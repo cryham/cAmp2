@@ -33,6 +33,8 @@ void Track::SetNameFromPath()
 	
 	//  get rating, bookmark from name  // todo: for dirs too
 	GetNameRating(name.c_str(), rate, bookm);
+	rateInName = rate;
+	bookmInName	= bookm;
 	CleanNameRating();
 }
 
@@ -73,6 +75,7 @@ void Track::GetNameRating(const string& name, char& pRate, char& pBookm)
 	//  get bookmark %1..%6
 	string s(name);
 	size_t p = s.find_last_not_of(cFnCharRates);
-	if (p != string::npos && p > 1 && s[p-1]=='%' && s[p]>='1' && s[p]<='6')
+	if (p != string::npos &&
+		p > 1 && s[p-1]=='%' && s[p]>='1' && s[p]<='0'+cBookmarkMax)
 		pBookm = s[p]-'0';
 }

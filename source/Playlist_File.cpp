@@ -1,5 +1,6 @@
 #include "Playlist.h"
 #include "FileSystem.h"
+#include "Audio.h"
 #include "Util.h"
 #include "def.h"
 #include <string.h>
@@ -32,7 +33,7 @@ bool Playlist::Load()
 		&filterLow, &filterHigh,
 		&iCur, &iOfs, &iPlay, &bookm,
 		&hue, &sat, &val);
-	bookm = mia(0,6, bookm);
+	bookm = mia(0,cBookmarkMax, bookm);
 	hue = mia(0.f,1.f, hue);  sat = mia(0.f,1.f, sat);  val = mia(0.f,1.f, val);
 	UpdateColor();
 	
@@ -122,4 +123,33 @@ void Playlist::Clear()  // defaults
 	bookm = 0;
 	hue = 0.f;  sat = 0.f;  val = 0.f;
 	iFound = 0;
+}
+
+
+//------------------------------------------------
+bool Playlist::DeleteCurFile(bool playNext)
+{
+	const auto& tv = tracksVis[iCur];
+	if (tv.dir)  return false;
+
+	if (playNext)  // play next if deleting current
+	if (iCur == iPlayVis)
+		if (!Next())  audio->Stop();  //return false;
+	
+	auto& t = tracksAll[tv.iAll];
+	if (!fs::remove(t.path))
+		return false;
+			
+	tracksAll.erase(tracksAll.begin() + tv.iAll);
+	UpdateVis();
+	return true;
+}
+
+void Playlist::DeleteCur()
+{
+	const auto& tv = tracksVis[iCur];
+	if (tv.dir)  return;
+	
+	tracksAll.erase(tracksAll.begin() + tv.iAll);
+	UpdateVis();
 }
