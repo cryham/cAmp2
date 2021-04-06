@@ -1,8 +1,8 @@
 #pragma once
-namespace tinyxml2 {  class XMLElement;  }
+namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
 
-enum EVis
-{	viNone=0, viFFT, viOsc, viPrint, viALL  };
+enum EVisType
+{	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect, VisT_ALL  };
 
 
 class ViewSet
@@ -12,33 +12,43 @@ public:
 	void Defaults();
 
 	void Load(const tinyxml2::XMLElement* e);
-	void Save(tinyxml2::XMLElement* e);
+	void Save(tinyxml2::XMLElement* e, tinyxml2::XMLDocument* xml);
 
 
 	//  window
-	int xSize = 300, ySize = 600;
-	int xPos = 0, yPos = 0;
+	struct VS_Wnd {
+		int xSize = 300, ySize = 600;
+		int xPos = 0, yPos = 0;
 
-	int iSleep = 0;  // in ms
-	bool bVSync = true;
+		int iSleep = 0;  // in ms
+		bool bVSync = true;
+	} wnd;
+	
+	//  visualizations
+	const static int FFTSizes = 5;
+	struct VS_Vis {
+		int yH = 129;  // draw height, top
 
-	//  visualization
-	int iVisH = 96;  // draw height
-	const static int ciFFTNum = 5;
-	int iFFTSize = 1;      // FFT samples (quality)
-	float fFFTMul = 69.f;  // y multiplier (scale)
-	/*EVis*/ int eVis = viFFT;  // type
-	float fPrtFq = 100.f;  // spectrogram speed
+		/*EVisType*/ int eType = VisT_FFT;
+		int iFFT_Size = 1;      // FFT samples (quality)
+		float fFFT_Mul = 69.f;  // y multiplier (scale)
+		float fPrt_Fq = 100.f;  // spectrogram speed
+	} vis;
+	
+	//  pls slider
+	struct VS_Pls {
+		bool bSliderRate = 1;  // draw rating
 
-	//  slider
-	bool bSlDrawR;  // draw rating
-	int xW_plS;  // width
+		int xW_slider = 18;  // draw width, right
+	} pls;
 	
 	//  tabs counts: colums,rows, offset
-	int xNpt, yNpt, ofsTab;
-
+	struct VS_Tabs {
+		int xCols = 5, yRows = 1, ofs = 0;
+	} tabs;
+	
 	//  font sizes
-	int Fy;
-
-	// CList::bFilInf  CList::iDirView
+	struct VS_Fonts {
+		int Fy = 17;
+	} fnt;
 };

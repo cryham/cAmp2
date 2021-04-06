@@ -16,10 +16,10 @@ Settings::Settings()
 
 void Settings::SetDimFromWnd(sf::Window* wnd)
 {
-	view.xPos = wnd->getPosition().x;
-	view.yPos = wnd->getPosition().y;
-	view.xSize = wnd->getSize().x;
-	view.ySize = wnd->getSize().y;
+	view.wnd.xPos = wnd->getPosition().x;
+	view.wnd.yPos = wnd->getPosition().y;
+	view.wnd.xSize = wnd->getSize().x;
+	view.wnd.ySize = wnd->getSize().y;
 }
 
 
@@ -48,7 +48,7 @@ void Settings::Default()
 	
 	escQuit = false;
 	bFileInfo = false;
-	eDirView = DV_Path;
+	eDirView = DirV_Path;
 
 	cntrPls = 1;
 	vSetPls.clear();
@@ -62,7 +62,7 @@ void Settings::Default()
 //  cycle dir view modes  /
 void Settings::NextDirView(int i)
 {
-	int dv = ((int)eDirView + i + DV_All) % DV_All;
+	int dv = ((int)eDirView + i + DirV_All) % DirV_All;
 	eDirView = (EDirView)dv;
 }
 
@@ -197,7 +197,7 @@ bool Settings::Save()
 
 	//  view
 	e = xml.NewElement("view");
-		view.Save(e);
+		view.Save(e, &xml);
 	root->InsertEndChild(e);
 
 	//  playlists

@@ -49,7 +49,7 @@ public:
 	const char* GetAllExtStr() override  // for file open dialog
 	{	return sAllExt.c_str();  }
 
-	const static uint ciFFTSize[ViewSet::ciFFTNum];
+	const static uint ciFFTSize[ViewSet::FFTSizes];
 	
 private:
 	void InitPlugins();

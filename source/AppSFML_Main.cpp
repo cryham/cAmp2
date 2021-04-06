@@ -32,15 +32,16 @@ bool AppSFMLDraw::Run()
 void AppSFMLDraw::CreateWindow()
 {
 	//VideoMode vm = VideoMode::getDesktopMode();
+	const auto& v = set.view;
 
 	pWindow = make_unique<RenderWindow>(
-		VideoMode(set.view.xSize, set.view.ySize),
+		VideoMode(v.wnd.xSize, v.wnd.ySize),
 		"cAmp2",  // Title
 		Style::Default, ContextSettings());
 
 	pWindow->setVerticalSyncEnabled(true);
 //	pWindow->setFramerateLimit(60);  // par
-	pWindow->setPosition(Vector2i(set.view.xPos, set.view.yPos));
+	pWindow->setPosition(Vector2i(v.wnd.xPos, v.wnd.yPos));
 }
 	
 //  Load data
@@ -66,8 +67,13 @@ bool AppSFMLDraw::LoadResources()
 	}
 
 	pBackgr = make_unique<Sprite>(*pTexture.get());
-
 	
+	LoadFonts();
+	return true;
+}
+	
+bool AppSFMLDraw::LoadFonts()
+{
 	//  font  // todo: fonts in xml
 	const static string sFntName[Fnt_All] = {
 		"DejaVuLGCSans.ttf", //Fnt_Info, Fnt_Track, 
@@ -81,6 +87,7 @@ bool AppSFMLDraw::LoadResources()
 		15, //16
 		20, //20
 	};
+	string data = FileSystem::Data(), file;
 	
 	for (int i=0; i < Fnt_All; ++i)
 	{

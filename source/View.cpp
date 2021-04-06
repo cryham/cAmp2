@@ -14,70 +14,91 @@ ViewSet::ViewSet()
 
 void ViewSet::Defaults()
 {
-	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
-	iSleep = 10;  bVSync = true;
+	wnd.xSize = 390;  wnd.ySize = 1143;
+	wnd.xPos = 0;  wnd.yPos = 0;
+	wnd.iSleep = 10;  wnd.bVSync = true;
 	
-	iVisH = 116;  iFFTSize = 1;  fFFTMul = 69.f;
-	eVis = viFFT;  fPrtFq = 100.f;
+	vis.yH = 129;
+	vis.eType = VisT_FFT;  vis.iFFT_Size = 1;
+	vis.fFFT_Mul = 69.f;  vis.fPrt_Fq = 100.f;
 	
-	bSlDrawR = 1;  xW_plS = 14;
+	pls.bSliderRate = 1;  pls.xW_slider = 18;
 	
-	xNpt = 5;  yNpt = 1;/*2*/  ofsTab = 0;
+	//tabs.xCols = 5;  tabs.yRows = 1;  tabs.ofs = 0;
+	tabs.xCols = 10;  tabs.yRows = 3;  tabs.ofs = 0;
 	
-	Fy = 17;  ///+
+	fnt.Fy = 17;  // todo:
 	//cfP = 1;  cfA = 0;  cfT = 1;  cfH = 1;  cfG = 1;
 }
 
 
 ///  . . .             Load             . . .
-void ViewSet::Load(const XMLElement* e)
+void ViewSet::Load(const XMLElement* el)
 {
 	Defaults();
 
-	const char* a;
-	a = e->Attribute("sx");		if (a)  xSize = max(100, s2i(a));  //mia(100, ap->xScreen, cStr::toInt(a));
-	a = e->Attribute("sy");		if (a)	ySize = max(30, s2i(a));  //mia(30,  ap->yScreen, cStr::toInt(a));
-	a = e->Attribute("x");		if (a)  xPos = s2i(a);
-	a = e->Attribute("y");		if (a)  yPos = s2i(a);
+	const char* a;  const XMLElement* e;
+	e = el->FirstChildElement("wnd");  if (e) {
+		a = e->Attribute("sx");		if (a)  wnd.xSize = max(100, s2i(a));  //mia(100, ap->xScreen, cStr::toInt(a));
+		a = e->Attribute("sy");		if (a)	wnd.ySize = max(30, s2i(a));  //mia(30,  ap->yScreen, cStr::toInt(a));
+		a = e->Attribute("x");		if (a)  wnd.xPos = s2i(a);
+		a = e->Attribute("y");		if (a)  wnd.yPos = s2i(a);
 
-	a = e->Attribute("sleep");	if (a)  iSleep = s2i(a);
-	a = e->Attribute("vsync");	if (a)  bVSync = s2b(a);
+		a = e->Attribute("sleep");	if (a)  wnd.iSleep = s2i(a);
+		a = e->Attribute("vsync");	if (a)  wnd.bVSync = s2b(a);
+	}
+	e = el->FirstChildElement("vis");  if (e) {
+		a = e->Attribute("h");		if (a)  vis.yH = mia(0, wnd.ySize, s2i(a));
 
-	a = e->Attribute("visH");	if (a)  iVisH = mia(0, ySize, s2i(a));
-	a = e->Attribute("fft");	if (a)  iFFTSize = mia(0,ViewSet::ciFFTNum-1, s2i(a));
-	a = e->Attribute("ftMul");	if (a)  fFFTMul = s2f(a);
-	a = e->Attribute("eVis");	if (a)  eVis = (EVis)mia(0,int(viALL), s2i(a));
-	a = e->Attribute("vpFq");	if (a)  fPrtFq = s2f(a);
+		a = e->Attribute("type");	if (a)  vis.eType = (EVisType)mia(0,int(VisT_ALL), s2i(a));
+		a = e->Attribute("fft");	if (a)  vis.iFFT_Size = mia(0,ViewSet::FFTSizes-1, s2i(a));
+		a = e->Attribute("ftMul");	if (a)  vis.fFFT_Mul = s2f(a);
+		a = e->Attribute("vpFq");	if (a)  vis.fPrt_Fq = s2f(a);
+	}
+	e = el->FirstChildElement("pls");  if (e) {
+		a = e->Attribute("slW");	if (a)  pls.xW_slider = max(0, s2i(a));
 
-	a = e->Attribute("sldr");	if (a)  xW_plS = max(0, s2i(a));
-	a = e->Attribute("slR");	if (a)  bSlDrawR = s2b(a);
-
-	a = e->Attribute("tbX");	if (a)  xNpt = max(1, s2i(a));
-	a = e->Attribute("tbY");	if (a)  yNpt = max(0, s2i(a));
-	a = e->Attribute("tbO");	if (a)  ofsTab = s2i(a);
+		a = e->Attribute("slRate");	if (a)  pls.bSliderRate = s2b(a);
+	}
+	e = el->FirstChildElement("tabs");  if (e) {
+		a = e->Attribute("cols");	if (a)  tabs.xCols = max(1, s2i(a));
+		a = e->Attribute("rows");	if (a)  tabs.yRows = max(0, s2i(a));
+		a = e->Attribute("ofs");	if (a)  tabs.ofs = s2i(a);
+	}
 }
 
 ///  . . .             Save             . . .
-void ViewSet::Save(XMLElement* e)
+void ViewSet::Save(XMLElement* el, XMLDocument* xml)
 {
-	e->SetAttribute("sx",	i2s(xSize,4,' ').c_str());
-	e->SetAttribute("sy",	i2s(ySize,4,' ').c_str());
-	e->SetAttribute("x",	i2s(xPos,4,' ').c_str());
-	e->SetAttribute("y",	i2s(yPos,4,' ').c_str());
+	XMLElement* e;
+	e = xml->NewElement("wnd");
+		e->SetAttribute("sx",		i2s(wnd.xSize,4,' ').c_str());
+		e->SetAttribute("sy",		i2s(wnd.ySize,4,' ').c_str());
+		e->SetAttribute("x",		i2s(wnd.xPos,4,' ').c_str());
+		e->SetAttribute("y",		i2s(wnd.yPos,4,' ').c_str());
 
-	e->SetAttribute("sleep",	i2s(iSleep,2).c_str());
-	e->SetAttribute("vsync",	b2s(bVSync).c_str());
+		e->SetAttribute("sleep",	i2s(wnd.iSleep,2).c_str());
+		e->SetAttribute("vsync",	b2s(wnd.bVSync).c_str());
+	el->InsertEndChild(e);
 
-	e->SetAttribute("visH",		i2s(iVisH,4,' ').c_str());
-	e->SetAttribute("fft",		i2s(iFFTSize).c_str());
-	e->SetAttribute("ftMul",	f2s(fFFTMul).c_str());
-	e->SetAttribute("eVis",		i2s(eVis).c_str());
-	e->SetAttribute("vpFq",		f2s(fPrtFq).c_str());
+	e = xml->NewElement("vis");
+		e->SetAttribute("h",		i2s(vis.yH,4,' ').c_str());
 
-	e->SetAttribute("sldr",		i2s(xW_plS,2).c_str());
-	e->SetAttribute("slR",		b2s(bSlDrawR).c_str());
+		e->SetAttribute("type",		i2s(vis.eType).c_str());
+		e->SetAttribute("fft",		i2s(vis.iFFT_Size).c_str());
+		e->SetAttribute("ftMul",	f2s(vis.fFFT_Mul).c_str());
+		e->SetAttribute("vpFq",		f2s(vis.fPrt_Fq).c_str());
+	el->InsertEndChild(e);
 
-	e->SetAttribute("tbX",	i2s(xNpt,2).c_str());
-	e->SetAttribute("tbY",	i2s(yNpt).c_str());
-	e->SetAttribute("tbO",	i2s(ofsTab).c_str());
+	e = xml->NewElement("pls");
+		e->SetAttribute("sldrW",	i2s(pls.xW_slider,2).c_str());
+		
+		e->SetAttribute("sldrRate",	b2s(pls.bSliderRate).c_str());
+	el->InsertEndChild(e);
+
+	e = xml->NewElement("tabs");
+		e->SetAttribute("cols",		i2s(tabs.xCols,2).c_str());
+		e->SetAttribute("rows",		i2s(tabs.yRows).c_str());
+		e->SetAttribute("ofs",		i2s(tabs.ofs).c_str());
+	el->InsertEndChild(e);
 }

@@ -10,9 +10,9 @@ namespace sf {  class Window;  }
 
 enum EDirView
 {
-	DV_Fullpath, DV_Path, DV_Path2, DV_Path3, /*DV_None,*/ DV_All
+	DirV_Fullpath, DirV_Path, DirV_Path2, DirV_Path3, /*DirV_None,*/ DirV_All
 };
-const static char* sDirView[DV_All] =
+const static char* sDirView[DirV_All] =
 {
 	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
 };
@@ -66,7 +66,7 @@ public:
 	bool escQuit = false;
 	bool bFileInfo = false;
 
-	EDirView eDirView = DV_Path;
+	EDirView eDirView = DirV_Path;
 	void NextDirView(int i);
 
 	//  playlists

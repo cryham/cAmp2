@@ -215,14 +215,14 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 	DWORD chan = ch();
 
 	//  get data
-	if (view.eVis == viFFT)
+	if (view.vis.eType == VisT_FFT)
 	{
-		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.iFFTSize] );
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.vis.iFFT_Size] );
 
-		for (int x=0; x < view.xSize+1; x++)
+		for (int x=0; x < view.wnd.xSize+1; x++)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
-			float y = -log10(f) * view.fFFTMul /255.f -0.1f;  //par
+			float y = -log10(f) * view.vis.fFFT_Mul /255.f -0.1f;  //par
 
 			y = mia(0.f,1.f, y);  visA[x] = y;
 		}
