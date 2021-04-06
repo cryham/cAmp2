@@ -56,8 +56,8 @@ public:
 	virtual void SetVol(bool back, bool slow, bool fast) = 0;
 
 	//  visualization
-	virtual float* GetFFT() = 0;   // updates float*
-	virtual void GetVisData(int size, const ViewSet &view) = 0;
+	virtual float* GetVis() = 0;
+	virtual void GetVisData(int size, const ViewSet &view) = 0;  // updates float*
 	
 	virtual void GetTrackTime(Track& t) = 0;
 	virtual bool IsPlayable(std::string ext) = 0;

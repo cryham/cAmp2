@@ -215,31 +215,31 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 	DWORD chan = ch();
 
 	//  get data
+	int xw1 = view.wnd.xSize+1;
 	if (view.vis.eType == VisT_FFT)
 	{
 		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.vis.iFFT_Size] );
 
-		for (int x=0; x < view.wnd.xSize+1; x++)
+		for (int x=0; x < xw1; ++x)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
 			float y = -log10(f) * view.vis.fFFT_Mul /255.f -0.1f;  //par
 
-			y = mia(0.f,1.f, y);  visA[x] = y;
+			y = mia(0.f,1.f, y);  vis[x] = y;
 		}
-	}/*else
-	if (view.eVis == viOsc)  // todo:
+	}else
+	if (view.vis.eType == VisT_Osc)
 	{
-		BASS_ChannelGetData(chan, wav, 2*2*(view.xSize+1)*sizeof(short));
-		uint a = 0;  int w = 1;
-			if (bPlay)  w=-1;  // osc -y play, rec y
-		for (int x=0; x < view.xSize+1; x++)
+		BASS_ChannelGetData(chan, wav, 2*2*xw1*sizeof(short));
+		uint a = 0;
+		for (int x=0; x < xw1; ++x)
 		{
-			int i = w*(wav[a++] + wav[a++]) / 2;  a+=2;
+			int i = (wav[a++] + wav[a++]) / 2;  a+=2;  // stereo to mono
 			float y = 0.5f + i/65536.f;
-			visA[x] = y;
+			vis[x] = y;
 			//visA[x] = (0.5f - 0.5f*sin(float(x)/view.xSize*6.28) );  // test
 		}
-	}*/
+	}
 
 	/*  Line meter =
 	{

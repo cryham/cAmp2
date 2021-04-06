@@ -6,7 +6,7 @@
 
 
 const static int
-	ciWAV = 4096,   // wav data, max screen width
+	ciWAV = 10240,  // wav data, max screen width *2
 	ciFFT = 10240;  // fft data, max fft size
 
 
@@ -17,8 +17,8 @@ class AudioBass : public Audio, public LogErr
     DWORD ch() {  return chMod ? chMod : chPl;  }
     HSYNC chSync = 0;
 	
-	float fft[ciFFT], visA[ciFFT];
-	//std::vector<float> fft, visA;
+	float fft[ciFFT], vis[ciFFT];
+	short wav[ciWAV];
 	
 public:
     AudioBass();
@@ -32,8 +32,8 @@ public:
     void Stop() override;
 
 	void GetPos() override;
-	float* GetFFT() override
-	{  return visA;  }
+	float* GetVis() override
+	{	return vis;  }
 
 	void SetPos(bool back, bool slow, bool fast) override;
 	void SetPosAbs(double pos) override;

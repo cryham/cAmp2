@@ -45,31 +45,49 @@ void AppSFMLDraw::DrawPlayer()
 	Rect(0,0, xw,yE_vis, TX_BackPlr, false);
 	
 	
-	//  Vis FFT  ~~~~~
-	//  params
-	int h = yE_vis - yB_vis;
-	const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;
+	//  Vis  ~ ~ ~ ~ ~
+	const float h = yE_vis - yB_vis;
 
-	if (v.vis.eType == VisT_FFT && play)
+	if (play)
 	{
+		const float* vis = audio->GetVis();
+		const int uy=40 /*>0 darker*/, uh=52 /*0 line..fire 512*/;  // params
 		audio->GetVisData(xw, v);
-		float* fft = audio->GetFFT();
 
-		for (int i=0; i < xw; ++i)
-		{
-			float f = fft[i];
-			int y = h - f*h;
-			f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
-			
-			Uint8 r,g,b;  // clr
-			r = 40+f*f*(255-60);
-			g = 100+f*(255-120);
-			b = 180+f*(255-200);
-			RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
-			// todo: fill texture and use shader
-		}
-	}
-	
+		if (v.vis.eType == VisT_FFT)
+			for (int i=0; i < xw; ++i)
+			{
+				float f = vis[i];
+				int y = h - f*h;
+				f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
+				
+				Uint8 r,g,b;  // clr
+				r = 40+f*f*(255-60);
+				g = 100+f*(255-120);
+				b = 180+f*(255-200);
+				RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
+				// todo: fill texture and use shader
+			}
+		else if (v.vis.eType == VisT_Osc)
+			for (int i=0; i < xw; ++i)
+			{
+				float f = vis[i];
+				int y1 = h - f*h;
+				int y2 = h - vis[i+1]*h;
+				int ya = min(y1,y2), yb = max(y1,y2);
+
+				int d = yb - ya + 1;  // darker with high tones
+				float y = /*0.5f -*/ fabs(f - 0.5f);  // lighter at high amplitudes
+				//f = mia(0.f,1.f, 0.4f - y*0.16f + d*0.01f);  // mul
+				f = mia(0.f,1.f, 0.8f + y*1.0f - d*0.02f);  // mul  par +
+				
+				Uint8 r,g,b;  // clr
+				r = 20+f*f*(255-90);
+				g = 80+f*(255-120);
+				b = 180+f*(255-200);
+				RectUV(i, yB_vis + ya, 1,d,  475,uy,1,uh, true, r,g,b);
+			}
+	}	
 	
 	//  Position bar  --=---
 	int yH = yE_pos - yB_pos;
