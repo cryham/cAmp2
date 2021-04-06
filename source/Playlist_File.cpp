@@ -68,7 +68,7 @@ bool Playlist::Load()
 	}
 	fi.close();
 	
-	UpdateVis();
+	UpdateVis(false);  // no zoom
 	return true;
 }
 

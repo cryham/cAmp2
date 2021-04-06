@@ -34,7 +34,8 @@ protected:
 	
 	///  PlayLists Tabs  ------------------------------------------------
 	std::vector<Playlist> vPls;  // always at least 1
-	Playlist& Pls() {  return vPls[plsId];  }
+	Playlist& Pls()   {  return vPls[plsId];  }
+	Playlist& PlsPl() {  return vPls[plsPlId];  }
 	void LoadPls(), SavePls();  // for set
 	Stats all, allFull;
 	

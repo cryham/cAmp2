@@ -49,11 +49,10 @@ protected:
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_PlsFind(), WndDraw_PlsFilter(), WndDraw_PlsTab(), WndDraw_AppTabs();
-	void WndDraw_AppShow(), WndDraw_AppAudio(), WndDraw_AppVis();
+	void WndDraw_AppViewStats(), WndDraw_AppAudio(), WndDraw_AppVis();
 	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
-	void Sep(int h), Line();  // separators
-	
+
 	
 	//  resources
 	//--------------------------
@@ -66,7 +65,6 @@ protected:
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];
 	sf::Image icon;
-	void SetupGuiStyle();  // ImGui theme
 	
 	//  text and color
 	//--------------------------
@@ -94,4 +92,12 @@ protected:
 			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
 	void Rect(int x, int y, int w, int h,  ETexUV uv,  bool add=false,
 			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
+
+	///  Gui utils
+	//--------------------------
+	void TextG(const char* s);
+	void TextG(std::string s);
+	void Sep(int h), Line();  // separators
+
+	void SetupGuiStyle();  // ImGui theme
 };

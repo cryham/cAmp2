@@ -94,7 +94,7 @@ public:
 	void Clear();
 	
 	//  Update  Fill tracksVis Ids from tracksAll,
-	void UpdateVis();  // for view,  filter, add dirs etc.
+	void UpdateVis(bool bZoom = true);  // for view,  filter, add dirs etc.
 	
 	
 	//  basic  ----

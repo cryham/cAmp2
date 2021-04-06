@@ -18,8 +18,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(X):	 audio->Pause();  break;
 	key(C):	 audio->Stop();  break;
 	
-	key(A):	 Pls().Next(-1);  break;  // |<
-	key(S):	 Pls().Next(1);  break;   // >|
+	key(A):	 PlsPl().Next(-1);  break;  // |<
+	key(S):	 PlsPl().Next(1);  break;   // >|
 
 	
 	key(Q): key(Left):  // seek << >>
@@ -73,7 +73,6 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(N):  TabNew(alt? -1: ctrl? 2 : shift? -2: 1);  break;
 	//  Close tab
 	key(F8): TabClose();  break;
-	// todo: F2 rename ..
 	
 	
 	///  toggle
@@ -82,7 +81,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	key(P):  set.view.eVis = set.view.eVis == viFFT ? viNone : viFFT;  UpdDim();  break;
 
 	//  debug
-	key(I):  bFps = !bFps;  Osd("Fps: " + b2on(bFps));  break;
+	key(I):  bFps = !bFps;      Osd("Fps: " + b2on(bFps));  break;
 	key(U):  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  break;
 	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;
 			 Osd("Time test: " + !iTimeTest ? "off" : i2s(iTimeTest));  Redraw();  break;

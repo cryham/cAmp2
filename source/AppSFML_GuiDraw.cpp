@@ -5,7 +5,6 @@
 #include "Util.h"
 #include "Settings.h"
 using namespace sf;  using namespace std;  using namespace ImGui;
-#define TextG  ImGui::Text
 
 
 //------------------------------------------------------------------
@@ -33,7 +32,7 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	{	if (!iFoundAll)
 			TextG("Not found.");
 		else
-			TextG("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
+			ImGui::Text("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
 	}else
 		Sep(10);
 	Sep(10);
@@ -53,11 +52,11 @@ void AppSFMLDraw::WndDraw_PlsFilter()
 	bool e;  string s;  int i;
 
 	PushItemWidth(300);
-	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
+	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ GetRateStr(i);  TextG(s);
 	e = SliderInt("rFl", &i, cRateMin, cRateMax, "");
 	if (e) {  Pls().filterLow = i;  Pls().UpdateVis();  }
 	
-	i = Pls().filterHigh;  s = "Rating High: " + i2s(i) +" "+ GetRateStr(i);  TextG(s.c_str());
+	i = Pls().filterHigh;  s = "Rating High: " + i2s(i) +" "+ GetRateStr(i);  TextG(s);
 	e = SliderInt("rFh", &i, cRateMin, cRateMax, "");
 	if (e) {  Pls().filterHigh = i;  Pls().UpdateVis();  }
 	PopItemWidth();
@@ -79,7 +78,7 @@ void AppSFMLDraw::WndDraw_PlsTab()
 	e = InputText("Tbn", t, sizeof(t));  if (e) Pls().name = t;
 
 	Sep(10);
-	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s.c_str());
+	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbk", &i, 0, 6, "");
 	if (e) {  Pls().bookm = i;  Redraw();  }
 	
@@ -97,21 +96,21 @@ void AppSFMLDraw::WndDraw_AppTabs()
 	bool e;  string s;  int i;
 	PushItemWidth(300);  
 	Sep(10);
-	i = set.view.xNpt;  s = "Columns: " + i2s(i);  TextG(s.c_str());
+	i = set.view.xNpt;  s = "Columns: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbx", &i, 1, 30, "");
 	if (e) {  set.view.xNpt = i;  UpdDim();  }
 	
-	i = set.view.yNpt;  s = "Rows: " + i2s(i);  TextG(s.c_str());
+	i = set.view.yNpt;  s = "Rows: " + i2s(i);  TextG(s);
 	e = SliderInt("Tby", &i, 1, 30, "");
 	if (e) {  set.view.yNpt = i;  UpdDim();  }
 
 	Sep(10);
 	auto fp = [](int i){  return f2s(100.f*i/16.f,0,3) + " %%";  };
-	i = set.dimTabBck;  s = "Dim background: " + fp(i);  TextG(s.c_str());
+	i = set.dimTabBck;  s = "Dim background: " + fp(i);  TextG(s);
 	e = SliderInt("Tdb", &i, 1, 16, "");
 	if (e) {  set.dimTabBck = i;  }
 
-	i = set.dimTabTxt;  s = "Dim text: " + fp(i);  TextG(s.c_str());
+	i = set.dimTabTxt;  s = "Dim text: " + fp(i);  TextG(s);
 	e = SliderInt("Tdt", &i, 1, 16, "");
 	if (e) {  set.dimTabTxt = i;  }
 	PopItemWidth();
@@ -121,7 +120,7 @@ void AppSFMLDraw::WndDraw_AppTabs()
 //------------------------------------------------------------------
 //  App Show
 //------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppShow()
+void AppSFMLDraw::WndDraw_AppViewStats()
 {
 	bool e;  string s;
 	Checkbox("File Info (from cursor)", &set.bFileInfo);
@@ -129,7 +128,7 @@ void AppSFMLDraw::WndDraw_AppShow()
 	Sep(10);
 	int i = set.eDirView;
 	s = string("Dir View: ") + sDirView[i];
-	TextG(s.c_str());
+	TextG(s);
 	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
 	
@@ -141,6 +140,8 @@ void AppSFMLDraw::WndDraw_AppShow()
 	//  write stats
 	Sep(10);
 	uint di, fi, si, tm;
+	const Stats& ful = bAllStats ?
+					allFull : Pls().stAll;
 	const Stats& st = bAllStats ?
 		bFullStats ? allFull : all :
 		bFullStats ? Pls().stAll : Pls().stats;
@@ -148,10 +149,23 @@ void AppSFMLDraw::WndDraw_AppShow()
 	fi = st.GetFiles();
 	si = st.GetSize() / 1000000;
 	tm = st.GetTime();
-	s = " Dirs: "+i2s(di);  TextG(s.c_str());
-	s = "Files: "+i2s(fi);  TextG(s.c_str());
-	s = " Size: "+size2s(si);  TextG(s.c_str());
-	s = "Time: "+time2s(tm);  TextG(s.c_str());
+	if (bFullStats)
+	{
+		s = " Dirs:  "+i2s(di);    TextG(s);
+		s = "Files:  "+i2s(fi);    TextG(s);
+		s = " Size:  "+size2s(si); TextG(s);
+		s = "Time:  "+time2s(tm);  TextG(s);
+	}else
+	{	float Fdi, Ffi, Fsi, Ftm;  // %
+		Fdi = 100.f * di / ful.GetDirs();
+		Ffi = 100.f * fi / ful.GetFiles();
+		Fsi = 100.f * si /(ful.GetSize() / 1000000);
+		Ftm = 100.f * tm / ful.GetTime();
+		s = " Dirs:  "+i2s(di);    TextG(s);  SameLine(200);  s = f2s(Fdi,2,5)+" %%";  TextG(s);
+		s = "Files:  "+i2s(fi);    TextG(s);  SameLine(200);  s = f2s(Ffi,2,5)+" %%";  TextG(s);
+		s = " Size:  "+size2s(si); TextG(s);  SameLine(200);  s = f2s(Fsi,2,5)+" %%";  TextG(s);
+		s = "Time:  "+time2s(tm);  TextG(s);  SameLine(200);  s = f2s(Ftm,2,5)+" %%";  TextG(s);
+	}
 }
 
 //  Audio
@@ -162,7 +176,7 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	bool e;  string s;
 	
 	int i = audio->iVolume;
-	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s.c_str());
+	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s);
 	PushItemWidth(240);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
 	if (e) {  audio->iVolume = i;  Redraw();  }
 	
@@ -186,12 +200,12 @@ void AppSFMLDraw::WndDraw_AppVis()
 {
 	bool e;  string s;
 	int i = set.view.iFFTSize;
-	s = string("FFT size: ") + i2s(i);  TextG(s.c_str());
+	s = string("FFT size: ") + i2s(i);  TextG(s);
 	PushItemWidth(240);  e = SliderInt("fftsi", &i, 0, ViewSet::ciFFTNum-1, "");  PopItemWidth();
 	if (e)  set.view.iFFTSize = i;
 
 	float f = set.view.fFFTMul;
-	s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s.c_str());
+	s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
 	PushItemWidth(240);  e = SliderFloat("fftmul", &f, 0, 200.f, "");  PopItemWidth();
 	if (e)  set.view.fFFTMul = f;
 //	int eVis = viFFT;  // todo: type
@@ -211,7 +225,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Fps, frames per second drawn", &bFps);
 	Checkbox("Debug text", &bDebug);
 	
-	s = string("Time colors: ") + sTimesTest[iTimeTest];  TextG(s.c_str());
+	s = string("Time colors: ") + sTimesTest[iTimeTest];  TextG(s);
 	PushItemWidth(140);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
 }
 
@@ -225,7 +239,7 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	Sep(10);
 	TextG("by Crystal Hammer");
 	Sep(20);
-	TextG("Version: 2.0.4");
+	TextG("Version: 2.0.5");
 	//TextG(Settings::ver);
 	Sep(40);
 	PushItemWidth(400);

@@ -90,7 +90,7 @@ bool Playlist::Next(int add)
 //  Fill tracksVis Ids from tracksAll,
 //  filters rating, adds dirs etc.
 //--------------------------------------------------------------------
-void Playlist::UpdateVis()
+void Playlist::UpdateVis(bool bZoom)
 {
 	bool emptyDirs = false;
 
@@ -100,7 +100,7 @@ void Playlist::UpdateVis()
 		zoomTo = iCur - iOfs,  // zoom to cursor
 		iAll = LengthAll(), iVis = LengthVis();
 	bool sh = iAll < iLinVis || iVis == 0;  // all visible, no scroll
-	if (!sh)
+	if (!sh && bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
 	tracksVis.clear();
@@ -130,7 +130,7 @@ void Playlist::UpdateVis()
 			continue;
 		
 		fs::path path = t.path.parent_path();
-		//  todo: dir rate, dir hide  map[path]..
+		//  todo: dir rate, dir hide  tracksDirs in .cp ..
 		if (path != prev)
 		{
 			//  Add Dir  +++
@@ -156,14 +156,16 @@ void Playlist::UpdateVis()
 		
 		stats.Add(&t);
 	}
-		
-	iCur = iZoomNew;
-	//  adjust ofs
-	if (sh)
-		iOfs = 0;
-	else
-		iOfs = iZoomNew - zoomTo;
-		
+
+	if (bZoom)  // set cur, ofs
+	{
+		iCur = iZoomNew;
+		if (sh)
+			iOfs = 0;
+		else
+			iOfs = iZoomNew - zoomTo;
+	}
+	
 	int all = LengthVis();
 	iCur = mia(0, all, iCur);
 	if (iOfs > all-iLinVis)  iOfs = all-iLinVis;  //  no view past last track

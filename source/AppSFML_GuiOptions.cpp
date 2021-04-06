@@ -6,12 +6,7 @@
 using namespace sf;  using namespace std;  using namespace ImGui;
 
 
-bool AppSFMLDraw::WndVisible(EWndOpt w)
-{
-	return vWindows[w] && vWindows[w]->isOpen();
-}
-
-//  gui util  -----
+//  gui utils  -----
 const ImVec4 clr1(0.2f,0.2f,0.7f, 0.5f);
 const ImVec4 clr0(0.2f,0.2f,0.7f, 0.3f);
 
@@ -24,6 +19,10 @@ void AppSFMLDraw::Line()
 {
 	Sep(5);  Separator();  Sep(5);
 }
+
+void AppSFMLDraw::TextG(const char* s) {  ImGui::Text(s);  }
+void AppSFMLDraw::TextG(string s)      {  ImGui::Text(s.c_str());  }
+
 
 //  const
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
@@ -49,11 +48,17 @@ AppSFMLDraw::AppSFMLDraw()
 		vWindows[i] = nullptr;
 }
 
+bool AppSFMLDraw::WndVisible(EWndOpt w)
+{
+	return vWindows[w] && vWindows[w]->isOpen();
+}
+
 //  Wnd Open
 //------------------------------------------------------------------
 void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 {
-	if (wndInited)  //return;  // todo: many opened windows..
+	if (wndInited)  //return;
+	// todo: many opened windows or resize same window ..
 	{
 		for (int i=0; i < WO_All; ++i)
 			WndClose(i);
@@ -162,7 +167,7 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		case WO_PlsTab:		WndDraw_PlsTab();  break;
 		case WO_AppTabs:	WndDraw_AppTabs();  break;
 
-		case WO_AppViewStats:	WndDraw_AppShow();  break;
+		case WO_AppViewStats:	WndDraw_AppViewStats();  break;
 		case WO_AppAudio:	WndDraw_AppAudio();  break;
 		case WO_AppVis:		WndDraw_AppVis();  break;
 
