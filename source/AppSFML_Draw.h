@@ -15,8 +15,7 @@ public:
 protected:
 	//  Run stages
 	void CreateWindow();
-	bool LoadResources();
-	bool LoadFonts();
+	bool LoadResources(), CreateTextures(), LoadFonts();
 	
 	void LoopMain();
 	void DestroyAll();
@@ -54,6 +53,10 @@ protected:
 	void WndDraw_AppViewStats(), WndDraw_AppAudio(), WndDraw_AppVis();
 	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
+
+	//  vis spectrogram
+	std::unique_ptr<sf::Texture> pVisTexture = nullptr;
+	std::unique_ptr<sf::Sprite> pVisSprite = nullptr;
 
 	
 	//  resources

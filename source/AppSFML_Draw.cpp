@@ -79,7 +79,7 @@ void AppSFMLDraw::DrawPlayer()
 				int d = yb - ya + 1;  // darker with high tones
 				float y = /*0.5f -*/ fabs(f - 0.5f);  // lighter at high amplitudes
 				//f = mia(0.f,1.f, 0.4f - y*0.16f + d*0.01f);  // mul
-				f = mia(0.f,1.f, 0.8f + y*1.0f - d*0.02f);  // mul  par +
+				f = mia(0.f,1.f, 0.8f + y*1.0f - d*0.02f);  // mul  d/h  par +
 				
 				Uint8 r,g,b;  // clr
 				r = 20+f*f*(255-90);
@@ -87,6 +87,41 @@ void AppSFMLDraw::DrawPlayer()
 				b = 180+f*(255-200);
 				RectUV(i, yB_vis + ya, 1,d,  475,uy,1,uh, true, r,g,b);
 			}
+		else if (v.vis.eType == VisT_Spect && pVisSprite)
+		{
+			Uint8 pixels[1920*4];
+			static int yy = 0;
+			for (int i=0; i < xw; ++i)
+			{
+				float f = vis[i];
+				int y = h - f*h;
+				f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
+				//f = float(i)/xw;  // test
+				
+				Uint8 r,g,b;  // clr
+				r = 10+f*f*(255-100);
+				g = 10+f*(255-60);
+				b = 40+f*(255-40);
+				
+				int a = i*4;
+				pixels[a++] = r;
+				pixels[a++] = g;
+				pixels[a++] = b;
+				pixels[a++] = 255;
+				// todo: fill 1byte texture and use shader
+			}
+			++yy;  if (yy >= v.vis.yH)  yy = 0;
+			pVisTexture->update(pixels, 1920, 1, 0, yy);
+			
+			float w = xw, h = v.vis.yH;
+			const int ux=0, uy=0, uw=xw, uh=h;
+
+			pVisSprite->setScale(w/uw, h/uh);  // stretch
+			pVisSprite->setTextureRect(IntRect(ux, uy, uw, uh));
+			pVisSprite->setPosition(0, yB_vis);
+			pVisSprite->setColor(Color(255, 255, 255));
+			pWindow->draw(*pVisSprite);
+		}
 	}	
 	
 	//  Position bar  --=---

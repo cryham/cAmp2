@@ -62,8 +62,10 @@ bool App::Play(bool set)
 
 void App::NextVis()
 {
-	set.view.vis.eType =
-	set.view.vis.eType == VisT_FFT ? VisT_None : VisT_FFT;
+	auto& v = set.view.vis.eType;
+	++v;
+	if (v >= VisT_ALL)
+		v = VisT_None;
 	UpdDim();
 }
 

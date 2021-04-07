@@ -65,10 +65,37 @@ bool AppSFMLDraw::LoadResources()
 		Error("Can't load texture: " + file);
 		return false;
 	}
-
 	pBackgr = make_unique<Sprite>(*pTexture.get());
 	
-	LoadFonts();
+	
+	if (!LoadFonts())
+		return false;
+		
+	if (!CreateTextures())
+		return false;
+	return true;
+}
+
+bool AppSFMLDraw::CreateTextures()
+{
+	//  vis tex for spectrogram fullscreen
+	VideoMode vm = VideoMode::getDesktopMode();
+	pVisTexture = make_unique<Texture>();
+	if (!pVisTexture->create(vm.width, vm.height))
+	{
+		Error("Can't create fullscreen for vis spect");
+		//return false;
+	}
+	auto s = pVisTexture->getSize();
+	Uint8 pixels[s.x * 4] = {0};  // alpha
+	for (int y=0; y < s.y; ++y)
+		pVisTexture->update(pixels, s.x, 1, 0, y);
+	//pVisTexture->setRepeated(true);
+	//pVisTexture->setSmooth(false);
+	pVisSprite = make_unique<Sprite>(*pVisTexture.get());
+	
+	// todo: slider tex vm.height
+	//setSmooth(true);
 	return true;
 }
 	

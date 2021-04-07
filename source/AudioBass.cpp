@@ -208,27 +208,28 @@ void AudioBass::SetVol(bool back, bool slow, bool fast)  //  ^ v
 
 
 ///  FFT / Osc  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-//  get data for audio visualization
+//  get audio data for visualization
 void AudioBass::GetVisData(int size, const ViewSet& view)
 {
 	//DWORD chan = bPlay ? ch() : chRec;
 	DWORD chan = ch();
 
-	//  get data
+	const auto& v = view.vis;
 	int xw1 = view.wnd.xSize+1;
-	if (view.vis.eType == VisT_FFT)
+	
+	if (v.eType == VisT_FFT || v.eType == VisT_Spect)
 	{
-		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[view.vis.iFFT_Size] );
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[v.iFFT_Size] );
 
 		for (int x=0; x < xw1; ++x)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
-			float y = -log10(f) * view.vis.fFFT_Mul /255.f -0.1f;  //par
+			float y = -log10(f) * v.fFFT_Mul /255.f -0.1f;  //par
 
 			y = mia(0.f,1.f, y);  vis[x] = y;
 		}
-	}else
-	if (view.vis.eType == VisT_Osc)
+	}
+	else if (v.eType == VisT_Osc)
 	{
 		BASS_ChannelGetData(chan, wav, 2*2*xw1*sizeof(short));
 		uint a = 0;
@@ -240,7 +241,7 @@ void AudioBass::GetVisData(int size, const ViewSet& view)
 			//visA[x] = (0.5f - 0.5f*sin(float(x)/view.xSize*6.28) );  // test
 		}
 	}
-
+	
 	/*  Line meter =
 	{
 		float fL = LOWORD(BASS_ChannelGetLevel(chan)) / 128.f;
