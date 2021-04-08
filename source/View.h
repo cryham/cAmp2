@@ -15,7 +15,7 @@ public:
 	void Defaults();
 
 	void Load(const tinyxml2::XMLElement* e);
-	void Save(tinyxml2::XMLElement* e, tinyxml2::XMLDocument* xml);
+	void Save(tinyxml2::XMLElement* e, tinyxml2::XMLDocument* xml) const;
 
 
 	//  window

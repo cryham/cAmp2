@@ -45,39 +45,36 @@ struct SetFind
 class Settings : public LogErr
 {
 public:
-	const static int ver = 208;  // version of file
+	const static int ver = 210;  // version of file
 
 	//  main  -----
 	Settings();
 	
 	void Default();
 
-	bool Load(), Save();
+	bool Load();
+	bool Save() const;  // cAmp2.xml
 
 
-	//  window  -----
-	const static int MaxViews = 8;
+	//  views  -----
+	const static int cMaxViews = 10;
+	ViewSet view, views[cMaxViews];
 
-	ViewSet view, views[MaxViews];
 	
-	void SetDimFromWnd(sf::Window* wnd);
-
-
+	//  debug
 	bool escQuit = false;
-	bool bFileInfo = false;
 
+	//  view
+	bool bFileInfo = false;
 	EDirView eDirView = DirV_Path;
 	void NextDirView(int i);
 
 	//  playlists
 	int cntrPls = 1;  // new playlist counter
-
 	std::vector<std::string> vSetPls;
 	
 	SetFind find;
-	
-	//  old state
-	SetState state;
+	SetState state;  // player
 
 	int dimTabTxt = 16, dimTabBck = 16;  // in viewSet?
 };

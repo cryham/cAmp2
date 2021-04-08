@@ -14,14 +14,6 @@ Settings::Settings()
 	Default();
 }
 
-void Settings::SetDimFromWnd(sf::Window* wnd)
-{
-	view.wnd.xPos = wnd->getPosition().x;
-	view.wnd.yPos = wnd->getPosition().y;
-	view.wnd.xSize = wnd->getSize().x;
-	view.wnd.ySize = wnd->getSize().y;
-}
-
 
 //  Defaults
 //------------------------------------------------------------------------------------------------
@@ -144,12 +136,27 @@ bool Settings::Load()
 	{	a = e->Attribute("counter");	if (a)  cntrPls = s2i(a);
 		
 		m = e->FirstChildElement("Pls");
-		if (!m)  Log(sErr + "No <Pls>");
+		if (!m)  Log(sErr + "No <Pls> in <Playlists>");
 		while (m)
 		{
 			a = m->Attribute("name");
 			if (a)  vSetPls.emplace_back(a);
 			m = m->NextSiblingElement("Pls");
+	}	}
+	
+	//  views all
+	e = root->FirstChildElement("Views");
+	if (!e)  Log(sErr + "No <Views>");
+	if (e)
+	{
+		m = e->FirstChildElement("View");
+		if (!m)  Log(sErr + "No <View> in <Views>");
+		
+		int i = 0;
+		while (m && i < cMaxViews)
+		{
+			views[i].Load(m);
+			m = m->NextSiblingElement("View");  ++i;
 	}	}
 	
 	Log("Settings Loaded.");
@@ -158,7 +165,7 @@ bool Settings::Load()
 
 ///  Save
 //------------------------------------------------------------------------------------------------
-bool Settings::Save()
+bool Settings::Save() const
 {
 	using tinyxml2::XMLElement;
 	XMLDocument xml;
@@ -166,7 +173,6 @@ bool Settings::Save()
 	root->SetAttribute("ver", ver);
 	XMLElement* e, *p;
 
-	//  save  .......
 	//  debug
 	e = xml.NewElement("debug");
 		e->SetAttribute("escQuit", escQuit ? 1 : 0);
@@ -199,12 +205,13 @@ bool Settings::Save()
 	e = xml.NewElement("view");
 		view.Save(e, &xml);
 	root->InsertEndChild(e);
+	
 
 	//  playlists
 	e = xml.NewElement("Playlists");
 	e->SetAttribute("counter", cntrPls);
 	
-	for (const auto& s: vSetPls)
+	for (const auto& s : vSetPls)
 	{
 		p = xml.NewElement("Pls");
 		p->SetAttribute("name", s.c_str());
@@ -213,6 +220,18 @@ bool Settings::Save()
 	root->InsertEndChild(e);
 	
 	
+	//  views all
+	e = xml.NewElement("Views");
+	for (const auto& v : views)
+	{
+		p = xml.NewElement("View");
+		v.Save(p, &xml);
+		e->InsertEndChild(p);
+	}
+	root->InsertEndChild(e);
+	
+	
+	//  save  .......
 	xml.InsertEndChild(root);
 	
 	string file = FileSystem::Settings();

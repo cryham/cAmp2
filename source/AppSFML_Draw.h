@@ -4,6 +4,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "def.h"
 
 
 class AppSFMLDraw : public App
@@ -22,9 +23,14 @@ protected:
 
 	//  Draw stages
 	void DrawAll();
-	void DrawPlayer(), DrawTabs(), DrawPlaylist();
+	void DrawPlayer(), DrawVisual(), DrawTabs();
+	void DrawPlaylist(), DrawPlaylist_3Cursors();
 	void DrawPlsHeader(), DrawPlsSlider();
 
+	//  Views
+	void UpdateView(bool load, int v) override;
+	void SetViewFromWnd();  // after resize and before save
+	
 	
 	//  Windows Gui
 	//----------------------------------------------------
@@ -54,15 +60,10 @@ protected:
 	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
 
-	//  vis spectrogram
-	std::unique_ptr<sf::Texture> pVisTexture = nullptr;
-	std::unique_ptr<sf::Sprite> pVisSprite = nullptr;
-
-	
-	//  resources
-	//--------------------------
-	std::unique_ptr<sf::Texture> pTexture = nullptr;
-	std::unique_ptr<sf::Sprite> pBackgr = nullptr;
+	//  Resources
+	//----------------------------------------------------
+	std::unique_ptr<sf::Texture> pTexture = nullptr, pVisTexture = nullptr;
+	std::unique_ptr<sf::Sprite> pBackgr = nullptr, pVisSprite = nullptr;  // vis spectrogram
 
 	enum EFont
 	{	Fnt_Info, Fnt_Track, Fnt_Time, Fnt_TimeBig, Fnt_All  };
@@ -70,6 +71,7 @@ protected:
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];
 	sf::Image icon;
+	
 	
 	//  text and color
 	//--------------------------
@@ -84,12 +86,13 @@ protected:
 	sf::String Str(const std::string& s);
 
 	///  draw utils
-	//--------------------------
+	//----------------------------------------------------
 	//  write out text, from str
 	//  returns width, x advance
 	int Text(EFont n, int x, int y, bool draw=true);
 
 	void Format(const char* format, ...);
+	
 	
 	//  draw textured rect, stretched at
 	//  x,y pos, width,height,  texture coords uv start,size,  color rgb
@@ -98,6 +101,16 @@ protected:
 	void Rect(int x, int y, int w, int h,  ETexUV uv,  bool add=false,
 			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
 
+	
+	//  colors  // todo: in xml..
+	const static sf::Uint8 clrRateTxt[chRall][3], clrRateBck[chRall][3];
+	
+	inline static ETexUV Tex4Rate(int rate)
+	{
+		return (ETexUV)mia(int(TX_Rate1), int(TX_Rate5),
+						   int(TX_Rate1 - 1 + abs(rate)) );
+	}
+	
 	///  Gui utils
 	//--------------------------
 	void TextG(const char* s);

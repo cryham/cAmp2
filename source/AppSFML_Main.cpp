@@ -27,24 +27,7 @@ bool AppSFMLDraw::Run()
 }
 
 
-//  Create window
-//------------------------------------------------------------------------------------------------
-void AppSFMLDraw::CreateWindow()
-{
-	//VideoMode vm = VideoMode::getDesktopMode();
-	const auto& v = set.view;
-
-	pWindow = make_unique<RenderWindow>(
-		VideoMode(v.wnd.xSize, v.wnd.ySize),
-		"cAmp2",  // Title
-		Style::Default, ContextSettings());
-
-	pWindow->setVerticalSyncEnabled(true);
-//	pWindow->setFramerateLimit(60);  // par
-	pWindow->setPosition(Vector2i(v.wnd.xPos, v.wnd.yPos));
-}
-	
-//  Load data
+//  Load and create all
 //------------------------------------------------------------------------------------------------
 bool AppSFMLDraw::LoadResources()
 {
@@ -83,7 +66,7 @@ bool AppSFMLDraw::CreateTextures()
 	pVisTexture = make_unique<Texture>();
 	if (!pVisTexture->create(vm.width, vm.height))
 	{
-		Error("Can't create fullscreen for vis spect");
+		Error("Can't create fullscreen texture for vis spectrogram");
 		//return false;
 	}
 	auto s = pVisTexture->getSize();
@@ -173,11 +156,11 @@ void AppSFMLDraw::LoopMain()
 			case Event::Resized:
 				if (e.type == Event::Resized)
 				{
-					FloatRect vis(0, 0, e.size.width, e.size.height);
-					pWindow->setView(sf::View(vis));
+					FloatRect r(0, 0, e.size.width, e.size.height);
+					pWindow->setView(sf::View(r));
 				}
-				// save new size
-				set.SetDimFromWnd(pWindow.get());
+				//  save new size
+				SetViewFromWnd();
 				UpdDim();
 				break;
 
@@ -203,12 +186,58 @@ void AppSFMLDraw::LoopMain()
 
 
 //  Destroy All
-//------------------------------------------------------------------------------------------------
+//------------------------------------------------
 void AppSFMLDraw::DestroyAll()
 {
 	if (wndInited)
 		ImGui::SFML::Shutdown();
 	
-	set.SetDimFromWnd(pWindow.get());
+	SetViewFromWnd();
 	Destroy();
+}
+
+
+//------------------------------------------------------------------------------------------------
+//  Create window
+//------------------------------------------------------------------------------------------------
+void AppSFMLDraw::CreateWindow()
+{
+	//VideoMode vm = VideoMode::getDesktopMode();
+	const auto& v = set.view;
+
+	pWindow = make_unique<RenderWindow>(
+		VideoMode(v.wnd.xSize, v.wnd.ySize),
+		"cAmp2",  // Title
+		Style::Default, ContextSettings());
+
+	pWindow->setVerticalSyncEnabled(true);
+//	pWindow->setFramerateLimit(60);  // par
+	pWindow->setPosition(Vector2i(v.wnd.xPos, v.wnd.yPos));
+}
+
+
+//  Views
+void AppSFMLDraw::UpdateView(bool load, int v)
+{
+	if (load)
+	{
+		set.view = set.views[v];  // load preset
+		const auto& w = set.view.wnd;
+		pWindow->setPosition(Vector2i(w.xPos, w.yPos));
+		pWindow->setSize(Vector2u(w.xSize, w.ySize));
+		UpdDim();
+	}else
+	{
+		SetViewFromWnd();
+		set.views[v] = set.view;  // save preset
+	}
+}
+
+void AppSFMLDraw::SetViewFromWnd()
+{
+	auto& w = set.view.wnd;
+	auto p = pWindow->getPosition();
+	auto s = pWindow->getSize();
+	w.xPos = p.x;  w.yPos = p.y;
+	w.xSize = s.x;  w.ySize = s.y;
 }

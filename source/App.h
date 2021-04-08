@@ -69,6 +69,7 @@ protected:
 	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);
 	
+	virtual void UpdateView(bool load, int v) = 0;
 	void NextVis();
 
 	enum EWndOpt  // options windows

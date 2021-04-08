@@ -29,7 +29,7 @@ protected:
 	bool disabled = false;  // can't play
 
 	///  extra  ----
-	bool mod = false;  // xm, mod files etc.
+	bool mod = false;  // true for xm, mod files etc.
 	char hide = 0, sel = 0;  // todo:
 
 	char rateInName = 0;

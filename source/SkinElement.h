@@ -16,7 +16,7 @@ public:
 		//SE_Fps=0,
 		//SE_PlayInfo, SE_TimeCur, SE_TimeTotal,
 		SE_Visualization,
-		SE_LAST
+		SE_ALL
 	} type = SE_Text;
 
 public:

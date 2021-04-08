@@ -5,8 +5,19 @@
 using namespace std;  using namespace sf;
 
 
+//  Key press commands
+//------------------------------------------------------------------------------------------------------------
 bool App::KeyDown(Event::KeyEvent k)
 {
+	bool modView = ctrl || alt;
+	
+	//  views load,save
+	if (k.code >= Keyboard::Num0 && k.code <= Keyboard::Num9 && modView)
+	{
+		int v = k.code - Keyboard::Num0;
+		UpdateView(alt, v);
+	}
+	else
 	switch (k.code)
 	{
 	#define key(k)  case Keyboard::k

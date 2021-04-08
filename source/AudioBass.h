@@ -32,15 +32,15 @@ public:
     void Stop() override;
 
 	void GetPos() override;
-	float* GetVis() override
+	float* GetVisual() override
 	{	return vis;  }
 
 	void SetPos(bool back, bool slow, bool fast) override;
 	void SetPosAbs(double pos) override;
 	void SetVol(bool back, bool slow, bool fast) override;
 	
-	//  get data for audio visualization
-	void GetVisData(int size, const ViewSet &view) override;
+	//  get audio data for visualization
+	void GetVisualData(int size, const ViewSet &view) override;
 
 	void GetTrackTime(Track& t) override;  // sets time, mod, size
 	

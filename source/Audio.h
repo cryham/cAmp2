@@ -30,8 +30,8 @@ public:
 	bool bNextPrev = true;  // false back, prev
 
 public:
-	bool IsPlaying() {  return bPlaying;  }
-    bool IsPaused()  {  return bPaused;   }
+	const bool IsPlaying() const {  return bPlaying;  }
+    const bool IsPaused()  const {  return bPaused;   }
 
 	Playlist* GetPls() {  return pls;  }
 	void SetPls(Playlist* pl) {  pls = pl;  }
@@ -44,20 +44,20 @@ public:
     virtual void Init() = 0;
     virtual void Destroy() = 0;
 
-	//  play
+	//  Play
 	virtual bool Play(Track& trk) = 0;
 	virtual void Pause() = 0;
     virtual void Stop() = 0;
 
-	//  change position, volume
+	//  change  position, volume
 	virtual void GetPos() = 0;  // updates timePlay
 	virtual void SetPos(bool back, bool slow, bool fast) = 0;
 	virtual void SetPosAbs(double pos) = 0;
 	virtual void SetVol(bool back, bool slow, bool fast) = 0;
 
 	//  visualization
-	virtual float* GetVis() = 0;
-	virtual void GetVisData(int size, const ViewSet &view) = 0;  // updates float*
+	virtual float* GetVisual() = 0;
+	virtual void GetVisualData(int size, const ViewSet &view) = 0;  // updates float*
 	
 	virtual void GetTrackTime(Track& t) = 0;
 	virtual bool IsPlayable(std::string ext) = 0;

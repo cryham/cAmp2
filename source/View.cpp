@@ -68,7 +68,7 @@ void ViewSet::Load(const XMLElement* el)
 }
 
 ///  . . .             Save             . . .
-void ViewSet::Save(XMLElement* el, XMLDocument* xml)
+void ViewSet::Save(XMLElement* el, XMLDocument* xml) const
 {
 	XMLElement* e;
 	e = xml->NewElement("wnd");

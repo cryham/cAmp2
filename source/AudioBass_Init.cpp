@@ -6,14 +6,12 @@
 using namespace std;
 
 
-const uint AudioBass::ciFFTSize[ViewSet::FFTSizes] = {
-	BASS_DATA_FFT512, BASS_DATA_FFT1024, BASS_DATA_FFT2048, BASS_DATA_FFT4096, BASS_DATA_FFT8192};
-
 AudioBass::AudioBass()
 {
-//	fft.resize(10240);
-//	visA.resize(10240);
+	//fft.resize(ciFFT);
+	//vis.resize(ciFFT);
 }
+
 
 //  Ext
 bool AudioBass::IsPlayable(std::string ext)
@@ -40,49 +38,8 @@ void AudioBass::FillExt()
 }
 
 
-//  Init Plugins
-void AudioBass::InitPlugins()
-{
-	string p = FileSystem::Data() + "/../plugins";
-	Log("-------------------------");
-	Log(string("Loading plugins from:\n") + p);
-	vector<fs::path> files = FileSystem::ListDir(p);
-	
-	for (auto& f : files)
-	if (f.extension() == ".so")
-	{
-		HPLUGIN plug;
-		if (plug = BASS_PluginLoad(f.c_str(),0))
-		{
-			//  plugin loaded
-			const BASS_PLUGININFO *pinfo = BASS_PluginGetInfo(plug);
-			Log(string("  ") + f.filename().c_str());
-			for (int a=0; a < pinfo->formatc; ++a)
-			{
-				Log(string("    ") + pinfo->formats[a].name +" (" + pinfo->formats[a].exts + ")");
-
-				//  split Exts
-				string se = pinfo->formats[a].exts, s;
-				//  clean * ;
-				copy_if(se.begin(), se.end(), back_inserter(s),
-					[](char c){  return /*c!='.' &&*/ c!='*' && c!=';';  } );
-
-				//  add to vExt
-				vector<string> vs = split(s, ".");
-				for (auto& e:vs)
-				if (!e.empty())
-				{
-					//cout << e << endl;  //Log(e);
-					strupper(e);
-					vExt.emplace_back(e);
-				}
-			}
-		}else
-			Log(string("Plugin load error:") + f.c_str());
-	}
-}
-
-///  Init  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+///  Init
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 void AudioBass::Init()
 {
 	Log("-------------------------");
@@ -156,4 +113,48 @@ void AudioBass::Destroy()
 	Stop();
     BASS_Free();
     Log("Destroyed Sound: bass");
+}
+
+
+//  Init Plugins
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+void AudioBass::InitPlugins()
+{
+	string p = FileSystem::Data() + "/../plugins";
+	Log("-------------------------");
+	Log(string("Loading plugins from:\n") + p);
+	vector<fs::path> files = FileSystem::ListDir(p);
+	
+	for (auto& f : files)
+	if (f.extension() == ".so")
+	{
+		HPLUGIN plug;
+		if (plug = BASS_PluginLoad(f.c_str(),0))
+		{
+			//  plugin loaded
+			const BASS_PLUGININFO *pinfo = BASS_PluginGetInfo(plug);
+			Log(string("  ") + f.filename().c_str());
+			for (int a=0; a < pinfo->formatc; ++a)
+			{
+				Log(string("    ") + pinfo->formats[a].name +" (" + pinfo->formats[a].exts + ")");
+
+				//  split Exts
+				string se = pinfo->formats[a].exts, s;
+				//  clean * ;
+				copy_if(se.begin(), se.end(), back_inserter(s),
+					[](char c){  return /*c!='.' &&*/ c!='*' && c!=';';  } );
+
+				//  add to vExt
+				vector<string> vs = split(s, ".");
+				for (auto& e:vs)
+				if (!e.empty())
+				{
+					//cout << e << endl;  //Log(e);
+					strupper(e);
+					vExt.emplace_back(e);
+				}
+			}
+		}else
+			Log(string("Plugin load error:") + f.c_str());
+	}
 }

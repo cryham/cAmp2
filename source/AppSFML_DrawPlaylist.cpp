@@ -7,7 +7,7 @@ using namespace std;  using namespace sf;
 
 
 //  colors  // todo: in xml..
-const static Uint8 cc[chRall][3] = 
+const Uint8 AppSFMLDraw::clrRateTxt[chRall][3] = 
 {
 	100,140,100, //-3
 	110,160,110, //-2
@@ -19,7 +19,7 @@ const static Uint8 cc[chRall][3] =
 	140,200,240, // 4
 	160,210,240, // 5
 };
-const static Uint8 cb[chRall][3] = 
+const Uint8 AppSFMLDraw::clrRateBck[chRall][3] = 
 {
 	00, 40, 00, //-3
 	10, 60, 10, //-2
@@ -32,18 +32,11 @@ const static Uint8 cb[chRall][3] =
 	60,110,140, // 5
 };
 
-static ETexUV Tex4Rate(int rate)
-{
-	return (ETexUV)mia(int(TX_Rate1), int(TX_Rate5),
-					   int(TX_Rate1 - 1 + abs(rate)) );
-}
-
 
 //  Playlist  ==
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawPlaylist()
 {
-	//const auto& tracks = Pls().GetTracks();
 	int len = Pls().LengthVis();
 	bool play = audio->IsPlaying();
 	const ViewSet& v = set.view;
@@ -82,10 +75,10 @@ void AppSFMLDraw::DrawPlaylist()
 		if (!dir && rr)
 		Rect(0,yp,xw,yF,
 			Tex4Rate(rr), false,
-			cb[r][0], cb[r][1], cb[r][2]);
+			clrRateBck[r][0], clrRateBck[r][1], clrRateBck[r][2]);
 
 		//  rate
-		Clr(cc[r][0],cc[r][1],cc[r][2]);
+		Clr(clrRateTxt[r][0], clrRateTxt[r][1], clrRateTxt[r][2]);
 		str = GetRateStr(rr);
 		int w = Text(Fnt_Track, 0,0, false);  // center
 		Text(Fnt_Track, max(0, 5 - w/2), yp);
@@ -117,6 +110,7 @@ void AppSFMLDraw::DrawPlaylist()
 		yp += yF;  ++it;
 	}
 	iFoundVis = iFindVis;
+	
 	
 	//  const width
 	//str = t2s(600.f);  // get for 10:00
@@ -162,14 +156,28 @@ void AppSFMLDraw::DrawPlaylist()
 		yp += yF;  ++it;
 	}		
 
-	///  cursors  3rd pass
-	yp = yB_pl;  it = Pls().iOfs;
+	DrawPlaylist_3Cursors();
 
+	DrawPlsHeader();
+}
+
+
+///  cursors  3rd pass
+void AppSFMLDraw::DrawPlaylist_3Cursors()
+{
+	const bool play = audio->IsPlaying();
+	const ViewSet& v = set.view;
+	const int xws = v.wnd.xSize - v.pls.xW_slider;
+	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
+
+	int yp = yB_pl,
+		it = Pls().iOfs;
+	
 	for (int yi=0; yi < yL_pl; ++yi)
 	if (it < len)
 	{
 		const Track& trk = Pls().GetTrackVis(it);
-
+	
 		//  bookmarks
 		const Uint8 b = 150;  //par
 		if (trk.bookm > 0)
@@ -186,90 +194,7 @@ void AppSFMLDraw::DrawPlaylist()
 		const Uint8 c = 255;  //par dim
 		if (it == Pls().iCur)
 			Rect(0,yp,xws,yF, TX_PlsCur, true, c,c,c);
-
+	
 		yp += yF;  ++it;
 	}
-	
-	DrawPlsHeader();
-}
-
-
-//  Pls Slider  |
-//------------------------------------------------------------------------------------------------------------
-void AppSFMLDraw::DrawPlsSlider()
-{
-	const ViewSet& v = set.view;
-	const int xw = v.wnd.xSize, xs = v.pls.xW_slider;
-	if (yB_pl_inf >= v.wnd.ySize || xs <= 0)  return;
-
-	int len = Pls().LengthVis();  float fle = len;
-	float ySr = mia(1.f, 2.f, fle / yL_pl);
-	int xk1 = xw - xs +1,
-		xk2 = xw - xk1;
-	int xp1 = xw - 2*xs/3 +1,
-		xp2 = xw - xs/2 +1;
-
-	//  find results  -
-	if (bFind)
-	for (int i=0; i < len; ++i)
-		if (Pls().GetTrackVis(i).found)
-		{
-			float fc1 = i /fle,  fc2 = (i + ySr) /fle;		if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
-
-			Rect(xk1, float(c1), xp2, float(c2-c1), TX_SliF);
-		}
-
-	//  bookmarks  *
-	const Uint8 b = 100;  //par
-	for (int i=0; i < len; ++i)
-	{
-		const int bk = Pls().GetTrackVis(i).bookm;
-		if (bk > 0)
-		{
-			float fc1 = i /fle,  fc2 = (i + ySr) /fle;		if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
-
-			int tex = TX_SliB1 + bk - 1;
-			Rect(xp1, float(c1), xw - xp1, float(c2-c1), ETexUV(tex), true, b,b,b);
-	}	}
-
-	//  slider  |
-	if (len <= yL_pl/2)  return;
-
-	float fc1 = Pls().iCur /fle,  fc2 = (Pls().iCur + 1) /fle;	if (fc2>1.f) fc2=1.f;  // cursor
-	float fs1 = Pls().iOfs /fle,  fs2 = (Pls().iOfs +yL_pl) /fle;	if (fs2>1.f) fs2=1.f;  // vis list
-	int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;  // min h = 2 pix _
-	int s1 = fs1 *yH_pl+yB_pl, s2 = fs2 *yH_pl+yB_pl;  if (s2-s1<2)  s2=s1+2;
-
-	const Uint8 c = 180;  //par
-	if (len > yL_pl)
-	Rect(xk1, s1, xk2, s2-s1, TX_Slider, true, c,c,c);
-	Rect(xk1, c1, xk2, c2-c1, TX_SliCur, true);
-		
-	//  playing _
-	{
-		float fc1 = Pls().iPlayVis /fle,  fc2 = /*fc1+4.f/yw*/(Pls().iPlayVis + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
-		int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;
-
-		Rect(xk1, float(c1), xk2, float(c2-c1), TX_SliPlay);
-	}
-	//  selected-
-
-	
-	///  all tracks rating ->
-	//  todo: fill texture in Update() and just draw once
-	if (v.pls.bSliderRate && !bFind)
-		for (int i=0; i < len; ++i)
-		{
-			const int rr = Pls().GetTrackVis(i).rate, r = rr+3.;
-			if (rr != 0)
-			{
-				float fc1 = float(i) /fle, fc2 = float(i + ySr) /fle;  if (fc2>1.f) fc2=1.f;
-				int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<1) c2=c1+1;
-	
-				Rect(xk1, float(c1), xk2, float(c2-c1+1),
-					Tex4Rate(rr), true,
-					cb[r][0]*2/3, cb[r][1]*2/3, cb[r][2]*2/3);  //par
-		}	}
 }
