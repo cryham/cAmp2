@@ -10,7 +10,7 @@ using namespace std;  using namespace sf;
 void AppSFMLDraw::DrawVisual()
 {
 	const ViewSet& v = set.view;
-	const int xw = v.wnd.xSize, yw = v.wnd.ySize;
+	const int xw = v.wnd.xSize, yw = v.wnd.ySize, hh = v.vis.yH;
 	const bool play = audio->IsPlaying();
 	const float h = yE_vis - yB_vis;
 
@@ -77,18 +77,25 @@ void AppSFMLDraw::DrawVisual()
 				// todo: fill 1byte texture and use shader
 			}
 			++yy;
-			if (yy >= v.vis.yH)
+			if (yy >= hh)
 				yy = 0;
 			pVisTexture->update(pixels, xw, 1, 0, yy);
+			pVisTexture->setRepeated(true);
 			
-			//float w = xw, h = v.vis.yH;
-			//const int ux=0, uy=0, uw=xw, uh=h;
-
 			pVisSprite->setScale(1.f, 1.f);
-			pVisSprite->setTextureRect(IntRect(0, 0, xw, h));
-			pVisSprite->setPosition(0, yB_vis);
 			pVisSprite->setColor(Color(255, 255, 255));
+		#if 0
+			pVisSprite->setTextureRect(IntRect(0, 0, xw, h));  // static
 			pWindow->draw(*pVisSprite);
+		#else
+			//  rolling  // par..  horiz/vert..
+			pVisSprite->setTextureRect(IntRect(0, yy, xw, v.vis.yH-1-yy));
+			pVisSprite->setPosition(0, yB_vis);
+			pWindow->draw(*pVisSprite);
+			pVisSprite->setTextureRect(IntRect(0, 0, xw, yy));
+			pVisSprite->setPosition(0, yB_vis +v.vis.yH-yy);
+			pWindow->draw(*pVisSprite);
+		#endif
 		}
 	}	
 }

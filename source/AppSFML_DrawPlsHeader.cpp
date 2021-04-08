@@ -5,7 +5,7 @@ using namespace std;  using namespace sf;
 
 //  Pls header
 //------------------------------------------------------------------------------------------------------------
-void AppSFMLDraw::DrawPlsHeader()
+void AppSFMLDraw::DrawPls_Header()
 {
 	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
 	Clr(130,160,195);

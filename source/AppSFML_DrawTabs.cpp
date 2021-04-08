@@ -15,8 +15,8 @@ void AppSFMLDraw::DrawTabs()
 	Text(Fnt_Track, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
 
 	/* multi line  up,dn */
-	int ytb = yB_tabs+1;
-	if (ytb >= v.wnd.ySize)  return;  // fullscr vis
+	int ytB = yB_tabs+1;
+	if (ytB >= v.wnd.ySize)  return;  // fullscr vis
 	
 	int ntab = vPls.size();
 	if (ntab == 0)  return;
@@ -55,6 +55,6 @@ void AppSFMLDraw::DrawTabs()
 		str = pls.name;
 		const int w = Text(Fnt_Track, 0,0, false);
 		int xc = max(0, (xW_tabs - w)/2);  //center
-		Text(Fnt_Track, x*xW_tabs + xc, ytb+y*yH_tabs);
+		Text(Fnt_Track, x*xW_tabs + xc, ytB + y*yH_tabs);
 	}
 }

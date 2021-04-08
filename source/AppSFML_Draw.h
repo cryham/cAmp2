@@ -24,8 +24,8 @@ protected:
 	//  Draw stages
 	void DrawAll();
 	void DrawPlayer(), DrawVisual(), DrawTabs();
-	void DrawPlaylist(), DrawPlaylist_3Cursors();
-	void DrawPlsHeader(), DrawPlsSlider();
+	void DrawPlaylist(), DrawPls_1Names(), DrawPls_2Times(), DrawPls_3Cursors();
+	void DrawPls_Header(), DrawPls_Slider();
 
 	//  Views
 	void UpdateView(bool load, int v) override;
