@@ -69,9 +69,11 @@ void AppSFMLDraw::DrawPls_1Names()
 	//const int xws = v.wnd.xSize - v.pls.xW_slider;
 	const int xw = v.wnd.xSize;
 	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
-	int y = yB_pl, it = Pls().iOfs;
-	
 	int iFindVis = 0;
+	plsTxtW.clear();
+	plsTxtW.reserve(yL_pl);
+
+	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)
 	if (it < len)
 	{
@@ -115,7 +117,8 @@ void AppSFMLDraw::DrawPls_1Names()
 			if (bFind)
 				Clr(70,240,70);
 		}
-		Text(Fnt_Track, 17, y);
+		w = Text(Fnt_Track, 17, y);
+		plsTxtW.emplace_back(w + 17);
 	
 		y += yF;  ++it;
 	}
@@ -130,11 +133,11 @@ void AppSFMLDraw::DrawPls_2Times()
 	const int xw = v.wnd.xSize;
 	const int ws = v.pls.xW_slider + 8;  //par w  time|slider
 	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
-	int y = yB_pl, it = Pls().iOfs;
 	
 	str = "0";  //  digit width
 	const int w0 = Text(Fnt_Time, 0, 0, false);
 	
+	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)
 	if (it < len)
 	{
@@ -158,17 +161,21 @@ void AppSFMLDraw::DrawPls_2Times()
 			//  backgr  to clear names text
 			int xt = xw - ws - w, z = 10;  // marg
 			Rect(xt-z, y, xw - xt+z, yF, TX_Black, false);
-			//  todo: Text ..Time
 
 			//  text
 			TimeClr c = timeColors.Get(t);
 			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
 	
-			//string s = t2s(t);
-			//int l = s.length();
-			//int w = l * w0;
-			//int w = Text(Fnt_Time, 0, 0, false);
 			Text(Fnt_Time, xt, y);  // align right
+			
+			//  more signs, Text ..Time
+			int vw = plsTxtW[yl];
+			if (vw > xt-z)
+			{
+				str = "..";
+				Clr(170,200,230);
+				Text(Fnt_Track, xt-z, y+1);
+			}
 		}
 		y += yF;  ++it;
 	}		
@@ -184,7 +191,6 @@ void AppSFMLDraw::DrawPls_3Cursors()
 	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
 
 	int y = yB_pl, it = Pls().iOfs;
-	
 	for (int yl=0; yl < yL_pl; ++yl)
 	if (it < len)
 	{

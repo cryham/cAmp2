@@ -26,6 +26,7 @@ protected:
 	void DrawPlayer(), DrawVisual(), DrawTabs();
 	void DrawPlaylist(), DrawPls_1Names(), DrawPls_2Times(), DrawPls_3Cursors();
 	void DrawPls_Header(), DrawPls_Slider();
+	std::vector<int> plsTxtW;  // pls text widths temp
 
 	//  Views
 	void UpdateView(bool load, int v) override;
@@ -59,7 +60,7 @@ protected:
 	void WndDraw_AppViewStats(), WndDraw_AppAudio(), WndDraw_AppVis();
 	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
-
+	
 	//  Resources
 	//----------------------------------------------------
 	std::unique_ptr<sf::Texture> pTexture = nullptr, pVisTexture = nullptr;

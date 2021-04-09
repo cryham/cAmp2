@@ -235,7 +235,7 @@ void App::Mouse()
 		int yMd = ym - yMs;
 		if (abs(yMd) > 15)
 		{
-			mtiv = 0.6f - 0.07f* pow(float(abs(yMd)-15), 0.45f);  //ms
+			mtiv = 0.6f - 0.07f* pow(float(abs(yMd)-15), 0.45f);  //par? ms
 			if (mti > mtiv)
 			{
 				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1+ mtiv/-0.06f;
