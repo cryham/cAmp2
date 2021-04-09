@@ -7,13 +7,13 @@ using namespace std;
 Track::Track(fs::path file, bool dir1)
 {
 	dir = dir1;
-    path = file;
-    SetNameFromPath();
+	path = file;
+	SetNameFromPath();
 }
 
 void Track::SetNameFromPath()
 {
-    name = path.filename().filename().string();  // u8string?
+	name = path.filename().filename().string();  // u8string?
 	//  parent dirs
 	auto p1 = path.parent_path();
 	parent = p1.filename();

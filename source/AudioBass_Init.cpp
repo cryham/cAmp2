@@ -45,44 +45,44 @@ void AudioBass::Init()
 	Log("-------------------------");
 	Log("Init Sound: bass");
 
-    if (HIWORD(BASS_GetVersion()) != BASSVERSION)
-        Error("Incorrect bass version");
+	if (HIWORD(BASS_GetVersion()) != BASSVERSION)
+		Error("Incorrect bass version");
 
-    //  find all devs
-    //sDevs.clear();
-    BASS_DEVICEINFO di;
-    int devs = -1;
+	//  find all devs
+	//sDevs.clear();
+	BASS_DEVICEINFO di;
+	int devs = -1;
 	Log("Devices:");
-    for (int n=0; BASS_GetDeviceInfo(n,&di); ++n)
-    if (di.flags & BASS_DEVICE_ENABLED)
-    {
-        //sDevs.emplace_back(di.name);
-        devs = n;
-        Log(i2s(n,3) + ": " + di.name +
-            (di.flags & BASS_DEVICE_DEFAULT ? " (default)": ""));
-    }
-    int nDev = 1;  /// par
-    //int nDev = devs-1;
+	for (int n=0; BASS_GetDeviceInfo(n,&di); ++n)
+	if (di.flags & BASS_DEVICE_ENABLED)
+	{
+		//sDevs.emplace_back(di.name);
+		devs = n;
+		Log(i2s(n,3) + ": " + di.name +
+			(di.flags & BASS_DEVICE_DEFAULT ? " (default)": ""));
+	}
+	int nDev = 1;  /// par
+	//int nDev = devs-1;
 
-    //  Init
-    DWORD fl = BASS_DEVICE_FREQ;
-    int nFreq = 44100;  /// par
-    if (!BASS_Init(nDev,nFreq, fl, NULL,NULL))
-        Error("Can't initialize bass");
+	//  Init
+	DWORD fl = BASS_DEVICE_FREQ;
+	int nFreq = 44100;  /// par
+	if (!BASS_Init(nDev,nFreq, fl, NULL,NULL))
+		Error("Can't initialize bass");
 
 	FillExt();
 	InitPlugins();
 
-    //  get freq info-
+	//  get freq info-
 	Log("-------------------------");
-    Log("Info bass:");
-    BASS_INFO inf;
-    BOOL b = BASS_GetInfo(&inf);  maxFreq = 44100;
-    if (b)
-    {	Log("  speakers: " + i2s(inf.speakers));
-        Log("  max freq: " + i2s(inf.maxrate));  maxFreq = inf.maxrate;
-        Log("  cur freq: " + i2s(inf.freq));
-    }
+	Log("Info bass:");
+	BASS_INFO inf;
+	BOOL b = BASS_GetInfo(&inf);  maxFreq = 44100;
+	if (b)
+	{	Log("  speakers: " + i2s(inf.speakers));
+		Log("  max freq: " + i2s(inf.maxrate));  maxFreq = inf.maxrate;
+		Log("  cur freq: " + i2s(inf.freq));
+	}
 	
 	//  ext
 	Log("Playable file extensions:");
@@ -111,8 +111,8 @@ void AudioBass::Init()
 void AudioBass::Destroy()
 {
 	Stop();
-    BASS_Free();
-    Log("Destroyed Sound: bass");
+	BASS_Free();
+	Log("Destroyed Sound: bass");
 }
 
 

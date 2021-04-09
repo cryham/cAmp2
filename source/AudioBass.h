@@ -12,24 +12,24 @@ const static int
 
 class AudioBass : public Audio, public LogErr
 {
-    HSTREAM chPl = 0;   // ogg, mp3, etc.
-    HMUSIC chMod = 0;   // xm, mod, etc.
-    DWORD ch() {  return chMod ? chMod : chPl;  }
-    HSYNC chSync = 0;
+	HSTREAM chPl = 0;   // ogg, mp3, etc.
+	HMUSIC chMod = 0;   // xm, mod, etc.
+	DWORD ch() {  return chMod ? chMod : chPl;  }
+	HSYNC chSync = 0;
 	
 	float fft[ciFFT], vis[ciFFT];
 	short wav[ciWAV];
 	
 public:
-    AudioBass();
+	AudioBass();
 
-    void Init() override;
-    void Destroy() override;
+	void Init() override;
+	void Destroy() override;
 
-    //  player
+	//  player
 	bool Play(Track& trk) override;  // can disable track
 	void Pause() override;
-    void Stop() override;
+	void Stop() override;
 
 	void GetPos() override;
 	float* GetVisual() override

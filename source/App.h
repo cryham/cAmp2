@@ -14,10 +14,10 @@ class Audio;
 class App : public LogErr
 {
 public:
-    App();
+	App();
 	virtual ~App();
 
-    virtual bool Run() = 0;
+	virtual bool Run() = 0;
 
 protected:
 	

@@ -90,14 +90,14 @@ bool Playlist::Next(int add)
 //--------------------------------------------------------------------
 bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 {
-    auto files = FileSystem::ListDir(dir, recursive);
-    for (const auto& file: files)
-    {
+	auto files = FileSystem::ListDir(dir, recursive);
+	for (const auto& file: files)
+	{
 		AddFile(file, where);
-    }
+	}
 	UpdateVis();
 
-    return true;
+	return true;
 }
 
 bool Playlist::AddFile(fs::path file, const EInsert &where)

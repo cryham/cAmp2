@@ -19,7 +19,7 @@ protected:
 		int i = 0;     // id to All or Dirs
 		int iAll = 0;  // id to All  (to first track for dirs)
 	};
-    std::deque<VisId> tracksVis;  // only visible, filtered All, with dirs
+	std::deque<VisId> tracksVis;  // only visible, filtered All, with dirs
 
 public:
 	//  vars  ----
@@ -27,9 +27,9 @@ public:
 
 //  properties saved in .cp
 //private:
-	int iCur = 0;    //  cursor pos			id to Vis   cur >= ofs
-	int iOfs = 0;    //  offset, view start	id to Vis
-	int iPlay = 0;   //  playing pos		id to All
+	int iCur = 0;   //  cursor pos          id to Vis   cur >= ofs
+	int iOfs = 0;   //  offset, view start  id to Vis
+	int iPlay = 0;  //  playing pos	        id to All
 public:	
 	int filterLow = cRateMin;  // lower, upper
 	int filterHigh = cRateMax;
@@ -69,15 +69,15 @@ public:
 	//  stats
 	Stats stats, stAll;  // All = not filtered
 	
-    enum EInsert
-    {  Ins_Cursor, Ins_Top, Ins_End  };
+	enum EInsert
+	{  Ins_Cursor, Ins_Top, Ins_End  };
 
 	
 //  ctor, main  ----
 	Playlist();
-    Playlist(std::string name1);
+	Playlist(std::string name1);
 
-    bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
+	bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
 	bool AddFile(fs::path file, const EInsert& where = Ins_End);
 	
 	static Audio* audio;  // Play, GetTrackTime, IsPlayable(ext) etc.
@@ -120,7 +120,7 @@ public:
 	
 //  getters	etc.  ----
 	const Track& GetTrackAll(int id) const	{   return tracksAll[id];  }
-		  Track& GetTrackAll(int id)	    {   return tracksAll[id];  }
+		  Track& GetTrackAll(int id)		{   return tracksAll[id];  }
 
 	const Track& GetTrackVis(int id) const	{   return Get(tracksVis[id]);  }
 		  Track& GetTrackVis(int id)		{   return Get(tracksVis[id]);  }

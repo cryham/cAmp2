@@ -11,7 +11,7 @@ public:
 	std::vector<SkinElement> el;
 
 public:
-    Skin();
+	Skin();
 	
 	bool Load();
 

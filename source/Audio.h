@@ -9,17 +9,17 @@ class Playlist;
 class Audio
 {
 protected:
-    int maxFreq = 0;  // init, devices-
+	int maxFreq = 0;  // init, devices-
 
 	//  Play state
-    bool bPlaying = false;
-    bool bPaused  = false;
+	bool bPlaying = false;
+	bool bPaused  = false;
 
 	Playlist* pls = nullptr;  // for Play, Next
 
 public:
 	//  Time pos
-    double timePlay = 0.0, timeTrack = 0.0; //, lastPos = 0.0;
+	double timePlay = 0.0, timeTrack = 0.0; //, lastPos = 0.0;
 	int iVolume = 500;  // 1000 = 100%
 	
 	std::string sInfo;  // bitRate, freq, size MB
@@ -31,23 +31,23 @@ public:
 
 public:
 	const bool IsPlaying() const {  return bPlaying;  }
-    const bool IsPaused()  const {  return bPaused;   }
+	const bool IsPaused()  const {  return bPaused;   }
 
 	Playlist* GetPls() {  return pls;  }
 	void SetPls(Playlist* pl) {  pls = pl;  }
 
 public:
 	//  Init
-    Audio();
-    virtual ~Audio();
+	Audio();
+	virtual ~Audio();
 
-    virtual void Init() = 0;
-    virtual void Destroy() = 0;
+	virtual void Init() = 0;
+	virtual void Destroy() = 0;
 
 	//  Play
 	virtual bool Play(Track& trk) = 0;
 	virtual void Pause() = 0;
-    virtual void Stop() = 0;
+	virtual void Stop() = 0;
 
 	//  change  position, volume
 	virtual void GetPos() = 0;  // updates timePlay

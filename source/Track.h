@@ -10,15 +10,15 @@ class Track
 	friend class Playlist;
 protected:
 
-    //  shown in gui,  got from path with SetNameFromPath
+	//  shown in gui,  got from path with SetNameFromPath
 	//e.g.  /parent2/parent/name.ext
-    std::string name;  // no rating, bookm
+	std::string name;  // no rating, bookm
 	std::string ext;   // uppercase, no dot .
 
-    //  file on disk, saved in playlist
-    fs::path path;
+	//  file on disk, saved in playlist
+	fs::path path;
 	std::string parent, parent2;  // parent dirs
-	
+
 	//  time
 	bool hasTime = false;  // needs update
 	double time = 0.0;  // in seconds
@@ -38,45 +38,45 @@ public:
 	char rate = 0;   // rating
 	char bookm = 0;  // bookmark
 	bool found = false;     // match
-	
+
 	//  set in UpdateVis
 	bool vis = true;  // visible, after filtering etc.
 	int idPlayVis = 0;  // id to tracksVis
 
 public:
-    Track(fs::path file, bool dir1=false);
+	Track(fs::path file, bool dir1=false);
 
 	//  get for draw
-    const std::string& GetName() const
-    {   return name;  }
+	const std::string& GetName() const
+	{   return name;  }
 
 	const std::string GetPath() const
-    {   return path.u8string();  }
+	{   return path.u8string();  }
 
 	const std::string& GetParent() const
-    {   return parent;  }
+	{   return parent;  }
 
 	const std::string& GetParent2() const
-    {   return parent2;  }
-	
-	
+	{   return parent2;  }
+
+
 	bool HasTime() const
 	{	return hasTime;  }
-	
+
 	double GetTime() const
 	{	return time;  }
 
 	double GetSize() const
 	{	return size;  }
-	
-	
+
+
 	bool IsDisabled() const
 	{	return disabled;  }
 
 	bool IsDir() const
 	{	return dir;  }
-	
-	
+
+
 	void SetNameFromPath();
 	void CleanNameRating();
 	static void GetNameRating(const std::string& name, char& pRate, char& pBookm);

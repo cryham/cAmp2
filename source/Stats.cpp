@@ -4,15 +4,15 @@
 
 Stats::Stats()
 {
-    Clear();
+	Clear();
 }
 
 void Stats::Clear()
 {
-    size = 0;
-    time = 0.0;
-    dirs = 0;
-    files = 0;
+	size = 0;
+	time = 0.0;
+	dirs = 0;
+	files = 0;
 }
 
 void Stats::AddDir()
@@ -22,14 +22,14 @@ void Stats::AddDir()
 
 void Stats::Add(const Track* t)
 {
-    if (t->IsDir())
-        ++dirs;
-    else
-    {
-        ++files;
-        size += t->GetSize();
-        time += t->GetTime();
-    }
+	if (t->IsDir())
+		++dirs;
+	else
+	{
+		++files;
+		size += t->GetSize();
+		time += t->GetTime();
+	}
 }
 
 void Stats::operator += (const Stats& add)

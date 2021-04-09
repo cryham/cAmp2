@@ -18,7 +18,7 @@ class TimeColors  // theme
 {
 	friend class TimeClrSets;
 protected:
-    std::vector<TimeClr> vc;
+	std::vector<TimeClr> vc;
 	std::string name;
 
 public:
@@ -33,7 +33,7 @@ public:
 class TimeClrSets : public LogErr
 {
 protected:
-    std::vector<TimeColors> vt;
+	std::vector<TimeColors> vt;
 	int cur = 0;
 
 public:
