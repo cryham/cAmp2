@@ -44,7 +44,7 @@ void AudioBass::GetVisualData(int size, const ViewSet& view)
 			int i = (wav[a++] + wav[a++]) / 2;  a+=2;  // stereo to mono
 			float y = 0.5f + i/65536.f;
 			vis[x] = y;
-			//visA[x] = (0.5f - 0.5f*sin(float(x)/view.xSize*6.28) );  // test
+			//vis[x] = (0.5f - 0.5f*sin(float(x)/xw1*2*3.14f) );  // test
 		}
 	}
 	

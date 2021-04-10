@@ -4,6 +4,7 @@
 #include "Stats.h"
 #include "Settings.h"  // for SetFind
 #include <deque>
+#include <map>
 
 
 class Audio;
@@ -13,6 +14,7 @@ class Playlist : public LogErr
 protected:
 	std::deque<Track> tracksAll;  // All, unfiltered, from .cp
 	std::deque<Track> tracksDirs;  // Dir added when path changes
+	std::map<fs::path, int> mapDirs;  // map path to tracksDirs id+1, 0 not found
 	struct VisId
 	{
 		bool dir = false;

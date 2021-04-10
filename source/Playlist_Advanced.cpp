@@ -28,7 +28,6 @@ void Playlist::UpdateVis(bool bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
 	tracksVis.clear();
-	tracksDirs.clear();
 	stats.Clear();
 	fs::path prev;
 	//playVisOut = true;
@@ -54,19 +53,31 @@ void Playlist::UpdateVis(bool bZoom)
 			continue;
 		
 		fs::path path = t.path.parent_path();
-		//  todo: dir rate, dir hide  tracksDirs in .cp ..
 		if (path != prev)
 		{
-			//  Add Dir  +++
-			Track d(t.path.parent_path(), true);
-			tracksDirs.emplace_back(move(d));
-			
-			VisId id;  id.dir = true;  id.i = tracksDirs.size()-1;
+			VisId id;  id.dir = true;
+
+			int im = mapDirs[path];
+			if (im == 0)  // not found
+			{
+				//  Add Dir  +++
+				Track d(path, true);
+				tracksDirs.emplace_back(move(d));
+				int si = tracksDirs.size();
+				mapDirs[path] = si;  // 1..
+				
+				id.i = si - 1;  // last
+				id.iAll = i;
+	
+			}else
+				id.i = im - 1;
+
 			id.iAll = i;  // closest track
+
 			tracksVis.emplace_back(move(id));
 
 			t.idPlayVis = iVis+1;
-			
+				
 			stats.AddDir();
 		}
 		prev = path;

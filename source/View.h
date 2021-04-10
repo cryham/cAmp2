@@ -33,8 +33,10 @@ public:
 		int yH = 130;  // draw height, top
 
 		/*EVisType*/ int eType = VisT_FFT;
+		
 		int iFFT_Size = 1;      // FFT samples (quality)
 		float fFFT_Mul = 69.f;  // y multiplier (scale)
+		
 		float fPrt_Fq = 100.f;  // spectrogram speed
 	} vis;
 	

@@ -43,28 +43,45 @@ bool Playlist::Load()
 		fi.getline(s,MP,'|');  // path, utf8
 		if (strlen(s) > 0)
 		{
-			if (s[0] == '<')  // short, add prev path
-			{	string f(s);  // file
+			bool dir = false;
+			if (s[0] == '>')  // dirs top
+			{
+				dir = true;
+				string f(s);
+				f = f.substr(1);
+				a = f;
+			}
+			else if (s[0] == '<')  // short, add prev path
+			{
+				string f(s);  // file
 				f = f.substr(1);
 				a = prevPath / f;
 				stAll.AddDir();
 			}else
 				a = s;
 				
-			Track t(a, false);
+			Track t(a, dir);
 			prevPath = t.path.parent_path();
 			
 			//  time,size
-			fi.getline(s,MP,'|');  t.time = s2d(s);  t.hasTime = true;
-			fi.getline(s,MP,'|');  t.size = s2i(s);
-
+			if (!dir)
+			{
+				fi.getline(s,MP,'|');  t.time = s2d(s);  t.hasTime = true;
+				fi.getline(s,MP,'|');  t.size = s2i(s);
+			}
 			//  hide, rate,bookm, mod
 			fi.getline(s,80);	int h=0,r=0, b=0, m=0;
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
 			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
 			stAll.Add(&t);
-			tracksAll.emplace_back(move(t));
+			if (dir)
+			{	auto path = t.path;
+				tracksDirs.emplace_back(move(t));
+				mapDirs[path] = tracksDirs.size();
+			}
+			else
+				tracksAll.emplace_back(move(t));
 		}
 	}
 	fi.close();
@@ -91,6 +108,14 @@ bool Playlist::Save()
 		iCur <<'|'<< iOfs <<'|'<< iPlay <<'|'<< bookm <<'|'<<
 		f2s(hue,3,5) <<'|'<< f2s(sat,3,5) <<'|'<< f2s(val,3,5) <<"\n";
 	
+	for (int i=0; i < tracksDirs.size(); ++i)
+	{
+		const auto& t = tracksDirs[i];
+		of << '>' << t.path.u8string();
+		of << '|'<< (int)t.hide << '|'<< (int)t.rate <<'|'<< (int)t.bookm;
+		of << '|'<< '0';  // mod-
+		of << "\n";
+	}
 	for (int i=0; i < LengthAll(); ++i)
 	{
 		const Track& t = GetTrackAll(i);
@@ -114,6 +139,10 @@ void Playlist::Clear()  // defaults
 {
 	tracksAll.clear();
 	tracksVis.clear();
+
+	tracksDirs.clear();
+	mapDirs.clear();
+	
 	stats.Clear();
 	stAll.Clear();
 
