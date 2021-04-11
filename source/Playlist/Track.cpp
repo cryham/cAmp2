@@ -32,7 +32,7 @@ void Track::SetNameFromPath()
 	if (i != string::npos)
 		name = name.substr(0, i);
 	
-	//  get rating, bookmark from name  // todo: for dirs too
+	//  get rating, bookmark from name
 	Ratings::GetFromName(name.c_str(), rate, bookm);
 	rateInName = rate;
 	bookmInName	= bookm;

@@ -172,8 +172,7 @@ int Playlist::RenameRate(bool playing)
 	int i = 0, cnt = 0;
 	for (auto& t : tracks)
 	{
-		if (t.rate  != t.rateInName ||
-			t.bookm != t.bookmInName)  // user changed
+		if (t.NeedsRename())
 		{
 			//  get new filename
 			fs::path name = t.name;

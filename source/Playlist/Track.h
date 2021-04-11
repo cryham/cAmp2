@@ -51,6 +51,12 @@ class Track
 public:
 	Track(fs::path file, bool dir1=false);
 
+	bool NeedsRename() const
+	{	return  // user changed
+		rate  != rateInName ||
+		bookm != bookmInName;
+	}
+	
 	//  getters for draw  ----
 	const std::string& GetName() const		{   return name;  }
 	const std::string GetPath() const		{   return path.u8string();  }
