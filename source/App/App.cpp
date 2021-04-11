@@ -15,7 +15,7 @@ bool App::Init()
 	FileSystem::Init();
 
 	//  log
-	AppLog::Init();
+	LogFile::Init();
 	
 	Log(FileSystem::GetInfo());
 	
@@ -52,6 +52,7 @@ App::~App()
 
 
 //  key command utils
+//------------------------------------------------------------------------
 bool App::Play(bool set)
 {
 	bool b = Pls().Play(set);
@@ -69,7 +70,9 @@ void App::NextVis()
 	UpdDim();
 }
 
+
 //  apply set State to player
+//------------------------------------------------------------------------
 void App::LoadState()
 {
 	audio->iVolume = set.state.iVolume;
@@ -87,7 +90,9 @@ void App::SaveState()
 	set.state.idPlay = plsPlId;
 }
 
+
 //  Playlists
+//------------------------------------------------------------------------
 void App::LoadPls()
 {
 	all.Clear();

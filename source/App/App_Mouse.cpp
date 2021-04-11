@@ -5,7 +5,7 @@
 using namespace std;
 
 
-void App::Wheel(int d)
+void App::WheelMove(int d)
 {
 	if (d == 0)  return;
 	if (ym < yB_tabs)  // plr vol
@@ -22,7 +22,7 @@ void App::Wheel(int d)
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - -  Mouse  - - - - - - - - - - - - - - - - - - - - - - - - */
-void App::Mouse()
+void App::MouseUpdate()
 {
 	xms = xm;  xm = xMpos;
 	yms = ym;  ym = yMpos;

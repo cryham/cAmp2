@@ -12,7 +12,7 @@ using namespace std;
 
 //--------------------------------------------------------------------------------------------------------
 ///  Update Visible
-//   Fill tracksVis Ids from tracksAll, filters rating, adds dirs etc.
+//   Fills visible Ids from tracks,  filters rating, adds dirs etc.
 //--------------------------------------------------------------------------------------------------------
 void Playlist::UpdateVis(bool bZoom)
 {
@@ -57,23 +57,22 @@ void Playlist::UpdateVis(bool bZoom)
 		{
 			VisId id;  id.dir = true;
 
-			int im = mapPathToDirs[path];
-			if (im == 0)  // not found
+			int idDir = mapPathToDirs[path];
+			if (idDir == 0)  // not found
 			{
 				//  Add Dir  +++
 				Track d(path, true);
 				dirs.emplace_back(move(d));
-				int si = dirs.size();
-				mapPathToDirs[path] = si;  // 1..
 				
-				id.i = si - 1;  // last
+				int size = dirs.size();
+				mapPathToDirs[path] = size;  // 1..
+				
+				id.i = size - 1;  // last
 				id.iAll = i;
-	
 			}else
-				id.i = im - 1;
+				id.i = idDir - 1;
 
 			id.iAll = i;  // closest track
-
 			visible.emplace_back(move(id));
 
 			t.idPlayVis = iVis+1;

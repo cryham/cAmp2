@@ -139,8 +139,8 @@ void AppSFMLDraw::LoopMain()
 
 			switch (e.type)
 			{
-			case Event::MouseMoved:				Mouse(e.mouseMove.x, e.mouseMove.y);  break;
-			case Event::MouseWheelScrolled:		Wheel(e.mouseWheelScroll.delta);  break;
+			case Event::MouseMoved:				MouseMove(e.mouseMove.x, e.mouseMove.y);  break;
+			case Event::MouseWheelScrolled:		WheelMove(e.mouseWheelScroll.delta);  break;
 
 			case Event::MouseButtonPressed:		MouseDown((int)e.mouseButton.button + 1);  break;
 			case Event::MouseButtonReleased:	MouseUp((int)e.mouseButton.button + 1);  break;
@@ -175,7 +175,7 @@ void AppSFMLDraw::LoopMain()
 		dt = time.asSeconds();
 
 		DrawAll();
-		Mouse();
+		MouseUpdate();
 
 		pWindow->display();
 

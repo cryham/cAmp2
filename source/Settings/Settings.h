@@ -1,5 +1,5 @@
 #pragma once
-#include "../System/AppLog.h"
+#include "../System/LogFile.h"
 #include "View.h"
 #include <SFML/Config.hpp>
 #include <string>
@@ -42,7 +42,7 @@ struct SetFind
 
 //  App Settings
 //------------------------------------------------
-class Settings : public LogErr
+class Settings : public AddLog
 {
 public:
 	const static int ver = 210;  // version of file

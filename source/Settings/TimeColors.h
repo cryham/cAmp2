@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "../System/AppLog.h"
+#include "../System/LogFile.h"
 
 
 struct TimeClr  // color at time
@@ -30,7 +30,7 @@ public:
 
 
 //  all themes
-class TimeClrSets : public LogErr
+class TimeClrSets : public AddLog
 {
 protected:
 	std::vector<TimeColors> vt;

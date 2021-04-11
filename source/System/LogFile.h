@@ -3,7 +3,7 @@
 
 
 //  Log file  ----
-class AppLog
+class LogFile
 {
 	static std::ofstream ofLog;
 	static bool noLog;// = true;
@@ -17,9 +17,9 @@ public:
 
 
 //  helper for adding log
-class LogErr
+class AddLog
 {
 public:
-	static void Log  (std::string s) {  AppLog::Log(s);    }
-	static void Error(std::string s) {  AppLog::Error(s);  }
+	static void Log  (std::string s) {  LogFile::Log(s);    }
+	static void Error(std::string s) {  LogFile::Error(s);  }
 };

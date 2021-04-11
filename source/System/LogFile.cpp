@@ -1,4 +1,4 @@
-#include "AppLog.h"
+#include "LogFile.h"
 #include "FileSystem.h"
 #include <fstream>
 #include <iostream>
@@ -6,13 +6,13 @@ using namespace std;
 
 
 //  vars  ----
-ofstream AppLog::ofLog;
-bool AppLog::noLog = true;
-int AppLog::iErrors = 0;
+ofstream LogFile::ofLog;
+bool LogFile::noLog = true;
+int LogFile::iErrors = 0;
 
 
 //  init  ----
-void AppLog::Init()
+void LogFile::Init()
 {
 	ofLog.open(FileSystem::Log());
 	noLog = !ofLog.is_open();
@@ -21,7 +21,7 @@ void AppLog::Init()
 }
 
 //  log
-void AppLog::Log(string s)
+void LogFile::Log(string s)
 {
 	if (noLog)  return;
 	ofLog << s << endl;
@@ -29,7 +29,7 @@ void AppLog::Log(string s)
 }
 
 //  error
-void AppLog::Error(string s)
+void LogFile::Error(string s)
 {
 	++iErrors;
 	Log("Error! " + s);

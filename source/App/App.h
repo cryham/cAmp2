@@ -2,7 +2,7 @@
 #include "../Playlist/Playlist.h"
 #include "../Settings/Settings.h"
 #include "../Settings/TimeColors.h"
-#include "../System/AppLog.h"
+#include "../System/LogFile.h"
 #include <SFML/Window/Event.hpp>  // input, use own enum?
 #include <memory>
 #include <vector>
@@ -10,7 +10,7 @@
 class Audio;
 
 
-class App : public LogErr
+class App : public AddLog
 {
 public:
 	App();
@@ -49,21 +49,23 @@ protected:
 	void TabMove(int n);
 	void TabNew(int m);
 	void TabClose();
-	
 
-	//  find
+	
+	//  Advanced  ----
+	//  Find
 	std::string sFind;
 	bool bFind = false;  // hide
 	int iFoundAll = 0, iFoundVis = 0;
 	void Find();
 
-	//  file operations
+	//  File Operations
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	int RenameRate(bool allPls=false);
 	
 	
-	///  Input  ------------------------------------------------
-	//  keys
+	///  Input
+	//------------------------------------------------
+	//  Keys
 	bool alt = false, ctrl = false, shift = false;
 	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);
@@ -81,30 +83,35 @@ protected:
 	virtual void WndOpen(EWndOpt type, bool center = true) = 0;
 
 
-	//  mouse pos
+	///  Mouse  pos
+	//------------------------------------------------
 	int xMpos=0,yMpos=0, xMold=0,yMold=0;  //, xWclick,yWclick
 	int xm=0,ym=0, xms=0,yms=0;  // pos,old
 	
 	//  mmb vars
-	int xMs=0,yMs=0, yM_visH=0, xL_ofs=0,yL_sl=0;
+	int xMs=0,yMs=0, yM_visH=0, xL_ofs=0, yL_sl=0;
 	float mti=0.f, mtiv=0.f;
 
-	//  buttons, s old state
+	//  buttons, s = old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
 	
-	int iDraw = 2;  // clean and redraw, when needed
-	void Redraw() {  iDraw = 2;  }
 	
-	void Mouse();  // process, update
-	void Mouse(int x, int y)
+	void MouseUpdate();  // process, update
+	void WheelMove(int d);
+
+	void MouseMove(int x, int y)  // events
 	{	xMpos = x;  yMpos = y;  }
-	void Wheel(int d);
 	void MouseDown(int b);
 	void MouseUp(int b);
 
 	
+	int iDraw = 2;  // clean and redraw, when needed
+	void Redraw() {  iDraw = 2;  }
+	
+	
 	//  Toggle
+	//------------------------------------------------
 	float dt = 0.1f;   // frame time, ms
 	bool bFps = false;   // show Fps
 	bool bDebug = false; // show debug text
@@ -121,7 +128,8 @@ protected:
 	void Osd(std::string msg);
 	
 	
-	///  Dimensions  ------------------------------------------------
+	///  Dimensions
+	//------------------------------------------------
 	//  B = begin  E = end  W = width  H = height
 	int yB_inf=0,  // file info
 		yE_plr_btn=0,  // player buttons |< >|
@@ -144,4 +152,5 @@ protected:
 		xWex_plS=0;  // extra width for slider drag
 	
 	void UpdDim();
+	// todo:? struct Area xB,yB..  class Dimensions
 };

@@ -1,6 +1,6 @@
 #pragma once
 #include "Track.h"
-#include "../System/AppLog.h"
+#include "../System/LogFile.h"
 #include "../System/Stats.h"
 #include "../Settings/Settings.h"  // for SetFind
 #include <deque>
@@ -9,7 +9,7 @@
 
 class Audio;
 
-class Playlist : public LogErr
+class Playlist : public AddLog
 {
 protected:
 	std::deque<Track> tracks;  // All, unfiltered, from .cp
@@ -32,7 +32,7 @@ public:
 	int iCur = 0;   //  cursor pos          id to Vis   cur >= ofs
 	int iOfs = 0;   //  offset, view start  id to Vis
 	int iPlay = 0;  //  playing pos	        id to All
-public:	
+public:
 	int filterLow = cRateMin;  // lower, upper
 	int filterHigh = cRateMax;
 	int bookm = 0;  //  bookmark
@@ -85,7 +85,7 @@ public:
 	static Audio* audio;  // Play, GetTrackTime, IsPlayable(ext) etc.
 	
 
-	//  play  ----
+	//  Play  ----
 	bool Play(bool set = false);
 	bool Next(int add = 1);
 	void GotoPlay();
@@ -95,16 +95,17 @@ public:
 	bool Load(), Save();
 	void Clear();
 	
-	//  Update  Fill tracksVis Ids from tracksAll,
-	void UpdateVis(bool bZoom = true);  // for view,  filter, add dirs etc.
+	//  Update  Fills visible Ids
+	void UpdateVis(bool bZoom = true);
 	
 	
-	//  basic  ----
+	//  Basic  ----
 	//  todo:  copy, move selected tracks, from other ..
 	void DeleteCur();
+	void DuplicateCur();
 
 	
-	//  change  ----
+	//  Change  ----
 	void Bookm(bool pls, char add);  //  bookmarks
 	void Rate(bool playing, char add);
 
@@ -113,26 +114,29 @@ public:
 	{	return lower ? filterLow : filterHigh;  }
 
 	
-	//  advanced  ----
+	//  Advanced  ----
 	bool DeleteCurFile(bool playNext);
+	
 	void Find(std::string &find, const SetFind& opt);
 	void FindClear();
+	
 	int RenameRate(bool playing);
 
 	
-//  getters	etc.  ----
+	//  getters	etc.
+	//----------------------------------------------------------------------------------------
 	const Track& GetTrackAll(int id) const	{   return tracks[id];  }
-		  Track& GetTrackAll(int id)		{   return tracks[id];  }
+	      Track& GetTrackAll(int id)		{   return tracks[id];  }
 
 	const Track& GetTrackVis(int id) const	{   return Get(visible[id]);  }
-		  Track& GetTrackVis(int id)		{   return Get(visible[id]);  }
+	      Track& GetTrackVis(int id)		{   return Get(visible[id]);  }
 	
 	int LengthAll() const	{	return (int)tracks.size();  }
 	int LengthVis() const	{	return (int)visible.size();  }
 	bool IsEmpty() const	{	return tracks.empty();  }
 	
 	const Track& Get(VisId id) const	{	return id.dir ? dirs[id.i] : tracks[id.i];  }
-		  Track& Get(VisId id)			{	return id.dir ? dirs[id.i] : tracks[id.i];  }
+	      Track& Get(VisId id)			{	return id.dir ? dirs[id.i] : tracks[id.i];  }
 	
 	//  get all from vis
 	int GetTrackVisIdAll(int id) const	{   return visible[id].iAll;  }   // all  always track

@@ -1,6 +1,6 @@
 #pragma once
 #include "Audio.h"
-#include "../System/AppLog.h"
+#include "../System/LogFile.h"
 #include "../../../bass/src/bass.h"
 #include <vector>
 
@@ -10,7 +10,7 @@ const static int
 	ciFFT = 10240;  // fft data, max fft size
 
 
-class AudioBass : public Audio, public LogErr
+class AudioBass : public Audio, public AddLog
 {
 	HSTREAM chPl = 0;   // ogg, mp3, etc.
 	HMUSIC chMod = 0;   // xm, mod, etc.
