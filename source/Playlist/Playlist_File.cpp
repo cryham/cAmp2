@@ -69,10 +69,15 @@ bool Playlist::Load()
 				fi.getline(s,MP,'|');  t.time = s2d(s);  t.hasTime = true;
 				fi.getline(s,MP,'|');  t.size = s2i(s);
 			}
-			//  hide, rate,bookm, mod
+			
+			//  hide, rate, bookm, mod
 			fi.getline(s,80);	int h=0,r=0, b=0, m=0;
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
-			t.hide=(EHide)h;  t.rate=r;  t.bookm=b;  t.mod=m;
+			
+			t.hide = (EHide)h;
+			Ratings::Range(r);  t.rate = r;
+			Bookmarks::Range(b);  t.bookm = b;
+			t.mod = m;
 			
 			stAll.Add(&t);
 			if (dir)
@@ -208,4 +213,8 @@ void Playlist::HideCur(EHide hide)
 {
 	auto& track = GetTrackVis(iCur);
 	track.hide = track.hide == Hid_None ? hide : Hid_None;
+	if (track.IsDir())
+		UpdateVis();
+	else
+		bDraw = true;
 }

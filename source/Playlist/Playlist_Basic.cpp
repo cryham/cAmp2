@@ -13,11 +13,7 @@ using namespace std;
 
 Audio* Playlist::audio = nullptr;
 
-Playlist::Playlist()
-{
-}
 Playlist::Playlist(string name1)
-	:Playlist()
 {
 	name = name1;
 }
@@ -26,7 +22,7 @@ Playlist::Playlist(string name1)
 //--------------------------------------------------------------------
 void Playlist::GotoPlay()
 {
-	iCur = iPlayVis;  //!
+	iCur = iPlayVis;
 	iOfs = iCur - iLinVis/2;
 	Ofs();  Cur();
 }
@@ -56,10 +52,10 @@ bool Playlist::Next(int add)
 	if (IsEmpty())  return false;
 
 	audio->bNextPrev = add > 0;
-	bool dn = false;
+	bool found = false;
 	int adds = 0;
 	int p = iPlay, last = LengthAll()-1;
-	while (!dn && adds < LengthAll())
+	while (!found && adds < LengthAll())
 	{
 		++adds;  p += add;
 		if (add > 0)
@@ -72,13 +68,13 @@ bool Playlist::Next(int add)
 				if (!audio->bRepPls)  return false;
 				else  p = last;
 		}
-		//  skip while dirs or disabled or not visible..
-		if (!tracks[p].IsDir() && //
-			tracks[p].visible &&
-			!tracks[p].IsDisabled())
-			dn = true;
+		///  skip while  dirs or disabled or not visible etc..
+		const auto& t = tracks[p];
+		if (!t.IsDir() && t.visible && !t.IsDisabled() &&
+			t.GetHide() != Hid_Hide)
+			found = true;
 	}
-	if (!dn)  return false;  // looped all, none playabe
+	if (!found)  return false;  // looped all, none playabe
 	iPlay = p;
 	//UpdPlay();
 	

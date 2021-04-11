@@ -109,7 +109,8 @@ bool App::KeyDown(Event::KeyEvent k)
 		else {  bFind = !bFind;  Redraw();  }  break;
 	
 	key(D):  Pls().DuplicateCur();  break;
-	key(H):  Pls().HideCur(alt ? Hid_Show : Hid_Hide);  Redraw();  break;
+	key(H):  Pls().HideCur(Hid_Hide);  break;
+	key(J):  Pls().HideCur(Hid_Show);  break;
 	
 	
 	//  playlist

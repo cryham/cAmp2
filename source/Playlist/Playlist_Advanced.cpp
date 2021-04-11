@@ -16,21 +16,23 @@ using namespace std;
 //--------------------------------------------------------------------------------------------------------
 void Playlist::UpdateVis(bool bZoom)
 {
-	bool emptyDirs = false;
+	const bool noEmptyDirs = true;
 
 	int iZoomNew = 0,
-		iZoomOld = 0,
+		iZoomOld = 0;
+	const int
 		//zoomTo = lin/2,   // zoom to middle
 		zoomTo = iCur - iOfs,  // zoom to cursor
 		iAll = LengthAll(), iVis = LengthVis();
-	bool sh = iAll < iLinVis || iVis == 0;  // all visible, no scroll
+	const bool sh = iAll < iLinVis || iVis == 0;  // all visible, no scroll
 	if (!sh && bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
 	visible.clear();
 	stats.Clear();
+	
 	fs::path prev;
-	//playVisOut = true;
+	bool dirHide = false, dirShow = false;
 	
 	for (int i=0; i < iAll; ++i)
 	{
@@ -41,6 +43,10 @@ void Playlist::UpdateVis(bool bZoom)
 			iZoomNew = iVis;
 
 		bool out = t.rate < filterLow || t.rate > filterHigh;
+		bool show = t.GetHide() == Hid_Show;
+		if (dirShow || show)  // force showing all
+			out = false;
+		
 		if (i == iPlay)
 		{
 			iPlayVis = iVis;  // marks closest if out
@@ -49,7 +55,7 @@ void Playlist::UpdateVis(bool bZoom)
 		t.idPlayVis = iVis;
 		t.visible = !out;
 
-		if (out && !emptyDirs)
+		if (out && noEmptyDirs)
 			continue;
 		
 		fs::path path = t.path.parent_path();
@@ -60,7 +66,7 @@ void Playlist::UpdateVis(bool bZoom)
 			int idDir = mapPathToDirs[path];
 			if (idDir == 0)  // not found
 			{
-				//  Add Dir  +++
+				///  Add Dir  +++
 				Track d(path, true);
 				dirs.emplace_back(move(d));
 				
@@ -73,6 +79,11 @@ void Playlist::UpdateVis(bool bZoom)
 				id.i = idDir - 1;
 
 			id.iAll = i;  // closest track
+			
+			auto h = dirs[id.i].GetHide();
+			dirHide = h == Hid_Hide;
+			dirShow = h == Hid_Show;
+				
 			visible.emplace_back(move(id));
 
 			t.idPlayVis = iVis+1;
@@ -81,10 +92,16 @@ void Playlist::UpdateVis(bool bZoom)
 		}
 		prev = path;
 		
-		if (out)
-			continue;
+		if (!show)
+		{
+		if (dirHide)
+			t.visible = false;
 		
-		//  Add File  +++
+		if (out || dirHide)
+			continue;
+		}
+		
+		///  Add File  +++
 		VisId id;  id.iAll = id.i = i;
 		visible.emplace_back(id);
 		
