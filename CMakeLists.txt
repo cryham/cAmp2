@@ -5,6 +5,7 @@ project(cAmp2)
 
 file(GLOB SOURCES
     source/*.h source/*.cpp
+    source/*/*.h source/*/*.cpp
     libs/*.h libs/*.c libs/*.cpp)
 
 
