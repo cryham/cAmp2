@@ -4,6 +4,9 @@
 namespace fs = std::filesystem;
 
 
+enum EHide
+{	Hid_None, Hid_Hide, Hid_Show  };
+
 class Track
 {
 	friend class AudioBass;
@@ -30,7 +33,8 @@ protected:
 
 	///  extra  ----
 	bool mod = false;  // true for xm, mod files etc.
-	char hide = 0, sel = 0;  // todo:
+	EHide hide = Hid_None;
+	bool sel = 0;  // todo:
 
 	char rateInName = 0;
 	char bookmInName = 0;
@@ -75,6 +79,9 @@ public:
 
 	bool IsDir() const
 	{	return dir;  }
+	
+	EHide GetHide() const
+	{	return hide;  }
 
 
 	void SetNameFromPath();

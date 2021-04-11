@@ -103,6 +103,7 @@ public:
 	//  todo:  copy, move selected tracks, from other ..
 	void DeleteCur();
 	void DuplicateCur();
+	void HideCur(EHide hide);
 
 	
 	//  Change  ----

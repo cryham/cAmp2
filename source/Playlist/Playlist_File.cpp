@@ -72,7 +72,7 @@ bool Playlist::Load()
 			//  hide, rate,bookm, mod
 			fi.getline(s,80);	int h=0,r=0, b=0, m=0;
 			sscanf(s,"%d|%d|%d|%d", &h, &r, &b, &m);
-			t.hide=h;  t.rate=r;  t.bookm=b;  t.mod=m;
+			t.hide=(EHide)h;  t.rate=r;  t.bookm=b;  t.mod=m;
 			
 			stAll.Add(&t);
 			if (dir)
@@ -154,22 +154,22 @@ void Playlist::Clear()  // defaults
 	iFound = 0;
 }
 
-
+//  Delete
 //------------------------------------------------
 bool Playlist::DeleteCurFile(bool playNext)
 {
-	const auto& tv = visible[iCur];
-	if (tv.dir)  return false;
+	const auto& id = visible[iCur];
+	if (id.dir)  return false;
 
 	if (playNext)  // play next if deleting current
 	if (iCur == iPlayVis)
 		if (!Next())  audio->Stop();  //return false;
 	
-	auto& t = tracks[tv.iAll];
+	auto& t = tracks[id.iAll];
 	if (!fs::remove(t.path))
 		return false;
 			
-	tracks.erase(tracks.begin() + tv.iAll);
+	tracks.erase(tracks.begin() + id.iAll);
 	if (iPlayVis+1 > iCur)
 		--iPlay;
 	UpdateVis(false);
@@ -178,24 +178,33 @@ bool Playlist::DeleteCurFile(bool playNext)
 
 void Playlist::DeleteCur()
 {
-	const auto& tv = visible[iCur];
-	if (tv.dir)  return;
+	const auto& id = visible[iCur];
+	if (id.dir)  return;
 	
-	tracks.erase(tracks.begin() + tv.iAll);
+	tracks.erase(tracks.begin() + id.iAll);
 	if (iPlayVis+1 > iCur)
 		--iPlay;
 	UpdateVis(false);
 }
 
+//  Duplicate
+//------------------------------------------------
 void Playlist::DuplicateCur()
 {
-	const auto& tv = visible[iCur];
-	if (tv.dir)  return;
-	const auto& track = GetTrackAll(tv.iAll);
+	const auto& id = visible[iCur];
+	if (id.dir)  return;
+	const auto& track = GetTrackAll(id.iAll);
 	Track dupl = Track(track);
 	
-	tracks.insert(tracks.begin() + tv.iAll, dupl);
+	tracks.insert(tracks.begin() + id.iAll, dupl);
 	if (iPlayVis > iCur)
 		++iPlay;
 	UpdateVis(false);
+}
+
+//  Hide
+void Playlist::HideCur(EHide hide)
+{
+	auto& track = GetTrackVis(iCur);
+	track.hide = track.hide == Hid_None ? hide : Hid_None;
 }

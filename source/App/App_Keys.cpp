@@ -10,7 +10,9 @@ using namespace std;  using namespace sf;
 bool App::KeyDown(Event::KeyEvent k)
 {
 	bool modView = ctrl || alt;
-	// todo: for (a : actions)  if (a.Has(k.code))  a.Action();
+	// todo:
+//	for (auto& a : actions)
+//		if (a.Matches(modifiers, k.code))  a.Action();
 	
 	//  views load,save
 	if (k.code >= Keyboard::Num0 && k.code <= Keyboard::Num9 && modView)
@@ -107,6 +109,7 @@ bool App::KeyDown(Event::KeyEvent k)
 		else {  bFind = !bFind;  Redraw();  }  break;
 	
 	key(D):  Pls().DuplicateCur();  break;
+	key(H):  Pls().HideCur(alt ? Hid_Show : Hid_Hide);  Redraw();  break;
 	
 	
 	//  playlist

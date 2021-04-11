@@ -17,7 +17,7 @@ public:
 
 
 //  helper for adding log
-class AddLog
+class Logger
 {
 public:
 	static void Log  (std::string s) {  LogFile::Log(s);    }

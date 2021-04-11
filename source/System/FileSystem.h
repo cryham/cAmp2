@@ -6,7 +6,7 @@
 namespace fs = std::filesystem;
 
 
-class FileSystem : public AddLog // and ConfigPaths
+class FileSystem : public Logger // and ConfigPaths
 {
 private:
 	static std::string

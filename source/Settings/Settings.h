@@ -42,7 +42,7 @@ struct SetFind
 
 //  App Settings
 //------------------------------------------------
-class Settings : public AddLog
+class Settings : public Logger
 {
 public:
 	const static int ver = 210;  // version of file

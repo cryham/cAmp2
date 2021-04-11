@@ -30,7 +30,7 @@ public:
 
 
 //  all themes
-class TimeClrSets : public AddLog
+class TimeClrSets : public Logger
 {
 protected:
 	std::vector<TimeColors> vt;
