@@ -175,7 +175,7 @@ void AppSFMLDraw::LoopMain()
 		dt = time.asSeconds();
 
 		DrawAll();
-		MouseUpdate();
+		MouseUpdate();  MouseUpdateEnd();
 
 		pWindow->display();
 

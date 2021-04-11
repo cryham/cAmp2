@@ -10,7 +10,7 @@ void AppSFMLDraw::DrawPls_Header()
 	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
 	Clr(130,160,195);
 
-	//  filter  ` *
+	//  filter  ` Y *
 	int x = xM_pl_filt, y = yB_pl_inf;
 	EFont fnt = Fnt_Info;
 
@@ -24,25 +24,24 @@ void AppSFMLDraw::DrawPls_Header()
 	Text(fnt, x + 2, y-4);  str = "Y";
 	Text(fnt, x + 1, y-1);
 
-	//  info  Total dirs, files, bookm*, size, time
+	//  info  Total dirs, files, size, time
 	//----------------------------------------------------------------
-	//bool bList = Pls().LengthAll() > 0;
 	//if (yB_pli >= view.ySize)  return;
 	
 	//  get
-	uint di, fi, si, tm;
-	const Stats& st = bAllStats ?
+	uint dirs, files, size, time;
+	const Stats& stats = bAllStats ?
 		bFullStats ? allFull : all :
 		bFullStats ? Pls().stAll : Pls().stats;
 	/*if (Pls().numSel > 0)
-	{	aD = 0;  aF = Pls().numSel;
-		aSi = Pls().selSize/1000000;
-		aTm = Pls().selTime;  }
+	{	dirs = 0;  files = Pls().numSel;
+		size = Pls().selSize/1000000;
+		time = Pls().selTime;  }
 	else/**/
-	{	di = st.GetDirs();
-		fi = st.GetFiles();
-		si = st.GetSize() / 1000000;
-		tm = st.GetTime();
+	{	dirs = stats.GetDirs();
+		files = stats.GetFiles();
+		size = stats.GetSize() / 1000000;
+		time = stats.GetTime();
 	}
 	//  clr
 	if (bAllStats){  if (bFullStats)  Clr(160,170,190);  else  Clr(150,150,190);  }
@@ -50,16 +49,17 @@ void AppSFMLDraw::DrawPls_Header()
 	
 	//  size
 	y = yB_pl_inf;
-	string s = size2s(si);
-	if (di == 0)
-	{	str = i2s(fi) +"  "+ s;  Text(fnt, 20, y);  }
+	string ss = size2s(size);
+	if (dirs == 0)
+	{	str = i2s(files) +"  "+ ss;  Text(fnt, 20, y);  }
 	else
-	{	str = i2s(di) +"  "+ i2s(fi) +"  "+ s;  Text(fnt, 0, y);  }
-//	if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {
-//		Format("%6.1f%%", 100.f*Pls().itu/float(Pls().listLen));  Text(fnt, xwr, y);  }//-
+	{	str = i2s(dirs) +"  "+ i2s(files) +"  "+ ss;  Text(fnt, 0, y);  }
+
+	//if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {  % progress ..
+	//	Format("%6.1f%%", 100.f*Pls().itu/float(Pls().listLen));  Text(fnt, xwr, y);  }
 	
 	//  total time
-	str = time2s(tm);
+	str = time2s(time);
 	x = xE_pl_inf;
 	int w = Text(fnt, x, y, false);
 	Text(fnt, x - w, y);

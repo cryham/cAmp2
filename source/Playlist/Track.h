@@ -48,30 +48,30 @@ class Track
 
 	void SetNameFromPath();
 	void CleanNameRating();
-public:
-	Track(fs::path file, bool dir1=false);
-
-	bool NeedsRename() const
-	{	return  // user changed
+	
+	bool NeedsRename() const  // user changed
+	{	return
 		rate  != rateInName ||
 		bookm != bookmInName;
 	}
-	
+public:
+	Track(fs::path file, bool dir1=false);
+
 	//  getters for draw  ----
 	const std::string& GetName() const		{   return name;  }
-	const std::string GetPath() const		{   return path.u8string();  }
-	const std::string& GetParent() const	{   return parent;  }
+	const std::string  GetPath() const		{   return path.u8string();  }
+	const std::string& GetParent()  const	{   return parent;  }
 	const std::string& GetParent2() const	{   return parent2;  }
 
-	bool HasTime() const	{	return hasTime;  }
+	bool HasTime()   const	{	return hasTime;  }
 	double GetTime() const	{	return time;  }
 	double GetSize() const	{	return size;  }
 
-	char GetRate() const	{	return rate;  }
-	char GetBookmark() const{	return bookm;  }
-	EHide GetHide() const	{	return hide;  }
+	char GetRate()   const	{	return rate;  }
+	char GetBookmark()const {	return bookm;  }
+	EHide GetHide()  const	{	return hide;  }
 
-	bool IsDir() const		{	return dir;  }
-	bool IsDisabled() const	{	return disabled;  }
-	bool IsFound() const	{	return found;  }
+	bool IsDir()     const	{	return dir;  }
+	bool IsDisabled()const	{	return disabled;  }
+	bool IsFound()   const	{	return found;  }
 };

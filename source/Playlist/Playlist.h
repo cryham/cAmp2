@@ -22,7 +22,7 @@ protected:
 		int i = 0;     // id to tracks or dirs
 		int iAll = 0;  // id to tracks  (to first track for dirs)
 	};
-	std::deque<VisId> visible;  // only visible, filtered tracks with dirs
+	std::vector<VisId> visible;  // only visible, filtered tracks with dirs
 
 public:
 	//  vars  ----
@@ -34,6 +34,8 @@ public:
 	int iOfs = 0;   //  offset, view start  id to Vis
 	int iPlay = 0;  //  playing pos	        id to All
 public:
+	//struct Filter
+	
 	int filterLow = Ratings::valMin;  // lower, upper
 	int filterHigh = Ratings::valMax;
 	int bookm = 0;  //  bookmark
@@ -76,8 +78,8 @@ public:
 	{  Ins_Cursor, Ins_Top, Ins_End  };
 
 	
-//  ctor, main  ----
-	Playlist();
+//  ctor, main  ------------
+public:
 	Playlist(std::string name1);
 
 	bool AddDir(fs::path dir, bool recursive = true, const EInsert& where = Ins_End);
@@ -92,7 +94,6 @@ public:
 	void GotoPlay();
 
 	
-public:
 	bool Load(), Save();
 	void Clear();
 	

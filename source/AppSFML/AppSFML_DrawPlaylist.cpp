@@ -40,7 +40,7 @@ void AppSFMLDraw::DrawPlaylist()
 	//  visible lines
 	Pls().SetVisLines(yL_pl);
 	if (yL_pl <= 0)  return;
-
+	
 	if (Pls().IsEmpty())
 	{
 		Clr(120,160,240);
