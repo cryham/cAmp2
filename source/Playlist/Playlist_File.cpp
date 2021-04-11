@@ -186,3 +186,16 @@ void Playlist::DeleteCur()
 		--iPlay;
 	UpdateVis(false);
 }
+
+void Playlist::DuplicateCur()
+{
+	const auto& tv = visible[iCur];
+	if (tv.dir)  return;
+	const auto& track = GetTrackAll(tv.iAll);
+	Track dupl = Track(track);
+	
+	tracks.insert(tracks.begin() + tv.iAll, dupl);
+	if (iPlayVis > iCur)
+		++iPlay;
+	UpdateVis(false);
+}

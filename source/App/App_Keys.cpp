@@ -10,6 +10,7 @@ using namespace std;  using namespace sf;
 bool App::KeyDown(Event::KeyEvent k)
 {
 	bool modView = ctrl || alt;
+	// todo: for (a : actions)  if (a.Has(k.code))  a.Action();
 	
 	//  views load,save
 	if (k.code >= Keyboard::Num0 && k.code <= Keyboard::Num9 && modView)
@@ -40,8 +41,8 @@ bool App::KeyDown(Event::KeyEvent k)
 		if (alt)  audio->SetVol(0, shift, ctrl);
 			else  audio->SetPos(0, shift, ctrl);  break;
 
-	key(E):	 audio->SetVol(0, shift, ctrl);  break;  // volume ^ v
-	key(D):	 audio->SetVol(1, shift, ctrl);  break;
+	//key(E):	 audio->SetVol(0, shift, ctrl);  break;  // volume ^ v
+	//key(D):	 audio->SetVol(1, shift, ctrl);  break;
 	
 	key(Backspace):
 		if (ctrl)  plsId = plsPlId;
@@ -100,9 +101,12 @@ bool App::KeyDown(Event::KeyEvent k)
 	#define OsdStats  Osd("Stats  Full: " + b2on(bFullStats) + "  All: " + b2on(bAllStats))
 	key(L):  bAllStats = !bAllStats;  OsdStats;  Redraw();  break;
 	key(K):  bFullStats = !bFullStats;  OsdStats;  Redraw();  break;
+
 	//  find
 	key(F):  if (alt || ctrl)  WndOpen(WO_PlsFind);
 		else {  bFind = !bFind;  Redraw();  }  break;
+	
+	key(D):  Pls().DuplicateCur();  break;
 	
 	
 	//  playlist
