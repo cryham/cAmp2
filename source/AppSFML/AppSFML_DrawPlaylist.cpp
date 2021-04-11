@@ -92,6 +92,7 @@ void AppSFMLDraw::DrawPls_1Names()
 		//  rate
 		str = Ratings::GetVis(rate);
 		int w = Text(Fnt_Track, 0,0, false);  // center
+		Clr(clrRateTxt[r][0], clrRateTxt[r][1], clrRateTxt[r][2]);
 		Text(Fnt_Track, max(0, 5 - w/2), y);
 
 		//  hide  clr

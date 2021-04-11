@@ -97,7 +97,7 @@ protected:
 	bool bL_sl=false;
 	
 	
-	void MouseUpdate();  // process, update
+	void MouseUpdate(), MouseUpdateEnd();  // process, update
 	void WheelMove(int d);
 
 	void MouseMove(int x, int y)  // events
