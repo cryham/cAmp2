@@ -2,6 +2,7 @@
 #include "Track.h"
 #include "../System/LogFile.h"
 #include "../System/Stats.h"
+#include "../System/Rating.h"
 #include "../Settings/Settings.h"  // for SetFind
 #include <deque>
 #include <map>
@@ -9,11 +10,11 @@
 
 class Audio;
 
-class Playlist : public AddLog
+class Playlist : public Logger
 {
 protected:
 	std::deque<Track> tracks;  // All, unfiltered, from .cp
-	std::deque<Track> dirs;  // Dir added when path changes
+	std::vector<Track> dirs;  // Dir added when path changes
 	std::map<fs::path, int> mapPathToDirs;  // dirs id+1, 0 not found
 	struct VisId
 	{
@@ -25,21 +26,21 @@ protected:
 
 public:
 	//  vars  ----
-	std::string name = "none";  // filename, also for tab
+	std::string name = "none";  // filename .cp, also for tab
 
-//  properties saved in .cp
+//----  properties saved in .cp  ----
 //private:
 	int iCur = 0;   //  cursor pos          id to Vis   cur >= ofs
 	int iOfs = 0;   //  offset, view start  id to Vis
 	int iPlay = 0;  //  playing pos	        id to All
 public:
-	int filterLow = cRateMin;  // lower, upper
-	int filterHigh = cRateMax;
+	int filterLow = Ratings::valMin;  // lower, upper
+	int filterHigh = Ratings::valMax;
 	int bookm = 0;  //  bookmark
 
 	//  tab color
 	float hue = 0.f, sat = 0.f, val = 0.f;
-//  properties end
+//----  properties end  ----
 
 	uint8_t bck[3]={0,0,0};  // bckgr,text colors  after dim from hsv
 	uint8_t txt[3]={0,0,0};
@@ -107,10 +108,10 @@ public:
 
 	
 	//  Change  ----
-	void Bookm(bool pls, char add);  //  bookmarks
-	void Rate(bool playing, char add);
+	void Bookm(bool pls, int add);  //  bookmarks
+	void Rate(bool playing, int add);
 
-	void Filter(bool lower, char add);
+	void Filter(bool lower, int add);
 	int GetFilter(bool lower)
 	{	return lower ? filterLow : filterHigh;  }
 

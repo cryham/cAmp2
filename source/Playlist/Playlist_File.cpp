@@ -33,7 +33,7 @@ bool Playlist::Load()
 		&filterLow, &filterHigh,
 		&iCur, &iOfs, &iPlay, &bookm,
 		&hue, &sat, &val);
-	bookm = mia(0,cBookmarkMax, bookm);
+	Bookmarks::Range(bookm);
 	hue = mia(0.f,1.f, hue);  sat = mia(0.f,1.f, sat);  val = mia(0.f,1.f, val);
 	UpdateColor();
 	
@@ -148,7 +148,8 @@ void Playlist::Clear()  // defaults
 
 	iCur = 0;  iOfs = 0;  iPlay = 0;
 	iLinVis = 10;  bDraw = true;
-	filterLow = cRateMin;  filterHigh = cRateMax;
+	filterLow = Ratings::valMin;
+	filterHigh = Ratings::valMax;
 	bookm = 0;
 	hue = 0.f;  sat = 0.f;  val = 0.f;
 	iFound = 0;

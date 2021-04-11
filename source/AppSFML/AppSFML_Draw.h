@@ -104,14 +104,11 @@ protected:
 
 	
 	//  colors  // todo: in xml..
-	const static sf::Uint8 clrRateTxt[chRall][3], clrRateBck[chRall][3];
+	const static sf::Uint8
+		clrRateTxt[Ratings::cntAll][3],
+		clrRateBck[Ratings::cntAll][3];
 	
-	inline static ETexUV Tex4Rate(int rate)
-	{
-		return (ETexUV)mia(int(TX_Rate1), int(TX_Rate5),
-						   int(TX_Rate1 - 1 + abs(rate)) );
-	}
-	
+
 	///  Gui utils
 	//--------------------------
 	void TextG(const char* s);

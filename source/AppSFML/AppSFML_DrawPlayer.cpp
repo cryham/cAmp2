@@ -136,8 +136,7 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_TimeBig, xw - w - 20, y-2);
 		
 		//  track rating
-		int rr = audio->rate, r = rr+3;
-		str = chFRateVis[r];
+		str = Ratings::GetVis(audio->rate);
 		Text(Fnt_TimeBig, xw - 84, y-2);
 	}
 

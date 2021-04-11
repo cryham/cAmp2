@@ -14,9 +14,9 @@ void AppSFMLDraw::DrawPls_Header()
 	int x = xM_pl_filt, y = yB_pl_inf;
 	EFont fnt = Fnt_Info;
 
-	str = GetRateStr(low);
+	str = Ratings::GetVis(low);
 	Text(fnt, x -11-2, y+1);
-	str = GetRateStr(high);
+	str = Ratings::GetVis(high);
 	Text(fnt, x +13+2, y+1);
 
 	Clr(50,80,115);  //  Y icon

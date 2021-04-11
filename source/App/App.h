@@ -10,7 +10,7 @@
 class Audio;
 
 
-class App : public AddLog
+class App : public Logger
 {
 public:
 	App();

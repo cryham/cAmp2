@@ -11,7 +11,6 @@ class Track
 {
 	friend class AudioBass;
 	friend class Playlist;
-protected:
 
 	//  shown in gui,  got from path with SetNameFromPath
 	//e.g.  /parent2/parent/name.ext
@@ -34,74 +33,39 @@ protected:
 	///  extra  ----
 	bool mod = false;  // true for xm, mod files etc.
 	EHide hide = Hid_None;
-	bool sel = 0;  // todo:
+	bool sel = 0;  // todo: selected
 
-	char rateInName = 0;
-	char bookmInName = 0;
-public:
-	char rate = 0;   // rating
-	char bookm = 0;  // bookmark
-	bool found = false;     // match
+	int rateInName = 0;   // to check if user changed
+	int bookmInName = 0;  // since last rename rating
+
+	int rate = 0;   // rating
+	int bookm = 0;  // bookmark
+	bool found = false;     // find match
 
 	//  set in UpdateVis
-	bool vis = true;  // visible, after filtering etc.
+	bool visible = true;  // visible, after filtering etc.
 	int idPlayVis = 0;  // id to tracksVis
-
-public:
-	Track(fs::path file, bool dir1=false);
-
-	//  get for draw
-	const std::string& GetName() const
-	{   return name;  }
-
-	const std::string GetPath() const
-	{   return path.u8string();  }
-
-	const std::string& GetParent() const
-	{   return parent;  }
-
-	const std::string& GetParent2() const
-	{   return parent2;  }
-
-
-	bool HasTime() const
-	{	return hasTime;  }
-
-	double GetTime() const
-	{	return time;  }
-
-	double GetSize() const
-	{	return size;  }
-
-
-	bool IsDisabled() const
-	{	return disabled;  }
-
-	bool IsDir() const
-	{	return dir;  }
-	
-	EHide GetHide() const
-	{	return hide;  }
-
 
 	void SetNameFromPath();
 	void CleanNameRating();
-	static void GetNameRating(const std::string& name, char& pRate, char& pBookm);
+public:
+	Track(fs::path file, bool dir1=false);
+
+	//  getters for draw  ----
+	const std::string& GetName() const		{   return name;  }
+	const std::string GetPath() const		{   return path.u8string();  }
+	const std::string& GetParent() const	{   return parent;  }
+	const std::string& GetParent2() const	{   return parent2;  }
+
+	bool HasTime() const	{	return hasTime;  }
+	double GetTime() const	{	return time;  }
+	double GetSize() const	{	return size;  }
+
+	char GetRate() const	{	return rate;  }
+	char GetBookmark() const{	return bookm;  }
+	EHide GetHide() const	{	return hide;  }
+
+	bool IsDir() const		{	return dir;  }
+	bool IsDisabled() const	{	return disabled;  }
+	bool IsFound() const	{	return found;  }
 };
-
-
-///  rating chars in name
-const int chFnAll = 7;  // special -2 -- 
-const char cFnCharRates[chFnAll] = {'=','-', '`','^','~','+','#'};
-const static char* cFnStrRates = "=-`^~+#";
-const char cFnNumRates[chFnAll] = {-3,-1, 1,2,3,4,5};
-
-const int cRmin = 3/*-*/, cRmax = 5/*+*/, chRall = cRmin+cRmax+1;
-const static std::string chFRateAdd[chRall] = {"=","--","-","","`","^","~","+","#"};  // rename add, file name
-const static std::string chFRateVis[chRall] = {"=","--","-","","`","^","~","+","*"};  // draw text, sybols
-const static int cRateMin = -cRmin, cRateMax = cRmax;
-
-inline static std::string GetRateStr(int rate)
-{	return chFRateVis[rate + cRmin];  }
-
-const int cBookmarkMax = 6;  // %1..%6

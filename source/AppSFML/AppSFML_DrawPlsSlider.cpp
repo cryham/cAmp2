@@ -27,7 +27,7 @@ void AppSFMLDraw::DrawPls_Slider()
 	const Uint8 b = 100;  //par
 	for (int i=0; i < len; ++i)
 	{
-		const int bk = Pls().GetTrackVis(i).bookm;
+		const int bk = Pls().GetTrackVis(i).GetBookmark();
 		if (bk > 0)
 		{
 			float fc1 = i /fle,  fc2 = (i + yr) /fle;			if (fc2>1.f) fc2=1.f;
@@ -41,7 +41,7 @@ void AppSFMLDraw::DrawPls_Slider()
 	//  find results  -
 	if (bFind)
 	for (int i=0; i < len; ++i)
-		if (Pls().GetTrackVis(i).found)
+		if (Pls().GetTrackVis(i).IsFound())
 		{
 			float fc1 = i /fle,  fc2 = (i + yr) /fle;			if (fc2>1.f) fc2=1.f;
 			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
@@ -78,14 +78,14 @@ void AppSFMLDraw::DrawPls_Slider()
 	if (v.pls.bSliderRate && !bFind)
 		for (int i=0; i < len; ++i)
 		{
-			const int rr = Pls().GetTrackVis(i).rate, r = rr+cRmin;
-			if (rr != 0)
+			const int rate = Pls().GetTrackVis(i).GetRate(), r = rate + Ratings::cntMin;
+			if (rate != 0)
 			{
 				float fc1 = float(i) /fle, fc2 = float(i + yr) /fle;  if (fc2>1.f) fc2=1.f;
 				int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<1) c2=c1+1;
 	
 				Rect(xk1, float(c1), xk2, float(c2-c1+1),
-					Tex4Rate(rr), true,
+					Ratings::GetTex(rate), true,
 					//clrRateBck[r][0], clrRateBck[r][1], clrRateBck[r][2]);  //par
 					clrRateBck[r][0]*2/3, clrRateBck[r][1]*2/3, clrRateBck[r][2]*2/3);  //par
 		}	}

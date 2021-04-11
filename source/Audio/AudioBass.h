@@ -10,7 +10,7 @@ const static int
 	ciFFT = 10240;  // fft data, max fft size
 
 
-class AudioBass : public Audio, public AddLog
+class AudioBass : public Audio, public Logger
 {
 	HSTREAM chPl = 0;   // ogg, mp3, etc.
 	HMUSIC chMod = 0;   // xm, mod, etc.

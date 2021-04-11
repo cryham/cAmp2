@@ -3,6 +3,7 @@
 #include "../Audio/Audio.h"
 #include "../System/Stats.h"
 #include "../System/defines.h"
+#include "../System/Rating.h"
 #include "../System/Utilities.h"
 #include "../../libs/imgui.h"  // ColorConvert
 #include <vector>
@@ -73,7 +74,7 @@ bool Playlist::Next(int add)
 		}
 		//  skip while dirs or disabled or not visible..
 		if (!tracks[p].IsDir() && //
-			tracks[p].vis &&
+			tracks[p].visible &&
 			!tracks[p].IsDisabled())
 			dn = true;
 	}
@@ -152,31 +153,29 @@ void Playlist::UpdateColor()
 
 //  change  bookmark, rating, filter
 //--------------------------------------------------------------------
-void Playlist::Bookm(bool pls, char add)
+void Playlist::Bookm(bool pls, int add)
 {
 	if (pls)
 	{	//  playlist
-		bookm += add;  bookm = mia(0,cBookmarkMax, bookm);
+		bookm += add;  Bookmarks::Range(bookm);
 	}else
 	{	//  track
 		auto& t = GetTrackVis(iCur);
-		char& b = t.bookm;
-		b += add;  b = mia(char(0),char(cBookmarkMax), b);
+		t.bookm += add;  Bookmarks::Range(t.bookm);
 	}
 }
 
-void Playlist::Rate(bool playing, char add)
+void Playlist::Rate(bool playing, int add)
 {
 	auto& t = playing ? GetTrackAll(iPlay) : GetTrackVis(iCur);
-	char& r = t.rate;
-	r += add;  r = mia(char(cRateMin),char(cRateMax), r);
+	int& r = t.rate;
+	r += add;  Ratings::Range(r);
 	bDraw = true;
 }
 
-void Playlist::Filter(bool lower, char add)
+void Playlist::Filter(bool lower, int add)
 {
 	int& f = lower ? filterLow : filterHigh;
-	f += add;  f = mia(cRateMin,cRateMax, f);
+	f += add;  Ratings::Range(f);
 	UpdateVis();
 }
-

@@ -47,7 +47,7 @@ void Playlist::UpdateVis(bool bZoom)
 			bPlayVisOut = out;
 		}
 		t.idPlayVis = iVis;
-		t.vis = !out;
+		t.visible = !out;
 
 		if (out && !emptyDirs)
 			continue;
@@ -112,7 +112,7 @@ void Playlist::UpdateVis(bool bZoom)
 void Playlist::UpdPlayVis()
 {
 	iPlayVis    = tracks[iPlay].idPlayVis;
-	bPlayVisOut = !tracks[iPlay].vis;
+	bPlayVisOut = !tracks[iPlay].visible;
 	bDraw = true;
 }
 
@@ -142,7 +142,7 @@ void Playlist::Find(std::string& find, const SetFind& opt)
 		
 	if (!low)
 	{	for (auto& trk : tracks)
-		if (opt.bUnfiltered || trk.vis)
+		if (opt.bUnfiltered || trk.visible)
 		{
 			auto& name = opt.bFullPath ? trk.GetPath() : trk.GetName();
 			bool f = name.find(find) != string::npos;
@@ -151,7 +151,7 @@ void Playlist::Find(std::string& find, const SetFind& opt)
 		}
 	}else
 	{	for (auto& trk : tracks)
-		if (opt.bUnfiltered || trk.vis)
+		if (opt.bUnfiltered || trk.visible)
 		{
 			auto name = opt.bFullPath ? trk.GetPath() : trk.GetName();
 			strlower(name);
@@ -180,7 +180,7 @@ int Playlist::RenameRate(bool playing)
 			if (t.bookm > 0)
 			{	name += "%";  name += '0'+t.bookm;  }
 			if (t.rate)
-				name += chFRateAdd[t.rate + cRmin];
+				name += Ratings::GetAdd(t.rate);
 			name += t.path.extension();
 			
 			fs::path from = t.path;
