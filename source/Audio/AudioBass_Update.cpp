@@ -89,7 +89,7 @@ void AudioBass::GetTrackTime(Track& t)
 		BASS_StreamFree(chan);
 	
 	//  size
-	t.size = FileSystem::Size(t.path);
+	t.size = FileSystem::Size(t.path.string());
 	t.hasTime = true;
 }
 

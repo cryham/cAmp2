@@ -133,7 +133,7 @@ void AudioBass::InitPlugins()
 		{
 			//  plugin loaded
 			const BASS_PLUGININFO *pinfo = BASS_PluginGetInfo(plug);
-			Log(string("  ") + f.filename().c_str());
+			Log(string("  ") + f.filename().string());
 			for (int a=0; a < pinfo->formatc; ++a)
 			{
 				Log(string("    ") + pinfo->formats[a].name +" (" + pinfo->formats[a].exts + ")");
@@ -155,6 +155,6 @@ void AudioBass::InitPlugins()
 				}
 			}
 		}else
-			Log(string("Plugin load error:") + f.c_str());
+			Log(string("Plugin load error:") + f.string());
 	}
 }

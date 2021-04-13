@@ -20,22 +20,26 @@ bool App::Init()
 	Log(FileSystem::GetInfo());
 	
 	
-	//  set
-	if (!set.Load())
-		return false;
-	
-	timeColors.Load();
-	
-	
 	//  audio
 	audio = make_unique<AudioBass>();
 	audio->Init();
 
 	Playlist::audio = audio.get();
 
-	audio->SetPls(&Pls());
+
+	//  set
+	if (!set.Load())
+	{
+		//LoadPls();
+		//return false;
+	}
+	
+	timeColors.Load();
+	
 
 	LoadPls();
+
+	audio->SetPls(&Pls());
 	
 	LoadState();
 	

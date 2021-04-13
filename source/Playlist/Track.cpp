@@ -17,11 +17,11 @@ void Track::SetNameFromPath()
 	name = path.filename().filename().string();  // u8string?
 	//  parent dirs
 	auto p1 = path.parent_path();
-	parent = p1.filename();
-	parent2 = p1.parent_path().filename();
+	parent = p1.filename().string();
+	parent2 = p1.parent_path().filename().string();
 
 	//  ext
-	ext = path.extension();
+	ext = path.extension().string();
 	if (ext.empty())
 		return;
 	ext = ext.substr(1);  // no .

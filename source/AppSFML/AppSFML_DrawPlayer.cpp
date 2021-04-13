@@ -177,7 +177,7 @@ void AppSFMLDraw::DrawPlayer()
 	}
 	
 	///  Debug  ~~~~
-	if (bDebug)
+	if (bDebug && !Pls().IsEmpty())
 	{
 		Clr(120,180,240);
 		int ymc = (ym - yB_pl) / v.fnt.Fy;  ymc = max(0, min(ymc, yL_pl-1));

@@ -103,10 +103,10 @@ bool Playlist::AddFile(fs::path file, const EInsert &where)
 		return false;
 
 	//  get ext
-	string ext = file.extension();
+	string ext = file.extension().string();
 	if (ext.length() < 2)
 		return false;
-	ext = file.extension();
+	ext = file.extension().string();
 	ext = ext.substr(1);  // no .
 	strupper(ext);
 	

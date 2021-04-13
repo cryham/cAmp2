@@ -2,6 +2,7 @@
 #include "Audio.h"
 #include "../System/LogFile.h"
 #include "../../../bass/src/bass.h"
+#include "../System/defines.h"
 #include <vector>
 
 

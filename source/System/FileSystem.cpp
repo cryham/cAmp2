@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <iostream>
 #include "FileSystem.h"
-using namespace std;
 
 #include <string>
 #include <fstream>
@@ -15,19 +14,20 @@ using namespace std;
 #include <sstream>
 #include <iostream>
 
-#ifdef _WIN32
-#include <windows.h>
-#include <shlobj.h>
-#endif
-
 //  cAmp2 const
 #define  DATA_DIR  "data"
 #define  APP_NAME  "cAmp2"
 
-using namespace std;
-
 #include <filesystem>
 namespace fs = std::filesystem;
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <shlobj.h>
+#endif
+
+using namespace std;
 
 
 //  static vars

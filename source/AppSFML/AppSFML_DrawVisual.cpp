@@ -57,7 +57,7 @@ void AppSFMLDraw::DrawVisual()
 		else if (t == VisT_Spect && pVisSprite)
 		{
 			Uint8 pixels[xw*4];
-			static int yy = 0;
+			static int yy = 0;  int a=0;
 			for (int i=0; i < xw; ++i)
 			{
 				float f = vis[i];
@@ -75,7 +75,6 @@ void AppSFMLDraw::DrawVisual()
 				b = 155.f * yy/hh + 100.f * i/xw;
 				//if (yy == hh-1)  r = g = b = 255;
 			#endif
-				int a = i*4;
 				pixels[a++] = r;
 				pixels[a++] = g;
 				pixels[a++] = b;

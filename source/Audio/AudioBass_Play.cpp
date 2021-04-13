@@ -56,7 +56,7 @@ bool AudioBass::Play(Track& trk)
 
 			default:  // other
 				int er = BASS_ErrorGetCode();
-				Log("Can't play file: " + string(trk.path) + "\n  error code: " + i2s(er)); // + GetErrStr(er);
+				Log("Can't play file: " + trk.path.string() + "\n  error code: " + i2s(er)); // + GetErrStr(er);
 				return false;
 		}
 	}else
