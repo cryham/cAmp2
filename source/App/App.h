@@ -1,7 +1,7 @@
 #pragma once
 #include "../Playlist/Playlist.h"
 #include "../Settings/Settings.h"
-#include "../Settings/TimeColors.h"
+#include "../Settings/ColorSets.h"
 #include "../System/LogFile.h"
 #include <SFML/Window/Event.hpp>  // input, use own enum?
 #include <memory>
@@ -22,7 +22,7 @@ protected:
 	
 	Settings set;
 	//ViewSet view;  // in set
-	TimeClrSets timeColors;
+	ColorSets colors;
 	//std::unique_ptr<Skin> skin;  // todo:
 	
 	std::unique_ptr<Audio> audio;

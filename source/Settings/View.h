@@ -1,5 +1,8 @@
 #pragma once
+#include "VisualColors.h"
+
 namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
+
 
 enum EVisType
 {	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect, VisT_ALL  };
@@ -8,6 +11,7 @@ const static char* SVisType[VisT_ALL] =
 {	"None", "FFT", "Oscilloscope", "Spectrogram" };
 
 
+//  View settings
 class ViewSet
 {
 public:
@@ -29,15 +33,19 @@ public:
 	
 	//  visualizations
 	const static int FFTSizes = 5;
-	struct VS_Vis {
+	struct VS_Visuals {
 		int yH = 130;  // draw height, top
 
 		/*EVisType*/ int eType = VisT_FFT;
 		
-		int iFFT_Size = 1;      // FFT samples (quality)
-		float fFFT_Mul = 69.f;  // y multiplier (scale)
+		struct VS_Vis_FFT
+		{
+			int iSize = 1;      // FFT samples (quality)
+			float fMul = 69.f;  // y multiplier (scale)
+			VisualColors clr;
+		} fft, spect;
 		
-		float fPrt_Fq = 100.f;  // spectrogram speed
+		float fPrt_Fq = 100.f;  // spectrogram speed  // todo: thread
 	} vis;
 	
 	//  pls slider

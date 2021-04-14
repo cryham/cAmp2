@@ -2,6 +2,7 @@
 #include "../Audio/Audio.h"
 #include "../System/Utilities.h"
 #include "../Settings/Settings.h"
+#include "../Settings/VisualColors.h"
 #include "../../libs/imgui.h"
 #include "../../libs/imgui-SFML.h"
 using namespace sf;  using namespace std;  using namespace ImGui;
@@ -40,7 +41,7 @@ void AppSFMLDraw::WndDraw_AppViewStats()
 	fi = st.GetFiles();
 	si = st.GetSize() / 1000000;
 	tm = st.GetTime();
-	if (bFullStats)
+	if (bFullStats || ful.GetFiles() == 0)
 	{
 		s = " Dirs:  "+i2s(di);    TextG(s);
 		s = "Files:  "+i2s(fi);    TextG(s);
@@ -88,39 +89,111 @@ void AppSFMLDraw::WndDraw_AppAudio()
 }
 
 
+void AppSFMLDraw::SliderF(float& fl, float a, float b, const char* text, const char* uid)
+{
+	float f = fl;
+	string s = string(text) + f2s(f, 3, 5);  TextG(s);
+	bool e = SliderFloat(text, &f, a, b, "");
+	if (e)  fl = f;
+}
+
+//------------------------------------------------------------------
 //  Visualization
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppVis()
 {
 	bool e;  string s;  float f;  int i;
 	auto& v = set.view.vis;
-	PushItemWidth(350);
+	PushItemWidth(750);
 
 	i = v.eType;
 	s = string("Type: ") + SVisType[i];  TextG(s);
 	e = SliderInt("visT", &i, 0, VisT_ALL-1, "");
 	if (e) {  v.eType = i;  UpdDim();  }
 	
-	f = v.yH; // / set.view.wnd.ySize;  %
+	f = v.yH;  // / set.view.wnd.ySize;  %
 	s = string("Height: ") + f2s(f, 0, 4);  TextG(s);
 	e = SliderFloat("visH", &f, 0, set.view.wnd.ySize, "");
 	if (e) {  v.yH = f;  UpdDim();  }
 
+	//	int iSleep = 0;  // in ms
+	//	bool bVSync = true;
+	
 	Sep(10);
-	i = v.iFFT_Size;
-	s = string("FFT size: ") + i2s(i);  TextG(s);
-	e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
-	if (e)  v.iFFT_Size = i;
+	switch (v.eType)
+	{
+	case VisT_FFT:
+	{	i = v.fft.iSize;
+		s = string("FFT size: ") + i2s(i);  TextG(s);
+		e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
+		if (e)  v.fft.iSize = i;
+	
+		f = v.fft.fMul;
+		s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
+		e = SliderFloat("fftmul", &f, 0, 200.f, "");
+		if (e)  v.fft.fMul = f;
 
-	f = v.fFFT_Mul;
-	s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
-	e = SliderFloat("fftmul", &f, 0, 200.f, "");
-	if (e)  v.fFFT_Mul = f;
+		i = colors.curFFT;
+		s = "Theme: " + i2s(i)+ "  " + colors.CurFFT().name;  TextG(s);
+		e = SliderInt("FTh", &i, 0, colors.vVisual.size()-1, "");
+		if (e) {  colors.curFFT = i;
+			v.fft.clr = colors.CurFFT();  }
+		
+		Sep(10);
+		auto& c = v.fft.clr;
+		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", "FHa");
+		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", "FHm");
+		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", "FHp");
+		Sep(5);
+		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", "FSa");
+		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", "FSm");
+		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", "FSp");
+		Sep(5);
+		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", "FVa");
+		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", "FVm");
+		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", "FVp");
+	}	break;
+
+	case VisT_Osc:
+		//  clr ..
+		break;
+
+	case VisT_Spect:
+	{	i = v.spect.iSize;
+		s = string("FFT size: ") + i2s(i);  TextG(s);
+		e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
+		if (e)  v.spect.iSize = i;
+	
+		f = v.spect.fMul;
+		s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
+		e = SliderFloat("fftmul", &f, 0, 200.f, "");
+		if (e)  v.spect.fMul = f;
+
+		i = colors.curSpect;
+		s = "Theme: " + i2s(i)+ "  " + colors.CurSpect().name;  TextG(s);
+		e = SliderInt("STh", &i, 0, colors.vVisual.size()-1, "");
+		if (e) {  colors.curSpect = i;
+			v.spect.clr = colors.CurSpect();  }
+		
+		Sep(10);
+		auto& c = v.spect.clr;
+		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", "SHa");
+		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", "SHm");
+		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", "SHp");
+		Sep(5);
+		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", "SSa");
+		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", "SSm");
+		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", "SSp");
+		Sep(5);
+		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", "SVa");
+		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", "SVm");
+		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", "SVp");
+		
+		//	float fPrtFq = 100.f;  // spectrogram speed
+	}	break;
+	}
 
 	PopItemWidth();
-//	int iSleep = 0;  // in ms
-//	bool bVSync = true;
-//	float fPrtFq = 100.f;  // spectrogram speed
 }
 
 

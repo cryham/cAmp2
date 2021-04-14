@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "../System/LogFile.h"
 
 
 struct TimeClr  // color at time
@@ -16,7 +15,7 @@ struct TimeClr  // color at time
 
 class TimeColors  // theme
 {
-	friend class TimeClrSets;
+	friend class ColorSets;
 protected:
 	std::vector<TimeClr> vc;
 	std::string name;
@@ -27,20 +26,3 @@ public:
 	//  get color for time, interpolate
 	TimeClr Get(float time, int mode = 2);
 };
-
-
-//  all themes
-class TimeClrSets : public Logger
-{
-protected:
-	std::vector<TimeColors> vt;
-	int cur = 0;
-
-public:
-	TimeClrSets();
-
-	bool Load(); //, Save();
-	
-	TimeClr Get(float time, int mode = 2);
-};
-

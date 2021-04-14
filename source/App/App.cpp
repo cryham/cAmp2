@@ -34,7 +34,10 @@ bool App::Init()
 		//return false;
 	}
 	
-	timeColors.Load();
+	colors.Load();
+	//  apply cur colors to view
+	set.view.vis.fft.clr = colors.CurFFT();
+	set.view.vis.spect.clr = colors.CurSpect();
 	
 
 	LoadPls();
@@ -131,9 +134,10 @@ void App::SavePls()
 //  Destroy
 bool App::Destroy()
 {
-	//  set
+	//  set save
 	SavePls();
 	bool ok = set.Save();
+	colors.Save();  //
 
 	//  audio
 	audio->Destroy();

@@ -18,6 +18,7 @@ bool App::KeyDown(Event::KeyEvent k)
 	if (k.code >= Keyboard::Num0 && k.code <= Keyboard::Num9 && modView)
 	{
 		int v = k.code - Keyboard::Num0;
+		if (shift)  v += 10;
 		UpdateView(alt, v);
 	}
 	else

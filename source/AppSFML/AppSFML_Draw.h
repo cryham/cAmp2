@@ -49,6 +49,8 @@ protected:
 
 	bool wndInited = false;
 	EWndOpt wndOpen = WO_All;  // open next from Main
+	bool wndFocus = false;  // after show
+	void WndFocus();
 
 	void WndOpen(EWndOpt type, bool center = true) override;
 	bool WndVisible(EWndOpt w);
@@ -114,6 +116,8 @@ protected:
 	void TextG(const char* s);
 	void TextG(std::string s);
 	void Sep(int h), Line();  // separators
+	void SliderF(float& fl, float a, float b, const char* text, const char *uid);
+	//void SliderI(int& f, const char* label);
 
 	void SetupGuiStyle();  // ImGui theme
 };

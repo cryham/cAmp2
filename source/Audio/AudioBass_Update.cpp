@@ -24,12 +24,24 @@ void AudioBass::GetVisualData(int size, const ViewSet& view)
 	
 	if (v.eType == VisT_FFT || v.eType == VisT_Spect)
 	{
-		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[v.iFFT_Size] );
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[v.fft.iSize] );
 
 		for (int x=0; x < xw1; ++x)
 		{
 			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
-			float y = -log10(f) * v.fFFT_Mul /255.f -0.1f;  //par
+			float y = -log10(f) * v.fft.fMul /255.f -0.1f;  //par
+
+			y = mia(0.f,1.f, y);  vis[x] = y;
+		}
+	}
+	else if (v.eType == VisT_Spect)
+	{
+		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[v.spect.iSize] );
+
+		for (int x=0; x < xw1; ++x)
+		{
+			float f = fft[x+1];  if (f<0.000001f) f=0.000001f;
+			float y = -log10(f) * v.spect.fMul /255.f -0.1f;  //par
 
 			y = mia(0.f,1.f, y);  vis[x] = y;
 		}

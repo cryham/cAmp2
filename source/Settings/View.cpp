@@ -1,4 +1,5 @@
 #include "View.h"
+#include "VisualColors.h"
 #include "../System/defines.h"  // mia
 #include "../System/Utilities.h"
 #include "../../libs/tinyxml2.h"
@@ -12,18 +13,25 @@ ViewSet::ViewSet()
 
 void ViewSet::Defaults()
 {
+	//  for no cAmp2.xml or missing attributes
 	wnd.xSize = 390;  wnd.ySize = 1143;
 	wnd.xPos = 0;  wnd.yPos = 0;
 	wnd.iSleep = 10;  wnd.bVSync = true;
 	
 	vis.yH = 129;
-	vis.eType = VisT_FFT;  vis.iFFT_Size = 1;
-	vis.fFFT_Mul = 69.f;  vis.fPrt_Fq = 100.f;
+	vis.eType = VisT_FFT;  vis.fft.iSize = 1;
+	vis.fft.fMul = 69.f;  vis.fPrt_Fq = 100.f;
+	
+	auto& c = vis.fft.clr;
+	c.name = "default view";
+	c.add.h = 0.594f;  c.add.s = 0.893f;  c.add.v = 0.633f;
+	c.mul.h =-0.099f;  c.mul.s =-1.033f;  c.mul.v = 0.273f;
+	c.pow.h = 1.035f;  c.pow.s = 1.654f;  c.pow.v = 0.997f;
+	vis.spect.clr = c;
 	
 	pls.bSliderRate = 1;  pls.xW_slider = 18;
 	
-	//tabs.xCols = 5;  tabs.yRows = 1;  tabs.ofs = 0;
-	tabs.xCols = 10;  tabs.yRows = 3;  tabs.ofs = 0;
+	tabs.xCols = 5;  tabs.yRows = 1;  tabs.ofs = 0;
 	
 	fnt.Fy = 17;  // todo:
 	//cfP = 1;  cfA = 0;  cfT = 1;  cfH = 1;  cfG = 1;
@@ -49,8 +57,8 @@ void ViewSet::Load(const XMLElement* el)
 		a = e->Attribute("h");		if (a)  vis.yH = mia(0, wnd.ySize, s2i(a));
 
 		a = e->Attribute("type");	if (a)  vis.eType = (EVisType)mia(0,int(VisT_ALL), s2i(a));
-		a = e->Attribute("fft");	if (a)  vis.iFFT_Size = mia(0,ViewSet::FFTSizes-1, s2i(a));
-		a = e->Attribute("ftMul");	if (a)  vis.fFFT_Mul = s2f(a);
+		a = e->Attribute("fft");	if (a)  vis.fft.iSize = mia(0,ViewSet::FFTSizes-1, s2i(a));
+		a = e->Attribute("ftMul");	if (a)  vis.fft.fMul = s2f(a);
 		a = e->Attribute("vpFq");	if (a)  vis.fPrt_Fq = s2f(a);
 	}
 	e = el->FirstChildElement("pls");  if (e) {
@@ -83,8 +91,8 @@ void ViewSet::Save(XMLElement* el, XMLDocument* xml) const
 		e->SetAttribute("h",		i2s(vis.yH,4,' ').c_str());
 
 		e->SetAttribute("type",		i2s(vis.eType).c_str());
-		e->SetAttribute("fft",		i2s(vis.iFFT_Size).c_str());
-		e->SetAttribute("ftMul",	f2s(vis.fFFT_Mul).c_str());
+		e->SetAttribute("fft",		i2s(vis.fft.iSize).c_str());
+		e->SetAttribute("ftMul",	f2s(vis.fft.fMul).c_str());
 		e->SetAttribute("vpFq",		f2s(vis.fPrt_Fq).c_str());
 	el->InsertEndChild(e);
 

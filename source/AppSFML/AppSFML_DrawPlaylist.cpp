@@ -194,7 +194,7 @@ void AppSFMLDraw::DrawPls_2Times()
 		if (time)
 		{
 			//  text
-			TimeClr c = timeColors.Get(t);
+			TimeClr c = colors.Get(t);
 			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
 	
 			Text(Fnt_Time, xt, y);  // align right

@@ -40,7 +40,10 @@ public:
 	static std::string Config() {     return user_config;  }
 	static std::string AppConfig() {  return app_config;  }
 	static std::string Data() {       return app_data; }
-
+	
+	static std::string Colors() {     return app_data + "/colors.xml"; }
+	static std::string ColorsUser() { return user_config + "/colors.xml"; }
+	
 	static std::string Settings() {   return user_config + "/cAmp2.xml"; }
 	static std::string Log() {        return user_config + "/cAmp2.log"; }
 	static std::string Playlists() {  return user_config + "/playlists/"; }

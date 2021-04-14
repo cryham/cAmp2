@@ -9,7 +9,7 @@ using namespace std;  using namespace sf;
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawVisual()
 {
-	const ViewSet& v = set.view;
+	const auto& v = set.view;  //const auto& vis = set.view.vis;
 	const int xw = v.wnd.xSize, yw = v.wnd.ySize, hh = v.vis.yH;
 	const bool play = audio->IsPlaying();
 	const float h = yE_vis - yB_vis;
@@ -29,9 +29,12 @@ void AppSFMLDraw::DrawVisual()
 				f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
 				
 				Uint8 r,g,b;  // clr
+				v.vis.fft.clr.GetRGB(f, r,g,b);
+			#if 0  // old
 				r = 40+f*f*(255-60);
 				g = 100+f*(255-120);
 				b = 180+f*(255-200);
+			#endif
 				RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
 				// todo: fill texture and use shader
 			}
@@ -66,19 +69,19 @@ void AppSFMLDraw::DrawVisual()
 				//f = float(i)/xw * 0.5f + 1.f * abs(yy-hh/2)/hh;  // test
 				
 				Uint8 r,g,b;  // clr
+				v.vis.spect.clr.GetRGB(f, r,g,b);
+			#if 0  // old
 				r = 10+f*f*(255-100);
 				g = 10+f*(255-60);
 				b = 40+f*(255-40);
+			#endif				
 			#if 0  //  test ::
 				r = (i%2==0?1:0) * 222;  //255.f * i/xw;
 				g = (yy%2==0?1:0) * 100 + 100.f * i/xw;
 				b = 155.f * yy/hh + 100.f * i/xw;
 				//if (yy == hh-1)  r = g = b = 255;
 			#endif
-				pixels[a++] = r;
-				pixels[a++] = g;
-				pixels[a++] = b;
-				pixels[a++] = 255;
+				pixels[a++] = r;  pixels[a++] = g;  pixels[a++] = b;  pixels[a++] = 255;
 			}
 			pVisTexture->update(pixels, xw, 1, 0, yy);
 			pVisTexture->setRepeated(true);
