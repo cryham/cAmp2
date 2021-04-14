@@ -33,7 +33,7 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
 	
 	{"Player View & Statistics", 400,350},
 	{"Player Audio", 400,300},
-	{"Player Visualization", 400,300},
+	{"Player Visualization", 800,800},
 	
 	{"Player Test", 300,200},
 	{"About", 450,340},
@@ -52,6 +52,15 @@ bool AppSFMLDraw::WndVisible(EWndOpt w)
 {
 	return vWindows[w] && vWindows[w]->isOpen();
 }
+
+void AppSFMLDraw::WndFocus()
+{
+	if (wndFocus)
+	{	wndFocus = false;
+		SetKeyboardFocusHere();
+	}
+}
+
 
 //  Wnd Open
 //------------------------------------------------------------------
@@ -98,6 +107,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	ImGui::SFML::UpdateFontTexture();
 
 	SetupGuiStyle();
+	wndFocus = true;
 }
 
 void AppSFMLDraw::WndClose(int i)

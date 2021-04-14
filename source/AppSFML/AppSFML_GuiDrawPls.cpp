@@ -12,11 +12,9 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_PlsFind()
 {
-	/*if (findFocus)  // after alt-F
-	{	findFocus = false;  SetKeyboardFocusHere();  }*/
 	bool e;
 	static char s[1024]={0};
-	strcpy(s, sFind.c_str());
+	strcpy(s, sFind.c_str());  WndFocus();
 	PushItemWidth(140);  e = InputText("find", s, sizeof(s));  PopItemWidth();
 	if (e)  {  sFind = s;  Find();  }
 	SameLine(200);
@@ -52,7 +50,7 @@ void AppSFMLDraw::WndDraw_PlsFilter()
 	bool e;  string s;  int i;
 
 	PushItemWidth(300);
-	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ Ratings::GetVis(i);  TextG(s);
+	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ Ratings::GetVis(i);  TextG(s);  WndFocus();
 	e = SliderInt("rFl", &i, Ratings::valMin, Ratings::valMax, "");
 	if (e) {  Pls().filterLow = i;  Pls().UpdateVis();  }
 	
@@ -74,7 +72,7 @@ void AppSFMLDraw::WndDraw_PlsTab()
 	static char t[1024]={0};
 
 	strcpy(t, Pls().name.c_str());  TextG("Name:");
-	PushItemWidth(300);  
+	PushItemWidth(300);  WndFocus();
 	e = InputText("Tbn", t, sizeof(t));  if (e) Pls().name = t;
 
 	Sep(10);
@@ -98,7 +96,7 @@ void AppSFMLDraw::WndDraw_AppTabs()
 	auto& t = set.view.tabs;
 
 	PushItemWidth(300);  
-	i = t.xCols;  s = "Columns: " + i2s(i);  TextG(s);
+	i = t.xCols;  s = "Columns: " + i2s(i);  TextG(s);  WndFocus();
 	e = SliderInt("Tbx", &i, 1, 30, "");
 	if (e) {  t.xCols = i;  UpdDim();  }
 	

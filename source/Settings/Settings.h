@@ -57,7 +57,7 @@ public:
 
 
 	//  views  -----
-	const static int cMaxViews = 10;
+	const static int cMaxViews = 20;
 	ViewSet view, views[cMaxViews];
 
 	

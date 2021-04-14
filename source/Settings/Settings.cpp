@@ -159,7 +159,7 @@ bool Settings::Load()
 			m = m->NextSiblingElement("View");  ++i;
 	}	}
 	
-	Log("Settings Loaded.");
+	Log("Settings Loaded, from: " + file);
 	return true;
 }
 
