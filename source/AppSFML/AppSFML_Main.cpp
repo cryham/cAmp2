@@ -69,7 +69,7 @@ bool AppSFMLDraw::CreateTextures()
 		//return false;
 	}
 	auto s = pVisTexture->getSize();
-	Uint8 pixels[s.x * 4] = {0};  // alpha
+	Uint8 pixels[ciMaxScreenX * 4] = {0};  // alpha
 	for (int y=0; y < s.y; ++y)
 		pVisTexture->update(pixels, s.x, 1, 0, y);
 	//pVisTexture->setRepeated(true);

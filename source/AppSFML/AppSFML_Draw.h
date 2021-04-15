@@ -27,6 +27,7 @@ protected:
 	void DrawPlaylist(), DrawPls_1Names(), DrawPls_2Times(), DrawPls_3Cursors();
 	void DrawPls_Header(), DrawPls_Slider();
 	std::vector<int> plsTxtW;  // pls text widths temp
+	const static int ciMaxScreenX = 8192;
 
 	//  Views
 	void UpdateView(bool load, int v) override;
