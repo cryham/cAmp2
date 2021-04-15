@@ -6,9 +6,13 @@ namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
 
 enum EVisType
 {	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect, VisT_ALL  };
-
-const static char* SVisType[VisT_ALL] =
+const static char* csVisType[VisT_ALL] =
 {	"None", "FFT", "Oscilloscope", "Spectrogram" };
+
+enum SpectType 
+{	SpcT_VerticalDown, SpcT_HorizRight, SpcT_VerticalUpFFT, SpcT_ALL  };
+const static char* csSpectType[SpcT_ALL] =
+{	"Vertical Down", "Horizontal Right", "Vertical Up with FFT"  };
 
 
 //  View settings
@@ -43,8 +47,10 @@ public:
 			int iSize = 1;      // FFT samples (quality)
 			float fMul = 69.f;  // y multiplier (scale)
 			VisualColors clr;
-		} fft, spect;
+			int id = 0;  // todo: only id saved in xml
+		} fft, osc/*-*/, spect;
 		
+		SpectType eSpect;
 		float fPrt_Fq = 100.f;  // spectrogram speed  // todo: thread
 	} vis;
 	

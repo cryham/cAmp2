@@ -102,7 +102,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 		UpdDim();
 	
 	//  / set.view.wnd.ySize;  %
-	if (SliderI(v.yH, 0, set.view.wnd.ySize, string("Height: ") + f2s(f, 0, 4), "visH"))
+	if (SliderI(v.yH, 0, set.view.wnd.ySize, string("Height: ") + f2s(v.yH, 0, 4), "visH"))
 		UpdDim();
 
 	//	int iSleep = 0;  // in ms  // todo:

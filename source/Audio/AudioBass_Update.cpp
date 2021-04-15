@@ -22,7 +22,7 @@ void AudioBass::GetVisualData(int size, const ViewSet& view)
 	const auto& v = view.vis;
 	int xw1 = view.wnd.xSize+1;
 	
-	if (v.eType == VisT_FFT || v.eType == VisT_Spect)
+	if (v.eType == VisT_FFT)
 	{
 		BASS_ChannelGetData(chan, (void*)fft, ciFFTSize[v.fft.iSize] );
 

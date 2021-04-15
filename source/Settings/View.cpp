@@ -19,14 +19,19 @@ void ViewSet::Defaults()
 	wnd.iSleep = 10;  wnd.bVSync = true;
 	
 	vis.yH = 129;
-	vis.eType = VisT_FFT;  vis.fft.iSize = 1;
-	vis.fft.fMul = 69.f;  vis.fPrt_Fq = 100.f;
+	vis.eType = VisT_FFT;
+	vis.fft.iSize = 1;  vis.fft.fMul = 69.f;
+	
+	vis.spect.iSize = 2;  vis.spect.fMul = 69.f;
+	vis.eSpect = SpcT_HorizRight;
+	vis.fPrt_Fq = 100.f;
 	
 	auto& c = vis.fft.clr;
 	c.name = "default view";
 	c.add.h = 0.594f;  c.add.s = 0.893f;  c.add.v = 0.633f;
 	c.mul.h =-0.099f;  c.mul.s =-1.033f;  c.mul.v = 0.273f;
 	c.pow.h = 1.035f;  c.pow.s = 1.654f;  c.pow.v = 0.997f;
+	vis.osc.clr = c;
 	vis.spect.clr = c;
 	
 	pls.bSliderRate = 1;  pls.xW_slider = 18;

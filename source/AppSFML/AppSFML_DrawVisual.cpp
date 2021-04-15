@@ -10,10 +10,11 @@ using namespace std;  using namespace sf;
 void AppSFMLDraw::DrawVisual()
 {
 	const auto& v = set.view;  //const auto& vis = set.view.vis;
-	const int xw = v.wnd.xSize, yw = v.wnd.ySize, hh = v.vis.yH;
+	const int xw = v.wnd.xSize, yw = v.wnd.ySize;
 	const bool play = audio->IsPlaying();
 	const float h = yE_vis - yB_vis;
 	const auto t = v.vis.eType;
+	const int hh = v.vis.yH, yh = hh;
 
 	if (play)
 	{
@@ -30,13 +31,8 @@ void AppSFMLDraw::DrawVisual()
 				
 				Uint8 r,g,b;  // clr
 				v.vis.fft.clr.GetRGB(f, r,g,b);
-			#if 0  // old
-				r = 40+f*f*(255-60);
-				g = 100+f*(255-120);
-				b = 180+f*(255-200);
-			#endif
 				RectUV(i, yB_vis + h-y, 1,y,  475,uy,1,uh, true, r,g,b);
-				// todo: fill texture and use shader
+				// todo: fill 1d texture and use shader
 			}
 		else if (t == VisT_Osc)
 			for (int i=0; i < xw; ++i)
@@ -52,38 +48,72 @@ void AppSFMLDraw::DrawVisual()
 				f = mia(0.f,1.f, 0.8f + y*1.0f - d*0.02f);  // mul  d/h  par +
 				
 				Uint8 r,g,b;  // clr
-				r = 20+f*f*(255-90);
-				g = 80+f*(255-120);
-				b = 180+f*(255-200);
+				v.vis.osc.clr.GetRGB(f, r,g,b);
+//				r = 20+f*f*(255-90);
+//				g = 80+f*(255-120);
+//				b = 180+f*(255-200);
 				RectUV(i, yB_vis + ya, 1,d,  475,uy,1,uh, true, r,g,b);
+				// todo: fill 1d texture and use shader, add glow
 			}
+		///------------------------------------------------------------------------------------
 		else if (t == VisT_Spect && pVisSprite)
 		{
-			Uint8 pixels[xw*4];
-			static int yy = 0;  int a=0;
+			bool right = v.vis.eSpect == SpcT_HorizRight;
+			bool withFFT = v.vis.eSpect == SpcT_VerticalUpFFT;
+
+			// draw FFT  split h
+			//hh -= hh/3;  // 1/3 fft, rest spect
+			const int h2 = hh / 3, hh2 = hh-h2;
+			
+			if (withFFT)
 			for (int i=0; i < xw; ++i)
 			{
 				float f = vis[i];
-				int y = h - f*h;
+				int y = h2 - f*h2;
 				f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
-				//f = float(i)/xw * 0.5f + 1.f * abs(yy-hh/2)/hh;  // test
 				
 				Uint8 r,g,b;  // clr
 				v.vis.spect.clr.GetRGB(f, r,g,b);
-			#if 0  // old
-				r = 10+f*f*(255-100);
-				g = 10+f*(255-60);
-				b = 40+f*(255-40);
-			#endif				
-			#if 0  //  test ::
-				r = (i%2==0?1:0) * 222;  //255.f * i/xw;
-				g = (yy%2==0?1:0) * 100 + 100.f * i/xw;
-				b = 155.f * yy/hh + 100.f * i/xw;
-				//if (yy == hh-1)  r = g = b = 255;
-			#endif
-				pixels[a++] = r;  pixels[a++] = g;  pixels[a++] = b;  pixels[a++] = 255;
+				RectUV(i, yB_vis + h2-y, 1,y,  475,uy,1,uh, true, r,g,b);
 			}
-			pVisTexture->update(pixels, xw, 1, 0, yy);
+			
+			Uint8 pixels[ciMaxScreenX * 4];
+			static int yy = 0;  int a=0;
+			static int xx = 0;
+			
+			if (right)
+			{
+				for (int j=0; j < yw; ++j)
+				{
+					float f = vis[yh-1-j];
+					int y = h - f*h;
+					f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
+					
+					Uint8 r,g,b;  // clr
+					v.vis.spect.clr.GetRGB(f, r,g,b);
+					pixels[a++] = r;  pixels[a++] = g;  pixels[a++] = b;  pixels[a++] = 255;
+				}
+				pVisTexture->update(pixels, 1, yw, xx, 0);
+			}else{
+				for (int i=0; i < xw; ++i)
+				{
+					float f = vis[i];
+					int y = h - f*h;
+					f = mia(0.f,1.f, 1.f-f*1.5f);  // mul
+					//f = float(i)/xw * 0.5f + 1.f * abs(yy-hh/2)/hh;  // test
+					
+					Uint8 r,g,b;  // clr
+					v.vis.spect.clr.GetRGB(f, r,g,b);
+				#if 0  //  test ::
+					r = (i%2==0?1:0) * 222;  //255.f * i/xw;
+					g = (yy%2==0?1:0) * 100 + 100.f * i/xw;
+					b = 155.f * yy/hh + 100.f * i/xw;
+					//if (yy == hh-1)  r = g = b = 255;
+				#endif
+					pixels[a++] = r;  pixels[a++] = g;  pixels[a++] = b;  pixels[a++] = 255;
+				}
+				pVisTexture->update(pixels, xw, 1, 0, yy);
+			}
 			pVisTexture->setRepeated(true);
 			//pVisTexture->setSmooth(false);
 			
@@ -93,17 +123,36 @@ void AppSFMLDraw::DrawVisual()
 			pVisSprite->setTextureRect(IntRect(0, 0, xw, h));  // static
 			pWindow->draw(*pVisSprite);
 		#else
-			//  rolling  // par..  horiz/vert..
-			pVisSprite->setTextureRect(IntRect(0, yy+1, xw, hh-1-yy));
-			pVisSprite->setPosition(0, yB_vis+10);
-			pWindow->draw(*pVisSprite);
-			pVisSprite->setTextureRect(IntRect(0, 0, xw, yy));
-			pVisSprite->setPosition(0, yB_vis+10 +hh-1-yy);
-			pWindow->draw(*pVisSprite);
+			//  bRolling par..
+			const int yb = yB_vis + 10;  // top
+			switch (v.vis.eSpect)
+			{
+			case SpcT_VerticalUpFFT:  // todo: mirror
+				pVisSprite->setTextureRect(IntRect(0, yy+1, xw, hh2-1-yy));
+				pVisSprite->setPosition(0, yb +h2);
+				pWindow->draw(*pVisSprite);
+				pVisSprite->setTextureRect(IntRect(0, 0, xw, yy));
+				pVisSprite->setPosition(0, yb +h2 +hh2-1-yy);
+				pWindow->draw(*pVisSprite);  break;
+			case SpcT_VerticalDown:
+				pVisSprite->setTextureRect(IntRect(0, yy+1, xw, hh-1-yy));
+				pVisSprite->setPosition(0, yb);
+				pWindow->draw(*pVisSprite);
+				pVisSprite->setTextureRect(IntRect(0, 0, xw, yy));
+				pVisSprite->setPosition(0, yb +hh-1-yy);
+				pWindow->draw(*pVisSprite);  break;
+			case SpcT_HorizRight:
+				pVisSprite->setTextureRect(IntRect(xx+1, 0, xw-1-xx, yh));
+				pVisSprite->setPosition(0, yb);
+				pWindow->draw(*pVisSprite);
+				pVisSprite->setTextureRect(IntRect(0, 0, xx, yh));
+				pVisSprite->setPosition(xw-1-xx, yb);
+				pWindow->draw(*pVisSprite);  break;
+			}
 		#endif
-			++yy;
-			if (yy >= hh)
-				yy = 0;
+			if (!right)
+			{	++yy;  if (yy >= (withFFT ? hh2 : hh))  yy = 0;  }else
+			{	++xx;  if (xx >= xw)  xx = 0;  }
 		}
 	}	
 }
