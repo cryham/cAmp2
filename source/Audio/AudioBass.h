@@ -39,6 +39,7 @@ public:
 	void SetPos(bool back, bool slow, bool fast) override;
 	void SetPosAbs(double pos) override;
 	void SetVol(bool back, bool slow, bool fast) override;
+	void SetVolAbs() override;
 	
 	//  get audio data for visualization
 	void GetVisualData(int size, const ViewSet &view) override;

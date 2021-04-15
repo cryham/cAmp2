@@ -145,7 +145,14 @@ void AudioBass::SetVol(bool back, bool slow, bool fast)  //  ^ v
 {
 	float add = slow ? 10 : fast ? 100 : 20;  //vSpdVol[iSpdVol].v[slow ? 0 : fast ? 2 : 1] * 0.01f;
 	iVolume += back ? -add : add;
-	iVolume = mia(0,1000, iVolume);  //tmd = tmD;
+	iVolume = mia(0,1000, iVolume);
+	if (bPlaying)
+		BASS_ChannelSetAttribute(ch(), BASS_ATTRIB_VOL, 0.001f * iVolume);
+}
+
+void AudioBass::SetVolAbs()
+{
+	iVolume = mia(0,1000, iVolume);
 	if (bPlaying)
 		BASS_ChannelSetAttribute(ch(), BASS_ATTRIB_VOL, 0.001f * iVolume);
 }

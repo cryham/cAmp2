@@ -134,7 +134,7 @@ bool App::KeyDown(Event::KeyEvent k)
 		break;
 	
 	//  view modes
-	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(sDirView[set.eDirView]));  Redraw();  break;
+	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(csDirView[set.eDirView]));  Redraw();  break;
 	key(Num3):  set.bFileInfo = !set.bFileInfo;  Osd("FileInfo: " + b2on(set.bFileInfo));  break;
 	
 	//  gui

@@ -6,6 +6,22 @@
 using namespace sf;  using namespace std;  using namespace ImGui;
 
 
+//  const windows data
+const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
+	{"Playlist Find", 400,300},
+	{"Playlist Filter", 400,200},
+	{"Playlist Tab", 400,520},
+	{"Player Tabs", 400,320},
+	
+	{"Player View & Statistics", 400,350},
+	{"Player Audio", 400,300},
+	{"Player Visualization", 800,900},
+	
+	{"Player Test", 300,200},
+	{"About", 450,340},
+	{"All Options windows", 300,400},
+};
+
 //  gui utils  -----
 const ImVec4 clr1(0.2f,0.2f,0.7f, 0.5f);
 const ImVec4 clr0(0.2f,0.2f,0.7f, 0.3f);
@@ -23,22 +39,28 @@ void AppSFMLDraw::Line()
 void AppSFMLDraw::TextG(const char* s) {  ImGui::Text(s);  }
 void AppSFMLDraw::TextG(string s)      {  ImGui::Text(s.c_str());  }
 
+bool AppSFMLDraw::SliderF(
+	float& val, float vmin, float vmax,
+	const string& text, const string& uid)
+{
+	float f = val;
+	string s = text + f2s(f, 3, 5);  TextG(s);
+	bool e = SliderFloat(uid.c_str(), &f, vmin, vmax, "");
+	if (e)  val = f;
+	return e;
+}
 
-//  const
-const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
-	{"Playlist Find", 400,300},
-	{"Playlist Filter", 400,200},
-	{"Playlist Tab", 400,520},
-	{"Player Tabs", 400,320},
-	
-	{"Player View & Statistics", 400,350},
-	{"Player Audio", 400,300},
-	{"Player Visualization", 800,800},
-	
-	{"Player Test", 300,200},
-	{"About", 450,340},
-	{"All Options windows", 300,400},
-};
+bool AppSFMLDraw::SliderI(
+	int& val, float vmin, float vmax,
+	const string& text, const string& uid)
+{
+	int i = val;
+	TextG(text);
+	bool e = SliderInt(uid.c_str(), &i, vmin, vmax, "");
+	if (e)  val = i;
+	return e;
+}
+
 
 //  ctor
 //------------------------------------------------------------------

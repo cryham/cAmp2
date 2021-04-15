@@ -18,7 +18,7 @@ void AppSFMLDraw::WndDraw_AppViewStats()
 	
 	Sep(10);
 	int i = set.eDirView;
-	s = string("Dir View: ") + sDirView[i];
+	s = string("Dir View: ") + csDirView[i];
 	TextG(s);
 	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
@@ -71,7 +71,7 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	int i = audio->iVolume;
 	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s);
 	PushItemWidth(240);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
-	if (e) {  audio->iVolume = i;  Redraw();  }
+	if (e) {  audio->iVolume = i;  audio->SetVolAbs();  Redraw();  }
 	
 	Sep(10);
 	TextG("Repeat");
@@ -89,14 +89,6 @@ void AppSFMLDraw::WndDraw_AppAudio()
 }
 
 
-void AppSFMLDraw::SliderF(float& fl, float a, float b, const char* text, const char* uid)
-{
-	float f = fl;
-	string s = string(text) + f2s(f, 3, 5);  TextG(s);
-	bool e = SliderFloat(text, &f, a, b, "");
-	if (e)  fl = f;
-}
-
 //------------------------------------------------------------------
 //  Visualization
 //------------------------------------------------------------------
@@ -106,88 +98,78 @@ void AppSFMLDraw::WndDraw_AppVis()
 	auto& v = set.view.vis;
 	PushItemWidth(750);
 
-	i = v.eType;
-	s = string("Type: ") + SVisType[i];  TextG(s);
-	e = SliderInt("visT", &i, 0, VisT_ALL-1, "");
-	if (e) {  v.eType = i;  UpdDim();  }
+	if (SliderI(v.eType, 0, VisT_ALL-1, string("Type: ") + csVisType[v.eType], "visT"))
+		UpdDim();
 	
-	f = v.yH;  // / set.view.wnd.ySize;  %
-	s = string("Height: ") + f2s(f, 0, 4);  TextG(s);
-	e = SliderFloat("visH", &f, 0, set.view.wnd.ySize, "");
-	if (e) {  v.yH = f;  UpdDim();  }
+	//  / set.view.wnd.ySize;  %
+	if (SliderI(v.yH, 0, set.view.wnd.ySize, string("Height: ") + f2s(f, 0, 4), "visH"))
+		UpdDim();
 
-	//	int iSleep = 0;  // in ms
+	//	int iSleep = 0;  // in ms  // todo:
 	//	bool bVSync = true;
 	
+	auto AddSlidersHSV = [&](VisualColors& c, string s)
+	{
+		Sep(10);
+		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", s+"Ha");
+		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", s+"Hm");
+		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", s+"Hp");
+		Sep(5);
+		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", s+"Sa");
+		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", s+"Sm");
+		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", s+"Sp");
+		Sep(5);
+		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", s+"Va");
+		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", s+"Vm");
+		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", s+"Vp");
+	};
+	
+	const int clrs = colors.vVisual.size()-1;
 	Sep(10);
 	switch (v.eType)
 	{
 	case VisT_FFT:
-	{	i = v.fft.iSize;
-		s = string("FFT size: ") + i2s(i);  TextG(s);
-		e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
-		if (e)  v.fft.iSize = i;
+	{
+		SliderI(v.fft.iSize, 0, ViewSet::FFTSizes-1,
+				"FFT size: " + i2s(v.fft.iSize), "fft-siz");
 	
-		f = v.fft.fMul;
-		s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
-		e = SliderFloat("fftmul", &f, 0, 200.f, "");
-		if (e)  v.fft.fMul = f;
+		SliderF(v.fft.fMul, 0.f, 200.f,
+				"FFT scale: ", "fft-mul");
 
-		i = colors.curFFT;
-		s = "Theme: " + i2s(i)+ "  " + colors.CurFFT().name;  TextG(s);
-		e = SliderInt("FTh", &i, 0, colors.vVisual.size()-1, "");
-		if (e) {  colors.curFFT = i;
-			v.fft.clr = colors.CurFFT();  }
+		if (SliderI(colors.curFFT, 0, clrs,
+				"Theme: " + i2s(i)+ "  " + colors.CurFFT().name, "fft-thm"))
+			v.fft.clr = colors.CurFFT();
 		
-		Sep(10);
-		auto& c = v.fft.clr;
-		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", "FHa");
-		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", "FHm");
-		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", "FHp");
-		Sep(5);
-		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", "FSa");
-		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", "FSm");
-		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", "FSp");
-		Sep(5);
-		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", "FVa");
-		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", "FVm");
-		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", "FVp");
+		AddSlidersHSV(v.fft.clr, "fft_");
 	}	break;
 
 	case VisT_Osc:
-		//  clr ..
-		break;
+	{
+		if (SliderI(colors.curOsc, 0, clrs,
+				"Theme: " + i2s(i)+ "  " + colors.CurOsc().name, "osc-thm"))
+			v.osc.clr = colors.CurOsc();
+		
+		AddSlidersHSV(v.osc.clr, "osc_");
+	}	break;
 
 	case VisT_Spect:
-	{	i = v.spect.iSize;
-		s = string("FFT size: ") + i2s(i);  TextG(s);
-		e = SliderInt("fftsi", &i, 0, ViewSet::FFTSizes-1, "");
-		if (e)  v.spect.iSize = i;
+	{
+		SliderI(v.spect.iSize, 0, ViewSet::FFTSizes-1,
+				"FFT size: " + i2s(v.spect.iSize), "spc-siz");
 	
-		f = v.spect.fMul;
-		s = string("FFT scale: ") + f2s(f, 2, 5);  TextG(s);
-		e = SliderFloat("fftmul", &f, 0, 200.f, "");
-		if (e)  v.spect.fMul = f;
+		SliderF(v.spect.fMul, 0.f, 200.f,
+				"FFT scale: ", "spc-mul");
 
-		i = colors.curSpect;
-		s = "Theme: " + i2s(i)+ "  " + colors.CurSpect().name;  TextG(s);
-		e = SliderInt("STh", &i, 0, colors.vVisual.size()-1, "");
-		if (e) {  colors.curSpect = i;
-			v.spect.clr = colors.CurSpect();  }
+		if (SliderI(colors.curSpect, 0, clrs,
+				"Theme: " + i2s(colors.curSpect)+ "  " + colors.CurSpect().name, "spc-thm"))
+			v.spect.clr = colors.CurSpect();
+
+		i = v.eSpect;
+		if (SliderI(i, 0, SpcT_ALL-1,
+				"Type: " + string(csSpectType[i]), "spc-typ"))
+			v.eSpect = (SpectType)i;
 		
-		Sep(10);
-		auto& c = v.spect.clr;
-		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", "SHa");
-		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", "SHm");
-		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", "SHp");
-		Sep(5);
-		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", "SSa");
-		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", "SSm");
-		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", "SSp");
-		Sep(5);
-		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", "SVa");
-		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", "SVm");
-		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", "SVp");
+		AddSlidersHSV(v.spect.clr, "spc_");
 		
 		//	float fPrtFq = 100.f;  // spectrogram speed
 	}	break;
@@ -207,7 +189,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Debug text", &bDebug);
 	
 	Sep(10);
-	s = string("Time colors: ") + sTimesTest[iTimeTest];  TextG(s);
+	s = string("Time colors: ") + csTimesTest[iTimeTest];  TextG(s);
 	PushItemWidth(140);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
 }
 

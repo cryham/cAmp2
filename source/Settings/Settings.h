@@ -12,11 +12,11 @@ enum EDirView
 {
 	DirV_Fullpath, DirV_Path, DirV_Path2, DirV_Path3, /*DirV_None,*/ DirV_All
 };
-const static char* sDirView[DirV_All] =
+const static char* csDirView[DirV_All] =
 {
 	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
 };
-const static char* sTimesTest[3] =
+const static char* csTimesTest[3] =
 {	"off", "short", "long"  };
 
 

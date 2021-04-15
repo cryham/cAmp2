@@ -53,7 +53,9 @@ public:
 	virtual void GetPos() = 0;  // updates timePlay
 	virtual void SetPos(bool back, bool slow, bool fast) = 0;
 	virtual void SetPosAbs(double pos) = 0;
+	
 	virtual void SetVol(bool back, bool slow, bool fast) = 0;
+	virtual void SetVolAbs() = 0;
 
 	//  visualization
 	virtual float* GetVisual() = 0;

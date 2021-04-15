@@ -73,7 +73,8 @@ void AppSFMLDraw::WndDraw_PlsTab()
 
 	strcpy(t, Pls().name.c_str());  TextG("Name:");
 	PushItemWidth(300);  WndFocus();
-	e = InputText("Tbn", t, sizeof(t));  if (e) Pls().name = t;
+	e = InputText("Tbn", t, sizeof(t));
+	if (e) {  Pls().name = t;  Redraw();  }
 
 	Sep(10);
 	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s);

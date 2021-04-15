@@ -117,8 +117,11 @@ protected:
 	void TextG(const char* s);
 	void TextG(std::string s);
 	void Sep(int h), Line();  // separators
-	void SliderF(float& fl, float a, float b, const char* text, const char *uid);
-	//void SliderI(int& f, const char* label);
+
+	bool SliderF(float& val, float vmin, float vmax,
+				 const std::string& text, const std::string& uid);
+	bool SliderI(int& val, float vmin, float vmax,
+				 const std::string& text, const std::string& uid);
 
 	void SetupGuiStyle();  // ImGui theme
 };
