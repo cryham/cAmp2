@@ -18,7 +18,7 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
 	{"Playlist Statistics", 400,250},
 	
 	{"Player Audio", 400,300},
-	{"Player Visualization", 900,600},
+	{"Player Visualization", 900,700},
 	
 	{"Player Test", 300,200},
 	{"About", 450,340},

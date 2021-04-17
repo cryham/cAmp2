@@ -12,21 +12,23 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppVis()
 {
-	bool e;  string s;  float f;  int i, x = 200;
+	bool e;  string s;  float f;  int i, x = 300;
 	auto& v = set.view.vis;
-	PushItemWidth(750);  xText = 160;  xSlider = 220;
+	xText = 140;  xSlider = 240;
 
 	//  view name edit
 	TextG("View name: ");  SameLine(xSlider);
-	static char es[1024]={0};
-	strcpy(es, set.view.name.c_str());  WndFocus();
-	PushItemWidth(x);  e = InputText("View name", es, sizeof(es));  PopItemWidth();
-	if (e)  {  set.view.name = es;  }
+	static char ed[1024]={0};
+	auto& ss = set.views[iLastView].name;
+	strcpy(ed, ss.c_str());  WndFocus();
+	PushItemWidth(x);  e = InputText("View name", ed, sizeof(ed));  PopItemWidth();
+	if (e)  {  ss = ed;  }
 
 	SameLine(xSlider+x+30);		if (Button("Load"))  UpdateView(true, iLastView);
 	SameLine(xSlider+x+150);	if (Button("Save"))  UpdateView(false, iLastView);
 	
 	//  view num
+	PushItemWidth(650);
 	SliderI(iLastView, 0, 20, "View number: ", "vwNum");
 	
 	Sep(10);
@@ -42,8 +44,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 	
 	auto AddSlidersHSV = [&](VisualColors& c, string s)
 	{
-		Sep(10);
-		Line();
+		Sep(10);  Line();
 		TextG("Adjust theme coloring");
 		SliderF(c.add.h, 0.f, 1.f, "Hue: ",        s+"Ha");
 		SliderF(c.mul.h,-2.f, 2.f, "  multi: ",    s+"Hm");

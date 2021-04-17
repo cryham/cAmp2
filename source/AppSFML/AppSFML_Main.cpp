@@ -216,13 +216,15 @@ void AppSFMLDraw::UpdateView(bool load, int v)
 		const auto& w = set.view.wnd;
 		pWindow->setPosition(Vector2i(w.xPos, w.yPos));
 		pWindow->setSize(Vector2u(w.xSize, w.ySize));
+		LoadFonts();
 		UpdDim();
 	}else
 	{
 		SetViewFromWnd();
 		set.views[v] = set.view;  // save preset
 	}
-	Osd(string(load ? "Loaded" : "Saved" )+" View: "+i2s(v));
+	Osd(string(load ? "Loaded" : "Saved" ) +
+		" View: " + i2s(v) + "  " + set.views[v].name);
 }
 
 void AppSFMLDraw::SetViewFromWnd()
