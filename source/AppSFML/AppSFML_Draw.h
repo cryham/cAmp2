@@ -1,9 +1,10 @@
 #pragma once
 #include "../App/App.h"
 #include "../App/AppConst.h"
+#include "../System/defines.h"
+#include "../Settings/Settings.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include "../System/defines.h"
 #include <memory>
 
 
@@ -61,7 +62,7 @@ protected:
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_PlsFind(), WndDraw_PlsFilter(), WndDraw_PlsTab(), WndDraw_AppTabs();
-	void WndDraw_AppViewStats(), WndDraw_AppAudio(), WndDraw_AppVis();
+	void WndDraw_AppView(), WndDraw_AppStats(), WndDraw_AppAudio(), WndDraw_AppVis();
 	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
 
 	
@@ -69,9 +70,6 @@ protected:
 	//----------------------------------------------------
 	std::unique_ptr<sf::Texture> pTexture = nullptr, pVisTexture = nullptr;
 	std::unique_ptr<sf::Sprite> pBackgr = nullptr, pVisSprite = nullptr;  // vis spectrogram
-
-	enum EFont
-	{	Fnt_Info, Fnt_Track, Fnt_Time, Fnt_TimeBig, Fnt_All  };
 
 	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
 	sf::Text text[Fnt_All];
@@ -119,10 +117,14 @@ protected:
 	void TextG(std::string s);
 	void Sep(int h), Line();  // separators
 
+	//  Text:   value  [Slider],  same line as if > 0
+	int xText = 0, xSlider = 0;
+	void SliderValue(const std::string& text, const std::string& val);
+	
 	bool SliderF(float& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid, int xSame=0);
+				 const std::string& text, const std::string& uid);
 	bool SliderI(int& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid, int xSame=0);
+				 const std::string& text, const std::string& uid);
 
 	void SetupGuiStyle();  // ImGui theme
 };

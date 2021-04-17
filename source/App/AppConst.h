@@ -1,6 +1,13 @@
 #pragma once
 
 
+enum EFont  // for different fonts, sizes
+{	Fnt_Player, Fnt_TimeBig,  // player
+	Fnt_Tabs,
+	Fnt_Tracks, Fnt_Times,  // playlist
+	Fnt_All
+};
+
 enum ETexUV  // textures in player.png
 {
 	TX_Prev=0, TX_Next, TX_Up, TX_Dn,  // buttons
@@ -20,7 +27,7 @@ enum ETexUV  // textures in player.png
 	TX_TabB1, TX_TabB2, TX_TabB3, TX_TabB4, TX_TabB5, TX_TabB6,  // tab bookm
 	
 	TX_Black,  // clear
-	TexUVNum
+	TX_ALL
 };
 
 //  size x,y, pos x,y  on player.png texture, in pixels
@@ -28,4 +35,38 @@ struct STexUV
 {
 	int w,h, x,y;
 };
-extern const STexUV ciTexUV[TexUVNum+1];
+extern const STexUV ciTexUV[TX_ALL+1];
+
+
+//  path view modes
+enum EDirView
+{
+	DirV_Fullpath, DirV_Path, DirV_Path2, DirV_Path3, /*DirV_None,*/
+	DirV_All
+};
+const static char* csDirView[DirV_All] =
+{
+	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
+};
+
+const static char* csTimesTest[3] =  // test
+{	"off", "short", "long"  };
+
+
+//  visualizations
+enum EVisType
+{
+	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect,
+	VisT_ALL
+};
+const static char* csVisType[VisT_ALL] =
+{	"None", "FFT", "Oscilloscope", "Spectrogram" };
+
+enum SpectType
+{
+	SpcT_VerticalDown, SpcT_HorizRight, SpcT_VerticalUpFFT,
+	SpcT_ALL
+};
+const static char* csSpectType[SpcT_ALL] =
+{	"Vertical Down", "Horizontal Right", "Vertical Up with FFT"  };
+

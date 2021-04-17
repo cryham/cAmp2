@@ -20,7 +20,6 @@ bool App::KeyDown(Event::KeyEvent k)
 		int v = k.code - Keyboard::Num0;
 		if (shift)  v += 10;
 		UpdateView(alt, v);
-		Osd(string(alt ? "Loaded" : "Saved" )+" View: "+i2s(v));
 	}
 	else
 	switch (k.code)
@@ -140,9 +139,9 @@ bool App::KeyDown(Event::KeyEvent k)
 	
 	//  gui
 	//key(F1):  WndOpen(alt ? WO_PlsFilter : WO_Main);  break;
-	key(F1):  WndOpen(shift ? WO_Main : ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
+	key(F1):  WndOpen(shift ? WO_AppAudio : ctrl ? WO_PlsFilter : alt ? WO_PlsFind : WO_Main);  break;
 	key(F2):  WndOpen(ctrl ? WO_AppTabs : alt ? WO_PlsTab : WO_AppVis);  break;
-	key(F3):  WndOpen(ctrl ? WO_AppAbout : alt ? WO_AppTest : WO_AppViewStats);  break;
+	key(F3):  WndOpen(shift ? WO_AppAbout : ctrl ? WO_AppStats : alt ? WO_AppTest : WO_AppView);  break;
 	// todo: F6..F12
 
 	#undef key

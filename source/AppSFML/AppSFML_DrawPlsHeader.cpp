@@ -12,7 +12,7 @@ void AppSFMLDraw::DrawPls_Header()
 
 	//  filter  ` Y *
 	int x = xM_pl_filt, y = yB_pl_inf;
-	EFont fnt = Fnt_Info;
+	EFont fnt = Fnt_Player;
 
 	str = Ratings::GetVis(low);
 	Text(fnt, x -11-2, y+1);

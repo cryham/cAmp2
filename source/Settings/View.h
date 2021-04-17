@@ -1,18 +1,8 @@
 #pragma once
 #include "VisualColors.h"
+#include "../App/AppConst.h"
 
 namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
-
-
-enum EVisType
-{	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect, VisT_ALL  };
-const static char* csVisType[VisT_ALL] =
-{	"None", "FFT", "Oscilloscope", "Spectrogram" };
-
-enum SpectType 
-{	SpcT_VerticalDown, SpcT_HorizRight, SpcT_VerticalUpFFT, SpcT_ALL  };
-const static char* csSpectType[SpcT_ALL] =
-{	"Vertical Down", "Horizontal Right", "Vertical Up with FFT"  };
 
 
 //  View settings
@@ -27,8 +17,9 @@ public:
 
 	std::string name;  // descr, with some info
 
-	//  window
-	struct VS_Wnd {
+	//  window  ------------------------
+	struct VS_Wnd
+	{
 		int xSize = 300, ySize = 600;
 		int xPos = 0, yPos = 0;
 
@@ -36,9 +27,10 @@ public:
 		bool bVSync = true;
 	} wnd;
 	
-	//  visualizations
+	//  visualizations  ------------------------
 	const static int FFTSizes = 5;
-	struct VS_Visuals {
+	struct VS_Visuals
+	{
 		int yH = 130;  // draw height, top
 
 		/*EVisType*/ int eType = VisT_FFT;
@@ -57,20 +49,25 @@ public:
 		float fPrt_Fq = 100.f;  // spectrogram speed  // todo: thread
 	} vis;
 	
-	//  pls slider
-	struct VS_Pls {
-		bool bSliderRate = 1;  // draw rating
-
+	//  pls slider  ------------------------
+	struct VS_Pls
+	{
+		bool bSliderRate = true;  // draw rating
 		int xW_slider = 18;  // draw width, right
 	} pls;
 	
 	//  tabs counts: colums,rows, offset
-	struct VS_Tabs {
+	struct VS_Tabs
+	{
 		int xCols = 5, yRows = 1, ofs = 0;
 	} tabs;
 	
-	//  font sizes
-	struct VS_Fonts {
-		int Fy = 17;
-	} fnt;
+	//  font sizes  ------------------------
+	struct VS_Fonts
+	{
+		std::string name = "";
+		int Fy = 17;  // font size
+		int FyH = 3;  // line add extra
+	}
+	fnt[Fnt_All];
 };

@@ -3,7 +3,7 @@
 
 //  size x,y, pos x,y
 //  on player.png texture, in pixels
-const STexUV ciTexUV[TexUVNum+1] = 
+const STexUV ciTexUV[TX_ALL+1] = 
 {	
 	96, 23,		0, 20,		// prev
 	96, 23,		100, 20,	// next

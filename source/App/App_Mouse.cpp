@@ -34,7 +34,7 @@ void App::MouseUpdate()
 
 	ViewSet& v = set.view;
 	const int xw = v.wnd.xSize, yw = v.wnd.ySize;
-	const int Fy = v.fnt.Fy; //cfont[v.cfP]->Fy;
+	const int Fy = v.fnt[Fnt_Tracks].Fy;
 
 	//  cur trk  ----
 	int cur = max(0, min(Pls().LengthVis()-1, (ym-yB_pl)/Fy + Pls().iOfs));
@@ -158,7 +158,10 @@ void App::MouseUpdate()
 			if (xm > xM_pl_filt - 21 && xm < xM_pl_filt + 21)
 				WndOpen(WO_PlsFilter, false);
 			else
-				WndOpen(WO_AppViewStats, false);
+				WndOpen(WO_AppStats, false);
+
+		if (ym > yB_pl && xm > xw - xWex_plS)
+			WndOpen(WO_AppView, false);
 		// main, find, vis ..?
 	}
 
@@ -170,7 +173,8 @@ void App::MouseUpdate()
 	if (ym > yB_pl)
 	{
 		///  Right  Play
-		if (bR && !bRs && !shift/*move wnd-*/ && !Pls().IsEmpty())
+		if (bR && !bRs && !shift/*move wnd-*/ &&
+			!Pls().IsEmpty() && xm < xw - xWex_plS)
 		{
 			auto old = Pls().iPlay;
 			int id = Pls().GetTrackVisId(cur);

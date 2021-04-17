@@ -10,9 +10,9 @@ void AppSFMLDraw::DrawTabs()
 	
 	Clr(50,80,115);  // ^ v btns
 	str = String(Uint32(0x25B4));
-	Text(Fnt_Track, v.wnd.xSize - 14, yB_tabs +1);
+	Text(Fnt_Tracks, v.wnd.xSize - 14, yB_tabs +1);
 	str = String(Uint32(0x25BE));
-	Text(Fnt_Track, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
+	Text(Fnt_Tracks, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
 
 	/* multi line  up,dn */
 	int ytB = yB_tabs+1;
@@ -53,8 +53,8 @@ void AppSFMLDraw::DrawTabs()
 
 		//  text
 		str = pls.name;
-		const int w = Text(Fnt_Track, 0,0, false);
+		const int w = Text(Fnt_Tabs, 0,0, false);
 		int xc = max(0, (xW_tabs - w)/2);  //center
-		Text(Fnt_Track, x*xW_tabs + xc, ytB + y*yH_tabs);
+		Text(Fnt_Tabs, x*xW_tabs + xc, ytB + y*yH_tabs);
 	}
 }

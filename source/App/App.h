@@ -76,7 +76,7 @@ protected:
 
 	enum EWndOpt  // options windows
 	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,
-		WO_AppViewStats, WO_AppAudio, WO_AppVis,
+		WO_AppView, WO_AppStats, WO_AppAudio, WO_AppVis,
 		WO_AppTest, WO_AppAbout, /*WO_Help,*/ WO_Main,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
 		// todo: theme, time colors,
