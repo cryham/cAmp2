@@ -35,9 +35,7 @@ bool App::Init()
 	}
 	
 	colors.Load();
-	//  apply cur colors to view
-	set.view.vis.fft.clr = colors.CurFFT();
-	set.view.vis.spect.clr = colors.CurSpect();
+	ApplyVisColors();
 	
 
 	LoadPls();
@@ -49,6 +47,7 @@ bool App::Init()
 	return true;
 }
 
+
 App::App()
 {
 }
@@ -57,6 +56,19 @@ App::~App()
 {
 }
 
+
+//  apply cur set colors to view vis
+void App::ApplyVisColors()
+{
+	auto& v = set.view.vis;
+	colors.curFFT = colors.GetVis(v.fft.theme);
+	colors.curOsc = colors.GetVis(v.osc.theme);
+	colors.curSpect = colors.GetVis(v.spect.theme);
+
+	v.fft.clr = colors.CurFFT();
+	v.osc.clr = colors.CurOsc();
+	v.spect.clr = colors.CurSpect();
+}
 
 //  key command utils
 //------------------------------------------------------------------------

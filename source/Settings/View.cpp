@@ -49,6 +49,8 @@ void ViewSet::Load(const XMLElement* el)
 	Defaults();
 
 	const char* a;  const XMLElement* e;
+	
+	a = e->Attribute("name");	if (a)  name = string(a);
 	e = el->FirstChildElement("wnd");  if (e) {
 		a = e->Attribute("sx");		if (a)  wnd.xSize = max(100, s2i(a));  //mia(100, ap->xScreen, cStr::toInt(a));
 		a = e->Attribute("sy");		if (a)	wnd.ySize = max(30, s2i(a));  //mia(30,  ap->yScreen, cStr::toInt(a));
@@ -60,11 +62,20 @@ void ViewSet::Load(const XMLElement* el)
 	}
 	e = el->FirstChildElement("vis");  if (e) {
 		a = e->Attribute("h");		if (a)  vis.yH = mia(0, wnd.ySize, s2i(a));
-
 		a = e->Attribute("type");	if (a)  vis.eType = (EVisType)mia(0,int(VisT_ALL), s2i(a));
-		a = e->Attribute("fft");	if (a)  vis.fft.iSize = mia(0,ViewSet::FFTSizes-1, s2i(a));
-		a = e->Attribute("ftMul");	if (a)  vis.fft.fMul = s2f(a);
-		a = e->Attribute("vpFq");	if (a)  vis.fPrt_Fq = s2f(a);
+		
+		a = e->Attribute("Fthm");	if (a)  vis.fft.theme = string(a);
+		a = e->Attribute("Fsiz");	if (a)  vis.fft.iSize = mia(0,ViewSet::FFTSizes-1, s2i(a));
+		a = e->Attribute("Fmul");	if (a)  vis.fft.fMul = s2f(a);
+
+		a = e->Attribute("Othm");	if (a)  vis.osc.theme = string(a);
+		
+		a = e->Attribute("Sthm");	if (a)  vis.spect.theme = string(a);
+		a = e->Attribute("Ssiz");	if (a)  vis.spect.iSize = mia(0,ViewSet::FFTSizes-1, s2i(a));
+		a = e->Attribute("Smul");	if (a)  vis.spect.fMul = s2f(a);
+
+		a = e->Attribute("Styp");	if (a)  vis.eSpect = (SpectType)mia(0,SpcT_ALL-1, s2i(a));
+		a = e->Attribute("Sfrq");	if (a)  vis.fPrt_Fq = s2f(a);
 	}
 	e = el->FirstChildElement("pls");  if (e) {
 		a = e->Attribute("slW");	if (a)  pls.xW_slider = max(0, s2i(a));
@@ -82,6 +93,8 @@ void ViewSet::Load(const XMLElement* el)
 void ViewSet::Save(XMLElement* el, XMLDocument* xml) const
 {
 	XMLElement* e;
+	el->SetAttribute("name",		name.c_str());
+
 	e = xml->NewElement("wnd");
 		e->SetAttribute("sx",		i2s(wnd.xSize,4,' ').c_str());
 		e->SetAttribute("sy",		i2s(wnd.ySize,4,' ').c_str());
@@ -94,11 +107,25 @@ void ViewSet::Save(XMLElement* el, XMLDocument* xml) const
 
 	e = xml->NewElement("vis");
 		e->SetAttribute("h",		i2s(vis.yH,4,' ').c_str());
-
 		e->SetAttribute("type",		i2s(vis.eType).c_str());
+
 		e->SetAttribute("fft",		i2s(vis.fft.iSize).c_str());
 		e->SetAttribute("ftMul",	f2s(vis.fft.fMul).c_str());
 		e->SetAttribute("vpFq",		f2s(vis.fPrt_Fq).c_str());
+
+		e->SetAttribute("Fthm",		vis.fft.theme.c_str());
+		e->SetAttribute("Fsiz",		i2s(vis.fft.iSize).c_str());
+		e->SetAttribute("Fmul",		f2s(vis.fft.fMul).c_str());
+
+		e->SetAttribute("Othm",		vis.osc.theme.c_str());
+
+		e->SetAttribute("Sthm",		vis.spect.theme.c_str());
+		e->SetAttribute("Ssiz",		i2s(vis.spect.iSize).c_str());
+		e->SetAttribute("Smul",		f2s(vis.spect.fMul).c_str());
+
+		e->SetAttribute("Styp",		i2s((int)vis.eSpect).c_str());
+		e->SetAttribute("Sfrq",		f2s(vis.fPrt_Fq).c_str());
+
 	el->InsertEndChild(e);
 
 	e = xml->NewElement("pls");

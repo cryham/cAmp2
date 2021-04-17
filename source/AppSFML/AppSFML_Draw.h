@@ -30,6 +30,7 @@ protected:
 	const static int ciMaxScreenX = 8192;
 
 	//  Views
+	int iLastView = 0;
 	void UpdateView(bool load, int v) override;
 	void SetViewFromWnd();  // after resize and before save
 	
@@ -119,9 +120,9 @@ protected:
 	void Sep(int h), Line();  // separators
 
 	bool SliderF(float& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid);
+				 const std::string& text, const std::string& uid, int xSame=0);
 	bool SliderI(int& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid);
+				 const std::string& text, const std::string& uid, int xSame=0);
 
 	void SetupGuiStyle();  // ImGui theme
 };

@@ -20,6 +20,7 @@ bool App::KeyDown(Event::KeyEvent k)
 		int v = k.code - Keyboard::Num0;
 		if (shift)  v += 10;
 		UpdateView(alt, v);
+		Osd(string(alt ? "Loaded" : "Saved" )+" View: "+i2s(v));
 	}
 	else
 	switch (k.code)
@@ -134,13 +135,13 @@ bool App::KeyDown(Event::KeyEvent k)
 		break;
 	
 	//  view modes
-	key(Num2):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(csDirView[set.eDirView]));  Redraw();  break;
+	key(V):  set.NextDirView(shift ? -1 : 1);  Osd("Dir View: " + string(csDirView[set.eDirView]));  Redraw();  break;
 	key(Num3):  set.bFileInfo = !set.bFileInfo;  Osd("FileInfo: " + b2on(set.bFileInfo));  break;
 	
 	//  gui
 	//key(F1):  WndOpen(alt ? WO_PlsFilter : WO_Main);  break;
 	key(F1):  WndOpen(shift ? WO_Main : ctrl ? WO_AppAudio : alt ? WO_PlsFilter : WO_PlsFind);  break;
-	key(F2):  WndOpen(ctrl ? WO_AppVis : alt ? WO_AppTabs : WO_PlsTab);  break;
+	key(F2):  WndOpen(ctrl ? WO_AppTabs : alt ? WO_PlsTab : WO_AppVis);  break;
 	key(F3):  WndOpen(ctrl ? WO_AppAbout : alt ? WO_AppTest : WO_AppViewStats);  break;
 	// todo: F6..F12
 

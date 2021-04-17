@@ -218,9 +218,11 @@ void AppSFMLDraw::CreateWindow()
 //  Views
 void AppSFMLDraw::UpdateView(bool load, int v)
 {
+	iLastView = v;
 	if (load)
 	{
 		set.view = set.views[v];  // load preset
+		ApplyVisColors();
 		const auto& w = set.view.wnd;
 		pWindow->setPosition(Vector2i(w.xPos, w.yPos));
 		pWindow->setSize(Vector2u(w.xSize, w.ySize));

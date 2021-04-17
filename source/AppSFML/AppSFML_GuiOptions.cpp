@@ -8,18 +8,18 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 
 //  const windows data
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
-	{"Playlist Find", 400,300},
-	{"Playlist Filter", 400,200},
+	{"Playlist Find", 320,250},
+	{"Playlist Filter", 350,200},
 	{"Playlist Tab", 400,520},
-	{"Player Tabs", 400,320},
+	{"Player Tabs", 350,320},
 	
 	{"Player View & Statistics", 400,350},
 	{"Player Audio", 400,300},
-	{"Player Visualization", 800,900},
+	{"Player Visualization", 900,600},
 	
 	{"Player Test", 300,200},
 	{"About", 450,340},
-	{"All Options windows", 300,400},
+	{"All Options windows", 250,400},
 };
 
 //  gui utils  -----
@@ -44,7 +44,7 @@ bool AppSFMLDraw::SliderF(
 	const string& text, const string& uid)
 {
 	float f = val;
-	string s = text + f2s(f, 3, 5);  TextG(s);
+	string s = text + f2s(f, 3, 5);  TextG(s);  SameLine(220);
 	bool e = SliderFloat(uid.c_str(), &f, vmin, vmax, "");
 	if (e)  val = f;
 	return e;
@@ -55,7 +55,7 @@ bool AppSFMLDraw::SliderI(
 	const string& text, const string& uid)
 {
 	int i = val;
-	TextG(text);
+	TextG(text);  SameLine(220);
 	bool e = SliderInt(uid.c_str(), &i, vmin, vmax, "");
 	if (e)  val = i;
 	return e;
@@ -89,7 +89,7 @@ void AppSFMLDraw::WndFocus()
 void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 {
 	if (wndInited)  //return;
-	// todo: many opened windows or resize same window ..
+	// todo: resize same window cant focus ..
 	{
 		for (int i=0; i < WO_All; ++i)
 			WndClose(i);
@@ -98,7 +98,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	auto& wnd = vWindows[w];
 	if (wnd)  return;
 	const auto& wc = wndConst[w];
-	
+
 	wnd = make_unique<RenderWindow>(
 		VideoMode(wc.width, wc.height), wc.title,
 		Style::Default, ContextSettings());
@@ -178,8 +178,8 @@ void AppSFMLDraw::WndDrawAll(Time time)
 	for (int i=0; i < WO_All; ++i)
 	{
 		if (!WndVisible((EWndOpt)i))  continue;
-		
-		auto& wnd = vWindows[i];
+
+		auto& wnd = vWindows[i];	
 		auto& wc = wndConst[i];
 		ImGui::SFML::Update(*wnd, time);
 

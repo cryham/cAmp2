@@ -20,7 +20,7 @@ void AppSFMLDraw::WndDraw_AppViewStats()
 	int i = set.eDirView;
 	s = string("Dir View: ") + csDirView[i];
 	TextG(s);
-	PushItemWidth(140);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
+	PushItemWidth(200);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
 	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
 	
 	Sep(5);  Line();
@@ -70,7 +70,7 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	
 	int i = audio->iVolume;
 	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s);
-	PushItemWidth(240);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
+	PushItemWidth(300);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
 	if (e) {  audio->iVolume = i;  audio->SetVolAbs();  Redraw();  }
 	
 	Sep(10);
@@ -124,7 +124,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", s+"Vp");
 	};
 	
-	const int clrs = colors.vVisual.size()-1;
+	const int clrs = colors.VisCount()-1;
 	Sep(10);
 	switch (v.eType)
 	{
@@ -137,8 +137,8 @@ void AppSFMLDraw::WndDraw_AppVis()
 				"FFT scale: ", "fft-mul");
 
 		if (SliderI(colors.curFFT, 0, clrs,
-				"Theme: " + i2s(i)+ "  " + colors.CurFFT().name, "fft-thm"))
-			v.fft.clr = colors.CurFFT();
+				"Theme: " + i2s(colors.curFFT)+ "  " + colors.CurFFT().name, "fft-thm"))
+		{	v.fft.clr = colors.CurFFT();  v.fft.theme = colors.CurFFT().name;  }
 		
 		AddSlidersHSV(v.fft.clr, "fft_");
 	}	break;
@@ -146,8 +146,8 @@ void AppSFMLDraw::WndDraw_AppVis()
 	case VisT_Osc:
 	{
 		if (SliderI(colors.curOsc, 0, clrs,
-				"Theme: " + i2s(i)+ "  " + colors.CurOsc().name, "osc-thm"))
-			v.osc.clr = colors.CurOsc();
+				"Theme: " + i2s(colors.curOsc)+ "  " + colors.CurOsc().name, "osc-thm"))
+		{	v.osc.clr = colors.CurOsc();  v.osc.theme = colors.CurOsc().name;  }
 		
 		AddSlidersHSV(v.osc.clr, "osc_");
 	}	break;
@@ -162,7 +162,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 
 		if (SliderI(colors.curSpect, 0, clrs,
 				"Theme: " + i2s(colors.curSpect)+ "  " + colors.CurSpect().name, "spc-thm"))
-			v.spect.clr = colors.CurSpect();
+		{	v.spect.clr = colors.CurSpect();  v.spect.theme = colors.CurSpect().name;  }
 
 		i = v.eSpect;
 		if (SliderI(i, 0, SpcT_ALL-1,
@@ -190,7 +190,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 	
 	Sep(10);
 	s = string("Time colors: ") + csTimesTest[iTimeTest];  TextG(s);
-	PushItemWidth(140);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
+	PushItemWidth(200);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
 }
 
 
@@ -203,7 +203,7 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	Sep(10);
 	TextG("by Crystal Hammer");
 	Sep(20);
-	TextG("Version: 2.0.5");
+	TextG("Version: 2.0.8");
 	//TextG(Settings::ver);
 	Sep(40);
 	PushItemWidth(400);

@@ -25,6 +25,7 @@ public:
 	void Load(const tinyxml2::XMLElement* e);
 	void Save(tinyxml2::XMLElement* e, tinyxml2::XMLDocument* xml) const;
 
+	std::string name;  // descr, with some info
 
 	//  window
 	struct VS_Wnd {
@@ -46,9 +47,11 @@ public:
 		{
 			int iSize = 1;      // FFT samples (quality)
 			float fMul = 69.f;  // y multiplier (scale)
-			VisualColors clr;
-			int id = 0;  // todo: only id saved in xml
-		} fft, osc/*-*/, spect;
+			
+			std::string theme;  // saved by name in xml <view>
+			VisualColors clr;   // loaded from ColorSets outside by theme
+		}
+		fft, osc/*-*/, spect;
 		
 		SpectType eSpect;
 		float fPrt_Fq = 100.f;  // spectrogram speed  // todo: thread

@@ -72,6 +72,7 @@ protected:
 	
 	virtual void UpdateView(bool load, int v) = 0;
 	void NextVis();
+	void ApplyVisColors();  // fill vis clr, by id from xml
 
 	enum EWndOpt  // options windows
 	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,

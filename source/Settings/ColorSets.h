@@ -4,6 +4,7 @@
 #include "../System/LogFile.h"
 #include <vector>
 #include <string>
+#include <map>
 
 
 //  all color sets
@@ -11,10 +12,11 @@
 
 class ColorSets : public Logger
 {
-public:  //protected:
+protected:
 	std::vector<TimeColors> vTime;
 
 	std::vector<VisualColors> vVisual;
+	std::map<std::string, int> mapVisual;  // id to vVisual by name
 public:
 	int curTime = 0;
 
@@ -29,8 +31,12 @@ public:
 	void Defaults();
 	bool Load(), Save() const;
 	
-	//  utils
+	//  time
 	TimeClr Get(float time, int mode = 2);
+	
+	//  vis
+	int GetVis(const std::string &name);  // id by name
+	int VisCount() const {  return (int)vVisual.size();  }
 	
 	VisualColors& CurFFT()	{	return vVisual[curFFT];  }
 	VisualColors& CurOsc()	{	return vVisual[curOsc];  }

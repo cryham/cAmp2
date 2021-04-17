@@ -17,10 +17,21 @@ TimeClr ColorSets::Get(float time, int mode)
 	return TimeClr(1.f, 0.4f,0.7f,1.0f);
 }
 
+
+int ColorSets::GetVis(const string& name)
+{
+	int id = mapVisual[name];
+	if (id != 0)
+		return id-1;
+	return 0;  // 1st, default
+}
+
+
 void ColorSets::Defaults()
 {
 	vTime.clear();
 	vVisual.clear();
+	mapVisual.clear();
 
 	//  add anything working
 	TimeColors tc;  tc.name = "default";
@@ -33,6 +44,7 @@ void ColorSets::Defaults()
 	c.mul.h =-0.099f;  c.mul.s =-1.033f;  c.mul.v = 0.273f;
 	c.pow.h = 1.035f;  c.pow.s = 1.654f;  c.pow.v = 0.997f;
 	vVisual.emplace_back(c);
+	mapVisual[c.name] = vVisual.size();
 }
 
 ///  Load
@@ -131,7 +143,8 @@ bool ColorSets::Load()
 				}
 				m = m->NextSiblingElement("hsv");
 			}
-			vVisual.push_back(vc);
+			vVisual.emplace_back(vc);
+			mapVisual[vc.name] = vVisual.size();
 		}
 		a = n->Attribute("curFFT");  if (a)  curFFT = i;
 		a = n->Attribute("curSpect");  if (a)  curSpect = i;
