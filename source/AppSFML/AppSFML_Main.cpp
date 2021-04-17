@@ -2,6 +2,7 @@
 #include "../System/FileSystem.h"
 #include "../../libs/imgui.h"
 #include "../../libs/imgui-SFML.h"
+#include "../System/Utilities.h"
 #include <memory>
 #include <iostream>
 using namespace sf;  using namespace std;
@@ -83,35 +84,23 @@ bool AppSFMLDraw::CreateTextures()
 	
 bool AppSFMLDraw::LoadFonts()
 {
-	//  font  // todo: fonts in xml
-	const static string sFntName[Fnt_All] = {
-		"DejaVuLGCSans.ttf", //Fnt_Info, Fnt_Track, 
-		"DejaVuLGCSans.ttf",
-		"NotoMono.ttf", //Fnt_Time, Fnt_TimeBig
-		"NotoMono.ttf",
-	};
-	const static int iFntSize[Fnt_All] = {
-		14, //14
-		14, //15
-		15, //16
-		20, //20
-	};
 	string data = FileSystem::Data(), file;
 	
 	for (int i=0; i < Fnt_All; ++i)
 	{
-		file = data + "/" + sFntName[i];
+		auto& f = set.view.fnt[i];
+		file = data + "/" + f.name;
 		pFont[i] = make_unique<Font>();
 		if (!pFont[i]->loadFromFile(file))
 		{
 			Error("Can't load font: " + file);
 			//return false;
 		}
-		//SetFont(Fnt_Info, view.Fy);
 		text[i].setFont(*pFont[i].get());
-		text[i].setCharacterSize(iFntSize[i]);  // view.Fy -3);
-		//text[i].setStyle(bold ? Text::Bold : Text::Regular);
-		//font.getLineSpacing();
+		text[i].setCharacterSize(f.size);
+		text[i].setStyle(f.bold ? Text::Bold : Text::Regular);
+		f.height = f.size + f.lineSpacing;
+		//text[i].getLineSpacing();
 	}
 	return true;
 }
@@ -120,7 +109,7 @@ bool AppSFMLDraw::LoadFonts()
 //------------------------------------------------------------------------------------------------
 //  Loop
 //------------------------------------------------------------------------------------------------
-void AppSFMLDraw::LoopMain()
+void AppSFMLDraw::LoopMain()	
 {
 	Clock timer;
 	while (pWindow->isOpen())
@@ -218,6 +207,7 @@ void AppSFMLDraw::CreateWindow()
 //  Views
 void AppSFMLDraw::UpdateView(bool load, int v)
 {
+	if (v >= Settings::cMaxViews)  return;
 	iLastView = v;
 	if (load)
 	{
@@ -232,6 +222,7 @@ void AppSFMLDraw::UpdateView(bool load, int v)
 		SetViewFromWnd();
 		set.views[v] = set.view;  // save preset
 	}
+	Osd(string(load ? "Loaded" : "Saved" )+" View: "+i2s(v));
 }
 
 void AppSFMLDraw::SetViewFromWnd()

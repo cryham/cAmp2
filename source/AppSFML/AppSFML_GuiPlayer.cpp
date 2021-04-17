@@ -8,24 +8,67 @@
 using namespace sf;  using namespace std;  using namespace ImGui;
 
 
+//  Main
 //------------------------------------------------------------------
-//  App Show
+void AppSFMLDraw::WndDraw_Main()
+{
+	PushItemWidth(300);
+	for (int i=0; i < WO_Main; ++i)
+	{
+		if (i==WO_PlsTab || i==WO_AppAudio || i==WO_AppAbout)
+			Line();
+		bool e = Button(wndConst[i].title.c_str());
+		if (e)  wndOpen = (EWndOpt)i;  // schedule to open
+	}
+	PopItemWidth();
+}
+
+
 //------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppViewStats()
+//  App View
+//------------------------------------------------------------------
+void AppSFMLDraw::WndDraw_AppView()
 {
 	bool e;  string s;
 	Checkbox("File Info (from cursor)", &set.bFileInfo);
 	
 	Sep(10);
 	int i = set.eDirView;
-	s = string("Dir View: ") + csDirView[i];
-	TextG(s);
-	PushItemWidth(200);  e = SliderInt("dirv", &i, 0, DirV_All-1, "");  PopItemWidth();
-	if (e) {  set.eDirView = (EDirView)i;  Redraw();  }
-	
-	Sep(5);  Line();
-	TextG("Playlists Statistics:");
+	if (SliderI(i, 0, DirV_All-1, "Dir View: ", "dirv", csDirView[i]))
+	{	set.eDirView = (EDirView)i;  Redraw();  }
+
+	Sep(10);
+	if (Checkbox("Slider draw all ratings", &set.view.sldr.drawRate))  Redraw();
+
 	Sep(5);
+	if (SliderI(set.view.sldr.width, 2, 60, "Slider width: ", "sldW"))  UpdDim();
+
+	Sep(10);  Line();  e = false;
+	TextG("Font sizes:");	xSlider = 200;
+	for (int i=0; i < Fnt_All; ++i)
+	{
+		auto& f = set.view.fnt[i];
+		TextG(csFonts[i]);
+		PushItemWidth(50);
+		s = " + "+i2s(i);  SameLine(200);  if (Button(s.c_str())) {  e = true;  ++f.size;  ++f.height;  }
+		s = " - "+i2s(i);  SameLine(280);  if (Button(s.c_str())) {  e = true;  --f.size;  --f.height;  }
+		PopItemWidth();
+		e |= SliderI(f.size, 1, 40, "  Size: ", "fntS" + i2s(i));
+		if (i == Fnt_Tabs || i == Fnt_Tracks)  // rest unused
+			e |= SliderI(f.lineSpacing, -5, 20, "  Spacing: ", "fntH" + i2s(i));
+	}
+	if (e)
+	{	LoadFonts();  UpdDim();  }
+	xSlider = 0;
+}
+
+
+//  App Stats
+//------------------------------------------------------------------
+void AppSFMLDraw::WndDraw_AppStats()
+{
+	bool e;  string s;
+	Sep(10);
 	e = Checkbox("All playlists", &bAllStats);  if (e) Redraw();
 	e = Checkbox("Full unfiltered", &bFullStats);  if (e) Redraw();
 	
@@ -90,96 +133,6 @@ void AppSFMLDraw::WndDraw_AppAudio()
 
 
 //------------------------------------------------------------------
-//  Visualization
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppVis()
-{
-	bool e;  string s;  float f;  int i;
-	auto& v = set.view.vis;
-	PushItemWidth(750);
-
-	if (SliderI(v.eType, 0, VisT_ALL-1, string("Type: ") + csVisType[v.eType], "visT"))
-		UpdDim();
-	
-	//  / set.view.wnd.ySize;  %
-	if (SliderI(v.yH, 0, set.view.wnd.ySize, string("Height: ") + f2s(v.yH, 0, 4), "visH"))
-		UpdDim();
-
-	//	int iSleep = 0;  // in ms  // todo:
-	//	bool bVSync = true;
-	
-	auto AddSlidersHSV = [&](VisualColors& c, string s)
-	{
-		Sep(10);
-		SliderF(c.add.h, 0.f, 1.f, "Hue value: ", s+"Ha");
-		SliderF(c.mul.h,-2.f, 2.f, "Hue multi: ", s+"Hm");
-		SliderF(c.pow.h, 0.f, 4.f, "Hue power: ", s+"Hp");
-		Sep(5);
-		SliderF(c.add.s,-1.f, 2.f, "Saturation value: ", s+"Sa");
-		SliderF(c.mul.s,-3.f, 3.f, "Saturation multi: ", s+"Sm");
-		SliderF(c.pow.s, 0.f, 4.f, "Saturation power: ", s+"Sp");
-		Sep(5);
-		SliderF(c.add.v,-1.f, 2.f, "Brightness value: ", s+"Va");
-		SliderF(c.mul.v,-3.f, 3.f, "Brightness multi: ", s+"Vm");
-		SliderF(c.pow.v, 0.f, 4.f, "Brightness power: ", s+"Vp");
-	};
-	
-	const int clrs = colors.VisCount()-1;
-	Sep(10);
-	switch (v.eType)
-	{
-	case VisT_FFT:
-	{
-		SliderI(v.fft.iSize, 0, ViewSet::FFTSizes-1,
-				"FFT size: " + i2s(v.fft.iSize), "fft-siz");
-	
-		SliderF(v.fft.fMul, 0.f, 200.f,
-				"FFT scale: ", "fft-mul");
-
-		if (SliderI(colors.curFFT, 0, clrs,
-				"Theme: " + i2s(colors.curFFT)+ "  " + colors.CurFFT().name, "fft-thm"))
-		{	v.fft.clr = colors.CurFFT();  v.fft.theme = colors.CurFFT().name;  }
-		
-		AddSlidersHSV(v.fft.clr, "fft_");
-	}	break;
-
-	case VisT_Osc:
-	{
-		if (SliderI(colors.curOsc, 0, clrs,
-				"Theme: " + i2s(colors.curOsc)+ "  " + colors.CurOsc().name, "osc-thm"))
-		{	v.osc.clr = colors.CurOsc();  v.osc.theme = colors.CurOsc().name;  }
-		
-		AddSlidersHSV(v.osc.clr, "osc_");
-	}	break;
-
-	case VisT_Spect:
-	{
-		SliderI(v.spect.iSize, 0, ViewSet::FFTSizes-1,
-				"FFT size: " + i2s(v.spect.iSize), "spc-siz");
-	
-		SliderF(v.spect.fMul, 0.f, 200.f,
-				"FFT scale: ", "spc-mul");
-
-		if (SliderI(colors.curSpect, 0, clrs,
-				"Theme: " + i2s(colors.curSpect)+ "  " + colors.CurSpect().name, "spc-thm"))
-		{	v.spect.clr = colors.CurSpect();  v.spect.theme = colors.CurSpect().name;  }
-
-		i = v.eSpect;
-		if (SliderI(i, 0, SpcT_ALL-1,
-				"Type: " + string(csSpectType[i]), "spc-typ"))
-			v.eSpect = (SpectType)i;
-		
-		AddSlidersHSV(v.spect.clr, "spc_");
-		
-		//	float fPrtFq = 100.f;  // spectrogram speed
-	}	break;
-	}
-
-	PopItemWidth();
-}
-
-
-//------------------------------------------------------------------
 //  Test
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppTest()
@@ -189,12 +142,12 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Debug text", &bDebug);
 	
 	Sep(10);
-	s = string("Time colors: ") + csTimesTest[iTimeTest];  TextG(s);
-	PushItemWidth(200);  e = SliderInt("test", &iTimeTest, 0, 2, "");  PopItemWidth();  if (e) Redraw();
+	if (SliderI(iTimeTest, 0, 2, "Time colors: ", "test", csTimesTest[iTimeTest]))
+		Redraw();
 }
 
 
-//  About
+//  Abou
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppAbout()
 {
@@ -215,21 +168,5 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	Sep(10);
 	TextG("Project description");
 	TextG("http://cryham.tuxfamily.org/portfolio/2010_camp/");
-	PopItemWidth();
-}
-
-
-//  Main
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_Main()
-{
-	PushItemWidth(300);
-	for (int i=0; i < WO_Main; ++i)
-	{
-		if (i==WO_PlsTab || i==WO_AppAudio || i==WO_AppAbout)
-			Line();
-		bool e = Button(wndConst[i].title.c_str());
-		if (e)  wndOpen = (EWndOpt)i;  // schedule to open
-	}
 	PopItemWidth();
 }

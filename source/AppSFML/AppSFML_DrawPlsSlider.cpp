@@ -7,7 +7,7 @@ using namespace std;  using namespace sf;
 void AppSFMLDraw::DrawPls_Slider()
 {
 	const ViewSet& v = set.view;
-	const int xw = v.wnd.xSize, xs = v.pls.xW_slider;
+	const int xw = v.wnd.xSize, xs = v.sldr.width;
 	if (yB_pl_inf >= v.wnd.ySize || xs <= 0)  return;
 
 	const int len = Pls().LengthVis();  const float fle = len;
@@ -75,7 +75,7 @@ void AppSFMLDraw::DrawPls_Slider()
 
 	
 	///  all tracks  rating
-	if (v.pls.bSliderRate && !bFind)
+	if (v.sldr.drawRate && !bFind)
 		for (int i=0; i < len; ++i)
 		{
 			const int rate = Pls().GetTrackVis(i).GetRate(), r = rate + Ratings::cntMin;
@@ -87,7 +87,7 @@ void AppSFMLDraw::DrawPls_Slider()
 				Rect(xk1, float(c1), xk2, float(c2-c1+1),
 					Ratings::GetTex(rate), true,
 					//clrRateBck[r][0], clrRateBck[r][1], clrRateBck[r][2]);  //par
-					clrRateBck[r][0]*2/3, clrRateBck[r][1]*2/3, clrRateBck[r][2]*2/3);  //par
+					Ratings::clrBck[r][0]*2/3, Ratings::clrBck[r][1]*2/3, Ratings::clrBck[r][2]*2/3);  //par
 		}	}
 	
 	//  todo: fill texture in Update() and just draw once

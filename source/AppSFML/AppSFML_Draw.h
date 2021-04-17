@@ -105,12 +105,6 @@ protected:
 			  sf::Uint8 r=255, sf::Uint8 g=255, sf::Uint8 b=255);
 
 	
-	//  colors  // todo: in xml..
-	const static sf::Uint8
-		clrRateTxt[Ratings::cntAll][3],
-		clrRateBck[Ratings::cntAll][3];
-	
-
 	///  Gui utils
 	//--------------------------
 	void TextG(const char* s);
@@ -122,9 +116,9 @@ protected:
 	void SliderValue(const std::string& text, const std::string& val);
 	
 	bool SliderF(float& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid);
+				 const std::string& text, const std::string& uid, const std::string& value="");
 	bool SliderI(int& val, float vmin, float vmax,
-				 const std::string& text, const std::string& uid);
+				 const std::string& text, const std::string& uid, const std::string& value="");
 
 	void SetupGuiStyle();  // ImGui theme
 };

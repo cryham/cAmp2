@@ -158,7 +158,7 @@ bool App::Destroy()
 }
 
 
-//  Update dims
+//  Update dims, layout
 //------------------------------------------------------------------------
 void App::UpdDim()
 {
@@ -183,17 +183,18 @@ void App::UpdDim()
 	yB_tabs = yE_pos;  /*par+- +2 8pos*/
 	xW_tabs_btn = 16;  // btnsW up,dn
 		xW_tabs = (v.wnd.xSize - xW_tabs_btn) / v.tabs.xCols;
-		yH_tabs = /*cfont[v.cfT]->*/v.fnt.Fy + 2;
+		yH_tabs = v.fnt[Fnt_Tabs].height + 2;
 	yE_tabs = yB_tabs + v.tabs.yRows * yH_tabs + 4;
 
 	//  playlist, tracks
-	yB_pl_inf = yE_tabs;
-	yB_pl = yB_pl_inf + /*cfont[v.cfP]->*/v.fnt.Fy + 2/*yHpli*/;
-	yE_pl = v.wnd.ySize - /*cfont[v.cfP]->*/v.fnt.Fy;
+	int yL = v.fnt[Fnt_Tracks].height;
+	yB_pl_inf = yE_tabs;  // header
+	yB_pl = yB_pl_inf + v.fnt[Fnt_Player].height + 2;
+	yE_pl = v.wnd.ySize - yL;
 	
 	yH_pl = yE_pl-1-yB_pl;
-	yL_pl = max(0, yH_pl / /*cfont[v.cfP]->*/v.fnt.Fy );  // lines
-	yE_pl = yL_pl * /*cfont[v.cfP]->*/v.fnt.Fy + yB_pl;
+	yL_pl = max(0, yH_pl / yL );  // lines
+	yE_pl = yL_pl * yL + yB_pl;
 	yH_pl = yE_pl-1-yB_pl;
 
 	xWex_plS = 40;  // slider extra

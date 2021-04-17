@@ -1,5 +1,6 @@
 #pragma once
 #include "../App/AppConst.h"
+#include <SFML/Config.hpp>  // Uint8
 #include <string>
 
 
@@ -30,6 +31,8 @@ public:
 	static void CleanName(std::string& name);  // remove rating and bookmark chars
 
 	static ETexUV GetTex(int rate);
+	//  draw colors  // todo: in xml..
+	const static sf::Uint8 clrTxt[cntAll][3], clrBck[cntAll][3];
 
 	friend class Bookmarks;
 };

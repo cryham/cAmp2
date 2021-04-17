@@ -7,6 +7,12 @@ enum EFont  // for different fonts, sizes
 	Fnt_Tracks, Fnt_Times,  // playlist
 	Fnt_All
 };
+const static char* csFonts[Fnt_All] =
+{
+	"Player Info", "Player Times Big",
+	"Tabs",
+	"Playlist Tracks", "Playlist Times",
+};
 
 enum ETexUV  // textures in player.png
 {

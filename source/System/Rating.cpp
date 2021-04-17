@@ -13,6 +13,33 @@ const std::string Ratings::sRateVis[Ratings::cntAll] = {"=","--","-","","`","^",
 const int Ratings::valMin = -Ratings::cntMin, Ratings::valMax = Ratings::cntMax;
 
 
+//  colors  // todo: in xml..
+const sf::Uint8 Ratings::clrTxt[Ratings::cntAll][3] = 
+{
+	100,140,100, //-3
+	110,160,110, //-2
+	120,180,120, //-1
+	90,150,190, //0
+	110,150,210, // 1
+	120,170,220, // 2
+	120,190,230, // 3
+	140,200,240, // 4
+	160,210,240, // 5
+};
+const sf::Uint8 Ratings::clrBck[Ratings::cntAll][3] = 
+{
+	00, 40, 00, //-3
+	10, 60, 10, //-2
+	20, 80, 20, //-1
+	0, 50, 90, //0
+	10, 50,110, // 1
+	20, 70,120, // 2
+	20, 90,130, // 3
+	40,100,140, // 4
+	60,110,140, // 5
+};
+
+
 //  Bookmarks
 const int Bookmarks::valMax = 6;  // %1..%6
 

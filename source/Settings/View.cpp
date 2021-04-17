@@ -13,6 +13,8 @@ ViewSet::ViewSet()
 
 void ViewSet::Defaults()
 {
+	name = "";
+	
 	//  for no cAmp2.xml or missing attributes
 	wnd.xSize = 390;  wnd.ySize = 1143;
 	wnd.xPos = 0;  wnd.yPos = 0;
@@ -34,12 +36,29 @@ void ViewSet::Defaults()
 	vis.osc.clr = c;
 	vis.spect.clr = c;
 	
-	pls.bSliderRate = 1;  pls.xW_slider = 18;
+	sldr.drawRate = 1;  sldr.width = 18;
 	
 	tabs.xCols = 5;  tabs.yRows = 1;  tabs.ofs = 0;
 	
-	fnt.Fy = 17;  // todo:
-	//cfP = 1;  cfA = 0;  cfT = 1;  cfH = 1;  cfG = 1;
+	for (int i=0; i < Fnt_All; ++i)
+	{
+		auto&f = fnt[i];
+		f.name =
+			i == Fnt_TimeBig || i == Fnt_Times ?
+			"NotoMono.ttf" :
+			"DejaVuLGCSans.ttf";
+		switch (i)
+		{
+		case Fnt_Player:	f.size = 14;  break;
+		case Fnt_TimeBig:	f.size = 20;  break;
+		case Fnt_Tabs:		f.size = 14;  break;
+		case Fnt_Tracks:	f.size = 14;  break;
+		case Fnt_Times:		f.size = 15;  break;
+		default:			f.size = 15;  break;
+		}
+		f.bold = false;
+		f.height = f.size + 3;
+	}
 }
 
 
@@ -49,11 +68,11 @@ void ViewSet::Load(const XMLElement* el)
 	Defaults();
 
 	const char* a;  const XMLElement* e;
+	a = el->Attribute("name");		if (a)  name = string(a);
 	
-	a = e->Attribute("name");	if (a)  name = string(a);
 	e = el->FirstChildElement("wnd");  if (e) {
-		a = e->Attribute("sx");		if (a)  wnd.xSize = max(100, s2i(a));  //mia(100, ap->xScreen, cStr::toInt(a));
-		a = e->Attribute("sy");		if (a)	wnd.ySize = max(30, s2i(a));  //mia(30,  ap->yScreen, cStr::toInt(a));
+		a = e->Attribute("sx");		if (a)  wnd.xSize = max(100, s2i(a));  //mia(100, xScreen, 
+		a = e->Attribute("sy");		if (a)	wnd.ySize = max(30, s2i(a));  //mia(30,  yScreen, 
 		a = e->Attribute("x");		if (a)  wnd.xPos = s2i(a);
 		a = e->Attribute("y");		if (a)  wnd.yPos = s2i(a);
 
@@ -78,9 +97,8 @@ void ViewSet::Load(const XMLElement* el)
 		a = e->Attribute("Sfrq");	if (a)  vis.fPrt_Fq = s2f(a);
 	}
 	e = el->FirstChildElement("pls");  if (e) {
-		a = e->Attribute("slW");	if (a)  pls.xW_slider = max(0, s2i(a));
-
-		a = e->Attribute("slRate");	if (a)  pls.bSliderRate = s2b(a);
+		a = e->Attribute("slW");	if (a)  sldr.width = max(0, s2i(a));
+		a = e->Attribute("slRate");	if (a)  sldr.drawRate = s2b(a);
 	}
 	e = el->FirstChildElement("tabs");  if (e) {
 		a = e->Attribute("cols");	if (a)  tabs.xCols = max(1, s2i(a));
@@ -129,12 +147,17 @@ void ViewSet::Save(XMLElement* el, XMLDocument* xml) const
 	el->InsertEndChild(e);
 
 	e = xml->NewElement("pls");
-		e->SetAttribute("sldrW",	i2s(pls.xW_slider,2).c_str());
-		
-		e->SetAttribute("sldrRate",	b2s(pls.bSliderRate).c_str());
+		e->SetAttribute("sldrW",	i2s(sldr.width,2).c_str());
+		e->SetAttribute("sldrRate",	b2s(sldr.drawRate).c_str());
 	el->InsertEndChild(e);
 
 	e = xml->NewElement("tabs");
+		e->SetAttribute("cols",		i2s(tabs.xCols,2).c_str());
+		e->SetAttribute("rows",		i2s(tabs.yRows).c_str());
+		e->SetAttribute("ofs",		i2s(tabs.ofs).c_str());
+	el->InsertEndChild(e);
+
+	e = xml->NewElement("fonts");
 		e->SetAttribute("cols",		i2s(tabs.xCols,2).c_str());
 		e->SetAttribute("rows",		i2s(tabs.yRows).c_str());
 		e->SetAttribute("ofs",		i2s(tabs.ofs).c_str());

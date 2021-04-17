@@ -34,7 +34,7 @@ void App::MouseUpdate()
 
 	ViewSet& v = set.view;
 	const int xw = v.wnd.xSize, yw = v.wnd.ySize;
-	const int Fy = v.fnt[Fnt_Tracks].Fy;
+	const int Fy = v.fnt[Fnt_Tracks].height;
 
 	//  cur trk  ----
 	int cur = max(0, min(Pls().LengthVis()-1, (ym-yB_pl)/Fy + Pls().iOfs));

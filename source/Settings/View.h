@@ -50,11 +50,11 @@ public:
 	} vis;
 	
 	//  pls slider  ------------------------
-	struct VS_Pls
+	struct VS_PlsSldr
 	{
-		bool bSliderRate = true;  // draw rating
-		int xW_slider = 18;  // draw width, right
-	} pls;
+		bool drawRate = true;  // draw all rating on slider
+		int width = 18;  // draw width, right
+	} sldr;
 	
 	//  tabs counts: colums,rows, offset
 	struct VS_Tabs
@@ -62,12 +62,14 @@ public:
 		int xCols = 5, yRows = 1, ofs = 0;
 	} tabs;
 	
-	//  font sizes  ------------------------
+	//  fonts  ------------------------
 	struct VS_Fonts
 	{
 		std::string name = "";
-		int Fy = 17;  // font size
-		int FyH = 3;  // line add extra
+		bool bold = false;
+		int size = 15;  // font size
+		int lineSpacing = 3;  // add to height
+		int height = 18;  // line height = size + lineSpacing (auto set)
 	}
 	fnt[Fnt_All];
 };

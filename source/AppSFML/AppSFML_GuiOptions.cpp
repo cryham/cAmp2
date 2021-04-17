@@ -10,15 +10,19 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
 	{"Playlist Find", 320,250},
 	{"Playlist Filter", 350,200},
+	
 	{"Playlist Tab", 400,520},
 	{"Player Tabs", 350,320},
 	
-	{"Player View & Statistics", 400,350},
+	{"Player View", 500,700},
+	{"Playlist Statistics", 400,250},
+	
 	{"Player Audio", 400,300},
 	{"Player Visualization", 900,600},
 	
 	{"Player Test", 300,200},
 	{"About", 450,340},
+
 	{"All Options windows", 250,400},
 };
 
@@ -39,12 +43,27 @@ void AppSFMLDraw::Line()
 void AppSFMLDraw::TextG(const char* s) {  ImGui::Text(s);  }
 void AppSFMLDraw::TextG(string s)      {  ImGui::Text(s.c_str());  }
 
+//  text value slider
+void AppSFMLDraw::SliderValue(const string& text, const string& val)
+{
+	if (xText == 0)
+	{
+		string s = text + val;
+		TextG(s);
+	}else
+	{	TextG(text);  SameLine(xText);
+		TextG(val);
+	}
+}
+		
 bool AppSFMLDraw::SliderF(
 	float& val, float vmin, float vmax,
-	const string& text, const string& uid)
+	const string& text, const string& uid, const string& value)
 {
 	float f = val;
-	string s = text + f2s(f, 3, 5);  TextG(s);  SameLine(220);
+	SliderValue(text, value.empty() ? f2s(f, 3, 5) : value);
+	if (xSlider > 0)  SameLine(xSlider);
+	
 	bool e = SliderFloat(uid.c_str(), &f, vmin, vmax, "");
 	if (e)  val = f;
 	return e;
@@ -52,10 +71,12 @@ bool AppSFMLDraw::SliderF(
 
 bool AppSFMLDraw::SliderI(
 	int& val, float vmin, float vmax,
-	const string& text, const string& uid)
+	const string& text, const string& uid, const string& value)
 {
 	int i = val;
-	TextG(text);  SameLine(220);
+	SliderValue(text, value.empty() ? i2s(i) : value);
+	if (xSlider > 0)  SameLine(xSlider);
+
 	bool e = SliderInt(uid.c_str(), &i, vmin, vmax, "");
 	if (e)  val = i;
 	return e;
@@ -199,7 +220,8 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		case WO_PlsTab:		WndDraw_PlsTab();  break;
 		case WO_AppTabs:	WndDraw_AppTabs();  break;
 
-		case WO_AppViewStats:	WndDraw_AppViewStats();  break;
+		case WO_AppView:	WndDraw_AppView();  break;
+		case WO_AppStats:	WndDraw_AppStats();  break;
 		case WO_AppAudio:	WndDraw_AppAudio();  break;
 		case WO_AppVis:		WndDraw_AppVis();  break;
 

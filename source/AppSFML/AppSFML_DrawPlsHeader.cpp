@@ -7,12 +7,12 @@ using namespace std;  using namespace sf;
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawPls_Header()
 {
-	int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
+	const int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
 	Clr(130,160,195);
 
 	//  filter  ` Y *
 	int x = xM_pl_filt, y = yB_pl_inf;
-	EFont fnt = Fnt_Player;
+	const EFont fnt = Fnt_Player;
 
 	str = Ratings::GetVis(low);
 	Text(fnt, x -11-2, y+1);

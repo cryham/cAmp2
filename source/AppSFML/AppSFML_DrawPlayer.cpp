@@ -66,7 +66,7 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		Clr(120,160,240);
 		str = f2s(1.f / dt);
-		Text(Fnt_Info, 60, 16);
+		Text(Fnt_Player, 60, 16);
 	}
 
 	
@@ -76,11 +76,11 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		if (xm < xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25AE)) + String(Uint32(0x25C0));
-		Text(Fnt_Info, xw/2 - 30, y);
+		Text(Fnt_Player, xw/2 - 30, y);
 
 		if (xm > xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25B6)) + String(Uint32(0x25AE));
-		Text(Fnt_Info, xw/2 + 10, y);
+		Text(Fnt_Player, xw/2 + 10, y);
 	}else
 	{
 		//  play icons  |>
@@ -89,7 +89,7 @@ void AppSFMLDraw::DrawPlayer()
 		//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
 		str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
 			: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
-		Text(Fnt_Info, xw/2, y);
+		Text(Fnt_Player, xw/2, y);
 	}
 	
 	
@@ -100,13 +100,13 @@ void AppSFMLDraw::DrawPlayer()
 		str = String(Uint32(0x21BB));  // ↻
 		if (audio->bRepTrk)  str += "1";
 		//else  str += "A";
-		Text(Fnt_Info, xw-75, y+25);  // +Fy TimeBig..
+		Text(Fnt_Player, xw-75, y+25);  // +Fy TimeBig..
 	}
 	
 	//  Volume  %
 	Clr(100,140,220);
 	str = i2s(audio->iVolume/10) + "%";
-	Text(Fnt_Info, xw-40, y+25);
+	Text(Fnt_Player, xw-40, y+25);
 	
 
 	//  player  info Text  * * *
@@ -115,7 +115,7 @@ void AppSFMLDraw::DrawPlayer()
 		//  ext bitrate freq size
 		Clr(110,140,190);
 		str = audio->sInfo;
-		Text(Fnt_Info, 10, y);
+		Text(Fnt_Player, 10, y);
 				
 		//  time right align..
 		str = "0";
@@ -155,7 +155,7 @@ void AppSFMLDraw::DrawPlayer()
 
 		str = Str(s);
 		Clr(120,180,240);
-		Text(Fnt_Info, 10, 46);  // todo: wrap text..?
+		Text(Fnt_Player, 10, 46);  // todo: wrap text..?
 	}
 	
 	//  Osd  ----
@@ -165,7 +165,7 @@ void AppSFMLDraw::DrawPlayer()
 		str = osdStr;
 		float f = 0.7f * dtOsd / dtOsdShow + 0.3f;
 		Clr(160*f,250*f,250*f);
-		Text(Fnt_Info, 10, v.vis.eType == VisT_None ? 22 : 32);
+		Text(Fnt_Player, 10, v.vis.eType == VisT_None ? 22 : 32);
 	}
 	else
 	//  Find  ----
@@ -173,21 +173,21 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
 		Clr(100,220,100);  // center par
-		Text(Fnt_Info, (xw - 140) / 2, v.vis.eType == VisT_None ? 22 : 32);
+		Text(Fnt_Player, (xw - 140) / 2, v.vis.eType == VisT_None ? 22 : 32);
 	}
 	
 	///  Debug  ~~~~
 	if (bDebug && !Pls().IsEmpty())
 	{
 		Clr(120,180,240);
-		int ymc = (ym - yB_pl) / v.fnt.Fy;  ymc = max(0, min(ymc, yL_pl-1));
+		int ymc = (ym - yB_pl) / v.fnt[Fnt_Tracks].height;  ymc = max(0, min(ymc, yL_pl-1));
 		str = "curId "+i2s(Pls().GetTrackVisIdAll(Pls().iCur))
 			+" cur-ofs "+i2s(Pls().iCur-Pls().iOfs)+" len "+i2s(Pls().LengthVis());
-		Text(Fnt_Info, 50, 30);
+		Text(Fnt_Player, 50, 30);
 		str = "mId "+i2s(Pls().GetTrackVisIdAll( min(Pls().iOfs+ymc, Pls().LengthVis()-1) ))
 			+" ym "+i2s(ymc)+" / yL " + i2s(yL_pl);
-		Text(Fnt_Info, 50, 46);
+		Text(Fnt_Player, 50, 46);
 		str = "pl "+i2s(Pls().iPlay)+" plVis "+i2s(Pls().iPlayVis)+" " + b2s(Pls().bPlayVisOut);
-		Text(Fnt_Info, 50, 62);
+		Text(Fnt_Player, 50, 62);
 	}
 }

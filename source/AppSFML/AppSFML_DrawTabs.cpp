@@ -10,9 +10,9 @@ void AppSFMLDraw::DrawTabs()
 	
 	Clr(50,80,115);  // ^ v btns
 	str = String(Uint32(0x25B4));
-	Text(Fnt_Tracks, v.wnd.xSize - 14, yB_tabs +1);
+	Text(Fnt_Tabs, v.wnd.xSize - 14, yB_tabs +1);
 	str = String(Uint32(0x25BE));
-	Text(Fnt_Tracks, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
+	Text(Fnt_Tabs, v.wnd.xSize - 14, yE_tabs-yH_tabs -1);
 
 	/* multi line  up,dn */
 	int ytB = yB_tabs+1;

@@ -6,33 +6,6 @@
 using namespace std;  using namespace sf;
 
 
-//  colors  // todo: in xml..
-const Uint8 AppSFMLDraw::clrRateTxt[Ratings::cntAll][3] = 
-{
-	100,140,100, //-3
-	110,160,110, //-2
-	120,180,120, //-1
-	90,150,190, //0
-	110,150,210, // 1
-	120,170,220, // 2
-	120,190,230, // 3
-	140,200,240, // 4
-	160,210,240, // 5
-};
-const Uint8 AppSFMLDraw::clrRateBck[Ratings::cntAll][3] = 
-{
-	00, 40, 00, //-3
-	10, 60, 10, //-2
-	20, 80, 20, //-1
-	0, 50, 90, //0
-	10, 50,110, // 1
-	20, 70,120, // 2
-	20, 90,130, // 3
-	40,100,140, // 4
-	60,110,140, // 5
-};
-
-
 //  Playlist  ==
 //------------------------------------------------------------------------------------------------------------
 void AppSFMLDraw::DrawPlaylist()
@@ -45,7 +18,7 @@ void AppSFMLDraw::DrawPlaylist()
 	{
 		Clr(120,160,240);
 		str = "Playlist empty.";
-		Text(Fnt_Track, 0, yB_pl);
+		Text(Fnt_Tracks, 0, yB_pl);
 		//str = "Drop or Insert files..";
 		//Text(Fnt_Track, 0, yB_pl);
 		return;
@@ -68,7 +41,7 @@ void AppSFMLDraw::DrawPls_1Names()
 	const ViewSet& v = set.view;
 	//const int xws = v.wnd.xSize - v.pls.xW_slider;
 	const int xw = v.wnd.xSize;
-	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
+	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
 	
 	int iFindVis = 0;
 	plsTxtW.clear();
@@ -87,13 +60,13 @@ void AppSFMLDraw::DrawPls_1Names()
 		if (!dir && rate)
 		Rect(0,y, xw,yF,
 			Ratings::GetTex(rate), false,
-			clrRateBck[r][0], clrRateBck[r][1], clrRateBck[r][2]);
+			Ratings::clrBck[r][0], Ratings::clrBck[r][1], Ratings::clrBck[r][2]);
 	
 		//  rate
 		str = Ratings::GetVis(rate);
-		int w = Text(Fnt_Track, 0,0, false);  // center
-		Clr(clrRateTxt[r][0], clrRateTxt[r][1], clrRateTxt[r][2]);
-		Text(Fnt_Track, max(0, 5 - w/2), y);
+		int w = Text(Fnt_Tracks, 0,0, false);  // center
+		Clr(Ratings::clrTxt[r][0], Ratings::clrTxt[r][1], Ratings::clrTxt[r][2]);
+		Text(Fnt_Tracks, max(0, 5 - w/2), y);
 
 		//  hide  clr
 		const auto h = trk.GetHide();
@@ -121,8 +94,8 @@ void AppSFMLDraw::DrawPls_1Names()
 			else if (c)
 				Clr(140+c,160+c,200+c);
 			else	// todo: hsv?
-				Clr(clrRateTxt[r][0], clrRateTxt[r][1], clrRateTxt[r][2]);
-				//Clr(clrRateTxt[r][0]+c, clrRateTxt[r][1]+c/2, clrRateTxt[r][2]);
+				Clr(Ratings::clrTxt[r][0], Ratings::clrTxt[r][1], Ratings::clrTxt[r][2]);
+				//Clr(Ratings::clrTxt[r][0]+c, Ratings::clrTxt[r][1]+c/2, Ratings::clrTxt[r][2]);
 			
 			str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
 		}
@@ -135,7 +108,7 @@ void AppSFMLDraw::DrawPls_1Names()
 				Clr(70,240,70);
 		}
 		
-		w = Text(Fnt_Track, 17, y);
+		w = Text(Fnt_Tracks, 17, y);
 		plsTxtW.emplace_back(w + 17);
 	
 		y += yF;  ++it;
@@ -149,11 +122,11 @@ void AppSFMLDraw::DrawPls_2Times()
 {
 	const ViewSet& v = set.view;
 	const int xw = v.wnd.xSize;
-	const int ws = v.pls.xW_slider + 8;  //par w  time|slider
-	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
+	const int ws = v.sldr.width + 8;  //par w  time|slider
+	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
 	
 	str = "0";  //  digit width
-	const int w0 = Text(Fnt_Time, 0, 0, false);
+	const int w0 = Text(Fnt_Times, 0, 0, false);
 	const int mt = 10;  // marg time|
 	const int mh = yF+2;  // + - size
 	
@@ -197,7 +170,7 @@ void AppSFMLDraw::DrawPls_2Times()
 			TimeClr c = colors.Get(t);
 			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
 	
-			Text(Fnt_Time, xt, y);  // align right
+			Text(Fnt_Times, xt, y);  // align right
 			
 			//  more signs, Text ..Time
 			int vw = plsTxtW[yl];
@@ -205,7 +178,7 @@ void AppSFMLDraw::DrawPls_2Times()
 			{
 				str = "..";
 				Clr(170,200,230);
-				Text(Fnt_Track, xt -mt, y+1);
+				Text(Fnt_Tracks, xt -mt, y+1);
 			}
 		}
 		y += yF;  ++it;
@@ -218,8 +191,8 @@ void AppSFMLDraw::DrawPls_3Cursors()
 {
 	const bool play = audio->IsPlaying();
 	const ViewSet& v = set.view;
-	const int xws = v.wnd.xSize - v.pls.xW_slider;
-	const int len = Pls().LengthVis(), yF = v.fnt.Fy;
+	const int xws = v.wnd.xSize - v.sldr.width;
+	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
 
 	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)
