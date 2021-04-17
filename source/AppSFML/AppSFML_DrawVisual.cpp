@@ -37,23 +37,19 @@ void AppSFMLDraw::DrawVisual()
 		else if (t == VisT_Osc)
 			for (int i=0; i < xw; ++i)
 			{
-				float f = vis[i];
-				int y1 = h - f*h;
-				int y2 = h - vis[i+1]*h;
-				int ya = min(y1,y2), yb = max(y1,y2);
+				float f = 1.f - vis[i], f1 = 1.f - vis[i+1];
+				float fa = min(f,f1), fb = max(f,f1);
+				int ya = fa*h, yb = fb*h;
 
 				int d = yb - ya + 1;  // darker with high tones
+				float fd = fb - fa;
 				float y = /*0.5f -*/ fabs(f - 0.5f);  // lighter at high amplitudes
-				//f = mia(0.f,1.f, 0.4f - y*0.16f + d*0.01f);  // mul
-				f = mia(0.f,1.f, 0.8f + y*1.0f - d*0.02f);  // mul  d/h  par +
+				f = mia(0.f,1.f, 0.8f + y*1.0f - fd*10.f);  // mul  d/h  par +
 				
 				Uint8 r,g,b;  // clr
 				v.vis.osc.clr.GetRGB(f, r,g,b);
-//				r = 20+f*f*(255-90);
-//				g = 80+f*(255-120);
-//				b = 180+f*(255-200);
 				RectUV(i, yB_vis + ya, 1,d,  475,uy,1,uh, true, r,g,b);
-				// todo: fill 1d texture and use shader, add glow
+				// todo: use shader, add glow
 			}
 		///------------------------------------------------------------------------------------
 		else if (t == VisT_Spect && pVisSprite)
