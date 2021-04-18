@@ -32,7 +32,7 @@ enum ETexUV  // textures in player.png
 	TX_Rate1, TX_Rate2, TX_Rate3, TX_Rate4, TX_Rate5,  // rating
 	TX_TabB1, TX_TabB2, TX_TabB3, TX_TabB4, TX_TabB5, TX_TabB6,  // tab bookm
 	
-	TX_Black,  // clear
+	TX_Black, TX_White,  // clear
 	TX_ALL
 };
 
@@ -55,11 +55,16 @@ const static char* csDirView[DirV_All] =
 	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
 };
 
-const static char* csTimesTest[3] =  // test
-{	"off", "short", "long"  };
+//  times test
+enum ETimeTest
+{	TimT_Off, TimT_Short, TimT_Long, TimT_Huge,
+	TimT_All
+};
+const static char* csTimesTest[TimT_All] =
+{	"off", "short", "long", "huge"  };
 
 
-//  visualizations
+//  visualizations  ~ ~ ~
 enum EVisType
 {
 	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect,

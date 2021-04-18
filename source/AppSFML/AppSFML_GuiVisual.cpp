@@ -22,14 +22,14 @@ void AppSFMLDraw::WndDraw_AppVis()
 	auto& ss = set.views[iLastView].name;
 	strcpy(ed, ss.c_str());  WndFocus();
 	PushItemWidth(x);  e = InputText("View name", ed, sizeof(ed));  PopItemWidth();
-	if (e)  {  ss = ed;  }
+	if (e)  ss = ed;
 
 	SameLine(xSlider+x+30);		if (Button("Load"))  UpdateView(true, iLastView);
 	SameLine(xSlider+x+150);	if (Button("Save"))  UpdateView(false, iLastView);
 	
 	//  view num
 	PushItemWidth(650);
-	SliderI(iLastView, 0, 20, "View number: ", "vwNum");
+	SliderI(iLastView, 0, Settings::cMaxViews-1, "View number: ", "vwNum");
 	
 	Sep(10);
 	if (SliderI(v.eType, 0, VisT_ALL-1, string("Type: "), "visT", csVisType[v.eType]))

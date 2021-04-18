@@ -48,6 +48,7 @@ bool AppSFMLDraw::LoadResources()
 		Error("Can't load texture: " + file);
 		return false;
 	}
+	pTexture->setSmooth(true);
 	pBackgr = make_unique<Sprite>(*pTexture.get());
 	
 	
@@ -142,15 +143,13 @@ void AppSFMLDraw::LoopMain()
 
 				
 			case Event::Resized:
-				if (e.type == Event::Resized)
-				{
-					FloatRect r(0, 0, e.size.width, e.size.height);
-					pWindow->setView(sf::View(r));
-				}
+			{	FloatRect r(0, 0, e.size.width, e.size.height);
+				pWindow->setView(sf::View(r));
+
 				//  save new size
 				SetViewFromWnd();
 				UpdDim();
-				break;
+			}	break;
 
 			case Event::Closed:
 				pWindow->close();

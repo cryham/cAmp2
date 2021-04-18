@@ -62,6 +62,7 @@ const STexUV ciTexUV[TX_ALL+1] =
 	27, 12,		288, 440,	// 5
 	27, 12,		287, 461,	// 6
 	
-	1, 1,		260, 80,	// black backgr
+	1, 1,		448, 5,		// black backgr
+	1, 1,		425, 5,		// white backgr
 	512,512,	0, 0,		// whole tex
 };

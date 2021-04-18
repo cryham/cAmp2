@@ -98,8 +98,8 @@ bool App::KeyDown(Event::KeyEvent k)
 	//  debug
 	key(I):  bFps = !bFps;      Osd("Fps: " + b2on(bFps));  break;
 	key(U):  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  break;
-	key(M):	 ++iTimeTest;  if (iTimeTest > 2)  iTimeTest = 0;
-			 Osd("Time test: " + !iTimeTest ? "off" : i2s(iTimeTest));  Redraw();  break;
+//	key(M):	 ++eTimeTest;  if (eTimeTest > 2)  eTimeTest = 0;
+//			 Osd("Time test: " + csTimesTest[eTimeTest]);  Redraw();  break;
 	
 	#define OsdStats  Osd("Stats  Full: " + b2on(bFullStats) + "  All: " + b2on(bAllStats))
 	key(L):  bAllStats = !bAllStats;  OsdStats;  Redraw();  break;

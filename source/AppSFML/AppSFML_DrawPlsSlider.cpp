@@ -20,7 +20,7 @@ void AppSFMLDraw::DrawPls_Slider()
 
 	
 	//  clear backgr  par-
-	Rect(xp1-10, yB_pl, xk2+10, yE_pl-yB_pl, TX_Black, false);
+	Rect(xw-xs, yB_pl, xs, yH_pl, TX_Black, false);
 	
 	
 	//  bookmarks  *

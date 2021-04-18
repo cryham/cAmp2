@@ -142,7 +142,8 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Debug text", &bDebug);
 	
 	Sep(10);
-	if (SliderI(iTimeTest, 0, 2, "Time colors: ", "test", csTimesTest[iTimeTest]))
+	if (SliderI(eTimeTest, 0, TimT_All-1,
+			"Time colors: ", "test", csTimesTest[eTimeTest]))
 		Redraw();
 }
 

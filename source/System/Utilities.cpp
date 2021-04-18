@@ -40,10 +40,12 @@ string t2s(const float time, bool float10s)
 		return f2s(time,1,3);
 	int t = time,
 		s = t%60, m = t/60%60, h = t/3600;
-	if (h > 0)
+	if (h > 0)  // h:mm:ss
 		return i2s(h,1)+":"+i2s(m,2,'0')+":"+i2s(s,2,'0');
-	
-	return i2s(m,1)+":"+i2s(s,2,'0');
+	if (m > 0)  // m:ss
+		return i2s(m,1)+":"+i2s(s,2,'0');
+	//  :ss
+	return ":"+i2s(s,2,'0');
 }
 
 string time2s(const uint time)

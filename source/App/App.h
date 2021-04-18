@@ -116,7 +116,7 @@ protected:
 	float dt = 0.1f;   // frame time, ms
 	bool bFps = false;   // show Fps
 	bool bDebug = false; // show debug text
-	int iTimeTest = 0;   // test pls time colors
+	/*ETimeTest*/int eTimeTest = TimT_Off;   // test pls time colors
 
 	bool bAllStats = false;  // all playlists
 	bool bFullStats = false;  // unfiltered

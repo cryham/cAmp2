@@ -31,6 +31,7 @@ void AppSFMLDraw::DrawPlaylist()
 
 	DrawPls_Header();
 	DrawPls_Slider();
+	
 	// todo: down marg_
 }
 
@@ -121,64 +122,66 @@ void AppSFMLDraw::DrawPls_1Names()
 void AppSFMLDraw::DrawPls_2Times()
 {
 	const ViewSet& v = set.view;
-	const int xw = v.wnd.xSize;
-	const int ws = v.sldr.width + 8;  //par w  time|slider
+	const int xMax = v.wnd.xSize - v.sldr.width;  // slider start
 	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
 	
-	str = "0";  //  digit width
-	const int w0 = Text(Fnt_Times, 0, 0, false);
-	const int mt = 10;  // marg time|
-	const int mh = yF+2;  // + - size
+	str = "0:12:34";  //  digit width
+	const int wDigit = Text(Fnt_Times, 0, 0, false) / 7;
+	const int ico = yF+2;  // hide + - icons size
 	
+	const string sMore = ".. ";  // dots for more name
+	str = sMore;
+	const int wMore = Text(Fnt_Tracks, 0, 0);
 	
 	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)
 	if (it < len)
 	{
 		const Track& trk = Pls().GetTrackVis(it);
-		const bool time = trk.HasTime() && !trk.IsDisabled();
-		int w = 0;  float t = 0.f;
+		const bool hasTime = trk.HasTime() && !trk.IsDisabled();
+		int width = 0;  float time = 0.f;
 	
-		if (time)
+		//  time, width
+		if (hasTime)
 		{
-			//  time
-			t = trk.GetTime();
-			if (iTimeTest > 0)  // time colors test
-				t = iTimeTest == 1 ?
-					pow(float(it)/60.f, 1.2f) * 800.f :
-					pow(float(it)/40.f, 1.2f) * 3000.f;
-			
+			switch (eTimeTest)
+			{
+			case TimT_Off:   time = trk.GetTime();  break;
+			case TimT_Short: time = pow(float(it)/60.f, 1.2f) * 800.f;  break;  // time colors tests
+			case TimT_Long:  time = pow(float(it)/40.f, 1.2f) * 3000.f;  break;
+			case TimT_Huge:  time = pow(float(it)/40.f, 4.5f) * 160000.f;  break;
+			}
 			//  get width
-			string s = t2s(t);
+			string s = t2s(time);
 			str = s;
-			//int w = Text(Fnt_Time, 0, 0, false);
-			w = s.length() * w0;
+			width = (s.length() + 1) * wDigit + wMore /*always..*/;
 		}
 		
 		//  backgr  to clear names text
-		int xt = xw - ws - w;
-		Rect(xt -mt, y, xw - xt +mt, yF, TX_Black, false);
+		int xTime = xMax - width;  // x time pos
+		if (width > 0)
+			Rect(xTime, y, width, yF, /*TX_TabB1*/TX_Black, false);
 
 		//  hide icons  + -
 		auto h = trk.GetHide();
-		if (h == Hid_Hide)		Rect(xt-mh+4,y+1, mh,mh, TX_DHide, true);
-		else if (h == Hid_Show)	Rect(xt-mh+5,y+1, mh,mh, TX_DShow, true);
+		if (h == Hid_Hide)		Rect(xTime -ico+4,y+1, ico,ico, TX_DHide, true);
+		else if (h == Hid_Show)	Rect(xTime -ico+5,y+1, ico,ico, TX_DShow, true);
 		
-		if (time)
+		if (hasTime)
 		{
 			//  text
-			TimeClr c = colors.Get(t);
+			TimeClr c = colors.Get(time);
 			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
 	
-			Text(Fnt_Times, xt, y);  // align right
+			Text(Fnt_Times, xTime + wMore, y);  // align right
 			
-			//  more signs, Text ..Time
-			int vw = plsTxtW[yl];
-			if (vw > xt -mt)
+			//  more signs, Track.. Time
+			int xPlsTxt = plsTxtW[yl];
+			if (xPlsTxt > xTime)
 			{
-				str = "..";
+				str = sMore;
 				Clr(170,200,230);
-				Text(Fnt_Tracks, xt -mt, y+1);
+				Text(Fnt_Tracks, xTime, y+1);
 			}
 		}
 		y += yF;  ++it;
@@ -193,6 +196,7 @@ void AppSFMLDraw::DrawPls_3Cursors()
 	const ViewSet& v = set.view;
 	const int xws = v.wnd.xSize - v.sldr.width;
 	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
+	const Uint8 c = 255;  //par dim
 
 	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)
@@ -218,7 +222,6 @@ void AppSFMLDraw::DrawPls_3Cursors()
 			RectUV(0,y, xws, sh ? yF/3 : yF,
 				t.x,t.y, t.w,sh ? t.h/3 : t.h,  true, c,c,c);
 		}
-		const Uint8 c = 255;  //par dim
 		if (it == Pls().iCur)
 			Rect(0,y,xws,yF, TX_PlsCur, true, c,c,c);
 	
