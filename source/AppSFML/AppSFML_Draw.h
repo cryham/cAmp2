@@ -53,6 +53,7 @@ protected:
 	bool wndInited = false;
 	EWndOpt wndOpen = WO_All;  // open next from Main
 	bool wndFocus = false;  // after show
+	int wndSizeX = 400, wndSizeY = 300;  // actual dims
 	void WndFocus();
 
 	void WndOpen(EWndOpt type, bool center = true) override;

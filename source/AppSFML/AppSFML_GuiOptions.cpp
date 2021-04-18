@@ -8,20 +8,20 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 
 //  const windows data
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
-	{"Playlist Find", 320,250},
-	{"Playlist Filter", 350,200},
+	{"Playlist Find", 320,300},
+	{"Playlist Filter", 350,250},
 	
-	{"Playlist Tab", 400,520},
-	{"Player Tabs", 350,320},
+	{"Playlist Tab", 400,570},
+	{"Player Tabs", 350,370},
 	
-	{"Player View", 500,700},
-	{"Playlist Statistics", 400,250},
+	{"Player View", 500,750},
+	{"Playlist Statistics", 400,300},
 	
-	{"Player Audio", 400,300},
-	{"Player Visualization", 900,700},
+	{"Player Audio", 400,350},
+	{"Player Visualization", 900,750},
 	
-	{"Player Test", 300,200},
-	{"About", 450,340},
+	{"Player Test", 300,250},
+	{"About", 450,400},
 
 	{"All Options windows", 250,400},
 };
@@ -124,6 +124,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 		VideoMode(wc.width, wc.height), wc.title,
 		Style::Default, ContextSettings());
 	wnd->clear();
+	wndSizeX = wc.width;  wndSizeY = wc.height;
 	
 	VideoMode vm = VideoMode::getDesktopMode();
 	if (center)
@@ -187,6 +188,17 @@ void AppSFMLDraw::WndProcessAll()
 			case Event::Closed:
 				WndClose(i);
 				return;
+			
+			case Event::Resized:
+				FloatRect r(0, 0, e.size.width, e.size.height);
+				wnd->setView(sf::View(r));
+				wndSizeX = e.size.width;
+				wndSizeY = e.size.height;
+
+				//  save new size
+				SetViewFromWnd();
+				UpdDim();
+				break;
 			}
 		}
 	}
@@ -206,11 +218,16 @@ void AppSFMLDraw::WndDrawAll(Time time)
 
 		//  controls  wnd  =====
 		SetNextWindowPos( ImVec2(0, 0),  ImGuiCond_Always);
-		SetNextWindowSize(ImVec2(wc.width, wc.height), ImGuiCond_Always);
+		
+		SetNextWindowSize(ImVec2(wndSizeX, wndSizeY), ImGuiCond_Always);
 	
 		bool open = true;
 		const int wfl = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
 		Begin("Controls", &open, wfl);
+		//Sep(5);
+		if (i != WO_Main)
+			if (Button("< Back to main"))
+				wndOpen = WO_Main;
 		Sep(5);
 
 		switch (i)
