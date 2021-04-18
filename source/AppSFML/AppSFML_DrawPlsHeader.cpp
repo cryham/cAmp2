@@ -61,7 +61,7 @@ void AppSFMLDraw::DrawPls_Header()
 	//  total time
 	str = time2s(time);
 	x = xE_pl_inf;
-	int w = Text(fnt, x, y, false);
+	int w = Text(fnt, 0, 0, false);
 	Text(fnt, x - w, y);
 	
 	//  num sel

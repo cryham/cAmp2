@@ -45,7 +45,10 @@ protected:
 	PWindow vWindows[WO_All] = {nullptr,};
 	struct SWndConst
 	{
+		std::string group = "no group";
 		std::string title = "no title";
+		std::string FullTitle() const
+		{	return group + " - " + title;  }
 		int width = 400, height = 300;
 	};
 	const static SWndConst wndConst[WO_All];

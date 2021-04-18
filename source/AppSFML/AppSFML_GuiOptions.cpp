@@ -7,23 +7,22 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 
 
 //  const windows data
-const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] = {
-	{"Playlist Find", 320,300},
-	{"Playlist Filter", 350,250},
-	
-	{"Playlist Tab", 400,570},
-	{"Player Tabs", 350,370},
-	
-	{"Player View", 500,750},
-	{"Playlist Statistics", 400,300},
-	
-	{"Player Audio", 400,350},
-	{"Player Visualization", 900,750},
-	
-	{"Player Test", 300,250},
-	{"About", 450,400},
+const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] =
+{
+	{"Player", "View", 500,750},
+	{"Player", "Visualization", 900,750},
+	{"Player", "Audio", 420,350},
 
-	{"All Options windows", 250,400},
+	{"Tabs", "Current", 420,570},
+	{"Tabs", "All", 420,370},
+
+	{"Playlist", "Find", 420,300},
+	{"Playlist", "Filter", 420,300},
+	{"Playlist", "Statistics", 420,300},
+
+	{"Playlist", "Test", 420,300},
+	{"Player", "About", 420,400},
+	{"Main", "All Options", 420,400},
 };
 
 //  gui utils  -----
@@ -121,7 +120,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	const auto& wc = wndConst[w];
 
 	wnd = make_unique<RenderWindow>(
-		VideoMode(wc.width, wc.height), wc.title,
+		VideoMode(wc.width, wc.height), wc.FullTitle(),
 		Style::Default, ContextSettings());
 	wnd->clear();
 	wndSizeX = wc.width;  wndSizeY = wc.height;
@@ -222,12 +221,51 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		SetNextWindowSize(ImVec2(wndSizeX, wndSizeY), ImGuiCond_Always);
 	
 		bool open = true;
-		const int wfl = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
+		const int wfl = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
 		Begin("Controls", &open, wfl);
-		//Sep(5);
-		if (i != WO_Main)
-			if (Button("< Back to main"))
+		
+		if (BeginMenuBar())
+		{
+			//if (i != WO_Main)
+			if (MenuItem("< Main"))
 				wndOpen = WO_Main;
+
+			auto MenuWnd = [&](auto wnd)
+			{
+				if (MenuItem(wndConst[wnd].title.c_str()))  wndOpen = wnd;
+			};
+
+			if (BeginMenu("File"))
+			{
+				if (MenuItem("Insert files.."))  OpenDirFile(true);
+				if (MenuItem("Insert dir.."))   OpenDirFile(false);
+				EndMenu();
+			}
+			if (BeginMenu("Player"))
+			{
+				MenuWnd(WO_AppView);
+				MenuWnd(WO_AppVis);
+
+				MenuWnd(WO_AppAudio);
+				MenuWnd(WO_AppAbout);
+				EndMenu();
+			}
+			if (BeginMenu("Tabs"))
+			{
+				MenuWnd(WO_PlsTab);
+				MenuWnd(WO_AppTabs);
+				EndMenu();
+			}
+			if (BeginMenu("Playlist"))
+			{
+				MenuWnd(WO_PlsFind);
+				MenuWnd(WO_PlsFilter);
+				MenuWnd(WO_AppStats);
+				MenuWnd(WO_AppTest);
+				EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
 		Sep(5);
 
 		switch (i)

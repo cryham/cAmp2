@@ -36,8 +36,10 @@ void AppSFMLDraw::DrawPlayer()
 	//	e.Draw();
 	
 	const ViewSet& v = set.view;
-	const int xw = v.wnd.xSize, yw = v.wnd.ySize;
+	const int xw = v.wnd.xSize, yw = v.wnd.ySize, xhalf = xw/2, y0 = 2;
 	const bool play = audio->IsPlaying();
+	const int yl2 = v.fnt[Fnt_TimeBig].height + 5;  // below times
+	const int yl1 = v.fnt[Fnt_Player].height + 5;  // below info
 
 	
 	//  backgr  []  clear
@@ -69,30 +71,30 @@ void AppSFMLDraw::DrawPlayer()
 		Text(Fnt_Player, 60, 16);
 	}
 
+
+	str = "100%";
+	const int wDigit = Text(Fnt_Player, 0,0, false) / 4;
+	
 	
 	//  Prev, Next  |< >|  hover
-	int y = 2;
 	if (ym > 0 && ym < yE_plr_btn)  // prev,next  btns |< >|
 	{
-		if (xm < xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		if (xm < xhalf)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25AE)) + String(Uint32(0x25C0));
-		Text(Fnt_Player, xw/2 - 30, y);
+		Text(Fnt_Player, xhalf - 3*wDigit, yl2);
 
-		if (xm > xw/2)  Clr(90,150,210);  else  Clr(50,90,130);
+		if (xm > xhalf)  Clr(90,150,210);  else  Clr(50,90,130);
 		str = String(Uint32(0x25B6)) + String(Uint32(0x25AE));
-		Text(Fnt_Player, xw/2 + 10, y);
-	}else
-	{
-		//  play icons  |>
-		y = 2;
-		Clr(50,90,120);
-		//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
-		str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
-			: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
-		Text(Fnt_Player, xw/2, y);
+		Text(Fnt_Player, xhalf + 2*wDigit, yl2);
 	}
 	
-	
+	//  play icons  |>
+	Clr(50,90,120);
+	//str = audio->IsPaused() ? "||" : play ? "|>" : "[]";  // simple
+	str = audio->IsPaused() ? String(Uint32(0x25AE)) + String(Uint32(0x25AE))
+		: play ? String(Uint32(0x25B6)) : String(Uint32(0x25A0));  // ▮▮ ▶ ■
+	Text(Fnt_Player, xw - 12*wDigit, yl2);
+
 	//  Repeat  @
 	if (audio->bRepTrk || audio->bRepPls)
 	{
@@ -100,13 +102,15 @@ void AppSFMLDraw::DrawPlayer()
 		str = String(Uint32(0x21BB));  // ↻
 		if (audio->bRepTrk)  str += "1";
 		//else  str += "A";
-		Text(Fnt_Player, xw-75, y+25);  // +Fy TimeBig..
+		Text(Fnt_Player, xw - 9*wDigit, yl2+1);
 	}
 	
 	//  Volume  %
 	Clr(100,140,220);
 	str = i2s(audio->iVolume/10) + "%";
-	Text(Fnt_Player, xw-40, y+25);
+	int w = Text(Fnt_Player, 0,0, false);
+	Text(Fnt_Player, xw - w - 1*wDigit, yl2+1);
+
 	
 
 	//  player  info Text  * * *
@@ -115,29 +119,33 @@ void AppSFMLDraw::DrawPlayer()
 		//  ext bitrate freq size
 		Clr(110,140,190);
 		str = audio->sInfo;
-		Text(Fnt_Player, 10, y);
+		Text(Fnt_Player, 10, y0);
 				
 		//  time right align..
-		str = "0";
-		const int w0 = Text(Fnt_TimeBig, 0,0, false);
-		string s;  int l, w;
+		str = "0:12:34";
+		const int wDigit = Text(Fnt_TimeBig, 0,0, false) / 7;
+		string s;  int len, w, x;
+
+		bool below10s = audio->timeTrack < 10.0;
+		bool over1Min = audio->timeTrack >= 60.0;
+		//  Time track
+		Clr(100,140,210);
+		s = t2s(audio->timeTrack, below10s);  str = s;
+		len = s.length() +1;  w = len * wDigit;
+		Text(Fnt_TimeBig, xw - w, 0);  x = w;
+
+		//  track rating
+		Clr(120,160,220);
+		str = Ratings::GetVis(audio->rate);
+		x += 3 * wDigit;
+		Text(Fnt_TimeBig, xw - x, 0);
+		x += 1 * wDigit;
 
 		//  Time cur
 		Clr(120,160,220);
-		bool below10 = audio->timeTrack < 10.0;
-		s = t2s(audio->timePlay, below10);  str = s;
-		l = s.length();  w = l * w0;
-		Text(Fnt_TimeBig, xw - w - 110, y-2);
-
-		//  Time track
-		Clr(100,140,210);
-		s = t2s(audio->timeTrack);  str = s;
-		l = s.length();  w = l * w0;
-		Text(Fnt_TimeBig, xw - w - 20, y-2);
-		
-		//  track rating
-		str = Ratings::GetVis(audio->rate);
-		Text(Fnt_TimeBig, xw - 84, y-2);
+		s = t2s(audio->timePlay, below10s, over1Min);  str = s;
+		len = s.length() +1;  w = len * wDigit;
+		Text(Fnt_TimeBig, xw - w - x, 0);
 	}
 
 	//  File info  ----
@@ -157,6 +165,7 @@ void AppSFMLDraw::DrawPlayer()
 		Clr(120,180,240);
 		Text(Fnt_Player, 10, 46);  // todo: wrap text..?
 	}
+
 	
 	//  Osd  ----
 	if (dtOsd > 0.f)
@@ -165,7 +174,7 @@ void AppSFMLDraw::DrawPlayer()
 		str = osdStr;
 		float f = 0.7f * dtOsd / dtOsdShow + 0.3f;
 		Clr(160*f,250*f,250*f);
-		Text(Fnt_Player, 10, v.vis.eType == VisT_None ? 22 : 32);
+		Text(Fnt_Player, 10, yl2);
 	}
 	else
 	//  Find  ----
@@ -173,8 +182,9 @@ void AppSFMLDraw::DrawPlayer()
 	{
 		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
 		Clr(100,220,100);  // center par
-		Text(Fnt_Player, (xw - 140) / 2, v.vis.eType == VisT_None ? 22 : 32);
+		Text(Fnt_Player, (xw - 140) / 2, yl2);
 	}
+
 	
 	///  Debug  ~~~~
 	if (bDebug && !Pls().IsEmpty())

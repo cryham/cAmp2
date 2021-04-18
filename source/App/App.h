@@ -75,9 +75,11 @@ protected:
 	void ApplyVisColors();  // fill vis clr, by id from xml
 
 	enum EWndOpt  // options windows
-	{	WO_PlsFind, WO_PlsFilter, WO_PlsTab, WO_AppTabs,
-		WO_AppView, WO_AppStats, WO_AppAudio, WO_AppVis,
-		WO_AppTest, WO_AppAbout, /*WO_Help,*/ WO_Main,
+	{	
+		WO_AppView, WO_AppVis,WO_AppAudio, 
+		WO_PlsTab, WO_AppTabs,
+		WO_PlsFind, WO_PlsFilter, WO_AppStats, WO_AppTest, 
+		WO_AppAbout, /*WO_Help,*/ WO_Main,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
 		// todo: theme, time colors,
 		WO_All  };
@@ -96,7 +98,7 @@ protected:
 	//  buttons, s = old state
 	bool bLs=false,bL=false, bRs=false,bR=false, bMs=false,bM=false;
 	bool bL_sl=false;
-	
+
 	
 	void MouseUpdate(), MouseUpdateEnd();  // process, update
 	void WheelMove(int d);

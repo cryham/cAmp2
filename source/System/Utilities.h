@@ -12,7 +12,7 @@ std::string b2s(const bool b);
 std::string b2on(const bool b);
 
 //  advanced
-std::string t2s(const float time, bool float10s = false);
+std::string t2s(const float time, bool float10s = false, bool addMin0 = false);
 std::string time2s(const uint time);
 std::string size2s(const uint size);
 

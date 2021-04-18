@@ -17,7 +17,7 @@ void AppSFMLDraw::WndDraw_Main()
 	{
 		if (i==WO_PlsTab || i==WO_AppAudio || i==WO_AppAbout)
 			Line();
-		bool e = Button(wndConst[i].title.c_str());
+		bool e = Button(wndConst[i].FullTitle().c_str());
 		if (e)  wndOpen = (EWndOpt)i;  // schedule to open
 	}
 	PopItemWidth();

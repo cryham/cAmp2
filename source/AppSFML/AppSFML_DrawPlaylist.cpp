@@ -126,12 +126,12 @@ void AppSFMLDraw::DrawPls_2Times()
 	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
 	
 	str = "0:12:34";  //  digit width
-	const int wDigit = Text(Fnt_Times, 0, 0, false) / 7;
+	const int wDigit = Text(Fnt_Times, 0,0, false) / 7;
 	const int ico = yF+2;  // hide + - icons size
 	
 	const string sMore = ".. ";  // dots for more name
 	str = sMore;
-	const int wMore = Text(Fnt_Tracks, 0, 0);
+	const int wMore = Text(Fnt_Tracks, 0,0, false);
 	
 	int y = yB_pl, it = Pls().iOfs;
 	for (int yl=0; yl < yL_pl; ++yl)

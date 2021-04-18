@@ -172,8 +172,9 @@ void App::UpdDim()
 
 	//  visualization
 	bool noVis = v.vis.eType == VisT_None;
-	yB_vis = 16;  //yFvi = 64;
-	yE_vis = min(v.wnd.ySize, 32 + (noVis ? 0 : v.vis.yH) );
+	yB_vis = v.fnt[Fnt_TimeBig].height + 5;
+	yE_vis = min(v.wnd.ySize,
+		yB_vis + (noVis ? v.fnt[Fnt_Player].height + 5 : v.vis.yH) );
 	
 	//  pos bar
 	yB_pos = yE_vis;  yE_pos = yB_pos + 9;

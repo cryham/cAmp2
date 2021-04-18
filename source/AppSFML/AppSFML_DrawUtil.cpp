@@ -26,7 +26,7 @@ int AppSFMLDraw::Text(EFont n, int x, int y, bool draw)
 	//if (!pWindow)  return;
 	text[n].setString(str);
 	//text[n].setStyle(bold ? Text::Bold : Text::Regular);
-	text[n].setColor(clr);
+	if (draw)  text[n].setColor(clr);
 	text[n].setPosition(x, y);
 	if (draw)  pWindow->draw(text[n]);
 	return static_cast<int>(text[n].getLocalBounds().width);  // advance x pos
