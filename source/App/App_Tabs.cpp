@@ -103,7 +103,7 @@ void App::TabNew(int m)
 }
 	
 ///  Close tab  . . . . . .
-void App::TabClose()
+void App::TabCloses()
 {
 	if (vPls.size() <= 1)  return;  //else plst.Clear();
 	//Pls().Save();

@@ -8,6 +8,7 @@
 #include <vector>
 
 class Audio;
+class ActionsMap;
 
 
 class App : public Logger
@@ -48,7 +49,7 @@ protected:
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);
 	void TabNew(int m);
-	void TabClose();
+	void TabCloses();
 
 	
 	//  Advanced  ----
@@ -57,6 +58,7 @@ protected:
 	bool bFind = false;  // hide
 	int iFoundAll = 0, iFoundVis = 0;
 	void Find();
+	void Save();
 
 	//  File Operations
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
@@ -70,8 +72,10 @@ protected:
 	void UpdModifiers();
 	bool KeyDown(sf::Event::KeyEvent key);
 	
+	std::unique_ptr<ActionsMap> act;
+	
 	virtual void UpdateView(bool load, int v) = 0;
-	void NextVis();
+	void NextVisual();
 	void ApplyVisColors();  // fill vis clr, by id from xml
 
 	enum EWndOpt  // options windows
@@ -156,4 +160,50 @@ protected:
 	
 	void UpdDim();
 	// todo:? struct Area xB,yB..  class Dimensions
+
+	
+protected:  //  actions
+	friend class ActionsMap;
+	
+	void
+	PlaySetCur(), Play(), Pause(), Stop(), Prev(), Next(),
+	
+	Backward(), BackwardSlow(), BackwardFast(),
+	Forward(), ForwardSlow(), ForwardFast(),
+
+	VolumeUp(), VolumeUpSlow(), VolumeUpFast(),
+	VolumeDown(), VolumeDownSlow(), VolumeDownFast(),
+	
+	GotoPlay(), GotoPlaySetPls(),
+
+	PlsUp(), PlsUpBy8(), PlsDown(), PlsDownBy8(),
+	PlsPageOfsUp  (),PlsPageOfsUp4  (),PlsPageUp4  (),PlsPageUp  (),
+	PlsPageOfsDown(),PlsPageOfsDown4(),PlsPageDown4(),PlsPageDown(),
+	PlsListHome(),PlsDirUp  (),PlsHome(),PlsHome4(),
+	PlsListEnd (),PlsDirDown(),PlsEnd (),PlsEnd4 (),
+
+	RateInc(), RateIncCur(), RateDec(), RateDecCur(),
+	FilterLowUp(), FilterHighUp(), FilterLowDown(), FilterHighDown(),
+	
+	BookmInc(), BookmDec(), BookmIncTab(), BookmDecTab(),
+
+	TabNext(), TabPrev(), TabNextRow(), TabPrevRow(), 
+	TabOfsNext(), TabOfsPrev(), TabOfsNextRow(), TabOfsPrevRow(), 
+
+	TabNew(), TabNewBegin(), TabNewEnd(), TabNewBefore(), TabClose(),
+	
+	RepeatTrack(), RepeatPls(),
+	Fps(), Debug(), Times(),
+	
+	AllStats(), FullStats(), NextVis(), DirViewNext(), FileInfo(),
+
+	FindHide(), FindOpen(),
+	DuplicateCur(),
+	HideCur(), ShowCur(),
+		
+	SaveAll(), ReloadPls(),
+	
+	InsertDir(), InsertFiles(),
+	ClearPls(), DeleteCurFile(), DeleteCur();
+
 };

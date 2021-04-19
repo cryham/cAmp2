@@ -1,44 +1,39 @@
 #pragma once
-#include <stdint.h>
+#include "../System/defines.h"
+#include "AppActionsEnum.h"
+#include <map>
+
+class App;
+typedef void(App::*AppMethod)(void);
 
 
-enum EActions  // app key actions
+typedef uint TModsKey;
+
+//  key bind  modifiers + key
+static TModsKey ModsKey(bool shift, bool ctrl, bool alt, uint key)
 {
+	return	(shift ? 0x1000 : 0) + 
+			(ctrl ? 0x2000 : 0) + 
+			(alt ? 0x4000 : 0) + key;
+}
+
+class ActionsMap
+{
+	App* pApp = nullptr;
+	std::map<EAction, std::string> names;  // for Gui
+	std::map<EAction, AppMethod> methods;  // const
 	
-};
+	std::map<TModsKey, EAction> bindings;  // var
 
-class SModifier
-{
-	const static uint8_t modAlt = 4, modCtrl = 2, modShift = 1;  // bits
+	void FillNames();
+	void FillMethods();
 public:	
-	uint8_t mod = 0;
-
-	void Set(bool alt, bool ctrl, bool shift)
-	{
-		mod = (alt ? modAlt : 0) + 
-			  (ctrl ? modCtrl : 0) + 
-			  (shift ? modShift : 0);
-	}
-	void Get(bool& alt, bool& ctrl, bool& shift)
-	{
-		alt = mod & modAlt > 0;
-		ctrl = mod & modCtrl > 0;
-		shift = mod & modShift > 0;
-	}
-	bool Matches(const SModifier& mod1)
-	{
-		return mod == mod1.mod;
-	}
-};
-		
-struct SActionKey
-{
-	SModifier mod;
-	//sf::KeyCode key = sf::KeyCode::Unknown;
-	int key = -1;
+	ActionsMap(App* app);
 	
-	bool Matches(SModifier mod1, int key1)
-	{
-		return key == key1 && mod.Matches(mod1);
-	}
+	void DefaultBindings();
+	void Bind(bool shift, bool ctrl, bool alt, uint key, EAction act);
+	void Bind2(bool shift, bool ctrl, bool alt, uint key, uint key2, EAction act);
+	//  Unbinds with Act_None
+	
+	void Check(TModsKey modsKey);
 };

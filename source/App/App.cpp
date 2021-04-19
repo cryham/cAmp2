@@ -1,4 +1,5 @@
 #include "App.h"
+#include "AppActions.h"
 #include "../Audio/AudioBass.h"
 #include "../System/FileSystem.h"
 #include "../../libs/nfd.h"
@@ -50,6 +51,7 @@ bool App::Init()
 
 App::App()
 {
+	act = make_unique<ActionsMap>(this);
 }
 
 App::~App()
@@ -80,7 +82,7 @@ bool App::Play(bool set)
 	return b;
 }
 
-void App::NextVis()
+void App::NextVisual()
 {
 	auto& v = set.view.vis.eType;
 	++v;

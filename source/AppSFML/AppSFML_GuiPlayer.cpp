@@ -15,7 +15,7 @@ void AppSFMLDraw::WndDraw_Main()
 	PushItemWidth(300);
 	for (int i=0; i < WO_Main; ++i)
 	{
-		if (i==WO_PlsTab || i==WO_AppAudio || i==WO_AppAbout)
+		if (i==WO_PlsTab || i==WO_PlsFind || i==WO_AppAbout)
 			Line();
 		bool e = Button(wndConst[i].FullTitle().c_str());
 		if (e)  wndOpen = (EWndOpt)i;  // schedule to open
