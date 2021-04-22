@@ -89,7 +89,7 @@ bool AppSFMLDraw::LoadFonts()
 	
 	for (int i=0; i < Fnt_All; ++i)
 	{
-		auto& f = set.view.fnt[i];
+		auto& f = set.view.fnt.fnt[i];
 		file = data + "/" + f.name;
 		pFont[i] = make_unique<Font>();
 		if (!pFont[i]->loadFromFile(file))
@@ -211,7 +211,7 @@ void AppSFMLDraw::UpdateView(bool load, int v)
 	if (load)
 	{
 		set.view = set.views[v];  // load preset
-		ApplyVisColors();
+		ApplyThemes();
 		const auto& w = set.view.wnd;
 		pWindow->setPosition(Vector2i(w.xPos, w.yPos));
 		pWindow->setSize(Vector2u(w.xSize, w.ySize));

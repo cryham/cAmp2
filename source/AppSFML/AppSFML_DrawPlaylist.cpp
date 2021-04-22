@@ -42,7 +42,7 @@ void AppSFMLDraw::DrawPls_1Names()
 	const ViewSet& v = set.view;
 	//const int xws = v.wnd.xSize - v.pls.xW_slider;
 	const int xw = v.wnd.xSize;
-	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
+	const int len = Pls().LengthVis(), yF = v.FontH(Fnt_Tracks);
 	
 	int iFindVis = 0;
 	plsTxtW.clear();
@@ -123,7 +123,7 @@ void AppSFMLDraw::DrawPls_2Times()
 {
 	const ViewSet& v = set.view;
 	const int xMax = v.wnd.xSize - v.sldr.width;  // slider start
-	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
+	const int len = Pls().LengthVis(), yF = v.FontH(Fnt_Tracks);
 	
 	str = "0:12:34";  //  digit width
 	const int wDigit = Text(Fnt_Times, 0,0, false) / 7;
@@ -170,7 +170,7 @@ void AppSFMLDraw::DrawPls_2Times()
 		if (hasTime)
 		{
 			//  text
-			TimeClr c = colors.Get(time);
+			TimeClr c = themes.GetTimeClr(time);
 			Clr(c.r*255.f, c.g*255.f, c.b*255.f);
 	
 			Text(Fnt_Times, xTime + wMore, y);  // align right
@@ -195,7 +195,7 @@ void AppSFMLDraw::DrawPls_3Cursors()
 	const bool play = audio->IsPlaying();
 	const ViewSet& v = set.view;
 	const int xws = v.wnd.xSize - v.sldr.width;
-	const int len = Pls().LengthVis(), yF = v.fnt[Fnt_Tracks].height;
+	const int len = Pls().LengthVis(), yF = v.FontH(Fnt_Tracks);
 	const Uint8 c = 255;  //par dim
 
 	int y = yB_pl, it = Pls().iOfs;

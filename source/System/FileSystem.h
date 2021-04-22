@@ -41,8 +41,8 @@ public:
 	static std::string AppConfig() {  return app_config;  }
 	static std::string Data() {       return app_data; }
 	
-	static std::string Colors() {     return app_data + "/colors.xml"; }
-	static std::string ColorsUser() { return user_config + "/colors.xml"; }
+	static std::string Themes() {     return app_data + "/themes.xml"; }
+	static std::string ThemesUser() { return user_config + "/themes.xml"; }
 	
 	static std::string Settings() {   return user_config + "/cAmp2.xml"; }
 	static std::string Log() {        return user_config + "/cAmp2.log"; }

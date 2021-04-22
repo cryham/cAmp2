@@ -1,7 +1,7 @@
 #pragma once
 #include "../Playlist/Playlist.h"
 #include "../Settings/Settings.h"
-#include "../Settings/ColorSets.h"
+#include "../Settings/Themes.h"
 #include "../System/LogFile.h"
 #include <SFML/Window/Event.hpp>  // input, use own enum?
 #include <memory>
@@ -23,7 +23,7 @@ protected:
 	
 	Settings set;
 	//ViewSet view;  // in set
-	ColorSets colors;
+	Themes themes;
 	//std::unique_ptr<Skin> skin;  // todo:
 	
 	std::unique_ptr<Audio> audio;
@@ -76,17 +76,18 @@ protected:
 	
 	virtual void UpdateView(bool load, int v) = 0;
 	void NextVisual();
-	void ApplyVisColors();  // fill vis clr, by id from xml
+	void ApplyThemes();  // fill vis clr, by id from xml
 
 	enum EWndOpt  // options windows
-	{	
-		WO_AppView, WO_AppVis,WO_AppAudio, 
+	{
+		WO_AppView, WO_AppVis, WO_AppAudio, WO_AppKeys, 
 		WO_PlsTab, WO_AppTabs,
 		WO_PlsFind, WO_PlsFilter, WO_AppStats, WO_AppTest, 
 		WO_AppAbout, /*WO_Help,*/ WO_Main,
 		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
 		// todo: theme, time colors,
-		WO_All  };
+		WO_All
+	};
 	virtual void WndOpen(EWndOpt type, bool center = true) = 0;
 
 

@@ -15,7 +15,7 @@ struct TimeClr  // color at time
 
 class TimeColors  // theme
 {
-	friend class ColorSets;
+	friend class Themes;
 protected:
 	std::vector<TimeClr> vc;
 	std::string name;

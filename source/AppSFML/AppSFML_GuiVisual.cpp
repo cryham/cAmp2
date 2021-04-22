@@ -44,22 +44,33 @@ void AppSFMLDraw::WndDraw_AppVis()
 	
 	auto AddSlidersHSV = [&](VisualColors& c, string s)
 	{
-		Sep(10);  Line();
-		TextG("Adjust theme coloring");
-		SliderF(c.add.h, 0.f, 1.f, "Hue: ",        s+"Ha");
-		SliderF(c.mul.h,-2.f, 2.f, "  multi: ",    s+"Hm");
-		SliderF(c.pow.h, 0.f, 4.f, "  power: ",    s+"Hp");
-		Sep(5);
-		SliderF(c.add.s,-1.f, 2.f, "Saturation: ", s+"Sa");
-		SliderF(c.mul.s,-3.f, 3.f, "  multi: ",    s+"Sm");
-		SliderF(c.pow.s, 0.f, 4.f, "  power: ",    s+"Sp");
-		Sep(5);
-		SliderF(c.add.v,-1.f, 2.f, "Brightness: ", s+"Va");
-		SliderF(c.mul.v,-3.f, 3.f, "  multi: ",    s+"Vm");
-		SliderF(c.pow.v, 0.f, 4.f, "  power: ",    s+"Vp");
-	};
+		/*{	//  preview gradient ..
+			ImVec2 p0 = GetCursorScreenPos();
+			ImVec2 gradient_size = ImVec2(CalcItemWidth(), GetFrameHeight());
+			ImVec2 p1 = ImVec2(p0.x + gradient_size.x, p0.y + gradient_size.y);
+			ImU32 col_a = GetColorU32(IM_COL32(0, 255, 0, 255));
+			ImU32 col_b = GetColorU32(IM_COL32(255, 0, 0, 255));
+			ImDrawList* draw_list = GetWindowDrawList();
+			draw_list->AddRectFilledMultiColor(p0, p1, col_a, col_b, col_b, col_a);
+			InvisibleButton("##gradient2", gradient_size);
+		}/**/
+		Sep(10);
+		if (CollapsingHeader("Adjust theme coloring", ImGuiTreeNodeFlags_DefaultOpen|ImGuiTreeNodeFlags_Framed))
+		{	Sep(5);  //Line();
+			SliderF(c.add.h, 0.f, 1.f, "Hue: ",        s+"Ha");
+			SliderF(c.mul.h,-2.f, 2.f, "  multi: ",    s+"Hm");
+			SliderF(c.pow.h, 0.f, 4.f, "  power: ",    s+"Hp");
+			Sep(5);
+			SliderF(c.add.s,-1.f, 2.f, "Saturation: ", s+"Sa");
+			SliderF(c.mul.s,-3.f, 3.f, "  multi: ",    s+"Sm");
+			SliderF(c.pow.s, 0.f, 4.f, "  power: ",    s+"Sp");
+			Sep(5);
+			SliderF(c.add.v,-1.f, 2.f, "Brightness: ", s+"Va");
+			SliderF(c.mul.v,-3.f, 3.f, "  multi: ",    s+"Vm");
+			SliderF(c.pow.v, 0.f, 4.f, "  power: ",    s+"Vp");
+	}	};
 	
-	const int clrs = colors.VisCount()-1;
+	const int clrs = themes.VisCount()-1;
 	Sep(10);
 	switch (v.eType)
 	{
@@ -71,18 +82,18 @@ void AppSFMLDraw::WndDraw_AppVis()
 		SliderF(v.fft.fMul, 0.f, 200.f,
 				"FFT scale: ", "fft-mul");
 
-		if (SliderI(colors.curFFT, 0, clrs,
-				"Theme: " + i2s(colors.curFFT), "fft-thm", colors.CurFFT().name))
-		{	v.fft.clr = colors.CurFFT();  v.fft.theme = colors.CurFFT().name;  }
+		if (SliderI(themes.curFFT, 0, clrs,
+				"Theme: " + i2s(themes.curFFT), "fft-thm", themes.CurFFT().name))
+		{	v.fft.clr = themes.CurFFT();  v.fft.theme = themes.CurFFT().name;  }
 		
 		AddSlidersHSV(v.fft.clr, "fft_");
 	}	break;
 
 	case VisT_Osc:
 	{
-		if (SliderI(colors.curOsc, 0, clrs,
-				"Theme: " + i2s(colors.curOsc), "osc-thm", colors.CurOsc().name))
-		{	v.osc.clr = colors.CurOsc();  v.osc.theme = colors.CurOsc().name;  }
+		if (SliderI(themes.curOsc, 0, clrs,
+				"Theme: " + i2s(themes.curOsc), "osc-thm", themes.CurOsc().name))
+		{	v.osc.clr = themes.CurOsc();  v.osc.theme = themes.CurOsc().name;  }
 		
 		AddSlidersHSV(v.osc.clr, "osc_");
 	}	break;
@@ -95,9 +106,9 @@ void AppSFMLDraw::WndDraw_AppVis()
 		SliderF(v.spect.fMul, 0.f, 200.f,
 				"FFT scale: ", "spc-mul");
 
-		if (SliderI(colors.curSpect, 0, clrs,
-				"Theme: " + i2s(colors.curSpect), "spc-thm", colors.CurSpect().name))
-		{	v.spect.clr = colors.CurSpect();  v.spect.theme = colors.CurSpect().name;  }
+		if (SliderI(themes.curSpect, 0, clrs,
+				"Theme: " + i2s(themes.curSpect), "spc-thm", themes.CurSpect().name))
+		{	v.spect.clr = themes.CurSpect();  v.spect.theme = themes.CurSpect().name;  }
 
 		i = v.eSpect;
 		if (SliderI(i, 0, SpcT_ALL-1,

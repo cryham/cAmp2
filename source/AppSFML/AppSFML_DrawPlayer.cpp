@@ -38,8 +38,8 @@ void AppSFMLDraw::DrawPlayer()
 	const ViewSet& v = set.view;
 	const int xw = v.wnd.xSize, yw = v.wnd.ySize, xhalf = xw/2, y0 = 2;
 	const bool play = audio->IsPlaying();
-	const int yl2 = v.fnt[Fnt_TimeBig].height + 5;  // below times
-	const int yl1 = v.fnt[Fnt_Player].height + 5;  // below info
+	const int yl2 = v.FontH(Fnt_TimeBig) + 5;  // below times
+	const int yl1 = v.FontH(Fnt_Player) + 5;  // below info
 
 	
 	//  backgr  []  clear
@@ -190,7 +190,7 @@ void AppSFMLDraw::DrawPlayer()
 	if (bDebug && !Pls().IsEmpty())
 	{
 		Clr(120,180,240);
-		int ymc = (ym - yB_pl) / v.fnt[Fnt_Tracks].height;  ymc = max(0, min(ymc, yL_pl-1));
+		int ymc = (ym - yB_pl) / v.FontH(Fnt_Tracks);  ymc = max(0, min(ymc, yL_pl-1));
 		str = "curId "+i2s(Pls().GetTrackVisIdAll(Pls().iCur))
 			+" cur-ofs "+i2s(Pls().iCur-Pls().iOfs)+" len "+i2s(Pls().LengthVis());
 		Text(Fnt_Player, 50, 30);

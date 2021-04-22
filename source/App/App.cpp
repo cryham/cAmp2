@@ -35,8 +35,8 @@ bool App::Init()
 		//return false;
 	}
 	
-	colors.Load();
-	ApplyVisColors();
+	themes.Load();
+	ApplyThemes();
 	
 
 	LoadPls();
@@ -59,18 +59,22 @@ App::~App()
 }
 
 
-//  apply cur set colors to view vis
-void App::ApplyVisColors()
+//  copy cur theme names to view vis
+void App::ApplyThemes()
 {
 	auto& v = set.view.vis;
-	colors.curFFT = colors.GetVis(v.fft.theme);
-	colors.curOsc = colors.GetVis(v.osc.theme);
-	colors.curSpect = colors.GetVis(v.spect.theme);
+	themes.curFFT = themes.GetVisId(v.fft.theme);
+	themes.curOsc = themes.GetVisId(v.osc.theme);
+	themes.curSpect = themes.GetVisId(v.spect.theme);
 
-	v.fft.clr = colors.CurFFT();
-	v.osc.clr = colors.CurOsc();
-	v.spect.clr = colors.CurSpect();
+	v.fft.clr = themes.CurFFT();
+	v.osc.clr = themes.CurOsc();
+	v.spect.clr = themes.CurSpect();
+	
+	themes.curFonts = themes.GetFontId(set.view.fontSet);
+	set.view.fnt = themes.CurFont();
 }
+
 
 //  key command utils
 //------------------------------------------------------------------------
@@ -151,7 +155,7 @@ bool App::Destroy()
 	//  set save
 	SavePls();
 	bool ok = set.Save();
-	colors.Save();  //
+	themes.Save();  //
 
 	//  audio
 	audio->Destroy();
@@ -174,9 +178,9 @@ void App::UpdDim()
 
 	//  visualization
 	bool noVis = v.vis.eType == VisT_None;
-	yB_vis = v.fnt[Fnt_TimeBig].height + 5;
+	yB_vis = v.FontH(Fnt_TimeBig) + 5;
 	yE_vis = min(v.wnd.ySize,
-		yB_vis + (noVis ? v.fnt[Fnt_Player].height + 5 : v.vis.yH) );
+		yB_vis + (noVis ? v.FontH(Fnt_Player) + 5 : v.vis.yH) );
 	
 	//  pos bar
 	yB_pos = yE_vis;  yE_pos = yB_pos + 9;
@@ -186,13 +190,13 @@ void App::UpdDim()
 	yB_tabs = yE_pos;  /*par+- +2 8pos*/
 	xW_tabs_btn = 16;  // btnsW up,dn
 		xW_tabs = (v.wnd.xSize - xW_tabs_btn) / v.tabs.xCols;
-		yH_tabs = v.fnt[Fnt_Tabs].height + 2;
+		yH_tabs = v.FontH(Fnt_Tabs) + 2;
 	yE_tabs = yB_tabs + v.tabs.yRows * yH_tabs + 4;
 
 	//  playlist, tracks
-	int yL = v.fnt[Fnt_Tracks].height;
+	int yL = v.FontH(Fnt_Tracks);
 	yB_pl_inf = yE_tabs;  // header
-	yB_pl = yB_pl_inf + v.fnt[Fnt_Player].height + 2;
+	yB_pl = yB_pl_inf + v.FontH(Fnt_Player) + 2;
 	yE_pl = v.wnd.ySize - yL;
 	
 	yH_pl = yE_pl-1-yB_pl;

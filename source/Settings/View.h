@@ -1,5 +1,6 @@
 #pragma once
 #include "VisualColors.h"
+#include "FontSets.h"
 #include "../App/AppConst.h"
 
 namespace tinyxml2 {  class XMLElement;  class XMLDocument;  }
@@ -63,13 +64,11 @@ public:
 	} tabs;
 	
 	//  fonts  ------------------------
-	struct VS_Fonts
-	{
-		std::string name = "";
-		bool bold = false;
-		int size = 15;  // font size
-		int lineSpacing = 3;  // add to height
-		int height = 18;  // line height = size + lineSpacing (auto set)
-	}
-	fnt[Fnt_All];
+	std::string fontSet;  // name for FontSets
+	SFontSet fnt;   // loaded from FontSets outside by fontSet
+	
+	int FontH(EFont f) const
+	{	return fnt.fnt[f].height;  }
+	const SFont& Font(EFont f) const
+	{	return fnt.fnt[f];  }
 };

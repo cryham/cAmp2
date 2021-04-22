@@ -1,15 +1,17 @@
-#include "ColorSets.h"
+#include "Themes.h"
 #include "../System/FileSystem.h"
 #include "../System/Utilities.h"
 #include "../../libs/tinyxml2.h"
 using namespace std;  using namespace tinyxml2;
 
 
-ColorSets::ColorSets()
-{	}
+Themes::Themes()
+{
+	//Defaults();
+}
 
 
-TimeClr ColorSets::Get(float time, int mode)
+TimeClr Themes::GetTimeClr(float time, int mode)
 {
 	if (curTime < vTime.size())
 		return vTime[curTime].Get(time, mode);
@@ -17,8 +19,7 @@ TimeClr ColorSets::Get(float time, int mode)
 	return TimeClr(1.f, 0.4f,0.7f,1.0f);
 }
 
-
-int ColorSets::GetVis(const string& name)
+int Themes::GetVisId(const string& name)
 {
 	int id = mapVisual[name];
 	if (id != 0)
@@ -26,18 +27,29 @@ int ColorSets::GetVis(const string& name)
 	return 0;  // 1st, default
 }
 
-
-void ColorSets::Defaults()
+int Themes::GetFontId(const string& name)
 {
-	vTime.clear();
-	vVisual.clear();
-	mapVisual.clear();
+	int id = mapFonts[name];
+	if (id != 0)
+		return id-1;
+	return 0;  // 1st, default
+}
 
-	//  add anything working
+
+
+void Themes::Defaults()
+{
+	//  add 1 working default to each vector
+	//  time
+	vTime.clear();
 	TimeColors tc;  tc.name = "default";
 	tc.vc.push_back(TimeClr(0.0f, 0.16f, 0.52f, 1.00f));
 	tc.vc.push_back(TimeClr(900.0f, 0.86f, 0.92f, 1.00f));
 	vTime.emplace_back(tc);
+
+	//  visual
+	vVisual.clear();
+	mapVisual.clear();
 	
 	VisualColors c;  c.name = "default";
 	c.add.h = 0.594f;  c.add.s = 0.893f;  c.add.v = 0.633f;
@@ -45,23 +57,32 @@ void ColorSets::Defaults()
 	c.pow.h = 1.035f;  c.pow.s = 1.654f;  c.pow.v = 0.997f;
 	vVisual.emplace_back(c);
 	mapVisual[c.name] = vVisual.size();
+
+	//  fonts
+	vFonts.clear();
+	mapFonts.clear();
+	
+	SFontSet fs;
+	vFonts.emplace_back(fs);
+	mapFonts[fs.name] = vFonts.size();
 }
+
 
 ///  Load
 //------------------------------------------------------------------------------------------------
-bool ColorSets::Load()
+bool Themes::Load()
 {
 	Defaults();
 
-	string file = FileSystem::ColorsUser();
+	string file = FileSystem::ThemesUser();
 	if (!FileSystem::Exists(file))
 	{
-		file = FileSystem::Colors();
+		file = FileSystem::Themes();
 		if (!FileSystem::Exists(file))
 			return false;
 	}
 
-	const string sErr = string("Colors Load Error: ") + file + "\n";
+	const string sErr = string("Themes Load Error: ") + file + "\n";
 	ifstream fi;
 	fi.open(file);
 	if (!fi.good())
@@ -122,7 +143,6 @@ bool ColorSets::Load()
 	{
 		VisualColors vc;
 		a = n->Attribute("name");  if (a)  vc.name = string(a);
-
 		if (vc.name != "default")
 		{
 			m = n->FirstChildElement("hsv");
@@ -130,9 +150,9 @@ bool ColorSets::Load()
 			while (m)
 			{
 				Float3HSV hsv;
-				a = m->Attribute("h");	if (a)	hsv.h = (float)atof(a);
-				a = m->Attribute("s");	if (a)	hsv.s = (float)atof(a);
-				a = m->Attribute("v");	if (a)	hsv.v = (float)atof(a);
+				a = m->Attribute("h");	if (a)	hsv.h = s2f(a);
+				a = m->Attribute("s");	if (a)	hsv.s = s2f(a);
+				a = m->Attribute("v");	if (a)	hsv.v = s2f(a);
 	
 				a = m->Attribute("type");	int type = a ? atoi(a) : 0;
 				switch (type)
@@ -152,15 +172,47 @@ bool ColorSets::Load()
 		n = n->NextSiblingElement("VisualColors");  ++i;
 	}
 	Log("VisualColors loaded: " + i2s(vVisual.size()));
+
+	//  load  fonts
+	n = root->FirstChildElement("FontSet");
+	if (!n)
+	{	Log(sErr + "No <FontSet>.");  /*return false;*/  }
 	
-	Log("ColorSets Loaded from: " + file);
+	while (n)
+	{
+		SFontSet fs;
+		a = n->Attribute("name");  if (a)  fs.name = string(a);
+		if (fs.name != "default")
+		{
+			int i = 0;
+			m = n->FirstChildElement("font");
+			if (!m)  Log(sErr + "Warning, VisualColors has no <font>" + fs.name);
+			while (m)
+			{
+				auto& f = fs.fnt[i];
+				a = m->Attribute("name");	if (a)	f.name = string(a);
+				a = m->Attribute("size");	if (a)	f.size = s2i(a);
+				a = m->Attribute("lspc");	if (a)	f.lineSpacing = s2i(a);
+				a = m->Attribute("bold");	if (a)	f.bold = s2b(a);
+				f.height = f.size + f.lineSpacing;
+	
+				m = m->NextSiblingElement("font");  ++i;
+			}
+			vFonts.emplace_back(fs);
+			mapFonts[fs.name] = vFonts.size();
+		}
+		n = n->NextSiblingElement("FontSet");
+	}
+	Log("FontSets loaded: " + i2s(vFonts.size()));
+	
+	Log("ThemeSets Loaded from: " + file);
 	return true;
 }
 
 
 ///  Save
 //------------------------------------------------------------------------------------------------
-bool ColorSets::Save() const
+bool Themes::Save() const
 {
 	using tinyxml2::XMLElement;
 	XMLDocument xml;
@@ -211,15 +263,35 @@ bool ColorSets::Save() const
 
 		root->InsertEndChild(e);  ++i;
 	}
+
+	//  fonts
+	for (const auto& fs : vFonts)
+	{
+		e = xml.NewElement("FontSet");
+		e->SetAttribute("name", fs.name.c_str());
+		
+		for (i=0; i < Fnt_All; ++i)
+		{
+			const auto& f = fs.fnt[i];
+			p = xml.NewElement("font");
+			p->SetAttribute("name", f.name.c_str());
+			p->SetAttribute("size", i2s(f.size).c_str());
+			p->SetAttribute("lspc", i2s(f.lineSpacing).c_str());
+			p->SetAttribute("bold", b2s(f.bold).c_str());
+			e->InsertEndChild(p);
+		};
+		root->InsertEndChild(e);
+	}
+	
 	
 	//  save  .......
 	xml.InsertEndChild(root);
 	
-	string file = FileSystem::ColorsUser();
+	string file = FileSystem::ThemesUser();
 	bool ok = xml.SaveFile(file.c_str()) == XML_SUCCESS;
 	if (ok)
-		Log("Colors Saved.");
+		Log("ThemeSets Saved.");
 	else
-		Error("Error saving Colors file: " + file);
+		Error("Error saving ThemeSets file: " + file);
 	return ok;
 }

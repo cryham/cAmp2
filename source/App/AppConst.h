@@ -5,6 +5,7 @@ enum EFont  // for different fonts, sizes
 {	Fnt_Player, Fnt_TimeBig,  // player
 	Fnt_Tabs,
 	Fnt_Tracks, Fnt_Times,  // playlist
+	// add new here..
 	Fnt_All
 };
 const static char* csFonts[Fnt_All] =
