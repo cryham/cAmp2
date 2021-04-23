@@ -1,13 +1,14 @@
 #pragma once
 #include "../System/defines.h"
 #include "AppActionsEnum.h"
+#include <SFML/Window/Event.hpp>
 #include <map>
 
 class App;
 typedef void(App::*AppMethod)(void);
 
 
-typedef uint TModsKey;
+typedef int TModsKey;
 
 //  key bind  modifiers + key
 static TModsKey ModsKey(bool shift, bool ctrl, bool alt, uint key)
@@ -19,12 +20,16 @@ static TModsKey ModsKey(bool shift, bool ctrl, bool alt, uint key)
 
 class ActionsMap
 {
+public:
 	App* pApp = nullptr;
 	std::map<EAction, std::string> names;  // for Gui
 	std::map<EAction, AppMethod> methods;  // const
 	
-	std::map<TModsKey, EAction> bindings;  // var
+	std::map<TModsKey, EAction> bindings;  // var key binds
 
+	static const char* csKeyNames[sf::Keyboard::KeyCount];
+	static std::string StrKey(TModsKey mkey);
+	
 	void FillNames();
 	void FillMethods();
 public:	

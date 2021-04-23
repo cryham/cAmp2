@@ -11,7 +11,8 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] =
 {
 	{"Player", "View", 500,750},
 	{"Player", "Visualization", 900,750},
-	{"Player", "Audio", 420,350},
+	{"Player", "Audio", 500,350},
+	{"Player", "Keyboard", 600,750},
 
 	{"Tabs", "Current", 420,570},
 	{"Tabs", "All", 420,370},
@@ -217,7 +218,6 @@ void AppSFMLDraw::WndDrawAll(Time time)
 
 		//  controls  wnd  =====
 		SetNextWindowPos( ImVec2(0, 0),  ImGuiCond_Always);
-		
 		SetNextWindowSize(ImVec2(wndSizeX, wndSizeY), ImGuiCond_Always);
 	
 		bool open = true;
@@ -247,6 +247,7 @@ void AppSFMLDraw::WndDrawAll(Time time)
 				MenuWnd(WO_AppVis);
 
 				MenuWnd(WO_AppAudio);
+				MenuWnd(WO_AppKeys);
 				MenuWnd(WO_AppAbout);
 				EndMenu();
 			}
@@ -270,17 +271,19 @@ void AppSFMLDraw::WndDrawAll(Time time)
 
 		switch (i)
 		{
-		case WO_PlsFind:	WndDraw_PlsFind();  break;
-		case WO_PlsFilter:	WndDraw_PlsFilter();  break;
+		case WO_AppView:	WndDraw_AppView();  break;
+		case WO_AppVis:		WndDraw_AppVis();  break;
+		case WO_AppAudio:	WndDraw_AppAudio();  break;
+		case WO_AppKeys:	WndDraw_AppKeys();  break;
+
 		case WO_PlsTab:		WndDraw_PlsTab();  break;
 		case WO_AppTabs:	WndDraw_AppTabs();  break;
 
-		case WO_AppView:	WndDraw_AppView();  break;
+		case WO_PlsFind:	WndDraw_PlsFind();  break;
+		case WO_PlsFilter:	WndDraw_PlsFilter();  break;
 		case WO_AppStats:	WndDraw_AppStats();  break;
-		case WO_AppAudio:	WndDraw_AppAudio();  break;
-		case WO_AppVis:		WndDraw_AppVis();  break;
-
 		case WO_AppTest:	WndDraw_AppTest();  break;
+
 		case WO_AppAbout:   WndDraw_AppAbout();  break;
 		case WO_Main:		WndDraw_Main();  break;
 		}

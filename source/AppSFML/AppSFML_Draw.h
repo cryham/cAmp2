@@ -65,9 +65,10 @@ protected:
 	void WndClose(int w);
 	
 	void WndDrawAll(sf::Time time);
-	void WndDraw_PlsFind(), WndDraw_PlsFilter(), WndDraw_PlsTab(), WndDraw_AppTabs();
-	void WndDraw_AppView(), WndDraw_AppStats(), WndDraw_AppAudio(), WndDraw_AppVis();
-	void WndDraw_AppTest(), WndDraw_AppAbout(), WndDraw_Main();
+	void WndDraw_AppView(), WndDraw_AppVis(), WndDraw_AppAudio(), WndDraw_AppKeys();
+	void WndDraw_PlsTab(), WndDraw_AppTabs();
+	void WndDraw_PlsFind(),	WndDraw_PlsFilter(), WndDraw_AppStats(), WndDraw_AppTest();
+	void WndDraw_AppAbout(), WndDraw_Main();
 
 	
 	//  Resources

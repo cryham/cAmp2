@@ -14,12 +14,15 @@ ActionsMap::ActionsMap(App* app)
 
 void ActionsMap::Bind(bool shift, bool ctrl, bool alt, uint key, EAction act)
 {
-	bindings[ModsKey(shift, ctrl, alt, key)] = act;
+	auto mkey = ModsKey(shift, ctrl, alt, key);
+	bindings[mkey] = act;
 }
 void ActionsMap::Bind2(bool shift, bool ctrl, bool alt, uint key, uint key2, EAction act)
 {
-	bindings[ModsKey(shift, ctrl, alt, key)] = act;
-	bindings[ModsKey(shift, ctrl, alt, key2)] = act;
+	auto mkey1 = ModsKey(shift, ctrl, alt, key);
+	auto mkey2 = ModsKey(shift, ctrl, alt, key2);
+	bindings[mkey1] = act;
+	bindings[mkey2] = act;
 }
 
 void ActionsMap::Check(TModsKey modsKey)
@@ -31,6 +34,18 @@ void ActionsMap::Check(TModsKey modsKey)
 	AppMethod met = methods[act];
 	if (met != nullptr)
 		(pApp->*met)();
+}
+
+string ActionsMap::StrKey(TModsKey k)
+{
+	if (k == 0)
+		return "";
+	string s;
+	if ((k & 0x1000) >= 0x1000)  s += "Shift + ";
+	if ((k & 0x2000) >= 0x2000)  s += "Ctrl + ";
+	if ((k & 0x4000) >= 0x4000)  s += "Alt + ";
+	s += csKeyNames[k & 0xFFF];
+	return s;
 }
 
 
@@ -166,8 +181,8 @@ void ActionsMap::DefaultBindings()
 
 
 	///  load, save
-	Bind(0,1,0, key(Delete), Act_SaveAll);
-	Bind(0,1,0, key(Delete), Act_ReloadPls);
+	Bind(0,0,0, key(F4), Act_SaveAll);
+	Bind(0,0,0, key(F5), Act_ReloadPls);
 	
 	//  insert, delete
 	Bind(0,0,0, key(Insert), Act_InsertDir);

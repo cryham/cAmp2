@@ -12,6 +12,11 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_Main()
 {
+	#if 0  // test imgui demos
+	static bool a = true;
+	ShowDemoWindow(&a);
+	return;
+	#endif
 	PushItemWidth(300);
 	for (int i=0; i < WO_Main; ++i)
 	{
@@ -44,21 +49,39 @@ void AppSFMLDraw::WndDraw_AppView()
 	if (SliderI(set.view.sldr.width, 2, 60, "Slider width: ", "sldW"))  UpdDim();
 
 	Sep(10);  Line();  e = false;
+	
 	TextG("Font sizes:");	xSlider = 200;
-	for (int i=0; i < Fnt_All; ++i)
+	for (int i=0; i < themes.FontCount(); ++i)
 	{
-		auto& f = set.view.fnt[i];
-		TextG(csFonts[i]);
-		PushItemWidth(50);
-		s = " + "+i2s(i);  SameLine(200);  if (Button(s.c_str())) {  e = true;  ++f.size;  ++f.height;  }
-		s = " - "+i2s(i);  SameLine(280);  if (Button(s.c_str())) {  e = true;  --f.size;  --f.height;  }
-		PopItemWidth();
-		e |= SliderI(f.size, 1, 40, "  Size: ", "fntS" + i2s(i));
-		if (i == Fnt_Tabs || i == Fnt_Tracks)  // rest unused
-			e |= SliderI(f.lineSpacing, -5, 20, "  Spacing: ", "fntH" + i2s(i));
+		s = themes.GetFontName(i)+"###FntSet"+i2s(i);
+		if (Button(s.c_str()))
+		{
+			themes.curFonts = i;
+			set.view.fontSet = themes.CurFont().name;
+			set.view.fnt = themes.CurFont();
+			LoadFonts();
+			UpdDim();
+		}
+		if (i%3 < 2)  SameLine();  // 3 in row
 	}
-	if (e)
-	{	LoadFonts();  UpdDim();  }
+	Sep(5);
+	if (CollapsingHeader("Adjust fonts", ImGuiTreeNodeFlags_DefaultOpen|ImGuiTreeNodeFlags_Framed))
+	{
+		for (int i=0; i < Fnt_All; ++i)
+		{
+			auto& f = set.view.fnt.fnt[i];
+			TextG(csFonts[i]);
+			PushItemWidth(50);
+			s = " + "+i2s(i);  SameLine(200);  if (Button(s.c_str())) {  e = true;  ++f.size;  ++f.height;  }
+			s = " - "+i2s(i);  SameLine(280);  if (Button(s.c_str())) {  e = true;  --f.size;  --f.height;  }
+			PopItemWidth();
+			e |= SliderI(f.size, 1, 40, "  Size: ", "fntS" + i2s(i));
+			if (i == Fnt_Tabs || i == Fnt_Tracks)  // rest unused
+				e |= SliderI(f.lineSpacing, -5, 20, "  Spacing: ", "fntH" + i2s(i));
+		}
+		if (e)
+		{	LoadFonts();  UpdDim();  }
+	}
 	xSlider = 0;
 }
 
@@ -148,7 +171,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 }
 
 
-//  Abou
+//  About
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppAbout()
 {
@@ -157,7 +180,7 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	Sep(10);
 	TextG("by Crystal Hammer");
 	Sep(20);
-	TextG("Version: 2.0.8");
+	TextG("Version: 2.1.0");
 	//TextG(Settings::ver);
 	Sep(40);
 	PushItemWidth(400);
