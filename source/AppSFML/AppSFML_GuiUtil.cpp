@@ -6,26 +6,6 @@
 using namespace sf;  using namespace std;  using namespace ImGui;
 
 
-//  const windows data
-const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_All] =
-{
-	{"Player", "View", 500,750},
-	{"Player", "Visualization", 900,750},
-	{"Player", "Audio", 500,350},
-	{"Player", "Keyboard", 600,750},
-
-	{"Tabs", "Current", 420,570},
-	{"Tabs", "All", 420,370},
-
-	{"Playlist", "Find", 420,300},
-	{"Playlist", "Filter", 420,300},
-	{"Playlist", "Statistics", 420,300},
-
-	{"Playlist", "Test", 420,300},
-	{"Player", "About", 420,400},
-	{"Main", "All Options", 420,400},
-};
-
 //  gui utils  -----
 const ImVec4 clr1(0.2f,0.2f,0.7f, 0.5f);
 const ImVec4 clr0(0.2f,0.2f,0.7f, 0.3f);
@@ -87,7 +67,7 @@ bool AppSFMLDraw::SliderI(
 //------------------------------------------------------------------
 AppSFMLDraw::AppSFMLDraw()
 {
-	for (int i=0; i < WO_All; ++i)
+	for (int i=0; i < WO_ALL; ++i)
 		vWindows[i] = nullptr;
 }
 
@@ -112,10 +92,10 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	if (wndInited)  //return;
 	// todo: resize same window cant focus ..
 	{
-		for (int i=0; i < WO_All; ++i)
+		for (int i=0; i < WO_ALL; ++i)
 			WndClose(i);
 	}
-	if (w < 0 || w >= WO_All)  return;
+	if (w < 0 || w >= WO_ALL)  return;
 	auto& wnd = vWindows[w];
 	if (wnd)  return;
 	const auto& wc = wndConst[w];
@@ -166,11 +146,12 @@ void AppSFMLDraw::WndClose(int i)
 	wndInited = false;
 }
 
+
 //  Process All
 //---------------------------------------------------------------------------------------------
 void AppSFMLDraw::WndProcessAll()
 {
-	for (int i=0; i < WO_All; ++i)
+	for (int i=0; i < WO_ALL; ++i)
 	{
 		if (!WndVisible((EWndOpt)i))  continue;
 		auto& wnd = vWindows[i];
@@ -201,103 +182,5 @@ void AppSFMLDraw::WndProcessAll()
 				break;
 			}
 		}
-	}
-}
-
-//  Draw All
-//---------------------------------------------------------------------------------------------
-void AppSFMLDraw::WndDrawAll(Time time)
-{
-	for (int i=0; i < WO_All; ++i)
-	{
-		if (!WndVisible((EWndOpt)i))  continue;
-
-		auto& wnd = vWindows[i];	
-		auto& wc = wndConst[i];
-		ImGui::SFML::Update(*wnd, time);
-
-		//  controls  wnd  =====
-		SetNextWindowPos( ImVec2(0, 0),  ImGuiCond_Always);
-		SetNextWindowSize(ImVec2(wndSizeX, wndSizeY), ImGuiCond_Always);
-	
-		bool open = true;
-		const int wfl = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
-		Begin("Controls", &open, wfl);
-		
-		if (BeginMenuBar())
-		{
-			//if (i != WO_Main)
-			if (MenuItem("< Main"))
-				wndOpen = WO_Main;
-
-			auto MenuWnd = [&](auto wnd)
-			{
-				if (MenuItem(wndConst[wnd].title.c_str()))  wndOpen = wnd;
-			};
-
-			if (BeginMenu("File"))
-			{
-				if (MenuItem("Insert files.."))  OpenDirFile(true);
-				if (MenuItem("Insert dir.."))   OpenDirFile(false);
-				EndMenu();
-			}
-			if (BeginMenu("Player"))
-			{
-				MenuWnd(WO_AppView);
-				MenuWnd(WO_AppVis);
-
-				MenuWnd(WO_AppAudio);
-				MenuWnd(WO_AppKeys);
-				MenuWnd(WO_AppAbout);
-				EndMenu();
-			}
-			if (BeginMenu("Tabs"))
-			{
-				MenuWnd(WO_PlsTab);
-				MenuWnd(WO_AppTabs);
-				EndMenu();
-			}
-			if (BeginMenu("Playlist"))
-			{
-				MenuWnd(WO_PlsFind);
-				MenuWnd(WO_PlsFilter);
-				MenuWnd(WO_AppStats);
-				MenuWnd(WO_AppTest);
-				EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-		Sep(5);
-
-		switch (i)
-		{
-		case WO_AppView:	WndDraw_AppView();  break;
-		case WO_AppVis:		WndDraw_AppVis();  break;
-		case WO_AppAudio:	WndDraw_AppAudio();  break;
-		case WO_AppKeys:	WndDraw_AppKeys();  break;
-
-		case WO_PlsTab:		WndDraw_PlsTab();  break;
-		case WO_AppTabs:	WndDraw_AppTabs();  break;
-
-		case WO_PlsFind:	WndDraw_PlsFind();  break;
-		case WO_PlsFilter:	WndDraw_PlsFilter();  break;
-		case WO_AppStats:	WndDraw_AppStats();  break;
-		case WO_AppTest:	WndDraw_AppTest();  break;
-
-		case WO_AppAbout:   WndDraw_AppAbout();  break;
-		case WO_Main:		WndDraw_Main();  break;
-		}
-
-		End();
-
-		wnd->clear();
-		ImGui::SFML::Render(*wnd.get());
-	
-		wnd->display();
-	}
-	if (wndOpen != WO_All)
-	{
-		WndOpen(wndOpen);
-		wndOpen = WO_All;
 	}
 }

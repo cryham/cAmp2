@@ -178,12 +178,12 @@ void App::UpdDim()
 
 	//  visualization
 	bool noVis = v.vis.eType == VisT_None;
-	yB_vis = v.FontH(Fnt_TimeBig) + 5;
+	yB_vis = v.FontH(Fnt_TimeBig) - 3;
 	yE_vis = min(v.wnd.ySize,
 		yB_vis + (noVis ? v.FontH(Fnt_Player) + 5 : v.vis.yH) );
 	
 	//  pos bar
-	yB_pos = yE_vis;  yE_pos = yB_pos + 9;
+	yB_pos = yE_vis;  yE_pos = yB_pos + 11;  //par
 	xW_pos = 0.03f;
 
 	//  playlist tabs
@@ -284,4 +284,16 @@ int App::RenameRate(bool allPls)
 	else
 		all += Pls().RenameRate(plsId == plsPlId && audio->IsPlaying());
 	return all;
+}
+
+//  util
+void App::OpenBrowserUrl(std::string url)
+{
+#ifdef WIN32
+	string cmd = "system ";
+#else
+	string cmd = "xdg-open ";
+#endif
+	string s = cmd + url;
+	system(s.c_str());
 }

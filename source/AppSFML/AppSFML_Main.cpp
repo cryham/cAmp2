@@ -87,7 +87,7 @@ bool AppSFMLDraw::LoadFonts()
 {
 	string data = FileSystem::Data(), file;
 	
-	for (int i=0; i < Fnt_All; ++i)
+	for (int i=0; i < Fnt_ALL; ++i)
 	{
 		auto& f = set.view.fnt.fnt[i];
 		file = data + "/" + f.name;

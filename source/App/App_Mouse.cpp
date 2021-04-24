@@ -150,9 +150,9 @@ void App::MouseUpdate()
 		
 		if (ym > yB_tabs && ym < yE_tabs)
 			if (xm > xBtnUpDn)
-				WndOpen(WO_AppTabs, false);
+				WndOpen(WO_TabsAll, false);
 			else  // set cur tab ..
-				WndOpen(WO_PlsTab, false);
+				WndOpen(WO_Tab, false);
 
 		if (ym > yB_pl_inf && ym < yB_pl)
 			if (xm > xM_pl_filt - 21 && xm < xM_pl_filt + 21)
@@ -161,7 +161,7 @@ void App::MouseUpdate()
 				WndOpen(WO_AppStats, false);
 
 		if (ym > yB_pl && xm > xw - xWex_plS)
-			WndOpen(WO_AppView, false);
+			WndOpen(WO_View, false);
 		// main, find, vis ..?
 	}
 

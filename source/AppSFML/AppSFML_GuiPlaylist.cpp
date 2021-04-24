@@ -43,6 +43,7 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	if (e)  Find();
 }
 
+
 //  Pls Filter
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_PlsFilter()
@@ -63,67 +64,42 @@ void AppSFMLDraw::WndDraw_PlsFilter()
 }
 
 
+//  App Stats
 //------------------------------------------------------------------
-///  Pls Tab
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_PlsTab()
+void AppSFMLDraw::WndDraw_PlsStats()
 {
-	bool e;  string s;  int i;
-	static char t[1024]={0};
-
-	strcpy(t, Pls().name.c_str());  TextG("Name:");
-	PushItemWidth(300);  WndFocus();
-	e = InputText("Tbn", t, sizeof(t));
-	if (e) {  Pls().name = t;  Redraw();  }
-
+	bool e;  string s;
 	Sep(10);
-	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s);
-	e = SliderInt("Tbk", &i, 0, 6, "");
-	if (e) {  Pls().bookm = i;  Redraw();  }
+	e = Checkbox("All playlists", &bAllStats);  if (e) Redraw();
+	e = Checkbox("Full unfiltered", &bFullStats);  if (e) Redraw();
 	
-	Sep(10);  // h,s,v
-	float hsv[3] = {Pls().hue, Pls().sat, Pls().val};
-	e = ColorPicker3("Color", hsv, ImGuiColorEditFlags_PickerHueBar|ImGuiColorEditFlags_InputHSV);
-	if (e) {  Pls().hue = hsv[0];  Pls().sat = hsv[1];  Pls().val = hsv[2];  Pls().UpdateColor();  }
-	PopItemWidth();
-}
-
-
-//  App Tabs
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppTabs()
-{
-	bool e;  string s;  int i;
-	auto& t = set.view.tabs;
-
-	PushItemWidth(300);  
-	i = t.xCols;  s = "Columns: " + i2s(i);  TextG(s);  WndFocus();
-	e = SliderInt("Tbx", &i, 1, 30, "");
-	if (e) {  t.xCols = i;  UpdDim();  }
-	
-	i = t.yRows;  s = "Rows: " + i2s(i);  TextG(s);
-	e = SliderInt("Tby", &i, 1, 30, "");
-	if (e) {  t.yRows = i;  UpdDim();  }
-
-	i = t.ofs;  s = "offset: " + i2s(i);  TextG(s);
-	e = SliderInt("Tbo", &i, 0, vPls.size()-1, "");
-	if (e) {  t.ofs = i;  Redraw();  }
-
-	auto fp = [](int i){  return f2s(100.f*i/16.f,0,3) + " %%";  };
+	//  write stats
 	Sep(10);
-	i = set.dimTabBck;  s = "Dim background: " + fp(i);  TextG(s);
-	e = SliderInt("Tdb", &i, 1, 16, "");
-	if (e) {  set.dimTabBck = i;  Redraw();  }
-
-	i = set.dimTabTxt;  s = "Dim text: " + fp(i);  TextG(s);
-	e = SliderInt("Tdt", &i, 1, 16, "");
-	if (e) {  set.dimTabTxt = i;  Redraw();  }
-	PopItemWidth();
-
-/*	set.view.pls.xW_plS  todo: ...
-	set.view.pls.bSlDrawR
-	set.view.fnt.Fy = 17;  /// pls font size+
-*/
-//  app dim?
-//	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
+	uint di, fi, si, tm;
+	const Stats& ful = bAllStats ?
+					allFull : Pls().stAll;
+	const Stats& st = bAllStats ?
+		bFullStats ? allFull : all :
+		bFullStats ? Pls().stAll : Pls().stats;
+	di = st.GetDirs();
+	fi = st.GetFiles();
+	si = st.GetSize() / 1000000;
+	tm = st.GetTime();
+	if (bFullStats || ful.GetFiles() == 0)
+	{
+		s = " Dirs:  "+i2s(di);    TextG(s);
+		s = "Files:  "+i2s(fi);    TextG(s);
+		s = " Size:  "+size2s(si); TextG(s);
+		s = "Time:  "+time2s(tm);  TextG(s);
+	}else
+	{	float Fdi, Ffi, Fsi, Ftm;  // %
+		Fdi = 100.f * di / ful.GetDirs();
+		Ffi = 100.f * fi / ful.GetFiles();
+		Fsi = 100.f * si /(ful.GetSize() / 1000000);
+		Ftm = 100.f * tm / ful.GetTime();
+		s = " Dirs:  "+i2s(di);    TextG(s);  SameLine(200);  s = f2s(Fdi,2,5)+" %%";  TextG(s);
+		s = "Files:  "+i2s(fi);    TextG(s);  SameLine(200);  s = f2s(Ffi,2,5)+" %%";  TextG(s);
+		s = " Size:  "+size2s(si); TextG(s);  SameLine(200);  s = f2s(Fsi,2,5)+" %%";  TextG(s);
+		s = "Time:  "+time2s(tm);  TextG(s);  SameLine(200);  s = f2s(Ftm,2,5)+" %%";  TextG(s);
+	}
 }

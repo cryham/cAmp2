@@ -54,7 +54,7 @@ void Settings::Default()
 //  cycle dir view modes  /
 void Settings::NextDirView(int i)
 {
-	int dv = ((int)eDirView + i + DirV_All) % DirV_All;
+	int dv = ((int)eDirView + i + DirV_ALL) % DirV_ALL;
 	eDirView = (EDirView)dv;
 }
 

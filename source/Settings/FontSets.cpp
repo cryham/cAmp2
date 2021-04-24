@@ -9,7 +9,7 @@ SFontSet::SFontSet()
 void SFontSet::Default()
 {
 	name = "default";
-	for (int i=0; i < Fnt_All; ++i)
+	for (int i=0; i < Fnt_ALL; ++i)
 	{
 		auto&f = fnt[i];
 		f.name =

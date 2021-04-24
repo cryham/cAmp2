@@ -1,24 +1,79 @@
 #pragma once
 
 
-enum EFont  // for different fonts, sizes
-{	Fnt_Player, Fnt_TimeBig,  // player
+enum EWndOpt  // options windows  . . . . . . . . 
+{
+	WO_Main, // unused
+	WO_AppAudio, WO_AppKeys, WO_AppAbout, WO_AppHelp,
+	WO_View, WO_ViewFonts, WO_Vis, WO_VisThemes, WO_ViewTimes, 
+	WO_Tab, WO_TabsAll,
+	WO_PlsFind, WO_PlsFilter, WO_AppStats, WO_AppTest, 
+	// note: add new at end and to EAction too
+	// note: add new also to  wndConst[WO_ALL] =
+	// todo: WO_AppHotKeys, global
+	WO_ALL
+};
+
+enum EFont  // for different fonts, sizes  . . . . . .
+{
+	Fnt_Player, Fnt_TimeBig,  // player
 	Fnt_Tabs,
 	Fnt_Tracks, Fnt_Times,  // playlist
 	// add new here..
-	Fnt_All
+	Fnt_ALL
 };
-const static char* csFonts[Fnt_All] =
+const static char* csFonts[Fnt_ALL] =
 {
 	"Player Info", "Player Times Big",
 	"Tabs",
 	"Playlist Tracks", "Playlist Times",
 };
 
+
+//  visualizations  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+enum EVisType
+{
+	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect,
+	VisT_ALL
+};
+const static char* csVisType[VisT_ALL] =
+{	"None", "FFT", "Oscilloscope", "Spectrogram" };
+
+enum SpectType
+{
+	SpcT_VerticalDown, SpcT_HorizRight, SpcT_VerticalUpFFT,
+	SpcT_ALL
+};
+const static char* csSpectType[SpcT_ALL] =
+{	"Vertical Down", "Horizontal Right", "Vertical Up with FFT"  };
+
+
+//  path view modes  . . . . . .
+enum EDirView
+{
+	DirV_Fullpath, DirV_Path, DirV_Path2, DirV_Path3, /*DirV_None,*/
+	DirV_ALL
+};
+const static char* csDirView[DirV_ALL] =
+{
+	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
+};
+
+//  times test  . . . . . .
+enum ETimeTest
+{
+	TimT_Off, TimT_Short, TimT_Long, TimT_Huge,
+	TimT_ALL
+};
+const static char* csTimesTest[TimT_ALL] =
+{	"off", "short", "long", "huge"  };
+
+
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 enum ETexUV  // textures in player.png
 {
 	TX_Prev=0, TX_Next, TX_Up, TX_Dn,  // buttons
-	TX_Checks, TX_LeRi,
+	TX_Checks, TX_LeRi,  // _\unused
 	TX_PosBr, TX_PosDk,  // pos bar
 
 	TX_TabCur, TX_TabPlay, TX_TabSel,  // Cur,Play,Sel, Find,Bookm
@@ -43,42 +98,3 @@ struct STexUV
 	int w,h, x,y;
 };
 extern const STexUV ciTexUV[TX_ALL+1];
-
-
-//  path view modes
-enum EDirView
-{
-	DirV_Fullpath, DirV_Path, DirV_Path2, DirV_Path3, /*DirV_None,*/
-	DirV_All
-};
-const static char* csDirView[DirV_All] =
-{
-	"Full path", "Path", "Path / Parent", "Path / Parent / Parent2", /*"None"*/
-};
-
-//  times test
-enum ETimeTest
-{	TimT_Off, TimT_Short, TimT_Long, TimT_Huge,
-	TimT_All
-};
-const static char* csTimesTest[TimT_All] =
-{	"off", "short", "long", "huge"  };
-
-
-//  visualizations  ~ ~ ~
-enum EVisType
-{
-	VisT_None, VisT_FFT, VisT_Osc, VisT_Spect,
-	VisT_ALL
-};
-const static char* csVisType[VisT_ALL] =
-{	"None", "FFT", "Oscilloscope", "Spectrogram" };
-
-enum SpectType
-{
-	SpcT_VerticalDown, SpcT_HorizRight, SpcT_VerticalUpFFT,
-	SpcT_ALL
-};
-const static char* csSpectType[SpcT_ALL] =
-{	"Vertical Down", "Horizontal Right", "Vertical Up with FFT"  };
-

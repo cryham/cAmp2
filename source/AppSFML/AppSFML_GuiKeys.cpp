@@ -78,14 +78,14 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		}
 	}
 	
-	static ImGuiTableFlags flags =
+	const auto tbfl =
 		ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable
 		| ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoBordersInBody
 		| ImGuiTableFlags_ScrollY;
 	
-	const auto fl = ImGuiTableColumnFlags_WidthFixed;
-	if (BeginTable("table_sorting", 4, flags))
+	if (BeginTable("KeyBinds", 4, tbfl))
 	{
+		const auto fl = ImGuiTableColumnFlags_WidthFixed;
 		TableSetupColumn("N", ImGuiTableColumnFlags_DefaultSort | fl, 0.f, Col_ID);
 		TableSetupColumn("Name",      fl, 0.f, Col_Name);
 		TableSetupColumn("Shortcuts", fl, 0.f, Col_Keys);

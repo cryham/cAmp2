@@ -270,7 +270,7 @@ bool Themes::Save() const
 		e = xml.NewElement("FontSet");
 		e->SetAttribute("name", fs.name.c_str());
 		
-		for (i=0; i < Fnt_All; ++i)
+		for (i=0; i < Fnt_ALL; ++i)
 		{
 			const auto& f = fs.fnt[i];
 			p = xml.NewElement("font");

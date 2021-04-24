@@ -18,7 +18,7 @@ struct SFontSet
 {
 	std::string name = "";
 
-	SFont fnt[Fnt_All];
+	SFont fnt[Fnt_ALL];
 	
 	SFontSet();
 	void Default();

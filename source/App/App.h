@@ -78,16 +78,6 @@ protected:
 	void NextVisual();
 	void ApplyThemes();  // fill vis clr, by id from xml
 
-	enum EWndOpt  // options windows
-	{
-		WO_AppView, WO_AppVis, WO_AppAudio, WO_AppKeys, 
-		WO_PlsTab, WO_AppTabs,
-		WO_PlsFind, WO_PlsFilter, WO_AppStats, WO_AppTest, 
-		WO_AppAbout, /*WO_Help,*/ WO_Main,
-		// todo: WO_AppHotKeys, WO_AppKeys, global hotkeys, app key binds
-		// todo: theme, time colors,
-		WO_All
-	};
 	virtual void WndOpen(EWndOpt type, bool center = true) = 0;
 
 

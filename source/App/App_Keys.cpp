@@ -115,7 +115,7 @@ void App::NextVis()			{  NextVisual();  }
 //  debug
 void App::Fps()				{  bFps = !bFps;      Osd("Fps: " + b2on(bFps));  }
 void App::Debug()			{  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  }
-void App::Times()			{  ++eTimeTest;  if (eTimeTest >= TimT_All)  eTimeTest = TimT_Off;
+void App::Times()			{  ++eTimeTest;  if (eTimeTest >= TimT_ALL)  eTimeTest = TimT_Off;
 								Osd(string("Time test: ") + csTimesTest[eTimeTest]);  Redraw();  }
 //  view
 #define OsdStats  Osd("Stats  Full: " + b2on(bFullStats) + "  All: " + b2on(bAllStats))
@@ -176,10 +176,10 @@ bool App::KeyDown(Event::KeyEvent k)
 		Redraw();  break;*/
 	
 	//  gui
-	//key(F1):  WndOpen(alt ? WO_PlsFilter : WO_Main);  break;
-	key(F1):  WndOpen(shift ? WO_AppAudio : ctrl ? WO_PlsFilter : alt ? WO_PlsFind : WO_Main);  break;
-	key(F2):  WndOpen(ctrl ? WO_AppTabs : alt ? WO_PlsTab : WO_AppVis);  break;
-	key(F3):  WndOpen(shift ? WO_AppAbout : ctrl ? WO_AppStats : alt ? WO_AppTest : WO_AppView);  break;
+	key(F1):  WndOpen(alt ? WO_AppKeys : WO_Main);  break;
+	//key(F1):  WndOpen(shift ? WO_AppAudio : ctrl ? WO_PlsFilter : alt ? WO_PlsFind : WO_Main);  break;
+	key(F2):  WndOpen(ctrl ? WO_TabsAll : alt ? WO_Tab : WO_Vis);  break;
+	key(F3):  WndOpen(shift ? WO_AppAbout : ctrl ? WO_AppStats : alt ? WO_AppTest : WO_View);  break;
 	// todo: F6..F12
 
 	#undef key

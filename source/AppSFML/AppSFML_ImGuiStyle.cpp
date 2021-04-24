@@ -26,9 +26,9 @@ void AppSFMLDraw::SetupGuiStyle()
 	colors[ImGuiCol_PopupBg]                = ImVec4(0.05f, 0.05f, 0.10f, 0.82f);
 	colors[ImGuiCol_Border]                 = ImVec4(0.23f, 0.23f, 0.35f, 0.51f);
 	colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	colors[ImGuiCol_FrameBg]                = ImVec4(0.80f, 0.83f, 1.00f, 0.06f);//
-	colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.80f, 0.83f, 1.00f, 0.09f);
-	colors[ImGuiCol_FrameBgActive]          = ImVec4(0.80f, 0.83f, 1.00f, 0.09f);
+	colors[ImGuiCol_FrameBg]                = ImVec4(0.80f, 0.83f, 1.00f, 0.10f);//
+	colors[ImGuiCol_FrameBgHovered]         = ImVec4(0.80f, 0.83f, 1.00f, 0.15f);
+	colors[ImGuiCol_FrameBgActive]          = ImVec4(0.80f, 0.83f, 1.00f, 0.19f);
 	colors[ImGuiCol_TitleBg]                = ImVec4(0.27f, 0.27f, 0.54f, 0.61f);
 	colors[ImGuiCol_TitleBgActive]          = ImVec4(0.32f, 0.32f, 0.63f, 0.89f);
 	colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(0.40f, 0.40f, 0.80f, 0.45f);
