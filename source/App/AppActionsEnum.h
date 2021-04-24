@@ -54,12 +54,22 @@ enum EAction
 	//  insert, delete
 	Act_InsertDir, Act_InsertFiles,
 	Act_ClearPls, Act_DeleteCurFile, Act_DeleteCur,
+
+	// note: add new here for bindings in xml to work ..
 	
-//	Act_WndMain=1000, Act_WndPlsFilter, 
-//	Act_WndAppAudio, Act_WndPlsFilter, Act_WndPlsFind, Act_WndMain
-//	Act_WndAppTabs : alt ? Act_WndPlsTab : Act_WndAppVis);  break;
-//	Act_WndAppAbout : ctrl ? Act_WndAppStats : alt ? Act_WndAppTest : Act_WndAppView);  break;
-	// load, save views
+	///  gui wnd   same as in EWndOpt  . . . . . . 
+	Act_WO_Main=500,
+	Act_WO_AppAudio, Act_WO_AppKeys, Act_WO_AppAbout, Act_WO_AppHelp,
+	Act_WO_View, Act_WO_ViewFonts, Act_WO_Vis, Act_WO_VisThemes, Act_WO_ViewTimes, 
+	Act_WO_Tab, Act_WO_TabsAll,
+	Act_WO_PlsFind, Act_WO_PlsFilter, Act_WO_AppStats, Act_WO_AppTest, 
+
+	///  views
+	Act_SaveCurView=699,
+	Act_LoadView0=700, Act_LoadView1, Act_LoadView2, Act_LoadView3, Act_LoadView4,
+	Act_LoadView5, Act_LoadView6, Act_LoadView7, Act_LoadView8, Act_LoadView9,
+	Act_LoadView10, Act_LoadView11, Act_LoadView12, Act_LoadView13, Act_LoadView14,
+	Act_LoadView15, Act_LoadView16, Act_LoadView17, Act_LoadView18,	Act_LoadView19,
 
 	Act_All
 };

@@ -15,7 +15,7 @@ enum EColID
     Col_ID, Col_Name, Col_Keys
 };
 
-struct MyItem
+struct KeysItem  // for gui list
 {
     int ID;
     string Name;
@@ -23,8 +23,7 @@ struct MyItem
 
     static const ImGuiTableSortSpecs* sortSpecs;
 
-    // Compare function to be used by qsort()
-    static bool Compare(const MyItem& a, const MyItem& b)
+    static bool Compare(const KeysItem& a, const KeysItem& b)
     {
 		const ImGuiTableColumnSortSpecs* sort_spec = &sortSpecs->Specs[0];
 		if (sort_spec->SortDirection == ImGuiSortDirection_Ascending)
@@ -43,22 +42,22 @@ struct MyItem
 		return a.ID < b.ID;
     }
 };
-const ImGuiTableSortSpecs* MyItem::sortSpecs = NULL;
+const ImGuiTableSortSpecs* KeysItem::sortSpecs = NULL;
 
 
 //  Keys
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppKeys()
 {
-	// Create item list
-	static vector<MyItem> items;
+	//  Create item list
+	static vector<KeysItem> items;
 	if (items.size() == 0)
 	{
-		items.resize(act->names.size(), MyItem());
+		items.resize(act->names.size(), KeysItem());
 		int n = 0;
 		for (auto& a : act->names)
 		{
-			MyItem& item = items[n];
+			KeysItem& item = items[n];
 			auto aid = a.first;  // enum Act_
 			item.ID = aid;
 			item.Name = a.second;
@@ -96,23 +95,34 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		if (ImGuiTableSortSpecs* sorts_specs = TableGetSortSpecs())
 			if (sorts_specs->SpecsDirty)
 			{
-				MyItem::sortSpecs = sorts_specs;
+				KeysItem::sortSpecs = sorts_specs;
 				if (items.size() > 1)
-					stable_sort(items.begin(), items.end(), MyItem::Compare);
-				MyItem::sortSpecs = NULL;
+					stable_sort(items.begin(), items.end(), KeysItem::Compare);
+				KeysItem::sortSpecs = NULL;
 				sorts_specs->SpecsDirty = false;
 			}
 
-		ImGuiListClipper clipper;
+		/*ImGuiListClipper clipper;
 		clipper.Begin(items.size());
 		while (clipper.Step())
-			for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; ++row)
+			for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; ++row)*/
+		for (int row = 0; row < items.size(); ++row)
 			{
 				//  display item
-				MyItem* item = &items[row];
+				KeysItem* item = &items[row];
+				std::string grp = act->groups[(EAction)item->ID];
+				if (!grp.empty())
+				{
+					TableNextRow();
+					TableNextColumn();
+					ImU32 bg = GetColorU32(ImVec4(0.10f, 0.16f, 0.22f, 0.65f));
+                    TableSetBgColor(ImGuiTableBgTarget_RowBg0, bg);
+					TableNextColumn();  TextColored(ImVec4(0.6f, 0.8f, 1.0f, 1.f), grp.c_str());
+					TableNextColumn();  Separator();
+				}
 				PushID(item->ID);
 				TableNextRow();
-				TableNextColumn();  TextG(i2s(item->ID, 2,'0'));				
+				TableNextColumn();  TextG(i2s(item->ID, 3,'0'));
 				TableNextColumn();  TextUnformatted(item->Name.c_str());
 				TableNextColumn();  TextG(item->Keys);
 				//TableNextColumn();  SmallButton("Add Remove");

@@ -19,17 +19,17 @@ void AppSFMLDraw::WndDraw_Vis()
 	//  view name edit
 	TextG("View name: ");  SameLine(xSlider);
 	static char ed[1024]={0};
-	auto& ss = set.views[iLastView].name;
+	auto& ss = set.views[set.iLastView].name;
 	strcpy(ed, ss.c_str());  WndFocus();
 	PushItemWidth(x);  e = InputText("View name", ed, sizeof(ed));  PopItemWidth();
 	if (e)  ss = ed;
 
-	SameLine(xSlider+x+30);		if (Button("Load"))  UpdateView(true, iLastView);
-	SameLine(xSlider+x+150);	if (Button("Save"))  UpdateView(false, iLastView);
+	SameLine(xSlider+x+30);		if (Button("Load"))  UpdateView(true, set.iLastView);
+	SameLine(xSlider+x+150);	if (Button("Save"))  UpdateView(false, set.iLastView);
 	
 	//  view num
 	PushItemWidth(650);
-	SliderI(iLastView, 0, Settings::cMaxViews-1, "View number: ", "vwNum");
+	SliderI(set.iLastView, 0, Settings::cMaxViews-1, "View number: ", "vwNum");
 	
 	Sep(10);
 	if (SliderI(v.eType, 0, VisT_ALL-1, string("Type: "), "visT", csVisType[v.eType]))

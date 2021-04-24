@@ -207,7 +207,7 @@ void AppSFMLDraw::CreateWindow()
 void AppSFMLDraw::UpdateView(bool load, int v)
 {
 	if (v >= Settings::cMaxViews)  return;
-	iLastView = v;
+	set.iLastView = v;
 	if (load)
 	{
 		set.view = set.views[v];  // load preset

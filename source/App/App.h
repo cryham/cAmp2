@@ -63,6 +63,7 @@ protected:
 	//  File Operations
 	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
 	int RenameRate(bool allPls=false);
+	void OpenBrowserUrl(std::string url);
 	
 	
 	///  Input
@@ -153,7 +154,8 @@ protected:
 	// todo:? struct Area xB,yB..  class Dimensions
 
 	
-protected:  //  actions
+protected:  //  actions for key binds
+	//------------------------------------------------------------------------------------------------
 	friend class ActionsMap;
 	
 	void
@@ -195,6 +197,15 @@ protected:  //  actions
 	SaveAll(), ReloadPls(),
 	
 	InsertDir(), InsertFiles(),
-	ClearPls(), DeleteCurFile(), DeleteCur();
+	ClearPls(), DeleteCurFile(), DeleteCur(),
 
+	GUIMain(), GUIAppAudio(), GUIAppKeys(),	GUIAppAbout(), GUIAppHelp(),
+	GUIView(), GUIViewFonts(), GUIVis(), GUIVisThemes(), GUIViewTimes(),
+	GUITab(), GUITabsAll(), GUIPlsFind(), GUIPlsFilter(), GUIAppStats(), GUIAppTest(),
+	
+	SaveCurView(),
+	LoadCurView0(),	LoadCurView1(),	LoadCurView2(),	LoadCurView3(),	LoadCurView4(),
+	LoadCurView5(),	LoadCurView6(),	LoadCurView7(),	LoadCurView8(),	LoadCurView9(),
+	LoadCurView10(), LoadCurView11(), LoadCurView12(), LoadCurView13(), LoadCurView14(),
+	LoadCurView15(), LoadCurView16(), LoadCurView17(), LoadCurView18(), LoadCurView19();
 };

@@ -148,6 +148,51 @@ void App::DeleteCurFile()	{  if (Pls().DeleteCurFile(plsId == plsPlId))  Osd("Fi
 void App::DeleteCur()		{  Pls().DeleteCur();  }
 
 
+///  gui wnd
+void App::GUIMain()         {  WndOpen(WO_Main);  }
+void App::GUIAppAudio()     {  WndOpen(WO_AppAudio);  }
+void App::GUIAppKeys()      {  WndOpen(WO_AppKeys);   }
+void App::GUIAppAbout()     {  WndOpen(WO_AppAbout);  }
+void App::GUIAppHelp()      {  WndOpen(WO_AppHelp);   }
+
+void App::GUIView()         {  WndOpen(WO_View);  }
+void App::GUIViewFonts()    {  WndOpen(WO_ViewFonts);  }
+void App::GUIVis()          {  WndOpen(WO_Vis);  }
+void App::GUIVisThemes()    {  WndOpen(WO_VisThemes);  }
+void App::GUIViewTimes()    {  WndOpen(WO_ViewTimes);  }
+
+void App::GUITab()          {  WndOpen(WO_Tab);  }
+void App::GUITabsAll()      {  WndOpen(WO_TabsAll);  }
+
+void App::GUIPlsFind()      {  WndOpen(WO_PlsFind);  }
+void App::GUIPlsFilter()    {  WndOpen(WO_PlsFilter);  }
+void App::GUIAppStats()     {  WndOpen(WO_AppStats);  }
+void App::GUIAppTest()      {  WndOpen(WO_AppTest);  }
+
+
+///  views
+void App::SaveCurView()     {  UpdateView(false, set.iLastView);  }
+void App::LoadCurView0()    {  UpdateView(true, 0);  }
+void App::LoadCurView1()    {  UpdateView(true, 1);  }
+void App::LoadCurView2()    {  UpdateView(true, 2);  }
+void App::LoadCurView3()    {  UpdateView(true, 3);  }
+void App::LoadCurView4()    {  UpdateView(true, 4);  }
+void App::LoadCurView5()    {  UpdateView(true, 5);  }
+void App::LoadCurView6()    {  UpdateView(true, 6);  }
+void App::LoadCurView7()    {  UpdateView(true, 7);  }
+void App::LoadCurView8()    {  UpdateView(true, 8);  }
+void App::LoadCurView9()    {  UpdateView(true, 9);  }
+void App::LoadCurView10()   {  UpdateView(true, 10);  }
+void App::LoadCurView11()   {  UpdateView(true, 11);  }
+void App::LoadCurView12()   {  UpdateView(true, 12);  }
+void App::LoadCurView13()   {  UpdateView(true, 13);  }
+void App::LoadCurView14()   {  UpdateView(true, 14);  }
+void App::LoadCurView15()   {  UpdateView(true, 15);  }
+void App::LoadCurView16()   {  UpdateView(true, 16);  }
+void App::LoadCurView17()   {  UpdateView(true, 17);  }
+void App::LoadCurView18()   {  UpdateView(true, 18);  }
+void App::LoadCurView19()   {  UpdateView(true, 19);  }
+
 
 //  Key press commands
 //------------------------------------------------------------------------------------------------------------
@@ -156,43 +201,16 @@ bool App::KeyDown(Event::KeyEvent k)
 {
 	act->Check(ModsKey(shift,ctrl,alt, k.code));
 	
-	bool modView = ctrl || alt;
-
-	//  views load,save
-	if (k.code >= Keyboard::Num0 && k.code <= Keyboard::Num9 && modView)
-	{
-		int v = k.code - Keyboard::Num0;
-		if (shift)  v += 10;
-		UpdateView(alt, v);
-	}
-	else
-	switch (k.code)
-	{
-	#define key(k)  case Keyboard::k
-	
-
-/*	key(Backslash):  // bookmark
-		Pls().Bookm(alt, ctrl||shift ? -1 : 1);
-		Redraw();  break;*/
-	
-	//  gui
-	key(F1):  WndOpen(alt ? WO_AppKeys : WO_Main);  break;
-	//key(F1):  WndOpen(shift ? WO_AppAudio : ctrl ? WO_PlsFilter : alt ? WO_PlsFind : WO_Main);  break;
-	key(F2):  WndOpen(ctrl ? WO_TabsAll : alt ? WO_Tab : WO_Vis);  break;
-	key(F3):  WndOpen(shift ? WO_AppAbout : ctrl ? WO_AppStats : alt ? WO_AppTest : WO_View);  break;
-	// todo: F6..F12
-
-	#undef key
-	default:  break;
-	}
 	return true;
 }
 
 void App::Save()
-{	// todo: autosave
+{
+	// todo: autosave
 	int r = 0;  r = RenameRate(!shift);
 	Pls().Save();  SaveState();  set.Save();
-	string s = "Saved all.";  if (r)  s += "  Renamed: "+i2s(r);
+	string s = "Saved all.";
+	if (r)  s += "  Renamed: "+i2s(r);
 	Osd(s);
 }
 

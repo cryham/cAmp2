@@ -46,6 +46,7 @@ void AppSFMLDraw::WndDraw_View()
 	xSlider = 0;
 }
 
+
 //  Fonts
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_ViewFonts()
@@ -71,6 +72,7 @@ void AppSFMLDraw::WndDraw_ViewFonts()
 
 	xSlider = 0;
 }
+
 
 //  Times
 //------------------------------------------------------------------

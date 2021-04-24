@@ -41,6 +41,7 @@ void Settings::Default()
 	escQuit = false;
 	bFileInfo = false;
 	eDirView = DirV_Path;
+	iLastView = 1;
 
 	cntrPls = 1;
 	vSetPls.clear();
@@ -101,6 +102,7 @@ bool Settings::Load()
 	e = root->FirstChildElement("appView");
 	if (e)
 	{
+		a = e->Attribute("last");  if (a)  iLastView = s2i(a);
 		a = e->Attribute("dirView");  if (a)  eDirView = (EDirView)s2i(a);
 		a = e->Attribute("tbBck");  if (a)  dimTabBck = s2i(a);
 		a = e->Attribute("tbTxt");  if (a)  dimTabTxt = s2i(a);
@@ -180,6 +182,7 @@ bool Settings::Save() const
 
 	//  app view
 	e = xml.NewElement("appView");
+		e->SetAttribute("last", iLastView);
 		e->SetAttribute("dirView", eDirView);
 		e->SetAttribute("tbBck", dimTabBck);
 		e->SetAttribute("tbTxt", dimTabTxt);

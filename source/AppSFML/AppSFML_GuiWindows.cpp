@@ -12,7 +12,7 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 	{"Main", "All Options", 420,400},
 
 	{"Player", "Audio", 600,350},
-	{"Player", "Keyboard", 600,750},
+	{"Player", "Keyboard", 750,850},
 	{"Player", "About", 600,400},
 	{"Player", "Help", 600,750},
 
@@ -115,7 +115,8 @@ void AppSFMLDraw::WndMainMenu()
 			MenuWnd(WO_AppKeys);
 			Separator();
 			MenuWnd(WO_AppAbout);
-			//MenuWnd(WO_AppHelp);
+			MenuWnd(WO_AppHelp);
+			MenuWnd(WO_Main);
 			EndMenu();
 		}
 		if (BeginMenu("View"))

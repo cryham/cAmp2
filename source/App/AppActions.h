@@ -22,16 +22,18 @@ class ActionsMap
 {
 public:
 	App* pApp = nullptr;
-	std::map<EAction, std::string> names;  // for Gui
-	std::map<EAction, AppMethod> methods;  // const
+	std::map<EAction, std::string> names;   // const, for Gui
+	std::map<EAction, std::string> groups;  // 
+	std::map<EAction, AppMethod> methods;   // 
 	
 	std::map<TModsKey, EAction> bindings;  // var key binds
 
 	static const char* csKeyNames[sf::Keyboard::KeyCount];
 	static std::string StrKey(TModsKey mkey);
 	
-	void FillNames();
+	void FillNames(), FillGroupNames();
 	void FillMethods();
+
 public:	
 	ActionsMap(App* app);
 	

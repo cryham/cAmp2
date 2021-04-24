@@ -31,7 +31,6 @@ protected:
 	const static int ciMaxScreenX = 8192;
 
 	//  Views
-	int iLastView = 0;
 	void UpdateView(bool load, int v) override;
 	void SetViewFromWnd();  // after resize and before save
 	

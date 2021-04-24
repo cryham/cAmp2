@@ -47,6 +47,7 @@ public:
 
 	//  views  -----
 	const static int cMaxViews = 20;
+	int iLastView = 1;
 	ViewSet view, views[cMaxViews];
 
 	

@@ -8,6 +8,7 @@ ActionsMap::ActionsMap(App* app)
 	:pApp(app)
 {
 	FillNames();
+	FillGroupNames();
 	FillMethods();
 	DefaultBindings();
 }
@@ -191,4 +192,28 @@ void ActionsMap::DefaultBindings()
 	Bind(0,1,0, key(Delete), Act_ClearPls);
 	Bind(1,0,0, key(Delete), Act_DeleteCurFile);
 	Bind(0,0,0, key(Delete), Act_DeleteCur);
+
+
+	///  gui wnd
+	Bind(0,0,0, key(F1), Act_WO_Main);
+	Bind(0,0,0, key(F2), Act_WO_View);
+	Bind(0,0,0, key(F3), Act_WO_Vis);
+
+	Bind(0,0,1, key(F1), Act_WO_PlsFind);
+	Bind(0,0,1, key(F2), Act_WO_Tab);
+	Bind(0,0,1, key(F3), Act_WO_AppStats);
+	
+	
+	///  views
+	Bind(0,1,0, key(Num1), Act_SaveCurView);
+	Bind(0,0,1, key(Num0), Act_LoadView0);  Bind(1,0,1, key(Num0), Act_LoadView10);
+	Bind(0,0,1, key(Num1), Act_LoadView1);  Bind(1,0,1, key(Num1), Act_LoadView11);
+	Bind(0,0,1, key(Num2), Act_LoadView2);  Bind(1,0,1, key(Num2), Act_LoadView12);
+	Bind(0,0,1, key(Num3), Act_LoadView3);  Bind(1,0,1, key(Num3), Act_LoadView13);
+	Bind(0,0,1, key(Num4), Act_LoadView4);  Bind(1,0,1, key(Num4), Act_LoadView14);
+	Bind(0,0,1, key(Num5), Act_LoadView5);  Bind(1,0,1, key(Num5), Act_LoadView15);
+	Bind(0,0,1, key(Num6), Act_LoadView6);  Bind(1,0,1, key(Num6), Act_LoadView16);
+	Bind(0,0,1, key(Num7), Act_LoadView7);  Bind(1,0,1, key(Num7), Act_LoadView17);
+	Bind(0,0,1, key(Num8), Act_LoadView8);  Bind(1,0,1, key(Num8), Act_LoadView18);
+	Bind(0,0,1, key(Num9), Act_LoadView9);  Bind(1,0,1, key(Num9), Act_LoadView19);
 }
