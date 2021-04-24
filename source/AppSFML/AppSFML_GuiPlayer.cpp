@@ -20,110 +20,13 @@ void AppSFMLDraw::WndDraw_Main()
 	PushItemWidth(300);
 	for (int i=0; i < WO_Main; ++i)
 	{
-		if (i==WO_PlsTab || i==WO_PlsFind || i==WO_AppAbout)
+		if (i==WO_Tab || i==WO_PlsFind || i==WO_AppAbout)
 			Line();
 		bool e = Button(wndConst[i].FullTitle().c_str());
 		if (e)  wndOpen = (EWndOpt)i;  // schedule to open
+		if (i%3)  SameLine();
 	}
 	PopItemWidth();
-}
-
-
-//------------------------------------------------------------------
-//  App View
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppView()
-{
-	bool e;  string s;
-	Checkbox("File Info (from cursor)", &set.bFileInfo);
-	
-	Sep(10);
-	int i = set.eDirView;
-	if (SliderI(i, 0, DirV_All-1, "Dir View: ", "dirv", csDirView[i]))
-	{	set.eDirView = (EDirView)i;  Redraw();  }
-
-	Sep(10);
-	if (Checkbox("Slider draw all ratings", &set.view.sldr.drawRate))  Redraw();
-
-	Sep(5);
-	if (SliderI(set.view.sldr.width, 2, 60, "Slider width: ", "sldW"))  UpdDim();
-
-	Sep(10);  Line();  e = false;
-	
-	TextG("Font sizes:");	xSlider = 200;
-	for (int i=0; i < themes.FontCount(); ++i)
-	{
-		s = themes.GetFontName(i)+"###FntSet"+i2s(i);
-		if (Button(s.c_str()))
-		{
-			themes.curFonts = i;
-			set.view.fontSet = themes.CurFont().name;
-			set.view.fnt = themes.CurFont();
-			LoadFonts();
-			UpdDim();
-		}
-		if (i%3 < 2)  SameLine();  // 3 in row
-	}
-	Sep(5);
-	if (CollapsingHeader("Adjust fonts", ImGuiTreeNodeFlags_DefaultOpen|ImGuiTreeNodeFlags_Framed))
-	{
-		for (int i=0; i < Fnt_All; ++i)
-		{
-			auto& f = set.view.fnt.fnt[i];
-			TextG(csFonts[i]);
-			PushItemWidth(50);
-			s = " + "+i2s(i);  SameLine(200);  if (Button(s.c_str())) {  e = true;  ++f.size;  ++f.height;  }
-			s = " - "+i2s(i);  SameLine(280);  if (Button(s.c_str())) {  e = true;  --f.size;  --f.height;  }
-			PopItemWidth();
-			e |= SliderI(f.size, 1, 40, "  Size: ", "fntS" + i2s(i));
-			if (i == Fnt_Tabs || i == Fnt_Tracks)  // rest unused
-				e |= SliderI(f.lineSpacing, -5, 20, "  Spacing: ", "fntH" + i2s(i));
-		}
-		if (e)
-		{	LoadFonts();  UpdDim();  }
-	}
-	xSlider = 0;
-}
-
-
-//  App Stats
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppStats()
-{
-	bool e;  string s;
-	Sep(10);
-	e = Checkbox("All playlists", &bAllStats);  if (e) Redraw();
-	e = Checkbox("Full unfiltered", &bFullStats);  if (e) Redraw();
-	
-	//  write stats
-	Sep(10);
-	uint di, fi, si, tm;
-	const Stats& ful = bAllStats ?
-					allFull : Pls().stAll;
-	const Stats& st = bAllStats ?
-		bFullStats ? allFull : all :
-		bFullStats ? Pls().stAll : Pls().stats;
-	di = st.GetDirs();
-	fi = st.GetFiles();
-	si = st.GetSize() / 1000000;
-	tm = st.GetTime();
-	if (bFullStats || ful.GetFiles() == 0)
-	{
-		s = " Dirs:  "+i2s(di);    TextG(s);
-		s = "Files:  "+i2s(fi);    TextG(s);
-		s = " Size:  "+size2s(si); TextG(s);
-		s = "Time:  "+time2s(tm);  TextG(s);
-	}else
-	{	float Fdi, Ffi, Fsi, Ftm;  // %
-		Fdi = 100.f * di / ful.GetDirs();
-		Ffi = 100.f * fi / ful.GetFiles();
-		Fsi = 100.f * si /(ful.GetSize() / 1000000);
-		Ftm = 100.f * tm / ful.GetTime();
-		s = " Dirs:  "+i2s(di);    TextG(s);  SameLine(200);  s = f2s(Fdi,2,5)+" %%";  TextG(s);
-		s = "Files:  "+i2s(fi);    TextG(s);  SameLine(200);  s = f2s(Ffi,2,5)+" %%";  TextG(s);
-		s = " Size:  "+size2s(si); TextG(s);  SameLine(200);  s = f2s(Fsi,2,5)+" %%";  TextG(s);
-		s = "Time:  "+time2s(tm);  TextG(s);  SameLine(200);  s = f2s(Ftm,2,5)+" %%";  TextG(s);
-	}
 }
 
 
@@ -165,7 +68,7 @@ void AppSFMLDraw::WndDraw_AppTest()
 	Checkbox("Debug text", &bDebug);
 	
 	Sep(10);
-	if (SliderI(eTimeTest, 0, TimT_All-1,
+	if (SliderI(eTimeTest, 0, TimT_ALL-1,
 			"Time colors: ", "test", csTimesTest[eTimeTest]))
 		Redraw();
 }
@@ -176,21 +79,23 @@ void AppSFMLDraw::WndDraw_AppTest()
 void AppSFMLDraw::WndDraw_AppAbout()
 {
 	Sep(20);
-	TextG("Crystal AMP 2  (cAmp2)");
+	TextColored(ImVec4(0.5f, 0.97f, 1.0f, 1.f), "Crystal AMP 2  (cAmp2)");
 	Sep(10);
-	TextG("by Crystal Hammer");
+	TextColored(ImVec4(0.7f, 0.67f, 1.0f, 1.f), "by Crystal Hammer");
 	Sep(20);
-	TextG("Version: 2.1.0");
+	TextColored(ImVec4(0.8f, 0.9f, 1.0f, 1.f), "Version: 2.1.1");
 	//TextG(Settings::ver);
 	Sep(40);
 	PushItemWidth(400);
-	// todo: open url? or copy..
+
 	TextG("Sources, Issues etc.");
-	TextG("https://github.com/cryham/cAmp2");
-//	auto fl = ImGuiInputTextFlags_ReadOnly;
-//	InputText("Url1", url1, sizeof(url1), fl);
+	auto url1 = "https://github.com/cryham/cAmp2";
+	if (Button(url1))  OpenBrowserUrl(url1);
+
 	Sep(10);
 	TextG("Project description");
-	TextG("http://cryham.tuxfamily.org/portfolio/2010_camp/");
+	auto url2 = "https://cryham.tuxfamily.org/portfolio/2010_camp/";
+	if (Button(url2))  OpenBrowserUrl(url2);
+	
 	PopItemWidth();
 }

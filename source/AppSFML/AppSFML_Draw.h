@@ -42,7 +42,7 @@ protected:
 	PWindow pWindow = nullptr;  // main window
 
 	//  Options windows
-	PWindow vWindows[WO_All] = {nullptr,};
+	PWindow vWindows[WO_ALL] = {nullptr,};
 	struct SWndConst
 	{
 		std::string group = "no group";
@@ -51,10 +51,10 @@ protected:
 		{	return group + " - " + title;  }
 		int width = 400, height = 300;
 	};
-	const static SWndConst wndConst[WO_All];
+	const static SWndConst wndConst[WO_ALL];
 
 	bool wndInited = false;
-	EWndOpt wndOpen = WO_All;  // open next from Main
+	EWndOpt wndOpen = WO_ALL;  // open next from Main
 	bool wndFocus = false;  // after show
 	int wndSizeX = 400, wndSizeY = 300;  // actual dims
 	void WndFocus();
@@ -65,10 +65,12 @@ protected:
 	void WndClose(int w);
 	
 	void WndDrawAll(sf::Time time);
-	void WndDraw_AppView(), WndDraw_AppVis(), WndDraw_AppAudio(), WndDraw_AppKeys();
-	void WndDraw_PlsTab(), WndDraw_AppTabs();
-	void WndDraw_PlsFind(),	WndDraw_PlsFilter(), WndDraw_AppStats(), WndDraw_AppTest();
-	void WndDraw_AppAbout(), WndDraw_Main();
+	void WndDraw_Main(), WndMainMenu();
+	void WndDraw_AppAudio(), WndDraw_AppKeys(), WndDraw_AppAbout();
+	void WndDraw_View(), WndDraw_ViewFonts(), WndDraw_ViewTimes();
+	void WndDraw_Vis(), WndDraw_VisThemes();
+	void WndDraw_Tab(), WndDraw_TabsAll();
+	void WndDraw_PlsFind(), WndDraw_PlsFilter(), WndDraw_PlsStats(), WndDraw_AppTest();
 
 	
 	//  Resources
@@ -76,8 +78,8 @@ protected:
 	std::unique_ptr<sf::Texture> pTexture = nullptr, pVisTexture = nullptr;
 	std::unique_ptr<sf::Sprite> pBackgr = nullptr, pVisSprite = nullptr;  // vis spectrogram
 
-	std::unique_ptr<sf::Font> pFont[Fnt_All] = {nullptr};
-	sf::Text text[Fnt_All];
+	std::unique_ptr<sf::Font> pFont[Fnt_ALL] = {nullptr};
+	sf::Text text[Fnt_ALL];
 	sf::Image icon;
 	
 	

@@ -10,7 +10,7 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //------------------------------------------------------------------
 //  Visualization
 //------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppVis()
+void AppSFMLDraw::WndDraw_Vis()
 {
 	bool e;  string s;  float f;  int i, x = 300;
 	auto& v = set.view.vis;
@@ -42,34 +42,6 @@ void AppSFMLDraw::WndDraw_AppVis()
 	//	int iSleep = 0;  // in ms  // todo:
 	//	bool bVSync = true;
 	
-	auto AddSlidersHSV = [&](VisualColors& c, string s)
-	{
-		/*{	//  preview gradient ..
-			ImVec2 p0 = GetCursorScreenPos();
-			ImVec2 gradient_size = ImVec2(CalcItemWidth(), GetFrameHeight());
-			ImVec2 p1 = ImVec2(p0.x + gradient_size.x, p0.y + gradient_size.y);
-			ImU32 col_a = GetColorU32(IM_COL32(0, 255, 0, 255));
-			ImU32 col_b = GetColorU32(IM_COL32(255, 0, 0, 255));
-			ImDrawList* draw_list = GetWindowDrawList();
-			draw_list->AddRectFilledMultiColor(p0, p1, col_a, col_b, col_b, col_a);
-			InvisibleButton("##gradient2", gradient_size);
-		}/**/
-		Sep(10);
-		if (CollapsingHeader("Adjust theme coloring", ImGuiTreeNodeFlags_DefaultOpen|ImGuiTreeNodeFlags_Framed))
-		{	Sep(5);  //Line();
-			SliderF(c.add.h, 0.f, 1.f, "Hue: ",        s+"Ha");
-			SliderF(c.mul.h,-2.f, 2.f, "  multi: ",    s+"Hm");
-			SliderF(c.pow.h, 0.f, 4.f, "  power: ",    s+"Hp");
-			Sep(5);
-			SliderF(c.add.s,-1.f, 2.f, "Saturation: ", s+"Sa");
-			SliderF(c.mul.s,-3.f, 3.f, "  multi: ",    s+"Sm");
-			SliderF(c.pow.s, 0.f, 4.f, "  power: ",    s+"Sp");
-			Sep(5);
-			SliderF(c.add.v,-1.f, 2.f, "Brightness: ", s+"Va");
-			SliderF(c.mul.v,-3.f, 3.f, "  multi: ",    s+"Vm");
-			SliderF(c.pow.v, 0.f, 4.f, "  power: ",    s+"Vp");
-	}	};
-	
 	const int clrs = themes.VisCount()-1;
 	Sep(10);
 	switch (v.eType)
@@ -86,7 +58,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 				"Theme: " + i2s(themes.curFFT), "fft-thm", themes.CurFFT().name))
 		{	v.fft.clr = themes.CurFFT();  v.fft.theme = themes.CurFFT().name;  }
 		
-		AddSlidersHSV(v.fft.clr, "fft_");
+		if (Button("Edit theme.."))  wndOpen = WO_VisThemes;
 	}	break;
 
 	case VisT_Osc:
@@ -95,7 +67,7 @@ void AppSFMLDraw::WndDraw_AppVis()
 				"Theme: " + i2s(themes.curOsc), "osc-thm", themes.CurOsc().name))
 		{	v.osc.clr = themes.CurOsc();  v.osc.theme = themes.CurOsc().name;  }
 		
-		AddSlidersHSV(v.osc.clr, "osc_");
+		if (Button("Edit theme.."))  wndOpen = WO_VisThemes;
 	}	break;
 
 	case VisT_Spect:
@@ -115,11 +87,87 @@ void AppSFMLDraw::WndDraw_AppVis()
 				"Type: ", "spc-typ", string(csSpectType[i])))
 			v.eSpect = (SpectType)i;
 		
-		AddSlidersHSV(v.spect.clr, "spc_");
-		
+		if (Button("Edit theme.."))  wndOpen = WO_VisThemes;
+
 		//	float fPrtFq = 100.f;  // spectrogram speed
 	}	break;
 	}
 
+	PopItemWidth();  xText = 0;  xSlider = 0;
+}
+
+
+//  Themes
+//------------------------------------------------------------------
+void AppSFMLDraw::WndDraw_VisThemes()
+{
+	bool e;  string s;  float f;  int i, x = 300;
+	auto& v = set.view.vis;
+	xText = 140;  xSlider = 240;
+	PushItemWidth(650);
+	
+	auto AddSlidersHSV = [&](VisualColors& c, string s)
+	{
+		/*{	//  preview gradient ..
+			ImVec2 p0 = GetCursorScreenPos();
+			ImVec2 gradient_size = ImVec2(CalcItemWidth(), GetFrameHeight());
+			ImVec2 p1 = ImVec2(p0.x + gradient_size.x, p0.y + gradient_size.y);
+			ImU32 col_a = GetColorU32(IM_COL32(0, 255, 0, 255));
+			ImU32 col_b = GetColorU32(IM_COL32(255, 0, 0, 255));
+			ImDrawList* draw_list = GetWindowDrawList();
+			draw_list->AddRectFilledMultiColor(p0, p1, col_a, col_b, col_b, col_a);
+			InvisibleButton("##gradient2", gradient_size);
+		}/**/
+		Sep(10);
+		TextG("Adjust theme coloring");
+		Sep(5);  //Line();
+		SliderF(c.add.h, 0.f, 1.f, "Hue: ",        s+"Ha");
+		SliderF(c.mul.h,-2.f, 2.f, "  multi: ",    s+"Hm");
+		SliderF(c.pow.h, 0.f, 4.f, "  power: ",    s+"Hp");
+		Sep(5);
+		SliderF(c.add.s,-1.f, 2.f, "Saturation: ", s+"Sa");
+		SliderF(c.mul.s,-3.f, 3.f, "  multi: ",    s+"Sm");
+		SliderF(c.pow.s, 0.f, 4.f, "  power: ",    s+"Sp");
+		Sep(5);
+		SliderF(c.add.v,-1.f, 2.f, "Brightness: ", s+"Va");
+		SliderF(c.mul.v,-3.f, 3.f, "  multi: ",    s+"Vm");
+		SliderF(c.pow.v, 0.f, 4.f, "  power: ",    s+"Vp");
+		Sep(5);
+		if (Button("Back to Visual.."))  wndOpen = WO_Vis;
+	};
+
+	const int clrs = themes.VisCount()-1;
+	Sep(10);
+	switch (v.eType)
+	{
+	case VisT_FFT:
+	{
+		if (SliderI(themes.curFFT, 0, clrs,
+				"Theme: " + i2s(themes.curFFT), "fft-thm", themes.CurFFT().name))
+		{	v.fft.clr = themes.CurFFT();  v.fft.theme = themes.CurFFT().name;  }
+
+		// todo: btn set cur, save as name..
+		
+		AddSlidersHSV(v.fft.clr, "fft_");
+	}	break;
+
+	case VisT_Osc:
+	{
+		if (SliderI(themes.curOsc, 0, clrs,
+				"Theme: " + i2s(themes.curOsc), "osc-thm", themes.CurOsc().name))
+		{	v.osc.clr = themes.CurOsc();  v.osc.theme = themes.CurOsc().name;  }
+		
+		AddSlidersHSV(v.osc.clr, "osc_");
+	}	break;
+
+	case VisT_Spect:
+	{
+		if (SliderI(themes.curSpect, 0, clrs,
+				"Theme: " + i2s(themes.curSpect), "spc-thm", themes.CurSpect().name))
+		{	v.spect.clr = themes.CurSpect();  v.spect.theme = themes.CurSpect().name;  }
+
+		AddSlidersHSV(v.spect.clr, "spc_");
+	}	break;
+	}
 	PopItemWidth();  xText = 0;  xSlider = 0;
 }
