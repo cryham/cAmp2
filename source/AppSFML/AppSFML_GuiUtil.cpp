@@ -1,4 +1,5 @@
 #include "AppSFML_Draw.h"
+#include "../App/AppActions.h"
 #include "../System/FileSystem.h"
 #include "../System/Utilities.h"
 #include "../../libs/imgui.h"
@@ -67,8 +68,8 @@ bool AppSFMLDraw::SliderI(
 //------------------------------------------------------------------
 AppSFMLDraw::AppSFMLDraw()
 {
-	for (int i=0; i < WO_ALL; ++i)
-		vWindows[i] = nullptr;
+	for (int w=0; w < WO_ALL; ++w)
+		vWindows[w] = nullptr;
 }
 
 bool AppSFMLDraw::WndVisible(EWndOpt w)
@@ -134,9 +135,9 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	wndFocus = true;
 }
 
-void AppSFMLDraw::WndClose(int i)
+void AppSFMLDraw::WndClose(int w)
 {
-	auto& wnd = vWindows[i];
+	auto& wnd = vWindows[w];
 	if (!wnd)  return;
 	
 	wnd->close();
@@ -151,10 +152,10 @@ void AppSFMLDraw::WndClose(int i)
 //---------------------------------------------------------------------------------------------
 void AppSFMLDraw::WndProcessAll()
 {
-	for (int i=0; i < WO_ALL; ++i)
+	for (int w=0; w < WO_ALL; ++w)
 	{
-		if (!WndVisible((EWndOpt)i))  continue;
-		auto& wnd = vWindows[i];
+		if (!WndVisible((EWndOpt)w))  continue;
+		auto& wnd = vWindows[w];
 
 		Event e;
 		while (wnd->pollEvent(e))
@@ -164,10 +165,10 @@ void AppSFMLDraw::WndProcessAll()
 			switch (e.type)
 			{
 			case Event::KeyPressed:
-				if (e.key.code != Keyboard::Escape)
-					break;
+				WndKeyPress(w, e.key);
+				break;
 			case Event::Closed:
-				WndClose(i);
+				WndClose(w);
 				return;
 			
 			case Event::Resized:
@@ -183,4 +184,27 @@ void AppSFMLDraw::WndProcessAll()
 			}
 		}
 	}
+}
+
+//  Key press
+void AppSFMLDraw::WndKeyPress(int w, Event::KeyEvent k)
+{
+	#define key(m)  k.code == Keyboard::m
+	if (key(LAlt) || key(RAlt) ||
+		key(LControl) || key(RControl) ||
+		key(LShift) || key(RShift) ||
+		key(LSystem) || key(RSystem))
+		return;  // only modifier
+	#undef key
+	
+	auto mkey = ModsKey(k.shift,k.control,k.alt, k.code);
+	if (act->binding && w == WO_AppKeys)
+	{
+		act->binding = false;
+		act->Bind(mkey, act->bindAct);
+		act->bGuiUpdate = true;
+	}
+	else  // normal
+		if (k.code == Keyboard::Escape)
+			WndClose(w);
 }

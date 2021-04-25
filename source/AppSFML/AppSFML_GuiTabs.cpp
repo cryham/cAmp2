@@ -50,6 +50,7 @@ void AppSFMLDraw::WndDraw_TabsAll()
 	e = SliderInt("Tby", &i, 1, 30, "");
 	if (e) {  t.yRows = i;  UpdDim();  }
 
+	Sep(10);
 	i = t.ofs;  s = "offset: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbo", &i, 0, vPls.size()-1, "");
 	if (e) {  t.ofs = i;  Redraw();  }
@@ -65,10 +66,6 @@ void AppSFMLDraw::WndDraw_TabsAll()
 	if (e) {  set.dimTabTxt = i;  Redraw();  }
 	PopItemWidth();
 
-/*	set.view.pls.xW_plS  todo: ...
-	set.view.pls.bSlDrawR
-	set.view.fnt.Fy = 17;  /// pls font size+
-*/
 //  app dim?
 //	xSize = 390;  ySize = 900;  xPos = 0;  yPos = 0;
 }

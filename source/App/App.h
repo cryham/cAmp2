@@ -71,7 +71,7 @@ protected:
 	//  Keys
 	bool alt = false, ctrl = false, shift = false;
 	void UpdModifiers();
-	bool KeyDown(sf::Event::KeyEvent key);
+	void KeyPress(sf::Event::KeyEvent key);
 	
 	std::unique_ptr<ActionsMap> act;
 	

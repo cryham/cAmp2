@@ -12,15 +12,15 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 	{"Main", "All Options", 420,400},
 
 	{"Player", "Audio", 600,350},
-	{"Player", "Keyboard", 750,850},
+	{"Player", "Keyboard", 650,850},
 	{"Player", "About", 600,400},
 	{"Player", "Help", 600,750},
 
-	{"View", "View", 500,750},
-	{"View", "View Fonts", 500,750},
+	{"View", "View", 600,450},
+	{"View", "View Fonts", 600,750},
 	{"View", "Visualization", 900,750},
 	{"View", "Visualization Themes", 900,750},
-	{"View", "Times Coloring", 500,750},
+	{"View", "Times Coloring", 600,750},
 
 	{"Tabs", "Current", 420,570},
 	{"Tabs", "All", 420,370},
@@ -106,7 +106,8 @@ void AppSFMLDraw::WndMainMenu()
 		{
 			if (MenuItem("Insert files.."))  OpenDirFile(true);
 			if (MenuItem("Insert dir.."))   OpenDirFile(false);
-			//Separator();  //Exit
+			Separator();
+			if (MenuItem("Exit"))  pWindow->close();
 			EndMenu();
 		}
 		if (BeginMenu("Player"))

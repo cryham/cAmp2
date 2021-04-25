@@ -194,14 +194,13 @@ void App::LoadCurView18()   {  UpdateView(true, 18);  }
 void App::LoadCurView19()   {  UpdateView(true, 19);  }
 
 
-//  Key press commands
+//  Key press
 //------------------------------------------------------------------------------------------------------------
 
-bool App::KeyDown(Event::KeyEvent k)
+void App::KeyPress(Event::KeyEvent k)
 {
-	act->Check(ModsKey(shift,ctrl,alt, k.code));
-	
-	return true;
+	auto mkey = ModsKey(shift,ctrl,alt, k.code);
+	act->Check(mkey);
 }
 
 void App::Save()

@@ -139,7 +139,7 @@ void AppSFMLDraw::LoopMain()
 			case Event::KeyPressed:
 				if (set.escQuit && e.key.code == Keyboard::Escape)
 					pWindow->close();
-				KeyDown(e.key);  break;
+				KeyPress(e.key);  break;
 
 				
 			case Event::Resized:

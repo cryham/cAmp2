@@ -286,6 +286,7 @@ int App::RenameRate(bool allPls)
 	return all;
 }
 
+
 //  util
 void App::OpenBrowserUrl(std::string url)
 {

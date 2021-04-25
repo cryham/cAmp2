@@ -60,8 +60,9 @@ protected:
 
 	void WndOpen(EWndOpt type, bool center = true) override;
 	bool WndVisible(EWndOpt w);
-	void WndProcessAll();
 	void WndClose(int w);
+	void WndProcessAll();
+	void WndKeyPress(int w, sf::Event::KeyEvent key);
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_Main(), WndMainMenu();
