@@ -149,7 +149,7 @@ void App::DeleteCur()		{  Pls().DeleteCur();  }
 
 
 ///  gui wnd
-void App::GUIMain()         {  WndOpen(WO_Main);  }
+void App::GUIMain()         {  WndOpen((EWndOpt)set.iLastWnd);  }
 void App::GUIAppAudio()     {  WndOpen(WO_AppAudio);  }
 void App::GUIAppKeys()      {  WndOpen(WO_AppKeys);   }
 void App::GUIAppAbout()     {  WndOpen(WO_AppAbout);  }
@@ -200,7 +200,7 @@ void App::LoadCurView19()   {  UpdateView(true, 19);  }
 void App::KeyPress(Event::KeyEvent k)
 {
 	auto mkey = ModsKey(shift,ctrl,alt, k.code);
-	act->Check(mkey);
+	act->KeyPress(mkey);
 }
 
 void App::Save()

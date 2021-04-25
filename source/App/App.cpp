@@ -38,6 +38,8 @@ bool App::Init()
 	themes.Load();
 	ApplyThemes();
 	
+	act->Load();  // keys
+	
 
 	LoadPls();
 

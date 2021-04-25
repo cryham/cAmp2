@@ -1,5 +1,6 @@
 #pragma once
 #include "../System/defines.h"
+#include "../System/LogFile.h"
 #include "AppActionsEnum.h"
 #include <SFML/Window/Event.hpp>
 #include <map>
@@ -23,16 +24,16 @@ static TModsKey ModsKey(bool shift, bool ctrl, bool alt, uint key)
 }
 
 
+//  Key binds to app actions
 //------------------------------------------------------------------
-class ActionsMap
+class ActionsMap : public Logger
 {
-public:
 	App* pApp = nullptr;
 	std::map<EAction, std::string> names;   // const, for Gui
-	std::map<EAction, std::string> groups;  // 
-	std::map<EAction, AppMethod> methods;   // 
+	std::map<EAction, std::string> groups;  // actions which begin groups
+	std::map<EAction, AppMethod> methods;   // App method for action
 	
-	std::map<TModsKey, EAction> bindings;  // key binds
+	std::map<TModsKey, EAction> bindings;  // key binds, var, in xml
 	
 	//  Gui
 	std::vector<KeysRow> rows;  // gui list
@@ -43,21 +44,37 @@ public:
 	static const char* csKeyNames[sf::Keyboard::KeyCount];
 	static std::string StrKey(TModsKey mkey);
 	
+	//  Init const
 	void FillNames(), FillGroupNames();
 	void FillMethods();
 
 public:	
 	ActionsMap(App* app);
+	bool Load();
+	bool Save() const;
 	
 	void DefaultBindings();
+	
 	void Bind(TModsKey mkey, EAction act);
 	void Bind(bool shift, bool ctrl, bool alt, uint key, EAction act);
 	void Bind2(bool shift, bool ctrl, bool alt, uint key, uint key2, EAction act);
 	void Unbind(TModsKey mkey)  {  bindings[mkey] = Act_None;  }
 	
-	void Check(TModsKey modsKey);
+	void KeyPress(TModsKey modsKey);
 
 	void UpdateGuiKeysList();
+	void SortGui();
+
+	void UpdateGui()  {  bGuiUpdate = true;  }
+	void GuiBindStart(EAction act);
+	void GuiBindEnd(TModsKey mkey);
+	void GuiBindCancel()    {  binding = false;  }
+	bool IsGuiBind()        {  return binding;   }
+	bool IsGuiBind(int act) {  return binding && bindAct == act;  }
+	
+	int RowsCount()  {  return (int)rows.size();  }
+	const KeysRow& GetRow(int id)   {  return rows[id];   }
+	std::string GetGroup(EAction a) {  return groups[a];  }
 };
 
 
@@ -70,13 +87,12 @@ enum ESortCol
 struct KeysRow  // for gui list
 {
     int Act;  // enum Act_
-    std::string Name;  // action
-    std::string StrKeys;  // for sort only
+    std::string name;  // action
+    std::string strKeys;  // for sort only
 	
-	std::vector<std::string> Keys;  // button text
-	std::vector<TModsKey> ModsKeys;  // button key to unbind
+	std::vector<std::string> keys;  // button's texts
+	std::vector<TModsKey> modsKeys;  // button's keys to unbind
 
     static const ImGuiTableSortSpecs* sortSpecs;
-
     static bool Compare(const KeysRow& a, const KeysRow& b);
 };

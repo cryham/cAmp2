@@ -8,8 +8,7 @@ enum EWndOpt  // options windows  . . . . . . . .
 	WO_View, WO_ViewFonts, WO_Vis, WO_VisThemes, WO_ViewTimes, 
 	WO_Tab, WO_TabsAll,
 	WO_PlsFind, WO_PlsFilter, WO_AppStats, WO_AppTest, 
-	// note: add new at end and to EAction too
-	// note: add new also to  wndConst[WO_ALL] =
+	// note: add new at end, also add to  enum EAction  and to  wndConst[WO_ALL] =
 	// todo: WO_AppHotKeys, global
 	WO_ALL
 };

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include <SFML/Window.hpp>
 #include "../../libs/tinyxml2.h"
@@ -49,6 +48,7 @@ void Settings::Default()
 	
 	state.Default();
 	dimTabTxt = 16;  dimTabBck = 16;
+	iLastWnd = WO_AppAbout;
 }
 
 
@@ -103,6 +103,7 @@ bool Settings::Load()
 	if (e)
 	{
 		a = e->Attribute("last");  if (a)  iLastView = s2i(a);
+		a = e->Attribute("lastWnd");  if (a)  iLastWnd = s2i(a);
 		a = e->Attribute("dirView");  if (a)  eDirView = (EDirView)s2i(a);
 		a = e->Attribute("tbBck");  if (a)  dimTabBck = s2i(a);
 		a = e->Attribute("tbTxt");  if (a)  dimTabTxt = s2i(a);
@@ -165,6 +166,7 @@ bool Settings::Load()
 	return true;
 }
 
+
 ///  Save
 //------------------------------------------------------------------------------------------------
 bool Settings::Save() const
@@ -183,6 +185,7 @@ bool Settings::Save() const
 	//  app view
 	e = xml.NewElement("appView");
 		e->SetAttribute("last", iLastView);
+		e->SetAttribute("lastWnd", iLastWnd);
 		e->SetAttribute("dirView", eDirView);
 		e->SetAttribute("tbBck", dimTabBck);
 		e->SetAttribute("tbTxt", dimTabTxt);

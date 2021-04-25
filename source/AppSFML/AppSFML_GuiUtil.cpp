@@ -100,6 +100,7 @@ void AppSFMLDraw::WndOpen(EWndOpt w, bool center)
 	auto& wnd = vWindows[w];
 	if (wnd)  return;
 	const auto& wc = wndConst[w];
+	set.iLastWnd = w;
 
 	wnd = make_unique<RenderWindow>(
 		VideoMode(wc.width, wc.height), wc.FullTitle(),
@@ -165,11 +166,10 @@ void AppSFMLDraw::WndProcessAll()
 			switch (e.type)
 			{
 			case Event::KeyPressed:
-				WndKeyPress(w, e.key);
+				if (WndKeyPress(w, e.key))  return;
 				break;
 			case Event::Closed:
-				WndClose(w);
-				return;
+				WndClose(w);  return;
 			
 			case Event::Resized:
 				FloatRect r(0, 0, e.size.width, e.size.height);
@@ -187,24 +187,23 @@ void AppSFMLDraw::WndProcessAll()
 }
 
 //  Key press
-void AppSFMLDraw::WndKeyPress(int w, Event::KeyEvent k)
+bool AppSFMLDraw::WndKeyPress(int w, Event::KeyEvent k)
 {
 	#define key(m)  k.code == Keyboard::m
 	if (key(LAlt) || key(RAlt) ||
 		key(LControl) || key(RControl) ||
 		key(LShift) || key(RShift) ||
 		key(LSystem) || key(RSystem))
-		return;  // only modifier
+		return false;  // only modifier
 	#undef key
 	
-	auto mkey = ModsKey(k.shift,k.control,k.alt, k.code);
-	if (act->binding && w == WO_AppKeys)
+	if (act->IsGuiBind() && w == WO_AppKeys)
 	{
-		act->binding = false;
-		act->Bind(mkey, act->bindAct);
-		act->bGuiUpdate = true;
+		auto mkey = ModsKey(k.shift,k.control,k.alt, k.code);
+		act->GuiBindEnd(mkey);
 	}
 	else  // normal
 		if (k.code == Keyboard::Escape)
-			WndClose(w);
+		{	WndClose(w);  return true;  }
+	return false;
 }

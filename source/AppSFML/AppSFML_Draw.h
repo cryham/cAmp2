@@ -62,7 +62,7 @@ protected:
 	bool WndVisible(EWndOpt w);
 	void WndClose(int w);
 	void WndProcessAll();
-	void WndKeyPress(int w, sf::Event::KeyEvent key);
+	bool WndKeyPress(int w, sf::Event::KeyEvent key);
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_Main(), WndMainMenu();

@@ -34,7 +34,7 @@ struct SetFind
 class Settings : public Logger
 {
 public:
-	const static int ver = 210;  // version of file
+	const static int ver = 212;  // version of file
 
 	//  main  -----
 	Settings();
@@ -54,10 +54,11 @@ public:
 	//  debug
 	bool escQuit = false;
 
-	//  view
+	//  view toggle
 	bool bFileInfo = false;
 	EDirView eDirView = DirV_Path;
 	void NextDirView(int i);
+	
 
 	//  playlists
 	int cntrPls = 1;  // new playlist counter
@@ -67,4 +68,6 @@ public:
 	SetState state;  // player
 
 	int dimTabTxt = 16, dimTabBck = 16;  // in viewSet?
+	
+	int iLastWnd = WO_AppAbout;
 };

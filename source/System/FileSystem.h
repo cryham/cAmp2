@@ -34,17 +34,18 @@ public:
 	static std::string GetInfo();
 
 	//  Paths
-	static std::string Home() {       return home_dir; }
-	//static std::string Cache() {    return cache_dir; }
+	static std::string Home()       {  return home_dir;   }
+	//static std::string Cache()    {  return cache_dir;  }
 
-	static std::string Config() {     return user_config;  }
-	static std::string AppConfig() {  return app_config;  }
-	static std::string Data() {       return app_data; }
+	static std::string Config()     {  return user_config;  }
+	static std::string AppConfig()  {  return app_config;   }
+	static std::string Data()       {  return app_data;     }
 	
-	static std::string Themes() {     return app_data + "/themes.xml"; }
-	static std::string ThemesUser() { return user_config + "/themes.xml"; }
+	static std::string Themes()     {  return app_data + "/themes.xml";     }
+	static std::string ThemesUser() {  return user_config + "/themes.xml";  }
+	static std::string Keys()       {  return user_config + "/keys.xml";    }
 	
-	static std::string Settings() {   return user_config + "/cAmp2.xml"; }
-	static std::string Log() {        return user_config + "/cAmp2.log"; }
-	static std::string Playlists() {  return user_config + "/playlists/"; }
+	static std::string Settings()   {  return user_config + "/cAmp2.xml";   }
+	static std::string Log()        {  return user_config + "/cAmp2.log";   }
+	static std::string Playlists()  {  return user_config + "/playlists/";  }
 };

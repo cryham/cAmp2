@@ -12,7 +12,7 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 	{"Main", "All Options", 420,400},
 
 	{"Player", "Audio", 600,350},
-	{"Player", "Keyboard", 650,850},
+	{"Player", "Keyboard", 650,855},
 	{"Player", "About", 600,400},
 	{"Player", "Help", 600,750},
 

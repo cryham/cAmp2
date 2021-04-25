@@ -20,6 +20,13 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		| ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoBordersInBody
 		| ImGuiTableFlags_ScrollY;
 	
+	Sep(5);
+	SameLine(200);
+	if (Button("Load"))  act->Load();
+	SameLine(300);
+	if (Button("Save"))  act->Save();
+	Sep(5);
+	
 	if (BeginTable("KeyBinds", 4, tbfl))
 	{
 		const auto fl = ImGuiTableColumnFlags_WidthFixed;
@@ -35,18 +42,17 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		if (sorts_specs != NULL && sorts_specs->SpecsDirty)
 		{
 			KeysRow::sortSpecs = sorts_specs;
-			if (act->rows.size() > 1)
-				stable_sort(act->rows.begin(), act->rows.end(), KeysRow::Compare);
+			act->SortGui();
 			KeysRow::sortSpecs = NULL;
 			sorts_specs->SpecsDirty = false;
 		}
 
-		for (int rid = 0; rid < act->rows.size(); ++rid)
+		for (int rid = 0; rid < act->RowsCount(); ++rid)
 		{
 			//  display item
-			KeysRow* row = &act->rows[rid];
+			const auto& row = act->GetRow(rid);
 			//  group row  ----  separator
-			std::string group = act->groups[(EAction)row->Act];
+			std::string group = act->GetGroup((EAction)row.Act);
 			if (!group.empty())
 			{
 				TableNextRow();
@@ -57,32 +63,31 @@ void AppSFMLDraw::WndDraw_AppKeys()
 				TableNextColumn();  Separator();
 			}
 			//  keys row  ----
-			PushID(row->Act);
+			PushID(row.Act);
 			TableNextRow();
-			TableNextColumn();  TextG(i2s(row->Act, 3,'0'));
-			TableNextColumn();  TextUnformatted(row->Name.c_str());
+			TableNextColumn();  TextG(i2s(row.Act, 3,'0'));
+			TableNextColumn();  TextUnformatted(row.name.c_str());
 			TableNextColumn();
 			//  add
-			if (act->binding && act->bindAct == row->Act)
-			{	if (Button("Press"))
-				{
-					act->binding = false;
-			}	}
+			if (act->IsGuiBind(row.Act))
+			{
+				if (SmallButton("Press"))
+					act->GuiBindCancel();
+			}
 			else if (SmallButton(".."))
 			{
 				//  wait for key press to bind..
-				act->binding = true;
-				act->bindAct = (EAction)row->Act;
+				act->GuiBindStart((EAction)row.Act);
 			}
 			TableNextColumn();
 			//  binds
 			int ik = 0;
-			for (auto k : row->Keys)
+			for (auto k : row.keys)
 			{
 				if (SmallButton(k.c_str()))
 				{	//  unbind on press
-					act->Unbind(row->ModsKeys[ik]);
-					act->bGuiUpdate = true;
+					act->Unbind(row.modsKeys[ik]);
+					act->UpdateGui();
 				}	++ik;
 			}
 			PopID();
