@@ -13,20 +13,19 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_AppKeys()
 {
-	act->UpdateGuiKeysList();
-	
 	const auto tbfl =
 		ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Sortable
 		| ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoBordersInBody
 		| ImGuiTableFlags_ScrollY;
 	
 	Sep(5);
-	SameLine(200);
-	if (Button("Load"))  act->Load();
-	SameLine(300);
-	if (Button("Save"))  act->Save();
+	SameLine(200);  if (Button("Load"))  act->Load();
+	SameLine(300);  if (Button("Save"))  act->Save();
+	SameLine(450);  if (Button("Reset to Defaults"))  act->DefaultBindings();
 	Sep(5);
-	
+
+	act->UpdateGuiKeysList();
+
 	if (BeginTable("KeyBinds", 4, tbfl))
 	{
 		const auto fl = ImGuiTableColumnFlags_WidthFixed;
@@ -47,12 +46,14 @@ void AppSFMLDraw::WndDraw_AppKeys()
 			sorts_specs->SpecsDirty = false;
 		}
 
+		if (act->RowsCount() > 0)
 		for (int rid = 0; rid < act->RowsCount(); ++rid)
 		{
 			//  display item
 			const auto& row = act->GetRow(rid);
+			
 			//  group row  ----  separator
-			std::string group = act->GetGroup((EAction)row.Act);
+			const auto& group = act->GetGroup((EAction)row.Act);
 			if (!group.empty())
 			{
 				TableNextRow();
@@ -62,13 +63,15 @@ void AppSFMLDraw::WndDraw_AppKeys()
 				TableNextColumn();  TextColored(ImVec4(0.6f, 0.8f, 1.0f, 1.f), group.c_str());
 				TableNextColumn();  Separator();
 			}
+
 			//  keys row  ----
 			PushID(row.Act);
 			TableNextRow();
 			TableNextColumn();  TextG(i2s(row.Act, 3,'0'));
 			TableNextColumn();  TextUnformatted(row.name.c_str());
 			TableNextColumn();
-			//  add
+			
+			//  add .. button
 			if (act->IsGuiBind(row.Act))
 			{
 				if (SmallButton("Press"))
@@ -80,6 +83,7 @@ void AppSFMLDraw::WndDraw_AppKeys()
 				act->GuiBindStart((EAction)row.Act);
 			}
 			TableNextColumn();
+			
 			//  binds
 			int ik = 0;
 			for (auto k : row.keys)

@@ -139,8 +139,7 @@ void ActionsMap::UpdateGuiKeysList()
 //------------------------------------------------------------------------------------------------
 bool ActionsMap::Load()
 {
-	//bindings.clear(); //?
-	DefaultBindings();
+	bindings.clear();
 
 	string file = FileSystem::Keys();
 	if (!FileSystem::Exists(file))
@@ -178,10 +177,19 @@ bool ActionsMap::Load()
 		if (!m)  Log(sErr + "No <k> in <keys>");
 		while (m)
 		{
-			a = m->Attribute("act");
-			if (!a)  {  Log(sErr + "No act in <k>");  }
-			EAction act = (EAction)s2i(a);
-			
+			EAction act = Act_None;
+			a = m->Attribute("a");
+			if (a)  // str
+			{
+				for (const auto& n : names)
+				{
+					if (n.second == a)
+					{
+						act = n.first;
+						//break;
+				}	}
+			}
+
 			a = m->Attribute("key");
 			TModsKey mkey = s2i(a);
 			
@@ -203,7 +211,7 @@ bool ActionsMap::Save() const
 	using tinyxml2::XMLElement;
 	XMLDocument xml;
 	XMLElement* root = xml.NewElement("cAmp2");
-	root->SetAttribute("ver", Settings::ver);
+	root->SetAttribute("ver", Settings::version);
 	XMLElement* e, *p;
 
 	//  playlists
@@ -211,9 +219,16 @@ bool ActionsMap::Save() const
 	
 	for (const auto& b : bindings)
 	{
+		EAction a = b.second;
 		p = xml.NewElement("k");
 		p->SetAttribute("key", b.first);
-		p->SetAttribute("act", b.second);
+
+		auto fn = names.find(a);
+		if (fn != names.end())
+			p->SetAttribute("a", fn->second.c_str());
+		else  // forgot to add in FillNames
+			Error("Error saving Keys file: action name not found id:" + a);
+
 		e->InsertEndChild(p);
 	}
 	root->InsertEndChild(e);

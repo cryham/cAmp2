@@ -38,11 +38,11 @@ bool App::Init()
 	themes.Load();
 	ApplyThemes();
 	
-	act->Load();  // keys
+	if (!act->Load())  // keys
+		act->DefaultBindings();
 	
 
 	LoadPls();
-
 	audio->SetPls(&Pls());
 	
 	LoadState();

@@ -58,7 +58,7 @@ public:
 	void Bind(TModsKey mkey, EAction act);
 	void Bind(bool shift, bool ctrl, bool alt, uint key, EAction act);
 	void Bind2(bool shift, bool ctrl, bool alt, uint key, uint key2, EAction act);
-	void Unbind(TModsKey mkey)  {  bindings[mkey] = Act_None;  }
+	void Unbind(TModsKey mkey)  {  bindings.erase(mkey);  }
 	
 	void KeyPress(TModsKey modsKey);
 
