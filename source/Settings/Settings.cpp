@@ -102,11 +102,11 @@ bool Settings::Load()
 	e = root->FirstChildElement("appView");
 	if (e)
 	{
-		a = e->Attribute("last");  if (a)  iLastView = s2i(a);
+		a = e->Attribute("last");     if (a)  iLastView = s2i(a);
 		a = e->Attribute("lastWnd");  if (a)  iLastWnd = s2i(a);
 		a = e->Attribute("dirView");  if (a)  eDirView = (EDirView)s2i(a);
-		a = e->Attribute("tbBck");  if (a)  dimTabBck = s2i(a);
-		a = e->Attribute("tbTxt");  if (a)  dimTabTxt = s2i(a);
+		a = e->Attribute("tbBck");    if (a)  dimTabBck = s2i(a);
+		a = e->Attribute("tbTxt");    if (a)  dimTabTxt = s2i(a);
 	}
 	//  state
 	e = root->FirstChildElement("state");
@@ -174,7 +174,7 @@ bool Settings::Save() const
 	using tinyxml2::XMLElement;
 	XMLDocument xml;
 	XMLElement* root = xml.NewElement("cAmp2");
-	root->SetAttribute("ver", ver);
+	root->SetAttribute("ver", version);
 	XMLElement* e, *p;
 
 	//  debug
@@ -184,11 +184,11 @@ bool Settings::Save() const
 
 	//  app view
 	e = xml.NewElement("appView");
-		e->SetAttribute("last", iLastView);
+		e->SetAttribute("last",    iLastView);
 		e->SetAttribute("lastWnd", iLastWnd);
 		e->SetAttribute("dirView", eDirView);
-		e->SetAttribute("tbBck", dimTabBck);
-		e->SetAttribute("tbTxt", dimTabTxt);
+		e->SetAttribute("tbBck",   dimTabBck);
+		e->SetAttribute("tbTxt",   dimTabTxt);
 	root->InsertEndChild(e);
 	
 	//  state

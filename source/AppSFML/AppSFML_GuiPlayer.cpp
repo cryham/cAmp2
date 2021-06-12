@@ -83,8 +83,8 @@ void AppSFMLDraw::WndDraw_AppAbout()
 	Sep(10);
 	TextColored(ImVec4(0.7f, 0.67f, 1.0f, 1.f), "by Crystal Hammer");
 	Sep(20);
-	TextColored(ImVec4(0.8f, 0.9f, 1.0f, 1.f), "Version: 2.1.1");
-	//TextG(Settings::ver);
+	auto s = "Version: "+ i2s(Settings::version/100) + "." + i2s(Settings::version % 100);
+	TextColored(ImVec4(0.8f, 0.9f, 1.0f, 1.f), s.c_str());
 	Sep(40);
 	PushItemWidth(400);
 

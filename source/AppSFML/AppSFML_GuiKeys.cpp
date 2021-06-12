@@ -32,7 +32,7 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		const auto fl = ImGuiTableColumnFlags_WidthFixed;
 		TableSetupColumn("N", ImGuiTableColumnFlags_DefaultSort | fl, 0.f, Col_ID);
 		TableSetupColumn("Name",      fl, 0.f, Col_Name);
-		TableSetupColumn("Add",      fl, 0.f, Col_Name);
+		TableSetupColumn("Add",       fl, 0.f, Col_Name);
 		TableSetupColumn("Shortcuts", fl, 0.f, Col_Keys);
 		TableSetupScrollFreeze(0, 1); // Make row always visible
 		TableHeadersRow();
