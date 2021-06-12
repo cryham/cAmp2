@@ -17,6 +17,9 @@ void App::Stop()            {  audio->Stop();     }
 void App::Prev()            {  PlsPl().Next(-1);  }  
 void App::Next()            {  PlsPl().Next( 1);  }
 
+void App::NextPls()			{  plsId = plsPlId;  TabNext( 1,0,0);  Play(false);  plsPlId = plsId;  }
+void App::PrevPls()			{  plsId = plsPlId;  TabNext(-1,0,0);  Play(false);  plsPlId = plsId;  }
+
 //  seek
 void App::Backward()        {  audio->SetPos(1, 0, 0);  }
 void App::BackwardSlow() 	{  audio->SetPos(1, 1, 0);  }
@@ -148,7 +151,7 @@ void App::DeleteCurFile()	{  if (Pls().DeleteCurFile(plsId == plsPlId))  Osd("Fi
 void App::DeleteCur()		{  Pls().DeleteCur();  }
 
 
-///  gui wnd
+///  gui wnd  -----
 void App::GUIMain()         {  WndOpen((EWndOpt)set.iLastWnd);  }
 void App::GUIAppAudio()     {  WndOpen(WO_AppAudio);  }
 void App::GUIAppKeys()      {  WndOpen(WO_AppKeys);   }

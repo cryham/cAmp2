@@ -29,11 +29,11 @@ static TModsKey ModsKey(bool shift, bool ctrl, bool alt, uint key)
 class ActionsMap : public Logger
 {
 	App* pApp = nullptr;
-	std::map<EAction, std::string> names;   // const, for Gui
-	std::map<EAction, std::string> groups;  // actions which begin groups
+	std::map<EAction, std::string> names;   // const, for Gui and keys.xml
+	std::map<EAction, std::string> groups;  // actions which start a group
 	std::map<EAction, AppMethod> methods;   // App method for action
 	
-	std::map<TModsKey, EAction> bindings;  // key binds, var, in xml
+	std::map<TModsKey, EAction> bindings;  // var, key binds, in keys.xml
 	
 	//  Gui
 	std::vector<KeysRow> rows;  // gui list
@@ -75,6 +75,7 @@ public:
 	int RowsCount()  {  return (int)rows.size();  }
 	const KeysRow& GetRow(int id)   {  return rows[id];   }
 	std::string GetGroup(EAction a) {  return groups[a];  }
+	EAction GetActFromName(std::string name);
 };
 
 

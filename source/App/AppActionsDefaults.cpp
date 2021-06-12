@@ -9,6 +9,7 @@ using namespace std;  using namespace sf;
 void ActionsMap::DefaultBindings()
 {
 	bindings.clear();
+
 	#define key(k)  Keyboard::k
 	//  shift, ctrl, alt
 
@@ -19,7 +20,10 @@ void ActionsMap::DefaultBindings()
 	Bind(0,0,0, key(C), Act_Stop);
 	Bind(0,0,0, key(A), Act_Prev);
 	Bind(0,0,0, key(S), Act_Next);
-	
+
+	Bind(0,1,0, key(A), Act_PrevPls);
+	Bind(0,1,0, key(S), Act_NextPls);
+
 	//  seek
 	Bind2(0,0,0, key(Q),key(Left), Act_Backward);
 	Bind2(0,1,0, key(Q),key(Left), Act_BackwardFast);
@@ -148,7 +152,7 @@ void ActionsMap::DefaultBindings()
 	Bind(0,0,0, key(Delete), Act_DeleteCur);
 
 
-	///  gui wnd
+	///  gui wnd  -----
 	Bind(0,0,0, key(F1), Act_WO_Main);
 	Bind(0,0,0, key(F2), Act_WO_View);
 	Bind(0,0,0, key(F3), Act_WO_Vis);
@@ -170,4 +174,6 @@ void ActionsMap::DefaultBindings()
 	Bind(0,0,1, key(Num7), Act_LoadView7);  Bind(1,0,1, key(Num7), Act_LoadView17);
 	Bind(0,0,1, key(Num8), Act_LoadView8);  Bind(1,0,1, key(Num8), Act_LoadView18);
 	Bind(0,0,1, key(Num9), Act_LoadView9);  Bind(1,0,1, key(Num9), Act_LoadView19);
+
+	bGuiUpdate = true;
 }

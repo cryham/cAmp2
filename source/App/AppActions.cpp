@@ -134,6 +134,15 @@ void ActionsMap::UpdateGuiKeysList()
 	}
 }
 
+//  map util
+EAction ActionsMap::GetActFromName(string name)
+{
+	for (const auto& n : names)
+		if (n.second == name)
+			return n.first;
+	return Act_None;
+}
+
 
 ///  Load
 //------------------------------------------------------------------------------------------------
@@ -145,7 +154,7 @@ bool ActionsMap::Load()
 	if (!FileSystem::Exists(file))
 		return false;
 
-	const string sErr = string("Keys Load Error: ") + file + "\n";
+	const string sErr = string("Load Error keys.xml: ") + file + "\n";
 	ifstream fi;
 	fi.open(file);
 	if (!fi.good())
@@ -169,6 +178,7 @@ bool ActionsMap::Load()
 	//  load  .......
 
 	//  playlists
+	int cnt = 0;
 	e = root->FirstChildElement("keys");
 	if (!e)  Log(sErr + "No <keys>");
 	if (e)
@@ -179,28 +189,21 @@ bool ActionsMap::Load()
 		{
 			EAction act = Act_None;
 			a = m->Attribute("a");
-			if (a)  // str
-			{
-				for (const auto& n : names)
-				{
-					if (n.second == a)
-					{
-						act = n.first;
-						//break;
-				}	}
-			}
+			if (a)
+				act = GetActFromName(a);
 
 			a = m->Attribute("key");
 			TModsKey mkey = s2i(a);
 			
 			bindings[mkey] = act;  // bind add
+			++cnt;
 
 			m = m->NextSiblingElement("k");
 	}	}
 	
 	Log("Keys Loaded, from: " + file);
 	bGuiUpdate = true;
-	return true;
+	return cnt > 1;
 }
 
 
@@ -210,6 +213,8 @@ bool ActionsMap::Save() const
 {
 	using tinyxml2::XMLElement;
 	XMLDocument xml;
+	const string sErr = string("Error saving keys.xml file: ");
+
 	XMLElement* root = xml.NewElement("cAmp2");
 	root->SetAttribute("ver", Settings::version);
 	XMLElement* e, *p;
@@ -227,7 +232,7 @@ bool ActionsMap::Save() const
 		if (fn != names.end())
 			p->SetAttribute("a", fn->second.c_str());
 		else  // forgot to add in FillNames
-			Error("Error saving Keys file: action name not found id:" + a);
+			Error(sErr + "Action name not found for id: " + i2s(a));
 
 		e->InsertEndChild(p);
 	}
@@ -242,6 +247,6 @@ bool ActionsMap::Save() const
 	if (ok)
 		Log("Keys Saved.");
 	else
-		Error("Error saving Keys file: " + file);
+		Error(sErr + file);
 	return ok;
 }

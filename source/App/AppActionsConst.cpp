@@ -44,6 +44,9 @@ void ActionsMap::FillNames()
 	names[Act_Prev			  ] = "Previous";
 	names[Act_Next			  ] = "Next";
 
+	names[Act_PrevPls		  ] = "Play Previous Playlist";
+	names[Act_NextPls		  ] = "Play Next Playlist";
+
 	//  seek
 	names[Act_Backward		  ] = "Backward";
 	names[Act_BackwardSlow	  ] = "Backward Slow";
@@ -172,8 +175,8 @@ void ActionsMap::FillNames()
 	names[Act_DeleteCurFile	  ] = "Delete File at cursor";
 	names[Act_DeleteCur		  ] = "Delete at cursor";
 
-	
-	///  gui wnd
+
+	///  gui wnd  ----
 	names[Act_WO_Main         ] = "GUI Main";
 	names[Act_WO_AppAudio	  ] = "GUI AppAudio";
 	names[Act_WO_AppKeys	  ] = "GUI AppKeys";
@@ -340,8 +343,12 @@ void ActionsMap::FillMethods()
 	methods[Act_DeleteCurFile	] = &App::DeleteCurFile;
 	methods[Act_DeleteCur		] = &App::DeleteCur;
 
+
+	methods[Act_PrevPls			] = &App::PrevPls;
+	methods[Act_NextPls			] = &App::NextPls;
+
 	
-	///  gui wnd
+	///  gui wnd  -----
 	methods[Act_WO_Main       ] = &App::GUIMain;
 	methods[Act_WO_AppAudio	  ] = &App::GUIAppAudio;
 	methods[Act_WO_AppKeys	  ] = &App::GUIAppKeys;

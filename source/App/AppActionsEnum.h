@@ -6,6 +6,7 @@ enum EAction
 	Act_None,
 	///  play
 	Act_PlaySetCur,	Act_Play, Act_Pause, Act_Stop, Act_Prev, Act_Next,
+	Act_PrevPls, Act_NextPls,
 	//  seek
 	Act_Backward, Act_BackwardSlow, Act_BackwardFast,
 	Act_Forward, Act_ForwardSlow, Act_ForwardFast,
@@ -55,8 +56,10 @@ enum EAction
 	Act_InsertDir, Act_InsertFiles,
 	Act_ClearPls, Act_DeleteCurFile, Act_DeleteCur,
 
+	// . . .
 	// note: add new here for bindings in xml to work ..
-	
+
+
 	///  gui wnd   same as in EWndOpt  . . . . . . 
 	Act_WO_Main=500,
 	Act_WO_AppAudio, Act_WO_AppKeys, Act_WO_AppAbout, Act_WO_AppHelp,

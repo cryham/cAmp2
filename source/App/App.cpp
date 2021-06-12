@@ -17,7 +17,7 @@ bool App::Init()
 
 	//  log
 	LogFile::Init();
-	
+
 	Log(FileSystem::GetInfo());
 	
 	
@@ -38,10 +38,13 @@ bool App::Init()
 	themes.Load();
 	ApplyThemes();
 	
-	if (!act->Load())  // keys
+
+	//  keys
+	if (!act->Load())
 		act->DefaultBindings();
 	
 
+	//  pls
 	LoadPls();
 	audio->SetPls(&Pls());
 	

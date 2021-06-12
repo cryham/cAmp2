@@ -160,6 +160,7 @@ protected:  //  actions for key binds
 	
 	void
 	PlaySetCur(), Play(), Pause(), Stop(), Prev(), Next(),
+	NextPls(), PrevPls(),
 	
 	Backward(), BackwardSlow(), BackwardFast(),
 	Forward(), ForwardSlow(), ForwardFast(),
@@ -198,7 +199,8 @@ protected:  //  actions for key binds
 	
 	InsertDir(), InsertFiles(),
 	ClearPls(), DeleteCurFile(), DeleteCur(),
-
+	
+	//  ----
 	GUIMain(), GUIAppAudio(), GUIAppKeys(),	GUIAppAbout(), GUIAppHelp(),
 	GUIView(), GUIViewFonts(), GUIVis(), GUIVisThemes(), GUIViewTimes(),
 	GUITab(), GUITabsAll(), GUIPlsFind(), GUIPlsFilter(), GUIAppStats(), GUIAppTest(),
