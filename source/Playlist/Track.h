@@ -33,7 +33,7 @@ class Track
 	///  extra  ----
 	bool mod = false;  // true for xm, mod files etc.
 	EHide hide = Hid_None;
-	bool sel = 0;  // todo: selected
+	bool sel = false;
 
 	int rateInName = 0;   // to check if user changed
 	int bookmInName = 0;  // since last rename rating
@@ -55,23 +55,24 @@ class Track
 		bookm != bookmInName;
 	}
 public:
-	Track(fs::path file, bool dir1=false);
+	Track(fs::path file, bool dir1 = false);
 
 	//  getters for draw  ----
-	const std::string& GetName() const		{   return name;  }
-	const std::string  GetPath() const		{   return path.u8string();  }
-	const std::string& GetParent()  const	{   return parent;  }
-	const std::string& GetParent2() const	{   return parent2;  }
+	const std::string& GetName()    const {   return name;  }
+	const std::string  GetPath()    const {   return path.u8string();  }
+	const std::string& GetParent()  const {   return parent;  }
+	const std::string& GetParent2() const {   return parent2;  }
 
-	bool HasTime()   const	{	return hasTime;  }
-	double GetTime() const	{	return time;  }
-	double GetSize() const	{	return size;  }
+	bool HasTime()    const	{   return hasTime;  }
+	double GetTime()  const	{   return time;  }
+	double GetSize()  const	{   return size;  }
 
-	char GetRate()   const	{	return rate;  }
-	char GetBookmark()const {	return bookm;  }
-	EHide GetHide()  const	{	return hide;  }
+	char GetRate()    const	{   return rate;  }
+	char GetBookmark()const {   return bookm;  }
+	EHide GetHide()   const	{   return hide;  }
 
-	bool IsDir()     const	{	return dir;  }
-	bool IsDisabled()const	{	return disabled;  }
-	bool IsFound()   const	{	return found;  }
+	bool IsDir()      const	{   return dir;  }
+	bool IsDisabled() const	{   return disabled;  }
+	bool IsFound()    const	{   return found;  }
+	bool IsSelected() const	{   return sel;  }
 };

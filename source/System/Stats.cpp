@@ -32,6 +32,18 @@ void Stats::Add(const Track* t)
 	}
 }
 
+void Stats::Sub(const Track* t)
+{
+	if (t->IsDir())
+		--dirs;
+	else
+	{
+		--files;
+		size -= t->GetSize();
+		time -= t->GetTime();
+	}
+}
+
 void Stats::operator += (const Stats& add)
 {
 	size += add.size;

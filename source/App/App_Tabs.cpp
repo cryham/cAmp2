@@ -30,22 +30,23 @@ void App::TabNext(int i, bool row, bool ofs)
 void cAmp::plsPlChg(int id)
 {
 	plsPlId = id;  plsPl = vPlst[plsPlId];
-}
+}*/
 
 void App::updSelId(int clear)
 {
-	if (pls->numSel > 0)
-	{	plsSelId=plsId;  plsSel=pls;  }
-	else if (clear)
-	{	plsSelId=-1;  plsSel=NULL;  }
+	if (Pls().HasSelected())
+		plsSelId = plsId;
+	else
+	if (clear)
+		plsSelId = -1;
 }
 
 void App::clrSelId()
 {
-	if (pls==plsSel)
-	{  plsSelId=-1;  plsSel=NULL;  }
+	if (plsId == plsSelId)
+	  plsSelId = -1;
 }
-*/
+
 
 ///  Move tab  . . . . . . . 
 void App::TabMove(int n)

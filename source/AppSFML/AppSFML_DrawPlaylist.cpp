@@ -101,15 +101,18 @@ void AppSFMLDraw::DrawPls_1Names()
 			str = String::fromUtf8(trk.GetName().begin(), trk.GetName().end());
 		}
 		
-		//  find
+		//  find, sel
 		if (trk.IsFound())
 		{
 			++iFindVis;
 			if (bFind)
 				Clr(70,240,70);
 		}
-		
-		w = Text(Fnt_Tracks, 17, y);
+
+		if (trk.IsSelected())
+			Clr(150,240,240);
+
+		w = Text(Fnt_Tracks, 17, y);  // save width
 		plsTxtW.emplace_back(w + 17);
 	
 		y += yF;  ++it;
@@ -158,14 +161,19 @@ void AppSFMLDraw::DrawPls_2Times()
 		}
 		
 		//  backgr  to clear names text
-		int xTime = xMax - width;  // x time pos
+		const int xTime = xMax - width;  // x time pos
 		if (width > 0)
 			Rect(xTime, y, width, yF, /*TX_TabB1*/TX_Black, false);
 
+
 		//  hide icons  + -
-		auto h = trk.GetHide();
-		if (h == Hid_Hide)		Rect(xTime -ico+4,y+1, ico,ico, TX_DHide, true);
-		else if (h == Hid_Show)	Rect(xTime -ico+5,y+1, ico,ico, TX_DShow, true);
+		const int xIco = -ico + 4 +
+			// 16;  // after rating
+			// xTime;  // before time
+			xMax - v.sldr.width + 19;  // before slider
+		auto h = trk.GetHide();  // 16 | xTime | 
+		if (h == Hid_Hide)		Rect(xIco  ,y+1, ico,ico, TX_DHide, true);
+		else if (h == Hid_Show)	Rect(xIco+1,y+1, ico,ico, TX_DShow, true);
 		
 		if (hasTime)
 		{
@@ -210,7 +218,10 @@ void AppSFMLDraw::DrawPls_3Cursors()
 		if (bk > 0)
 			Rect(0,y, xws,yF,
 				ETexUV(TX_PlsB1 + bk - 1), true, b,b,b);
-		
+
+		if (trk.IsSelected())
+			Rect(0,y, xws,yF, TX_PlsSel, true);/*?*/
+
 		//  cursors
 		if (it == Pls().iPlayVis)
 		{

@@ -15,6 +15,7 @@ enum EAction
 	Act_VolumeDown, Act_VolumeDownSlow, Act_VolumeDownFast,
 	//  go	                    
 	Act_GotoPlay, Act_GotoPlaySetPls,
+	Act_Unselect,
 
 	///  move cur
 	Act_PlsUp, Act_PlsUpBy8, Act_PlsDown, Act_PlsDownBy8,
@@ -55,9 +56,6 @@ enum EAction
 	//  insert, delete
 	Act_InsertDir, Act_InsertFiles,
 	Act_ClearPls, Act_DeleteCurFile, Act_DeleteCur,
-
-	// . . .
-	// note: add new here for bindings in xml to work ..
 
 
 	///  gui wnd   same as in EWndOpt  . . . . . . 

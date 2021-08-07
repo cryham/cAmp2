@@ -35,7 +35,7 @@ void Playlist::Home (int m)
 	case 2:  iCur = 0;  iOfs = 0;  break;  // list top
 	case 1:  iCur = iOfs;  break;  // view
 
-	case 0:
+	case 0:  // dir
 		do  --iCur;
 		while (iCur-1 > 0 && !visible[iCur].dir);
 		Up(0);  break;
@@ -51,10 +51,79 @@ void Playlist::End (int m)
 	case 2:  iCur = all-1;  iOfs = all-1;  Cur();  Ofs();  break;  // list end
 	case 1:  iCur = iOfs+iLinVis-1;  Cur();  break;  // view
 
-	case 0:
+	case 0:  // dir
 		do  ++iCur;
 		while (iCur+1 < all && !visible[iCur].dir);
 		Dn(0);  break;
 	}
 	bDraw = true;
+}
+
+
+//  Select
+//--------------------------------------------------------------------
+void Playlist::Pick(int cur)
+{
+	iCur = cur;  Cur();  ylastSel = cur;
+}
+
+void Playlist::sel(int ivL, bool sel)
+{
+	Track& t = GetTrackVis(ivL);
+	if (t.IsDir())  return;
+
+	if (sel){	t.sel = true;   stSel.Add(&t);  }  // select
+	else	{	t.sel = false;  stSel.Sub(&t);  }  // unselect
+}
+
+void Playlist::SelDir(int cur)  // select dir
+{
+	/*iCur = cur;  Cur();  int lc = iCur;
+	if (!GetTrackVis(lCur).isDir())  return;
+	lCur++;
+	while (lCur < listLen && !GetTrackVis(Cur).isDir())
+	{
+		sel(lCur, !GetTrackVis(lCur).sel);
+		lCur++;
+	}
+	lCur = lc;*/
+}
+
+void Playlist::SelRange(int cur, bool unselect)
+{
+	if (ylastSel <= 0)  return;
+
+	int a = min(ylastSel,cur), b = max(ylastSel,cur);
+
+	if (unselect)
+	{	for (int i = a; i <= b; ++i)
+			if (GetTrackVis(i).sel)  sel(i, 0);
+	}else{
+		for (int i = a; i <= b; ++i)
+			if (!GetTrackVis(i).sel)  sel(i, 1);
+	}
+	Pick(cur);
+}
+
+void Playlist::Select1(int cur)
+{
+	if (GetTrackVis(cur).IsDir())
+		SelDir(cur);
+	else
+	{	sel(cur, 1 - GetTrackVis(cur).sel > 0);
+		Pick(cur);
+	}
+}
+
+//  unselect all
+void Playlist::UnSel()
+{
+	for (int i=0; i < LengthAll(); ++i)
+		tracks[i].sel = false;
+	unSel0();
+}
+
+void Playlist::unSel0()
+{
+	stSel.Clear();
 }

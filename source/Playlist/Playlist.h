@@ -72,7 +72,7 @@ public:
 		Cur(), Ofs();  // check range
 
 	//  stats
-	Stats stats, stAll;  // All = not filtered
+	Stats stats, stAll, stSel;  // All = not filtered, Selected
 	
 	enum EInsert
 	{  Ins_Cursor, Ins_Top, Ins_End  };
@@ -93,7 +93,8 @@ public:
 	bool Next(int add = 1);
 	void GotoPlay();
 
-	
+
+	//  File
 	bool Load(), Save();
 	void Clear();
 	
@@ -116,6 +117,23 @@ public:
 	int GetFilter(bool lower)
 	{	return lower ? filterLow : filterHigh;  }
 
+
+	//  Select  ----
+	int ylastSel = -1;
+	void Pick(int cur), Select1(int cur);
+	void SelRange(int cur, bool unselect), SelDir(int cur);
+	void sel(int ivL, bool sel);
+	void unSel0(), UnSel();
+
+	#if 0
+	//  Move  ----
+	void Move1(int m, pTrk npos), MoveSel(int m, pTrk npos, CList* pL=NULL/*from*/),  // npos,cur = destin
+		Del(bool disk=false), DelSel(bool disk=false), del(pTrk q,bool disk=false),  //from disk
+		Insert1(int m, pTrk nt), ins(int m, pTrk cur, pTrk n/*what*/),
+		insertList(int m, pTrk npos, pTrk first,pTrk last),
+		CopySelFiles();
+	#endif
+
 	
 	//  Advanced  ----
 	bool DeleteCurFile(bool playNext);
@@ -128,15 +146,17 @@ public:
 	
 	//  getters	etc.
 	//----------------------------------------------------------------------------------------
+	bool IsEmpty() const	{	return tracks.empty();  }
+	bool HasSelected() const{	return stSel.GetFiles() > 0;  }
+
+	int LengthAll() const	{	return (int)tracks.size();  }
+	int LengthVis() const	{	return (int)visible.size();  }
+	
 	const Track& GetTrackAll(int id) const	{   return tracks[id];  }
 	      Track& GetTrackAll(int id)		{   return tracks[id];  }
 
 	const Track& GetTrackVis(int id) const	{   return Get(visible[id]);  }
 	      Track& GetTrackVis(int id)		{   return Get(visible[id]);  }
-	
-	int LengthAll() const	{	return (int)tracks.size();  }
-	int LengthVis() const	{	return (int)visible.size();  }
-	bool IsEmpty() const	{	return tracks.empty();  }
 	
 	const Track& Get(VisId id) const	{	return id.dir ? dirs[id.i] : tracks[id.i];  }
 	      Track& Get(VisId id)			{	return id.dir ? dirs[id.i] : tracks[id.i];  }

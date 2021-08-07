@@ -41,6 +41,7 @@ void App::VolumeDownFast()	{  audio->SetVol(1, 0, 1);  }
 //  go
 void App::GotoPlay()		{  Pls().GotoPlay();  }
 void App::GotoPlaySetPls()	{  plsId = plsPlId;  Pls().GotoPlay();  }
+void App::Unselect()		{  Pls().UnSel();  }
 
 
 ///  move cur

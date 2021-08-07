@@ -9,7 +9,7 @@ using namespace std;
 
 
 //  Load
-//------------------------------------------------
+//--------------------------------------------------------------------
 bool Playlist::Load()
 {
 	#define MP 1022  // max path len
@@ -96,7 +96,7 @@ bool Playlist::Load()
 }
 
 //  Save
-//------------------------------------------------
+//--------------------------------------------------------------------
 bool Playlist::Save()
 {
 	if (name.empty())
@@ -160,6 +160,7 @@ void Playlist::Clear()  // defaults
 	iFound = 0;
 }
 
+
 //  Delete
 //------------------------------------------------
 bool Playlist::DeleteCurFile(bool playNext)
@@ -192,6 +193,7 @@ void Playlist::DeleteCur()
 		--iPlay;
 	UpdateVis(false);
 }
+
 
 //  Duplicate
 //------------------------------------------------

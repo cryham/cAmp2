@@ -19,6 +19,7 @@ public:
 	int       GetFiles() const {  return files;  }
 	
 	void Add(const class Track* t);
+	void Sub(const class Track* t);
 	void AddDir();
 	void operator += (const Stats& add);
 };

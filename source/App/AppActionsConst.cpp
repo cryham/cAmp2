@@ -68,7 +68,7 @@ void ActionsMap::FillNames()
 	//  go
 	names[Act_GotoPlay		  ] = "Go to Playing in playlist";
 	names[Act_GotoPlaySetPls  ] = "Go to Playing and playlist";
-
+	names[Act_Unselect		  ] = "Unselect all in playlist";
 
 	///  move cur
 	names[Act_PlsUp			  ] = "Move Up";
@@ -235,7 +235,8 @@ void ActionsMap::FillMethods()
 
 	//  go
 	methods[Act_GotoPlay		] = &App::GotoPlay;
-	methods[Act_GotoPlaySetPls  ] = &App::GotoPlaySetPls;
+	methods[Act_GotoPlaySetPls	] = &App::GotoPlaySetPls;
+	methods[Act_Unselect		] = &App::Unselect;
 
 
 	///  move cur

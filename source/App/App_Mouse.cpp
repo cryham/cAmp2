@@ -207,11 +207,11 @@ void App::MouseUpdate()
 					else
 						Pls().Move1(m, dest);
 				}
-				else  if (shift) Pls().SelRange(cur, ctrl);  //  select range
+				else
+				#endif
+				if (shift)  Pls().SelRange(cur, ctrl);  //  select range
 				else  if (ctrl)  Pls().Select1(cur);  //  select 1
 				else  Pls().Pick(cur);  //  pick
-				#endif
-				Pls().iCur = cur;
 				
 				#if 0
 				if (/*plsSel &&*/ (ctrl || shift || alt))  /*plsSel when sel chg*/

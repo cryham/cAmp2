@@ -36,13 +36,18 @@ protected:
 	std::vector<Playlist> vPls;  // always at least 1
 	Playlist& Pls()   {  return vPls[plsId];  }
 	Playlist& PlsPl() {  return vPls[plsPlId];  }
+	Playlist& PlsSel(){  return plsSelId < 0 ? Pls() : vPls[plsSelId];  }
+
 	void LoadPls(), SavePls();  // for set
 	Stats all, allFull;
 	
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1,  // selected, copy from
 		nTabMov = -1;
-	
+
+	void updSelId(int clear);
+	void clrSelId();
+
 	void LoadState(), SaveState();  // set.st
 	bool Play(bool set);
 	
@@ -169,6 +174,7 @@ protected:  //  actions for key binds
 	VolumeDown(), VolumeDownSlow(), VolumeDownFast(),
 	
 	GotoPlay(), GotoPlaySetPls(),
+	Unselect(),
 
 	PlsUp(), PlsUpBy8(), PlsDown(), PlsDownBy8(),
 	PlsPageOfsUp  (),PlsPageOfsUp4  (),PlsPageUp4  (),PlsPageUp  (),

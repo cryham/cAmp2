@@ -45,6 +45,7 @@ void ActionsMap::DefaultBindings()
 	//  go
 	Bind(0,0,0, key(Backspace), Act_GotoPlay);
 	Bind(0,1,0, key(Backspace), Act_GotoPlaySetPls);
+	Bind(0,0,0, key(Space), Act_Unselect);
 
 
 	///  move cur
@@ -153,13 +154,19 @@ void ActionsMap::DefaultBindings()
 
 
 	///  gui wnd  -----
+	// Act_WO_AppAbout, Act_WO_AppHelp, Act_WO_AppTest, 
+	// Act_WO_ViewFonts,  Act_WO_VisThemes, Act_WO_ViewTimes
 	Bind(0,0,0, key(F1), Act_WO_Main);
-	Bind(0,0,0, key(F2), Act_WO_View);
-	Bind(0,0,0, key(F3), Act_WO_Vis);
+	Bind(0,0,1, key(A), Act_WO_AppAudio);
+	Bind(0,0,1, key(K), Act_WO_AppKeys);
+	Bind(0,0,1, key(F2), Act_WO_View);
+	Bind(0,0,0, key(F3), Act_WO_Vis);  Bind(0,0,1, key(V), Act_WO_Vis);
 
-	Bind(0,0,1, key(F1), Act_WO_PlsFind);
-	Bind(0,0,1, key(F2), Act_WO_Tab);
-	Bind(0,0,1, key(F3), Act_WO_AppStats);
+	Bind(0,0,1, key(F), Act_WO_PlsFind);
+	Bind(0,0,1, key(R), Act_WO_PlsFilter);
+	Bind(0,0,0, key(F2), Act_WO_Tab);  Bind(0,0,1, key(T), Act_WO_Tab);
+	Bind(0,0,1, key(H), Act_WO_TabsAll);
+	Bind(0,0,1, key(S), Act_WO_AppStats);
 	
 	
 	///  views
