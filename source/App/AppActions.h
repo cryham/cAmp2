@@ -62,10 +62,11 @@ public:
 	
 	void KeyPress(TModsKey modsKey);
 
+	std::string sFind;
+	void UpdateGui()  {  bGuiUpdate = true;  }
 	void UpdateGuiKeysList();
 	void SortGui();
 
-	void UpdateGui()  {  bGuiUpdate = true;  }
 	void GuiBindStart(EAction act);
 	void GuiBindEnd(TModsKey mkey);
 	void GuiBindCancel()    {  binding = false;  }

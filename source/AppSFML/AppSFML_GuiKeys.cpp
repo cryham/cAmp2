@@ -19,9 +19,15 @@ void AppSFMLDraw::WndDraw_AppKeys()
 		| ImGuiTableFlags_ScrollY;
 	
 	Sep(5);
-	SameLine(200);  if (Button("Load"))  act->Load();
-	SameLine(300);  if (Button("Save"))  act->Save();
-	SameLine(450);  if (Button("Reset to Defaults"))  act->DefaultBindings();
+	TextG("Find:");  SameLine(60);
+	static char s[1024]={0};  strcpy(s, sFind.c_str());  WndFocus();
+	PushItemWidth(140);  bool e = InputText("Afind", s, sizeof(s));  PopItemWidth();
+	if (e)  {  act->sFind = s;  act->UpdateGui();  }
+	SameLine(210);  if (Button("X"))  {  s[0] = 0;  act->sFind.clear();  act->UpdateGui();  }
+
+	SameLine(290);  if (Button("Load"))  act->Load();
+	SameLine(380);  if (Button("Save"))  act->Save();
+	SameLine(480);  if (Button("Reset to Defaults"))  act->DefaultBindings();
 	Sep(5);
 
 	act->UpdateGuiKeysList();

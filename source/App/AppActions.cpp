@@ -105,32 +105,42 @@ void ActionsMap::UpdateGuiKeysList()
 	bGuiUpdate = false;
 
 	rows.clear();
-	rows.resize(names.size(), KeysRow());
 
-	int n = 0;
+	string find = sFind;  strlower(find);
+
 	for (auto& a : names)
 	{
-		KeysRow& row = rows[n];
-		auto aid = a.first;  // enum Act_
-		row.Act = aid;
+		bool found = find.empty();
+		if (!found)
+		{
+			string name = a.second;  strlower(name);
+			found = name.find(find) != string::npos;
+		}
+		if (!found)
+			continue;
+
+		KeysRow row;
+		auto actId = a.first;  // enum Act_
+		row.Act = actId;
 		row.name = a.second;
-		
+
 		string ss;  // todo: use multi_map?
 		for (auto& b : bindings)
 		{
-			if (b.second == aid)
+			if (b.second == actId)
 			{
 				if (!ss.empty())
 					ss += "\n";
 				string s = ActionsMap::StrKey(b.first);
 				ss += s;
+				// todo: search keys too?
 				
 				row.keys.emplace_back(s);
 				row.modsKeys.emplace_back(b.first);
 			}
 		}
 		row.strKeys = ss;
-		++n;
+		rows.emplace_back(row);
 	}
 }
 

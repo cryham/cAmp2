@@ -13,8 +13,7 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 void AppSFMLDraw::WndDraw_PlsFind()
 {
 	bool e;
-	static char s[1024]={0};
-	strcpy(s, sFind.c_str());  WndFocus();
+	static char s[1024]={0};  strcpy(s, sFind.c_str());  WndFocus();
 	PushItemWidth(140);  e = InputText("find", s, sizeof(s));  PopItemWidth();
 	if (e)  {  sFind = s;  Find();  }
 	SameLine(200);
