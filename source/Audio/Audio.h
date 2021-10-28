@@ -6,7 +6,7 @@
 class Playlist;
 
 
-class Audio
+class Audio  // abstract
 {
 protected:
 	int maxFreq = 0;  // init, devices-
@@ -27,11 +27,15 @@ public:
 	
 	bool bRepTrk = false;  // repeat track
 	bool bRepPls = true;  // repeat playlist
-	bool bNextPrev = true;  // false back, prev
+	
+	bool bDirNext = true;  // pls play direction next/prev
+	bool bNextPrev = true;  // false back, prev, auto
 
 public:
 	const bool IsPlaying() const {  return bPlaying;  }
 	const bool IsPaused()  const {  return bPaused;   }
+
+	int DirNext() const {  return bDirNext ? 1 : -1;   }
 
 	Playlist* GetPls() {  return pls;  }
 	void SetPls(Playlist* pl) {  pls = pl;  }

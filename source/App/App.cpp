@@ -105,19 +105,29 @@ void App::NextVisual()
 //------------------------------------------------------------------------
 void App::LoadState()
 {
-	audio->iVolume = set.state.iVolume;
-	plsId = set.state.idPls;
-	plsPlId = set.state.idPlay;
-	if (set.state.bPlay && plsPlId < vPls.size())
+	const auto& st = set.state;
+	plsId = st.idPls;
+	plsPlId = st.idPlay;
+
+	audio->bRepPls = st.bRepPls;
+	audio->bDirNext = st.bDirNext;
+	
+	audio->iVolume = st.iVolume;
+	if (st.bPlay && plsPlId < vPls.size())
 		vPls[plsPlId].Play(false);
 }
 
 void App::SaveState()
 {
-	set.state.bPlay = audio->IsPlaying();
-	set.state.iVolume = audio->iVolume;
-	set.state.idPls = plsId;
-	set.state.idPlay = plsPlId;
+	auto& st = set.state;
+	st.idPls = plsId;
+	st.idPlay = plsPlId;
+	
+	st.bRepPls = audio->bRepPls;
+	st.bDirNext = audio->bDirNext;
+
+	st.iVolume = audio->iVolume;
+	st.bPlay = audio->IsPlaying();
 }
 
 

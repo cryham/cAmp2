@@ -13,7 +13,7 @@ void CALLBACK EndSync(HSYNC handle, DWORD channel, DWORD data, void *user)
 	if (!ab->bRepTrk)
 	{
 		ab->Stop();
-		ab->GetPls()->Next();
+		ab->GetPls()->Next(ab->DirNext());
 	}
 }
 

@@ -123,12 +123,12 @@ void AudioBass::SetPos(bool back, bool slow, bool fast)  //  <<  >>
 	pos += back ? -add : add;
 
 	if (pos < 0.0)
-	{	if (!bRepTrk)  pls->Next(-1);
+	{	if (!bRepTrk)  pls->Next(-DirNext());
 		pos += timeTrack;  // exact
 	}
 	if (pos > timeTrack)
 	{	pos -= timeTrack;
-		if (!bRepTrk)  pls->Next();
+		if (!bRepTrk)  pls->Next(DirNext());
 	}
 	BASS_ChannelSetPosition(ch(), BASS_ChannelSeconds2Bytes(ch(), pos), BASS_POS_BYTE);
 }

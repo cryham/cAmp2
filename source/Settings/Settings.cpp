@@ -20,7 +20,11 @@ void SetState::Default()
 {
 	bPlay = false;
 	iVolume = 500;
+
 	idPls = 0;  idPlay = 0;
+
+	bRepPls = true;
+	bDirNext = true;
 }
 
 void SetFind::Default()
@@ -114,8 +118,12 @@ bool Settings::Load()
 	{
 		a = e->Attribute("bPlay");    if (a)  state.bPlay = s2b(a);
 		a = e->Attribute("iVolume");  if (a)  state.iVolume = s2i(a);
+		
 		a = e->Attribute("idPls");    if (a)  state.idPls = s2i(a);
 		a = e->Attribute("idPlay");   if (a)  state.idPlay = s2i(a);
+
+		a = e->Attribute("bRepPls");  if (a)  state.bRepPls = s2b(a);
+		a = e->Attribute("bDirNext"); if (a)  state.bDirNext = s2b(a);
 	}
 	//  find
 	e = root->FirstChildElement("find");
@@ -193,10 +201,14 @@ bool Settings::Save() const
 	
 	//  state
 	e = xml.NewElement("state");
-		e->SetAttribute("bPlay",   state.bPlay ? 1 : 0);
-		e->SetAttribute("iVolume", state.iVolume);
-		e->SetAttribute("idPls",   state.idPls);
-		e->SetAttribute("idPlay",  state.idPlay);
+		e->SetAttribute("bPlay",    state.bPlay ? 1 : 0);
+		e->SetAttribute("iVolume",  state.iVolume);
+ 
+		e->SetAttribute("idPls",    state.idPls);
+		e->SetAttribute("idPlay",   state.idPlay);
+ 
+		e->SetAttribute("bRepPls",  state.bRepPls);
+		e->SetAttribute("bDirNext", state.bDirNext);
 	root->InsertEndChild(e);
 	
 	//  find

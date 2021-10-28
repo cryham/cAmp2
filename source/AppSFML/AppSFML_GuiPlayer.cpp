@@ -47,14 +47,18 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	Checkbox("Track", &audio->bRepTrk);  SameLine(150);
 	Checkbox("Playlist", &audio->bRepPls);
 	
-	i = 0;  // play controls meh
 	Sep(10);
+	TextG("Play Direction:");
+	auto& b = audio->bDirNext;
+	if (RadioButton("Down", b))  b = true;  SameLine(150);
+	if (RadioButton("Up", !b))  b = false;
+	
+	Sep(20);  i = 0;  // play controls
 	e = Button("|<");  i += 80;  SameLine(i);  if (e)  Pls().Next(-1);
 	e = Button("|>");  i += 60;  SameLine(i);  if (e)  Play(false);
 	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
 	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
 	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);
-	// todo: pls dir play next/prev
 }
 
 
