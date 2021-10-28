@@ -40,7 +40,7 @@ if(WIN32)
 	#target_link_libraries(${PROJECT_NAME} "-lopengl32 -lglu32 -lgdi32")
 	target_link_libraries(${PROJECT_NAME} "opengl32")
 else()
-	target_link_libraries(${PROJECT_NAME} "-lGL")
+	target_link_libraries(${PROJECT_NAME} "-lGL -lX11")
 endif()
 
 

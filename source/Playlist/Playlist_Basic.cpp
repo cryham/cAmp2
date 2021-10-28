@@ -55,6 +55,7 @@ bool Playlist::Next(int add)
 	bool found = false;
 	int adds = 0;
 	int p = iPlay, last = LengthAll()-1;
+	
 	while (!found && adds < LengthAll())
 	{
 		++adds;  p += add;

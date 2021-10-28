@@ -24,8 +24,8 @@ void Playlist::UpdateVis(bool bZoom)
 		//zoomTo = lin/2,   // zoom to middle
 		zoomTo = iCur - iOfs,  // zoom to cursor
 		iAll = LengthAll(), iVis = LengthVis();
-	const bool sh = iAll < iLinVis || iVis == 0;  // all visible, no scroll
-	if (!sh && bZoom)
+	const bool small = iAll < iLinVis || iVis == 0;  // all visible, no scroll
+	if (!small && bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
 	visible.clear();
@@ -111,7 +111,7 @@ void Playlist::UpdateVis(bool bZoom)
 	if (bZoom)  // set cur, ofs
 	{
 		iCur = iZoomNew;
-		if (sh)
+		if (small)
 			iOfs = 0;
 		else
 			iOfs = iZoomNew - zoomTo;
