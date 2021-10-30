@@ -12,17 +12,17 @@ void AppSFMLDraw::DrawAll()
 {
 	if (Pls().bDraw)
 	{	Pls().bDraw = false;
-		iDraw = 2;
+		iDraw = 4;  //par fixes double buffer flicker
 	}
-	if (iDraw > 0)
+	if (iDraw > 0)  // clear backgr
 		pWindow->clear();
 	
-	DrawPlayer();
+	DrawPlayer();   // always
 	
 	if (iDraw > 0)
 	{	--iDraw;
 		
-		DrawTabs();
+		DrawTabs();  // after change
 		DrawPlaylist();
 	}
 }
@@ -195,9 +195,9 @@ void AppSFMLDraw::DrawPlayer()
 			+" cur-ofs "+i2s(Pls().iCur-Pls().iOfs)+" len "+i2s(Pls().LengthVis());
 		Text(Fnt_Player, 50, 30);
 		str = "mId "+i2s(Pls().GetTrackVisIdAll( min(Pls().iOfs+ymc, Pls().LengthVis()-1) ))
-			+" ym "+i2s(ymc)+" / yL " + i2s(yL_pl);
+			+" ym "+i2s(ymc)+" / yL "+i2s(yL_pl);
 		Text(Fnt_Player, 50, 46);
-		str = "pl "+i2s(Pls().iPlay)+" plVis "+i2s(Pls().iPlayVis)+" " + b2s(Pls().bPlayVisOut);
+		str = "pl "+i2s(Pls().iPlay)+" plVis "+i2s(Pls().iPlayVis)+" "+b2s(Pls().bPlayVisOut);
 		Text(Fnt_Player, 50, 62);
 	}
 }
