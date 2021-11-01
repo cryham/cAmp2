@@ -8,12 +8,31 @@ using namespace std;  using namespace sf;
 void AppSFMLDraw::DrawPls_Header()
 {
 	const int low = Pls().GetFilter(true), high = Pls().GetFilter(false);
-	Clr(130,160,195);
+
+	//if (yB_pli >= view.ySize)  return;
+	bool sel = Pls().HasSelected();
+	
+	//  get
+	const Stats& stats = 
+		sel ? Pls().statsSel :
+		bAllStats ?
+			(bFullStats ? allFull : all) :
+			(bFullStats ? Pls().statsAll : Pls().stats);
+	const Stats& ful =
+		bAllStats ? allFull : Pls().statsAll;
+
+	uint dirs, files, size, time;
+	dirs = stats.GetDirs();  // todo: count dirs on sel?
+	files = stats.GetFiles();
+	size = stats.GetSize() / 1000000;
+	time = stats.GetTime();
+
 
 	//  filter  ` Y *
 	int x = xM_pl_filt, y = yB_pl_inf;
 	const EFont fnt = Fnt_Player;
 
+	Clr(130,160,195);
 	str = Ratings::GetVis(low);
 	Text(fnt, x -11-2, y+1);
 	str = Ratings::GetVis(high);
@@ -24,30 +43,26 @@ void AppSFMLDraw::DrawPls_Header()
 	Text(fnt, x + 2, y-4);  str = "Y";
 	Text(fnt, x + 1, y-1);
 
-	//  info  Total dirs, files, size, time
-	//----------------------------------------------------------------
-	//if (yB_pli >= view.ySize)  return;
-	bool sel = Pls().HasSelected();
-	
-	//  get
-	const Stats& stats = 
-		sel ? Pls().stSel :
-		bAllStats ?
-			(bFullStats ? allFull : all) :
-			(bFullStats ? Pls().stAll : Pls().stats);
-
-	uint dirs, files, size, time;
-	dirs = stats.GetDirs();
-	files = stats.GetFiles();
-	size = stats.GetSize() / 1000000;
-	time = stats.GetTime();
 
 	//  clr
 	if (sel)  Clr(0,190,190);  else
 	if (bAllStats){  if (bFullStats)  Clr(160,170,190);  else  Clr(150,150,190);  }
 	else		  {  if (bFullStats)  Clr(120,150,190);  else  Clr(100,130,160);  }
-	
-	//  size
+
+
+	//  filter  % files
+	if (stats.GetFiles() < ful.GetFiles())
+	{
+		float p = 100.f * stats.GetFiles() / ful.GetFiles();
+		str = f2s(p, 0,2) + "%";
+		Text(fnt, x + 32, y);
+	}
+
+
+	//  Info  Total dirs, files, size, time
+	//----------------------------------------------------------------
+
+	//  |Dirs Files Size
 	y = yB_pl_inf;
 	string ss = size2s(size);
 	if (dirs == 0)
@@ -58,9 +73,10 @@ void AppSFMLDraw::DrawPls_Header()
 	//if (Pls().bThrTi /*&& plst->itu < plst->listLen*/)  {  % progress ..
 	//	Format("%6.1f%%", 100.f * Pls().itu / float(Pls().listLen));  Text(fnt, xwr, y);  }
 	
-	//  total time
+
+	//  Total Time|
 	str = time2s(time);
-	x = xE_pl_inf;
+	x = xE_pl_inf;  // align right
 	int w = Text(fnt, 0, 0, false);
 	Text(fnt, x - w, y);
 }
