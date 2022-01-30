@@ -88,14 +88,19 @@ void App::TabNew(int m)
 		plsId = vPls.size()-1;  //pls = vPlst[plsId];  // sel
 	}else
 	{	//  none- after cur   alt- before cur   shift- at begin
-		vPls.insert(vPls.begin()+ (m==-2? 0: (plsId+ (m==-1?0:1))), pl);
-			// pl +-
-		if (m==-2 || m==1 && plsId < plsPlId || m==-1 && plsId <= plsPlId)
+		vPls.insert(vPls.begin()+
+					(m==-2? 0: (plsId+ (m==-1?0:1))), pl);
+		// pl +-
+		if (m==-2 || m==1 && plsId < plsPlId
+				 || m==-1 && plsId <= plsPlId)
 		{  plsPlId++;  /*plsPl = vPlst[plsPlId];*/  }  // pl
-			// sel +-
+		
+		// sel +-
 		if (plsSelId != -1)
-		if (m==-2 || m==1 && plsId < plsSelId || m==-1 && plsId <= plsSelId)
+		if (m==-2 || m==1 && plsId < plsSelId
+				 || m==-1 && plsId <= plsSelId)
 		{  plsSelId++;  /*plsSel = vPlst[plsSelId];*/  }  // sel
+		
 		// cur +-
 		if (m==-2)  plsId=0;  else
 		if (m==1)  plsId++;

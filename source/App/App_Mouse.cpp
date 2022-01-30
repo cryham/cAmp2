@@ -192,25 +192,24 @@ void App::MouseUpdate()
 		{
 			if (!bLs && ym > yB_pl && ym < yE_pl)
 			{
-				#if 0
 				if (alt)		//  Move
 				{
-					int m = shift? -2: ctrl? 2: Pls().lInsM;
+					/*int m = shift? -2: ctrl? 2: Pls().lInsM;
 					if (m == Pls().lInsM && Pls().lInsPos == -1)
-						return;  //restr
+						return;  //restr*/
 	
 					//CList* plFrom = plsSel ? plsSel : pls;
+					#if 0
 					if (/*plFrom->numSel > 0 ||/**/ plsSel && plsSel != pls)
 						Pls().MoveSel(m, dest, plsSel);
 					else if (Pls().numSel > 0)
 						Pls().MoveSel(m, dest, 0);
 					else
-						Pls().Move1(m, dest);
+					#endif
+						//Pls().Move1(m, dest);
 				}
-				else
-				#endif
-				if (shift)  Pls().SelRange(cur, ctrl);  //  select range
-				else  if (ctrl)  Pls().Select1(cur);  //  select 1
+				else if (shift)  Pls().SelRange(cur, ctrl);  //  select range
+				else if (ctrl)  Pls().Select1(cur);  //  select 1
 				else  Pls().Pick(cur);  //  pick
 				
 				#if 0

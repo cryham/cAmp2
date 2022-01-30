@@ -143,7 +143,7 @@ void App::LoadPls()
 	{
 		Playlist p(sp);
 		p.Load();
-		all += p.stats;  allFull += p.stAll;
+		all += p.stats;  allFull += p.statsAll;
 		vPls.emplace_back(move(p));
 	}
 	//Pls().Update();
@@ -252,7 +252,7 @@ void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL pa
 		{
 			char* file = NFD_PathSet_GetPath(&paths, i);
 			Pls().AddFile(file, where);
-			Pls().UpdateVis();
+			Pls().UpdateVis(0, true);
 		}
 		NFD_PathSet_Free(&paths);
 	}

@@ -13,9 +13,12 @@ class Audio;
 class Playlist : public Logger
 {
 protected:
+	// 
 	std::deque<Track> tracks;  // All, unfiltered, from .cp
-	std::vector<Track> dirs;  // Dir added when path changes
+	
+	std::vector<Track> dirs;  // Dir added when path changes  auto, saved in .cp
 	std::map<fs::path, int> mapPathToDirs;  // dirs id+1, 0 not found
+	
 	struct VisId
 	{
 		bool dir = false;
@@ -41,7 +44,7 @@ public:
 	int bookm = 0;  //  bookmark
 
 	//  tab color
-	float hue = 0.f, sat = 0.f, val = 0.f;
+	float hue = 0.55f, sat = 0.8f, val = 0.9f;  // skyblue
 //----  properties end  ----
 
 	uint8_t bck[3]={0,0,0};  // bckgr,text colors  after dim from hsv
@@ -72,7 +75,8 @@ public:
 		Cur(), Ofs();  // check range
 
 	//  stats
-	Stats stats, stAll, stSel;  // All = not filtered, Selected
+	Stats stats, statsAll, statsSel;  // filtered, All not filtered, Selected
+	// statsAll updated only in Load()..
 	
 	enum EInsert
 	{  Ins_Cursor, Ins_Top, Ins_End  };
@@ -99,11 +103,10 @@ public:
 	void Clear();
 	
 	//  Update  Fills visible Ids
-	void UpdateVis(bool bZoom = true);
+	void UpdateVis(int outDebug = 0, bool bZoom = true);
 	
 	
 	//  Basic  ----
-	//  todo:  copy, move selected tracks, from other ..
 	void DeleteCur();
 	void DuplicateCur();
 	void HideCur(EHide hide);
@@ -122,12 +125,15 @@ public:
 	int ylastSel = -1;
 	void Pick(int cur), Select1(int cur);
 	void SelRange(int cur, bool unselect), SelDir(int cur);
-	void sel(int ivL, bool sel);
-	void unSel0(), UnSel();
+	
+	void SelTrk(Track& t, bool sel);
+	void Sel(int ivL, bool sel);
+	void Unsel0(), UnSel();
 
+	//  Operation  ----
+	//  todo:  copy, move selected tracks, from other ..
 	#if 0
-	//  Move  ----
-	void Move1(int m, pTrk npos), MoveSel(int m, pTrk npos, CList* pL=NULL/*from*/),  // npos,cur = destin
+	void // Move1(int m, pTrk npos), MoveSel(int m, pTrk npos, CList* pL=NULL/*from*/),  // npos,cur = destin
 		Del(bool disk=false), DelSel(bool disk=false), del(pTrk q,bool disk=false),  //from disk
 		Insert1(int m, pTrk nt), ins(int m, pTrk cur, pTrk n/*what*/),
 		insertList(int m, pTrk npos, pTrk first,pTrk last),
@@ -147,7 +153,7 @@ public:
 	//  getters	etc.
 	//----------------------------------------------------------------------------------------
 	bool IsEmpty() const	{	return tracks.empty();  }
-	bool HasSelected() const{	return stSel.GetFiles() > 0;  }
+	bool HasSelected() const{	return statsSel.GetFiles() > 0;  }
 
 	int LengthAll() const	{	return (int)tracks.size();  }
 	int LengthVis() const	{	return (int)visible.size();  }
@@ -162,6 +168,6 @@ public:
 	      Track& Get(VisId id)			{	return id.dir ? dirs[id.i] : tracks[id.i];  }
 	
 	//  get all from vis
-	int GetTrackVisIdAll(int id) const	{   return visible[id].iAll;  }   // all  always track
+	int GetTrackVisIdAll(int id) const	{   return visible[id].iAll;  }   // All  always track
 	int GetTrackVisId(int id) const		{   return visible[id].dir ? -1 : visible[id].i;  }
 };

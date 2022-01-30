@@ -16,9 +16,11 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	static char s[1024]={0};  strcpy(s, sFind.c_str());  WndFocus();
 	PushItemWidth(140);  e = InputText("find", s, sizeof(s));  PopItemWidth();
 	if (e)  {  sFind = s;  Find();  }
+	
 	SameLine(200);
 	e = Button("X Clear");  if (e) {  sFind.clear();  Find();  }
 	e = Checkbox("Show", &bFind);  if (e)  Redraw();
+	
 	SameLine(120);  e = Button("< Prev");  //if (e)  NextFind(-dFind);
 	SameLine(200);  e = Button("Next >");  //if (e)  NextFind( dFind);
 	// todo: goto next,prev
@@ -32,6 +34,7 @@ void AppSFMLDraw::WndDraw_PlsFind()
 			ImGui::Text("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
 	}else
 		TextG("");
+	
 	Sep(10);
 	auto& f = set.find;
 	e = false;
@@ -52,11 +55,11 @@ void AppSFMLDraw::WndDraw_PlsFilter()
 	PushItemWidth(300);
 	i = Pls().filterLow;  s = "Rating Low: " + i2s(i) +" "+ Ratings::GetVis(i);  TextG(s);  WndFocus();
 	e = SliderInt("rFl", &i, Ratings::valMin, Ratings::valMax, "");
-	if (e) {  Pls().filterLow = i;  Pls().UpdateVis();  }
+	if (e) {  Pls().filterLow = i;  Pls().UpdateVis(0, true);  }
 	
 	i = Pls().filterHigh;  s = "Rating High: " + i2s(i) +" "+ Ratings::GetVis(i);  TextG(s);
 	e = SliderInt("rFh", &i, Ratings::valMin, Ratings::valMax, "");
-	if (e) {  Pls().filterHigh = i;  Pls().UpdateVis();  }
+	if (e) {  Pls().filterHigh = i;  Pls().UpdateVis(0, true);  }
 	PopItemWidth();
 
 	// todo:  -show empty dirs  `dir2 separator lines
@@ -75,15 +78,18 @@ void AppSFMLDraw::WndDraw_PlsStats()
 	//  write stats
 	Sep(10);
 	uint di, fi, si, tm;
+	
 	const Stats& ful = bAllStats ?
-					allFull : Pls().stAll;
+					allFull : Pls().statsAll;
 	const Stats& st = bAllStats ?
 		bFullStats ? allFull : all :
-		bFullStats ? Pls().stAll : Pls().stats;
+		bFullStats ? Pls().statsAll : Pls().stats;
+
 	di = st.GetDirs();
 	fi = st.GetFiles();
 	si = st.GetSize() / 1000000;
 	tm = st.GetTime();
+	
 	if (bFullStats || ful.GetFiles() == 0)
 	{
 		s = " Dirs:  "+i2s(di);    TextG(s);
@@ -96,6 +102,7 @@ void AppSFMLDraw::WndDraw_PlsStats()
 		Ffi = 100.f * fi / ful.GetFiles();
 		Fsi = 100.f * si /(ful.GetSize() / 1000000);
 		Ftm = 100.f * tm / ful.GetTime();
+		
 		s = " Dirs:  "+i2s(di);    TextG(s);  SameLine(200);  s = f2s(Fdi,2,5)+" %%";  TextG(s);
 		s = "Files:  "+i2s(fi);    TextG(s);  SameLine(200);  s = f2s(Ffi,2,5)+" %%";  TextG(s);
 		s = " Size:  "+size2s(si); TextG(s);  SameLine(200);  s = f2s(Fsi,2,5)+" %%";  TextG(s);

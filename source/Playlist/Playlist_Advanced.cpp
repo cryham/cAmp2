@@ -14,9 +14,9 @@ using namespace std;
 ///  Update Visible
 //   Fills visible Ids from tracks,  filters rating, adds dirs etc.
 //--------------------------------------------------------------------------------------------------------
-void Playlist::UpdateVis(bool bZoom)
+void Playlist::UpdateVis(int outDebug, bool bZoom)
 {
-	const bool noEmptyDirs = true;
+	const bool noEmptyDirs = true;  // par
 
 	int iZoomNew = 0,
 		iZoomOld = 0;
@@ -28,12 +28,25 @@ void Playlist::UpdateVis(bool bZoom)
 	if (!small && bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
+	if (outDebug)
+	{	cout << "--------------" << endl;
+		cout << "len all: " << iAll << endl;
+	}
+
+	auto Out = [&](const Track& t)
+	{
+		cout << "Trk " << t.idDir << "  " << t.name.substr(0, 22) << endl;
+	};
+
+
 	visible.clear();
 	stats.Clear();
 	
 	fs::path prev;
 	bool dirHide = false, dirShow = false;
+	int dirId = 0;
 	
+	//----------------
 	for (int i=0; i < iAll; ++i)
 	{
 		Track& t = tracks[i];
@@ -42,8 +55,10 @@ void Playlist::UpdateVis(bool bZoom)
 		if (i == iZoomOld)
 			iZoomNew = iVis;
 
-		bool out = t.rate < filterLow || t.rate > filterHigh;
+		//  Track hide/show
+		bool out = t.rate < filterLow || t.rate > filterHigh;  // filtered, hide
 		bool show = t.GetHide() == Hid_Show;
+		
 		if (dirShow || show)  // force showing all
 			out = false;
 		
@@ -66,12 +81,13 @@ void Playlist::UpdateVis(bool bZoom)
 			int idDir = mapPathToDirs[path];
 			if (idDir == 0)  // not found
 			{
-				///  Add Dir  +++
+				///  Add Dir  + + +
 				Track d(path, true);
 				dirs.emplace_back(move(d));
-				
+
 				int size = dirs.size();
 				mapPathToDirs[path] = size;  // 1..
+				idDir = size;
 				
 				id.i = size - 1;  // last
 				id.iAll = i;
@@ -79,34 +95,53 @@ void Playlist::UpdateVis(bool bZoom)
 				id.i = idDir - 1;
 
 			id.iAll = i;  // closest track
-			
+
+			if (outDebug)  /// D
+			{
+				int iD = mapPathToDirs[path]-1;
+				if (iD < 0)
+					cout << "Dir -1" << endl;
+				
+				const Track& d = dirs[iD];
+				cout << "Dir " << iD << "  " << d.name << endl;
+			}
+
+			//  Dir hide/show
 			auto h = dirs[id.i].GetHide();
 			dirHide = h == Hid_Hide;
 			dirShow = h == Hid_Show;
 				
 			visible.emplace_back(move(id));
-
+			
 			t.idPlayVis = iVis+1;
-				
+			dirId = id.i;
+
+			//if (outDebug)  Out(t);
+
 			stats.AddDir();
 		}
 		prev = path;
+
+		t.idDir = dirId;
 		
 		if (!show)
 		{
-		if (dirHide)
-			t.visible = false;
-		
-		if (out || dirHide)
-			continue;
+			if (dirHide)
+				t.visible = false;
+			
+			if (out || dirHide)
+				continue;
 		}
 		
-		///  Add File  +++
+		///  Add Track  + + +
 		VisId id;  id.iAll = id.i = i;
 		visible.emplace_back(id);
 		
+		if (outDebug)  Out(t);  /// D
+		
 		stats.Add(&t);
 	}
+	//----------------
 
 	if (bZoom)  // set cur, ofs
 	{

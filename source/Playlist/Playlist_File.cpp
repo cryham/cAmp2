@@ -56,7 +56,6 @@ bool Playlist::Load()
 				string f(s);  // file
 				f = f.substr(1);
 				a = prevPath / f;
-				stAll.AddDir();
 			}else
 				a = s;
 				
@@ -79,7 +78,7 @@ bool Playlist::Load()
 			Bookmarks::Range(b);  t.bookm = b;
 			t.mod = m;
 			
-			stAll.Add(&t);
+			statsAll.Add(&t);
 			if (dir)
 			{	auto path = t.path;
 				dirs.emplace_back(move(t));
@@ -91,7 +90,7 @@ bool Playlist::Load()
 	}
 	fi.close();
 	
-	UpdateVis(false);  // no zoom
+	UpdateVis(0, false);  // no zoom
 	return true;
 }
 
@@ -149,7 +148,7 @@ void Playlist::Clear()  // defaults
 	mapPathToDirs.clear();
 	
 	stats.Clear();
-	stAll.Clear();
+	statsAll.Clear();
 
 	iCur = 0;  iOfs = 0;  iPlay = 0;
 	iLinVis = 10;  bDraw = true;
@@ -179,7 +178,7 @@ bool Playlist::DeleteCurFile(bool playNext)
 	tracks.erase(tracks.begin() + id.iAll);
 	if (iPlayVis+1 > iCur)
 		--iPlay;
-	UpdateVis(false);
+	UpdateVis(0, false);
 	return true;
 }
 
@@ -191,7 +190,7 @@ void Playlist::DeleteCur()
 	tracks.erase(tracks.begin() + id.iAll);
 	if (iPlayVis+1 > iCur)
 		--iPlay;
-	UpdateVis(false);
+	UpdateVis(0, false);
 }
 
 
@@ -207,7 +206,7 @@ void Playlist::DuplicateCur()
 	tracks.insert(tracks.begin() + id.iAll, dupl);
 	if (iPlayVis > iCur)
 		++iPlay;
-	UpdateVis(false);
+	UpdateVis(0, false);
 }
 
 //  Hide
@@ -216,7 +215,7 @@ void Playlist::HideCur(EHide hide)
 	auto& track = GetTrackVis(iCur);
 	track.hide = track.hide == Hid_None ? hide : Hid_None;
 	if (track.IsDir())
-		UpdateVis();
+		UpdateVis(0, true);
 	else
 		bDraw = true;
 }

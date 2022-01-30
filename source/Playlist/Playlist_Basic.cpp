@@ -16,6 +16,7 @@ Audio* Playlist::audio = nullptr;
 Playlist::Playlist(string name1)
 {
 	name = name1;
+	UpdateColor();
 }
 
 //  Play
@@ -93,7 +94,7 @@ bool Playlist::AddDir(fs::path dir, bool recursive, const EInsert& where)
 	{
 		AddFile(file, where);
 	}
-	UpdateVis();
+	UpdateVis(0, true);
 
 	return true;
 }
@@ -136,6 +137,15 @@ bool Playlist::AddFile(fs::path file, const EInsert &where)
 //--------------------------------------------------------------------
 void Playlist::UpdateColor()
 {
+	if (val == 0.f)
+	{
+		for (int i=0; i<3; ++i)
+		{	bck[i] = 0;
+			txt[i] = 0;
+		}
+		return;
+	}
+
 	float r=0, g=0, b=0;
 
 	ImGui::ColorConvertHSVtoRGB(
@@ -174,5 +184,5 @@ void Playlist::Filter(bool lower, int add)
 {
 	int& f = lower ? filterLow : filterHigh;
 	f += add;  Ratings::Range(f);
-	UpdateVis();
+	UpdateVis(0, true);
 }

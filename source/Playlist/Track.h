@@ -45,6 +45,7 @@ class Track
 	//  set in UpdateVis
 	bool visible = true;  // visible, after filtering etc.
 	int idPlayVis = 0;  // id to tracksVis
+	int idDir = 0;  // id to Playlist dirs[]
 
 	void SetNameFromPath();
 	void CleanNameRating();

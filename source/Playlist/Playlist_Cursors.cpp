@@ -4,13 +4,13 @@
 using namespace std;
 
 
-//  list move (keys)
+//  list cursor move (keys)
 //--------------------------------------------------------------------
 void Playlist::Cur()
 {
 	int all = LengthVis()-1;
 	iCur = mia(0, all, iCur);
-	bDraw = true; 
+	bDraw = true;
 }
 void Playlist::Ofs()
 {
@@ -67,26 +67,34 @@ void Playlist::Pick(int cur)
 	iCur = cur;  Cur();  ylastSel = cur;
 }
 
-void Playlist::sel(int ivL, bool sel)
+void Playlist::SelTrk(Track& t, bool sel)
+{
+	if (sel){	if (!t.sel) {  t.sel = true;   statsSel.Add(&t);  }  }  // select
+	else	{	if (t.sel)  {  t.sel = false;  statsSel.Sub(&t);  }  }  // unselect
+}
+
+void Playlist::Sel(int ivL, bool sel)
 {
 	Track& t = GetTrackVis(ivL);
 	if (t.IsDir())  return;
-
-	if (sel){	t.sel = true;   stSel.Add(&t);  }  // select
-	else	{	t.sel = false;  stSel.Sub(&t);  }  // unselect
+	SelTrk(t, sel);
 }
 
-void Playlist::SelDir(int cur)  // select dir
+void Playlist::SelDir(int cur)  // select dir All
 {
-	/*iCur = cur;  Cur();  int lc = iCur;
-	if (!GetTrackVis(lCur).isDir())  return;
-	lCur++;
-	while (lCur < listLen && !GetTrackVis(Cur).isDir())
+	iCur = cur;  Cur();
+	if (!GetTrackVis(iCur).IsDir())  return;
+	
+	int i = GetTrackVisIdAll(iCur);
+	int id = tracks[i].idDir;
+	//++i;
+	while (i < LengthAll() && tracks[i].idDir == id)  // same dir
 	{
-		sel(lCur, !GetTrackVis(lCur).sel);
-		lCur++;
+		SelTrk(tracks[i], true);
+		//sel(i, 1); //!GetTrackAll(iCur).sel);
+		++i;
 	}
-	lCur = lc;*/
+	bDraw = true;
 }
 
 void Playlist::SelRange(int cur, bool unselect)
@@ -97,10 +105,10 @@ void Playlist::SelRange(int cur, bool unselect)
 
 	if (unselect)
 	{	for (int i = a; i <= b; ++i)
-			if (GetTrackVis(i).sel)  sel(i, 0);
+			if (GetTrackVis(i).sel)  Sel(i, 0);
 	}else{
 		for (int i = a; i <= b; ++i)
-			if (!GetTrackVis(i).sel)  sel(i, 1);
+			if (!GetTrackVis(i).sel)  Sel(i, 1);
 	}
 	Pick(cur);
 }
@@ -110,7 +118,7 @@ void Playlist::Select1(int cur)
 	if (GetTrackVis(cur).IsDir())
 		SelDir(cur);
 	else
-	{	sel(cur, 1 - GetTrackVis(cur).sel > 0);
+	{	Sel(cur, !GetTrackVis(cur).sel);
 		Pick(cur);
 	}
 }
@@ -120,10 +128,10 @@ void Playlist::UnSel()
 {
 	for (int i=0; i < LengthAll(); ++i)
 		tracks[i].sel = false;
-	unSel0();
+	Unsel0();
 }
 
-void Playlist::unSel0()
+void Playlist::Unsel0()
 {
-	stSel.Clear();
+	statsSel.Clear();
 }
