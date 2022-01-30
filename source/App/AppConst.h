@@ -78,7 +78,7 @@ enum ETexUV  // textures in player.png
 	TX_TabCur, TX_TabPlay, TX_TabSel,  // Cur,Play,Sel, Find,Bookm
 	TX_BackPlr, TX_BackBtm, TX_BackHelp,  // backgr
 	
-	TX_PlsCur, TX_PlsPlay, TX_PlsSel, //TX_PlsF,
+	TX_PlsCur, TX_PlsPlay, TX_PlsSel, TX_PlsFind,
 	TX_Slider, TX_SliCur, TX_SliPlay, TX_SliF,
 	TX_DShow, TX_DHide,  // hide + -
 

@@ -25,7 +25,8 @@ const STexUV ciTexUV[TX_ALL+1] =
 
 	241, 10,	0, 70,		// pls_cur
 	252, 13,	0, 90,		// pls_play
-	252, 13,	0, 110,		// pls_sel
+	27, 29,		250, 0,		// pls_sel
+	16, 24,		290, 40,	// pls_find
 
 	16, 512,	490, 0,		// slider
 	16, 24,		250, 40,	// slid_cur

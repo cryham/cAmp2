@@ -213,14 +213,24 @@ void AppSFMLDraw::DrawPls_3Cursors()
 		const Track& trk = Pls().GetTrackVis(it);
 	
 		//  bookmarks
-		const Uint8 b = 150;  //par
+		Uint8 b = 150;  //par
 		const auto bk = trk.GetBookmark();
 		if (bk > 0)
 			Rect(0,y, xws,yF,
 				ETexUV(TX_PlsB1 + bk - 1), true, b,b,b);
 
+		//  sel, found
 		if (trk.IsSelected())
-			Rect(0,y, xws,yF, TX_PlsSel, true);/*?*/
+			Rect(0,y, xws,yF, TX_PlsSel, true, 90,90,90);
+		if (trk.IsFound())
+			Rect(0,y, xws,yF, TX_PlsFind, true, 60,60,60);
+
+		//  between --
+		b = 140;
+		if (trk.Btw().sel)
+			Rect(0,y-4, xws,4, TX_PlsSel, true, b,b,b);
+		if (trk.Btw().found)
+			Rect(0,y-1, xws,4, TX_PlsFind, true, b,b,b);
 
 		//  cursors
 		if (it == Pls().iPlayVis)

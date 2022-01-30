@@ -7,6 +7,21 @@ namespace fs = std::filesystem;
 enum EHide
 {	Hid_None, Hid_Hide, Hid_Show  };
 
+class Track;
+
+//  auto counts between this track and next visible
+struct Between
+{
+	int sel = 0;
+	int found = 0;
+	//int dirs = 0;
+	//int bookm[levels] = 0;
+	
+	void Clear();
+	void Add(const Track& t);
+	void Sub(const Track& t);
+};
+
 class Track
 {
 	friend class AudioBass;
@@ -47,6 +62,9 @@ class Track
 	int idPlayVis = 0;  // id to tracksVis
 	int idDir = 0;  // id to Playlist dirs[]
 
+	Between btw;
+
+
 	void SetNameFromPath();
 	void CleanNameRating();
 	
@@ -55,25 +73,28 @@ class Track
 		rate  != rateInName ||
 		bookm != bookmInName;
 	}
+
 public:
 	Track(fs::path file, bool dir1 = false);
 
 	//  getters for draw  ----
 	const std::string& GetName()    const {   return name;  }
 	const std::string  GetPath()    const {   return path.u8string();  }
-	const std::string& GetParent()  const {   return parent;  }
+	const std::string& GetParent()  const {   return parent;   }
 	const std::string& GetParent2() const {   return parent2;  }
 
 	bool HasTime()    const	{   return hasTime;  }
-	double GetTime()  const	{   return time;  }
-	double GetSize()  const	{   return size;  }
+	double GetTime()  const	{   return time;   }
+	double GetSize()  const	{   return size;   }
 
-	char GetRate()    const	{   return rate;  }
+	char GetRate()    const	{   return rate;   }
 	char GetBookmark()const {   return bookm;  }
-	EHide GetHide()   const	{   return hide;  }
+	EHide GetHide()   const	{   return hide;   }
 
-	bool IsDir()      const	{   return dir;  }
+	bool IsDir()      const	{   return dir;    }
 	bool IsDisabled() const	{   return disabled;  }
 	bool IsFound()    const	{   return found;  }
-	bool IsSelected() const	{   return sel;  }
+	bool IsSelected() const	{   return sel;    }
+
+	const Between& Btw() const	{   return btw;   }
 };

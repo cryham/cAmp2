@@ -38,3 +38,23 @@ void Track::SetNameFromPath()
 	bookmInName	= bookm;
 	Ratings::CleanName(name);
 }
+
+
+void Between::Clear()
+{
+	sel = 0;
+	found = 0;
+}
+
+void Between::Add(const Track& t)
+{
+	if (t.IsSelected())  ++sel;
+	if (t.IsFound())   ++found;
+	//if (t.bookm > 0)  ++bookm[t.bookm];
+}
+
+void Between::Sub(const Track& t)
+{
+	if (t.IsSelected())  --sel;
+	if (t.IsFound())   --found;
+}

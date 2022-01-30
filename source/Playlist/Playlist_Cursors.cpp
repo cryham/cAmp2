@@ -1,6 +1,6 @@
 #include "Playlist.h"
 #include "../System/defines.h"
-#include "../System/Utilities.h"
+#include <iostream>
 using namespace std;
 
 
@@ -87,6 +87,7 @@ void Playlist::SelDir(int cur)  // select dir All
 	
 	int i = GetTrackVisIdAll(iCur);
 	int id = tracks[i].idDir;
+	//cout << "SelDir trk: " << i << " dir: " << id << endl;
 	//++i;
 	while (i < LengthAll() && tracks[i].idDir == id)  // same dir
 	{
@@ -129,6 +130,7 @@ void Playlist::UnSel()
 	for (int i=0; i < LengthAll(); ++i)
 		tracks[i].sel = false;
 	Unsel0();
+	bDraw = true;
 }
 
 void Playlist::Unsel0()

@@ -83,8 +83,7 @@ bool Playlist::Load()
 			{	auto path = t.path;
 				dirs.emplace_back(move(t));
 				mapPathToDirs[path] = dirs.size();
-			}
-			else
+			}else
 				tracks.emplace_back(move(t));
 		}
 	}
