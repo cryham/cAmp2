@@ -61,7 +61,7 @@ protected:
 	//  Find
 	std::string sFind;
 	bool bFind = false;  // hide
-	int iFoundAll = 0, iFoundVis = 0;
+	int iFoundSee = 0, iFoundAll = 0;
 	void Find();
 	void Save();
 

@@ -31,7 +31,8 @@ void AppSFMLDraw::WndDraw_PlsFind()
 	{	if (!iFoundAll)
 			TextG("Not found.");
 		else
-			ImGui::Text("Found:  %d  visible of  %d  All %d", iFoundVis, Pls().GetFound(), iFoundAll);
+			ImGui::Text("Found: See %d Vis %d / Pls %d  All %d",
+				iFoundSee, Pls().GetFoundVis(), Pls().GetFound(), iFoundAll);
 	}else
 		TextG("");
 	

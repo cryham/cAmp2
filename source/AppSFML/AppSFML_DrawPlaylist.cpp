@@ -44,7 +44,7 @@ void AppSFMLDraw::DrawPls_1Names()
 	const int xw = v.wnd.xSize;
 	const int len = Pls().LengthVis(), yF = v.FontH(Fnt_Tracks);
 	
-	int iFindVis = 0;
+	int iFindSee = 0;
 	plsTxtW.clear();
 	plsTxtW.reserve(yL_pl);
 
@@ -104,7 +104,7 @@ void AppSFMLDraw::DrawPls_1Names()
 		//  find, sel
 		if (trk.IsFound())
 		{
-			++iFindVis;
+			++iFindSee;
 			if (bFind)
 				Clr(70,240,70);
 		}
@@ -117,7 +117,7 @@ void AppSFMLDraw::DrawPls_1Names()
 	
 		y += yF;  ++it;
 	}
-	iFoundVis = iFindVis;
+	iFoundSee = iFindSee;
 }
 
 
@@ -222,14 +222,14 @@ void AppSFMLDraw::DrawPls_3Cursors()
 		//  sel, found
 		if (trk.IsSelected())
 			Rect(0,y, xws,yF, TX_PlsSel, true, 90,90,90);
-		if (trk.IsFound())
+		if (bFind && trk.IsFound())
 			Rect(0,y, xws,yF, TX_PlsFind, true, 60,60,60);
 
 		//  between --
 		b = 140;
 		if (trk.Btw().sel)
-			Rect(0,y-4, xws,4, TX_PlsSel, true, b,b,b);
-		if (trk.Btw().found)
+			Rect(0,y-1, xws,4, TX_PlsSel, true, b,b,b);
+		if (bFind && trk.Btw().found)
 			Rect(0,y-1, xws,4, TX_PlsFind, true, b,b,b);
 
 		//  cursors

@@ -34,14 +34,14 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 	if (!small && bZoom)
 		iZoomOld = GetTrackVisIdAll(min(iVis-1, iOfs + zoomTo));  // even if dir
 
+
 	if (outDebug) 
 	{	cout << "--------------" << endl;
 		cout << "len all: " << iAll << endl;
 	}
-
 	auto Out = [&](const Track& t)
 	{
-		cout << "Trk " << t.idDir << "  " << t.name.substr(0, 22) << endl;
+		cout << "Trk " << t.idDir << "  " << t.name.substr(0, 32) << endl;
 	};
 
 
@@ -52,6 +52,7 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 	bool dirHide = false, dirShow = false;
 	int dirId = 0;
 	Between btw;
+	iFoundVis = 0;
 	
 	//------------------------------------------------
 	for (int i=0; i < iAll; ++i)
@@ -77,7 +78,7 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 		t.idPlayVis = iVis;
 		t.visible = !out;
 
-		btw.Add(t);
+		btw.Add(t);  // Btw
 
 		if (out && noEmptyDirs)
 			continue;
@@ -89,6 +90,8 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 			VisId id;  id.dir = true;
 
 			int idDir = mapPathToDirs[path];
+			if (outDebug)  /// Dbg
+				cout << path << endl << "idDir: " << idDir << endl;
 			if (idDir == 0)  // not found
 			{
 				///  Add Dir  + + +
@@ -106,7 +109,7 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 
 			id.iAll = i;  // closest track
 
-			if (outDebug)  /// D
+			if (outDebug)  /// Dbg
 			{
 				int iD = mapPathToDirs[path]-1;
 				if (iD < 0)
@@ -126,7 +129,7 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 			t.idPlayVis = iVis+1;
 			dirId = id.i;
 
-			//if (outDebug)  Out(t);
+			//if (outDebug)  Out(t);  /// Dbg
 
 			stats.AddDir();
 		}
@@ -144,12 +147,15 @@ void Playlist::UpdateVis(int outDebug, bool bZoom)
 		}
 
 		///  Add Track  + + +
-		btw.Sub(t);  t.btw = btw;  btw.Clear();
+		btw.Sub(t);  t.btw = btw;  // Btw
+		btw.Clear();
+		if (t.found)
+			++iFoundVis;
 
 		VisId id;  id.iAll = id.i = i;
 		visible.emplace_back(id);
 		
-		if (outDebug)  Out(t);  /// D
+		if (outDebug)  Out(t);  /// Dbg
 		
 		stats.Add(&t);
 	}

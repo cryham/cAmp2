@@ -180,9 +180,10 @@ void AppSFMLDraw::DrawPlayer()
 	//  Find  ----
 	if (bFind && iFoundAll > 0)
 	{
-		str = "Found: "+i2s(iFoundVis)+" of "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
+		str = "Found: See "+i2s(iFoundSee)+" Vis "+i2s(Pls().GetFoundVis())+
+			+" / Pls "+i2s(Pls().GetFound())+"  All "+i2s(iFoundAll);
 		Clr(100,220,100);  // center par
-		Text(Fnt_Player, (xw - 140) / 2, yl2);
+		Text(Fnt_Player, 10 /*(xw - 140) / 2*/, yl2);
 	}
 
 	

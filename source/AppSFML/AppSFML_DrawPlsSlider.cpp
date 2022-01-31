@@ -10,15 +10,30 @@ void AppSFMLDraw::DrawPls_Slider()
 	const int xw = v.wnd.xSize, xs = v.sldr.width;
 	if (yB_pl_inf >= v.wnd.ySize || xs <= 0)  return;
 
-	const int len = Pls().LengthVis();  const float fle = len;
-	const float yr = mia(1.f, 2.f, fle / yL_pl);  // row h pixels
+	const int len = Pls().LengthVis();
+	const float fLen = len,
+		yr = mia(1.f, 2.f, fLen / yL_pl);  // row h pixels
 	const int
 		xk1 = xw - xs +1,
 		xk2 = xw - xk1,
 		xp1 = xw - 2*xs/3 +1,
 		xp2 = xw - xs/2 +1;
 
+	//  var
+	float fc1, fc2;
+	int c1, c2;
+	auto GetCur = [&](float i1, float i2, int m)
+	{
+		fc1 = i1 /fLen;
+		fc2 = i2 /fLen;
+		if (fc2 > 1.f)  fc2 = 1.f;
+
+		c1 = fc1 *yH_pl +yB_pl;
+		c2 = fc2 *yH_pl +yB_pl;
+		if (c2-c1 < m)  c2 = c1 + m;
+	};
 	
+
 	//  clear backgr  par-
 	Rect(xw-xs, yB_pl, xs, yH_pl, TX_Black, false);
 	
@@ -30,33 +45,37 @@ void AppSFMLDraw::DrawPls_Slider()
 		const int bk = Pls().GetTrackVis(i).GetBookmark();
 		if (bk > 0)
 		{
-			float fc1 = i /fle,  fc2 = (i + yr) /fle;			if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
-
-			int tex = TX_SliB1 + bk - 1;
+			const int tex = TX_SliB1 + bk - 1;
+			GetCur(i, i + yr, 1);
 			Rect(xp1, float(c1), xw - xp1, float(c2-c1), ETexUV(tex), true, b,b,b);
 	}	}
 
 	
-	//  find results  -
+	//  find results  ==
 	if (bFind)
 	for (int i=0; i < len; ++i)
-		if (Pls().GetTrackVis(i).IsFound())
+	{
+		const auto& t = Pls().GetTrackVis(i);
+		if (t.IsFound())
 		{
-			float fc1 = i /fle,  fc2 = (i + yr) /fle;			if (fc2>1.f) fc2=1.f;
-			int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;	if (c2-c1<1) c2=c1+1;
-
+			GetCur(i, i + yr, 1);
 			Rect(xk1, float(c1), xp2, float(c2-c1), TX_SliF);
 		}
+		if (t.Btw().found)
+		{
+			GetCur(i, i + yr, 1);
+			Rect(xk1, float(c1), xp2, float(c2-c1)*0.4f, TX_SliF);
+		}
+	}
 	
 	
 	//  slider bar  |  visble area
-	if (len <= yL_pl/2)  return;
+	if (len <= yL_pl/2)
+		return;
 
-	float fc1 = Pls().iCur /fle,  fc2 = (Pls().iCur + 1) /fle;		if (fc2>1.f) fc2=1.f;  // cursor
-	float fs1 = Pls().iOfs /fle,  fs2 = (Pls().iOfs +yL_pl) /fle;	if (fs2>1.f) fs2=1.f;  // vis list
-	int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;  // min h = 2 pix _
-	int s1 = fs1 *yH_pl+yB_pl, s2 = fs2 *yH_pl+yB_pl;  if (s2-s1<2)  s2=s1+2;
+	GetCur(Pls().iOfs, Pls().iOfs +yL_pl, 2);  // vis list
+	int s1 = c1, s2 = c2;
+	GetCur(Pls().iCur, Pls().iCur + 1, 2);  // cursor
 
 	const Uint8 c = 180;  //par
 	if (len > yL_pl)
@@ -66,28 +85,38 @@ void AppSFMLDraw::DrawPls_Slider()
 	
 	//  playing  _  cursor
 	{
-		float fc1 = Pls().iPlayVis /fle,  fc2 = /*fc1+4.f/yw*/(Pls().iPlayVis + 1.f) /fle;  if (fc2>1.f) fc2=1.f;
-		int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<2)  c2=c1+2;
-
+		GetCur(Pls().iPlayVis, Pls().iPlayVis + 1, 2);
 		Rect(xk1, float(c1), xk2, float(c2-c1), TX_SliPlay);
 	}
-	//  selected-
+
+
+	//  selected  --
+	if (Pls().HasSelected())
+	for (int i=0; i < len; ++i)
+	{
+		const auto& t = Pls().GetTrackVis(i);
+		bool btw = t.Btw().sel;
+		if (t.IsSelected() || btw)
+		{
+			GetCur(i, i + yr, 1);
+			Rect(xk1, float(c1), xk2,
+				btw ? float(c2-c1)*0.4f : float(c2-c1), TX_PlsSel, true);
+	}	}
 
 	
-	///  all tracks  rating
-	if (v.sldr.drawRate && !bFind)
+	///  all tracks  rating  `^
+	if (v.sldr.drawRate && !bFind && !Pls().HasSelected())
 		for (int i=0; i < len; ++i)
 		{
-			const int rate = Pls().GetTrackVis(i).GetRate(), r = rate + Ratings::cntMin;
+			const auto& t = Pls().GetTrackVis(i);
+			const int rate = t.GetRate(), r = rate + Ratings::cntMin;
 			if (rate != 0)
 			{
-				float fc1 = float(i) /fle, fc2 = float(i + yr) /fle;  if (fc2>1.f) fc2=1.f;
-				int c1 = fc1 *yH_pl+yB_pl, c2 = fc2 *yH_pl+yB_pl;  if (c2-c1<1) c2=c1+1;
-	
+				const auto c = Ratings::clrBck[r];
+				GetCur(i, i + yr, 1);
 				Rect(xk1, float(c1), xk2, float(c2-c1+1),
 					Ratings::GetTex(rate), true,
-					//clrRateBck[r][0], clrRateBck[r][1], clrRateBck[r][2]);  //par
-					Ratings::clrBck[r][0]*2/3, Ratings::clrBck[r][1]*2/3, Ratings::clrBck[r][2]*2/3);  //par
+					c[0]*2/3, c[1]*2/3, c[2]*2/3);  //par
 		}	}
 	
 	//  todo: fill texture in Update() and just draw once

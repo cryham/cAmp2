@@ -59,12 +59,15 @@ public:
 	bool bDraw = true;  // needs redraw, changed
 private:	
 	int iLinVis = 10;   //  view visible lines, for page keys, set outside
-	int iFound = 0;  //  find count
+	int iFound = 0;     //  find count, all in Pls
+	int iFoundVis = 0;  //  visible after UpdateVis
 public:
 	void SetVisLines(int l)
 	{	iLinVis = l;  }
 	int GetFound() const
 	{	return iFound;  }
+	int GetFoundVis() const
+	{	return iFoundVis;  }
 	
 	
 	//  move cur, ofs

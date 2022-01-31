@@ -45,7 +45,10 @@ void AppSFMLDraw::DrawPls_Header()
 
 
 	//  clr
-	if (sel)  Clr(0,190,190);  else
+	if (sel)  // sel bckgr
+	{	Rect(0, yB_pl_inf, set.view.wnd.xSize, yB_pl-yB_pl_inf, TX_PlsSel, true, 60,60,60);
+		Clr(160,210,210);
+	}else
 	if (bAllStats){  if (bFullStats)  Clr(160,170,190);  else  Clr(150,150,190);  }
 	else		  {  if (bFullStats)  Clr(120,150,190);  else  Clr(100,130,160);  }
 

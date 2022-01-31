@@ -16,7 +16,8 @@ void Playlist::FindClear()
 	for (auto& trk : tracks)
 		trk.found = false;
 	iFound = 0;
-	bDraw = true;
+	UpdateVis(0, false);  // for between
+	//bDraw = true;
 }
 
 ///  Find
@@ -53,7 +54,8 @@ void Playlist::Find(std::string& find, const SetFind& opt)
 			trk.found = f;
 		}
 	}
-	bDraw = true;
+	UpdateVis(0, false);  // for between
+	//bDraw = true;
 }
 
 
