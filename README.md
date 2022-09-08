@@ -39,9 +39,17 @@ Also using (included in `libs/`):
 # Building
 Uses C++17 and CMake to build.
 
-First to install SFML (on Debian like):
+Basic setup (on Debian like):
 ```
-sudo apt-get install libsfml-dev
+sudo apt-get install g++ git cmake make binutils
+```
+Extras
+```
+sudo apt-get install gdb clangd
+```
+Then install SFML:
+```
+sudo apt-get install libsfml-dev 
 ```
 To get sources:
 ```
