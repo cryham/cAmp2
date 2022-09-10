@@ -43,7 +43,10 @@ void AppSFMLDraw::WndDraw_View()
 		}
 		if (i%3 < 2)  SameLine();  // 3 in row
 	}
+
 	xSlider = 0;
+	Sep(5);
+	e = Button("Edit fonts..");  if (e)  wndOpen = WO_ViewFonts;
 }
 
 
@@ -71,6 +74,8 @@ void AppSFMLDraw::WndDraw_ViewFonts()
 	{	LoadFonts();  UpdDim();  }
 
 	xSlider = 0;
+	Sep(5);
+	if (Button("Back to View.."))  wndOpen = WO_View;
 }
 
 

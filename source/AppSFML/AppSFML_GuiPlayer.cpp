@@ -36,9 +36,17 @@ void AppSFMLDraw::WndDraw_AppAudio()
 {
 	// todo:  freq  snd device  volume  balance-
 	bool e;  string s;
-	
-	int i = audio->iVolume;
-	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %%";  TextG(s);
+
+	Sep(0);  int i = 0;  // play controls
+	e = Button("|<");  i += 80;  SameLine(i);  if (e)  Pls().Next(-1);
+	e = Button("|>");  i += 60;  SameLine(i);  if (e)  Play(false);
+	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
+	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
+	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);
+
+	Sep(50);
+	i = audio->iVolume;
+	s = string("Volume: ") + f2s(i/10.f, 1,4) + " %";  TextG(s);
 	PushItemWidth(300);  e = SliderInt("vol", &i, 0, 1000, "");  PopItemWidth();
 	if (e) {  audio->iVolume = i;  audio->SetVolAbs();  Redraw();  }
 	
@@ -52,13 +60,6 @@ void AppSFMLDraw::WndDraw_AppAudio()
 	auto& b = audio->bDirNext;
 	if (RadioButton("Down", b))  b = true;  SameLine(150);
 	if (RadioButton("Up", !b))  b = false;
-	
-	Sep(20);  i = 0;  // play controls
-	e = Button("|<");  i += 80;  SameLine(i);  if (e)  Pls().Next(-1);
-	e = Button("|>");  i += 60;  SameLine(i);  if (e)  Play(false);
-	e = Button("||");  i += 50;  SameLine(i);  if (e)  audio->Pause();
-	e = Button("[]");  i += 50;  SameLine(i);  if (e)  audio->Stop();
-	e = Button(">|");  i += 50;  SameLine(i);  if (e)  Pls().Next(1);
 }
 
 
@@ -75,31 +76,4 @@ void AppSFMLDraw::WndDraw_AppTest()
 	if (SliderI(eTimeTest, 0, TimT_ALL-1,
 			"Time colors: ", "test", csTimesTest[eTimeTest]))
 		Redraw();
-}
-
-
-//  About
-//------------------------------------------------------------------
-void AppSFMLDraw::WndDraw_AppAbout()
-{
-	Sep(20);
-	TextColored(ImVec4(0.5f, 0.97f, 1.0f, 1.f), "Crystal AMP 2  (cAmp2)");
-	Sep(10);
-	TextColored(ImVec4(0.7f, 0.67f, 1.0f, 1.f), "by Crystal Hammer");
-	Sep(20);
-	auto s = "Version: "+ i2s(Settings::version/100) + "." + i2s(Settings::version % 100);
-	TextColored(ImVec4(0.8f, 0.9f, 1.0f, 1.f), s.c_str());
-	Sep(40);
-	PushItemWidth(400);
-
-	TextG("Sources, Issues etc.");
-	auto url1 = "https://github.com/cryham/cAmp2";
-	if (Button(url1))  OpenBrowserUrl(url1);
-
-	Sep(10);
-	TextG("Project description");
-	auto url2 = "https://cryham.tuxfamily.org/portfolio/2010_camp/";
-	if (Button(url2))  OpenBrowserUrl(url2);
-	
-	PopItemWidth();
 }

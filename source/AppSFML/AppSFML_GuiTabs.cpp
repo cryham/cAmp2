@@ -22,6 +22,11 @@ void AppSFMLDraw::WndDraw_Tab()
 	if (e) {  Pls().name = t;  Redraw();  }
 
 	Sep(10);
+	bool b = queId == plsId;
+	e = Checkbox("Set as Queue", &b);
+	if (e)  SetTabAsQue();
+
+	Sep(20);
 	i = Pls().bookm;  s = "Bookmark: " + i2s(i);  TextG(s);
 	e = SliderInt("Tbk", &i, 0, 6, "");
 	if (e) {  Pls().bookm = i;  Redraw();  }

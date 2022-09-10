@@ -127,7 +127,7 @@ void App::MouseUpdate()
 			WndOpen(WO_AppAudio, false);
 		else if (ym < yE_pos)
 			WndOpen(WO_AppVis, false);*/
-		if (ym > yE_plr_btn && ym < yE_pos)
+		if (ym > yE_plr_btn && ym < yE_pos)  //-
 			WndOpen(WO_AppAudio, false);
 		
 		if (ym > yB_tabs && ym < yE_tabs)
@@ -248,7 +248,7 @@ void App::MouseUpdate()
 			mtiv = 0.6f - 0.07f* pow(float(abs(yMd)-15), 0.45f);  //par? ms
 			if (mti > mtiv)
 			{
-				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1+ mtiv/-0.06f;
+				mti = 0.f;  int m = mtiv >= 0.f ? 1 : 1 + mtiv / -0.06f;
 				if (yMd > 0)  Pls().PgOfsDn(m);  else  Pls().PgOfsUp(m);
 				Redraw();
 			}
