@@ -13,12 +13,7 @@
 
 # Compiled Dynamic libraries
 *.so
-*.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
 
 # Compiled Static libraries
 *.lai
@@ -29,11 +24,11 @@
 # Executables
 *.exe
 *.out
-*.app
 
 # build dirs
 build*/
 bin*/
 
-.vscode
+#.vscode
+.cache
 CMakeLists.txt.user

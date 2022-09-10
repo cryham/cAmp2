@@ -1,30 +1,30 @@
-# cAmp2
+## cAmp2
 
 **WIP** reimplementation of my Audio Player [Crystal AMP (cAmp)](http://cryham.tuxfamily.org/portfolio/2010_camp/) for GNU/Linux (and Windows).  
 Currently needs building from sources.  
 
-# New features
+### New features
 
 * Gui with options in few own windows (for find, tab, etc.)
 * All program keys bindable
 * Visualization themes with options and sliders in Gui
 
-# To do
-## restore old
+### To do
+#### restore old
 
 * move track, selection (critical), insert at cursor
 * hotkeys (how?)
 * threads for spectrogram, insert files, etc.
 * use shaders for visualizations
 
-## add new
+#### add new
 
 * queue (set tab, add to, keys)
 * rename files, dirs
 * skins, xml
 
 
-# Using
+### Using
 
 Using:
 * for Audio: [bass](https://www.un4seen.com/bass.html) (NOT FOSS)
@@ -36,7 +36,7 @@ Also using (included in `libs/`):
 * [Native File Dialog](https://github.com/mlabbe/nativefiledialog)
 
 
-# Building
+### Building
 Uses C++17 and CMake to build.
 
 Basic setup (on Debian like):
