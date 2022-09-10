@@ -155,14 +155,8 @@ void App::DeleteCurFile()	{  if (Pls().DeleteCurFile(plsId == plsPlId))  Osd("Fi
 void App::DeleteCur()		{  Pls().DeleteCur();  }
 
 //  queue
-void App::SetTabAsQue()     {  queId = plsId;  Osd("Set tab as Queue.");  }
-void App::AddTrkToQue()     {
-	if (queId >= vPls.size())
-	{	queId = -1;  Osd("Queue outside, reset.");  return;  }
-	if (queId < 0){  Osd("Queue tab not set.");  return;  }
-	
-	Pls().InsertCurToPls(vPls[queId], Ins_End);
-	Osd("Added to Queue at end.");  }
+void App::SetTabAsQue()     {  queId = plsId;  Osd("Set tab as Queue.");  Redraw();  }
+//void App::AddTrkToQue()
 
 
 ///  gui wnd  -----
