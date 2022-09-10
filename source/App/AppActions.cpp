@@ -153,6 +153,14 @@ EAction ActionsMap::GetActFromName(string name)
 	return Act_None;
 }
 
+std::string ActionsMap::GetKeyForAct(EAction a)
+{
+	for (const auto& b : bindings)
+	if (b.second == a)
+		return StrKey(b.first);
+	return "";
+}
+
 
 ///  Load
 //------------------------------------------------------------------------------------------------

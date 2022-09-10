@@ -47,7 +47,7 @@ void AppSFMLDraw::DrawTabs()
 		if (a == plsId)   {  Clr(220,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }
 		if (a == plsPlId) {  Clr(240,240,255);  Rect(x1, yt, x2, yH_tabs, TX_TabPlay, true); }  // playing
 		if (a == plsSelId){  Clr(170,240,170);  Rect(x1, yt, x2, yH_tabs, TX_TabSel, true);  }  // selected
-		if (a == queId)   {  Clr(235,235,235);  Rect(x1, yt, x2, yH_tabs, TX_TabQue, true);  }  // queue
+		if (a == queId)   {  Clr(210,210,210);  Rect(x1, yt, x2, yH_tabs, TX_TabQue, true);  }  // queue
 		//if (a==nTabMov)  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  // moving
 		if (bFind && pls.GetFound() > 0)
 						{	Clr(70,240,70);  Rect(x1, yt, x2, yH_tabs, TX_TabCur, true);  }  // find

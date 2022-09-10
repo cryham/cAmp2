@@ -1,6 +1,7 @@
 #pragma once
 #include "../App/App.h"
 #include "../App/AppConst.h"
+#include "../App/AppActionsEnum.h"
 #include "../System/defines.h"
 #include "../Settings/Settings.h"
 #include <SFML/Window.hpp>
@@ -48,7 +49,9 @@ protected:
 		std::string title = "no title";
 		std::string FullTitle() const
 		{	return group + " - " + title;  }
+		
 		int width = 400, height = 300;
+		EAction act;  // to get key shcut
 	};
 	const static SWndConst wndConst[WO_ALL];
 
@@ -66,7 +69,7 @@ protected:
 	
 	void WndDrawAll(sf::Time time);
 	void WndDraw_Main(), WndMainMenu();
-	void WndDraw_AppAudio(), WndDraw_AppKeys(), WndDraw_AppAbout();
+	void WndDraw_AppAudio(), WndDraw_AppKeys(), WndDraw_AppAbout(), WndDraw_AppHelp();
 	void WndDraw_View(), WndDraw_ViewFonts(), WndDraw_ViewTimes();
 	void WndDraw_Vis(), WndDraw_VisThemes();
 	void WndDraw_Tab(), WndDraw_TabsAll();

@@ -12,7 +12,7 @@ void AppSFMLDraw::DrawAll()
 {
 	if (Pls().bDraw)
 	{	Pls().bDraw = false;
-		iDraw = 4;  //par fixes double buffer flicker
+		iDraw = 4;  //par fixes double buffer flicker?
 	}
 	if (iDraw > 0)  // clear backgr
 		pWindow->clear();

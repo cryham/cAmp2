@@ -1,4 +1,5 @@
 #include "AppSFML_Draw.h"
+#include "../App/AppActions.h"
 #include "../System/FileSystem.h"
 #include "../System/Utilities.h"
 #include "../../libs/imgui.h"
@@ -9,26 +10,26 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //  const windows data
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 {
-	{"Main", "All Options", 420,400},
+	{"Main", "All Options",    420,400, Act_WO_Main},
 
-	{"Player", "Audio", 600,350},
-	{"Player", "Keyboard", 650,855},
-	{"Player", "About", 600,400},
-	{"Player", "Help", 600,750},
+	{"Player", "Audio",        600,350, Act_WO_AppAudio},
+	{"Player", "Keyboard",     650,855, Act_WO_AppKeys},
+	{"Player", "About",        600,400, Act_WO_AppAbout},
+	{"Player", "Help",         600,750, Act_WO_AppHelp},
 
-	{"View", "View", 600,450},
-	{"View", "View Fonts", 600,750},
-	{"View", "Visualization", 900,750},
-	{"View", "Visualization Themes", 900,750},
-	{"View", "Times Coloring", 600,750},
+	{"View", "View",           600,450, Act_WO_View},
+	{"View", "View Fonts",     600,750, Act_WO_ViewFonts},
+	{"View", "Visualization",  900,750, Act_WO_Vis},
+	{"View", "Visual Themes",  900,750, Act_WO_VisThemes},
+	{"View", "Times Coloring", 600,750, Act_WO_ViewTimes,},
 
-	{"Tabs", "Current", 420,570},
-	{"Tabs", "All", 420,370},
+	{"Tabs", "Current",        420,570, Act_WO_Tab},
+	{"Tabs", "All",            420,370, Act_WO_TabsAll},
 
-	{"Playlist", "Find", 420,300},
-	{"Playlist", "Filter", 420,300},
-	{"Playlist", "Statistics", 420,300},
-	{"Playlist", "Test", 420,300},
+	{"Playlist", "Find",       420,300, Act_WO_PlsFind},
+	{"Playlist", "Filter",     420,300, Act_WO_PlsFilter},
+	{"Playlist", "Statistics", 420,300, Act_WO_AppStats},
+	{"Playlist", "Test",       420,300, Act_WO_AppTest},
 };
 
 //  Draw All
@@ -61,6 +62,7 @@ void AppSFMLDraw::WndDrawAll(Time time)
 		case WO_AppAudio:	WndDraw_AppAudio();  break;
 		case WO_AppKeys:	WndDraw_AppKeys();  break;
 		case WO_AppAbout:   WndDraw_AppAbout();  break;
+		case WO_AppHelp:    WndDraw_AppHelp();  break;
 
 		case WO_View:		WndDraw_View();  break;
 		case WO_ViewFonts:	WndDraw_ViewFonts();  break;
@@ -99,7 +101,9 @@ void AppSFMLDraw::WndMainMenu()
 	{
 		auto MenuWnd = [&](auto wnd)
 		{
-			if (MenuItem(wndConst[wnd].title.c_str()))  wndOpen = wnd;
+			const auto& k = act->GetKeyForAct(wndConst[wnd].act);
+			if (MenuItem(wndConst[wnd].title.c_str(), k.c_str()))
+				wndOpen = wnd;
 		};
 
 		if (BeginMenu("File"))

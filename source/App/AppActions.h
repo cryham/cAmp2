@@ -77,6 +77,7 @@ public:
 	const KeysRow& GetRow(int id)   {  return rows[id];   }
 	std::string GetGroup(EAction a) {  return groups[a];  }
 	EAction GetActFromName(std::string name);
+	std::string GetKeyForAct(EAction a);
 };
 
 

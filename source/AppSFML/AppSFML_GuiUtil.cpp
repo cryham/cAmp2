@@ -21,8 +21,8 @@ void AppSFMLDraw::Line()
 	Sep(5);  Separator();  Sep(5);
 }
 
-void AppSFMLDraw::TextG(const char* s) {  ImGui::Text(s);  }
-void AppSFMLDraw::TextG(string s)      {  ImGui::Text(s.c_str());  }
+void AppSFMLDraw::TextG(const char* s) {  ImGui::Text("%s", s);  }
+void AppSFMLDraw::TextG(string s)      {  ImGui::Text("%s", s.c_str());  }
 
 //  text value slider
 void AppSFMLDraw::SliderValue(const string& text, const string& val)
