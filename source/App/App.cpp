@@ -108,6 +108,7 @@ void App::LoadState()
 	const auto& st = set.state;
 	plsId = st.idPls;
 	plsPlId = st.idPlay;
+	queId = st.idQue;
 
 	audio->bRepPls = st.bRepPls;
 	audio->bDirNext = st.bDirNext;
@@ -122,6 +123,7 @@ void App::SaveState()
 	auto& st = set.state;
 	st.idPls = plsId;
 	st.idPlay = plsPlId;
+	st.idQue = queId;
 	
 	st.bRepPls = audio->bRepPls;
 	st.bDirNext = audio->bDirNext;
@@ -238,7 +240,7 @@ void App::Osd(std::string msg)
 
 //  Insert dir or files, add to Pls
 //------------------------------------------------------------------------
-void App::OpenDirFile(bool files, Playlist::EInsert where/*, defaultPath=NULL par?*/)
+void App::OpenDirFile(bool files, EInsert where/*, defaultPath=NULL par?*/)
 {
 	if (files)
 	{

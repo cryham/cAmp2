@@ -11,7 +11,7 @@ void ActionsMap::DefaultBindings()
 	bindings.clear();
 
 	#define key(k)  Keyboard::k
-	//  shift, ctrl, alt
+	//  shift, ctrl, alt,
 
 	///  play
 	Bind(0,0,0, key(Enter), Act_PlaySetCur);
@@ -151,6 +151,10 @@ void ActionsMap::DefaultBindings()
 	Bind(0,1,0, key(Delete), Act_ClearPls);
 	Bind(1,0,0, key(Delete), Act_DeleteCurFile);
 	Bind(0,0,0, key(Delete), Act_DeleteCur);
+
+	//  queue
+	Bind(0,0,1, key(E), Act_SetTabAsQue);
+	Bind(0,0,0, key(E), Act_AddTrkToQue);
 
 
 	///  gui wnd  -----

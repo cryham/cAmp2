@@ -75,7 +75,7 @@ enum ETexUV  // textures in player.png
 	TX_Checks, TX_LeRi,  // _\unused
 	TX_PosBr, TX_PosDk,  // pos bar
 
-	TX_TabCur, TX_TabPlay, TX_TabSel,  // Cur,Play,Sel, Find,Bookm
+	TX_TabCur, TX_TabPlay, TX_TabSel, TX_TabQue, // Cur,Play, Selected,Queue, Find,Bookm
 	TX_BackPlr, TX_BackBtm, TX_BackHelp,  // backgr
 	
 	TX_PlsCur, TX_PlsPlay, TX_PlsSel, TX_PlsFind,

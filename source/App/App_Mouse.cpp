@@ -38,25 +38,7 @@ void App::MouseUpdate()
 
 	//  cur trk  ----
 	int cur = max(0, min(Pls().LengthVis()-1, (ym-yB_pl)/Fy + Pls().iOfs));
-	/*pTrk dest = NULL;
-	if (alt && Pls().Length() > 0)
-	{
-		if (shift) {  Pls().lInsM =-1;  Pls().lInsPos = Pls().lOfs;  } else
-		if (ctrl)  {  Pls().lInsM = 1;  Pls().lInsPos = Pls().lOfs+yL_pl-1;  } else
-		if (cr < int(Pls().vList.size()))
-		{
-			dest = Pls().vList[cur];
-			Pls().lInsPos = cur;  //ins bar vis
-			Pls().lInsM = (ym-yB_pl)%Fy >= Fy/2 ? 1 : -1;
-			if (cur==Pls().Length()-1)  Pls().lInsM = 1;
-			//  restrictions
-			if (dest->sel > 0 || dest->isDir())  Pls().lInsPos = -1;
-			if (Pls().numSel==0 && (cur==Pls().lCur ||
-				(cur-Pls().lCur== 1 && Pls().lInsM==-1) ||
-				(cur-Pls().lCur==-1 && Pls().lInsM== 1)))  Pls().lInsPos = -1;  // not near sel1
-		}
-	}*/
-		
+	
 
 	///  player
 	//------------------------------------------------
@@ -194,6 +176,24 @@ void App::MouseUpdate()
 			{
 				if (alt)		//  Move
 				{
+	/*pTrk dest = NULL;
+	if (alt && Pls().Length() > 0)
+	{
+		if (shift) {  Pls().lInsM =-1;  Pls().lInsPos = Pls().lOfs;  } else
+		if (ctrl)  {  Pls().lInsM = 1;  Pls().lInsPos = Pls().lOfs+yL_pl-1;  } else
+		if (cr < int(Pls().vList.size()))
+		{
+			dest = Pls().vList[cur];
+			Pls().lInsPos = cur;  //ins bar vis
+			Pls().lInsM = (ym-yB_pl)%Fy >= Fy/2 ? 1 : -1;
+			if (cur==Pls().Length()-1)  Pls().lInsM = 1;
+			//  restrictions
+			if (dest->sel > 0 || dest->isDir())  Pls().lInsPos = -1;
+			if (Pls().numSel==0 && (cur==Pls().lCur ||
+				(cur-Pls().lCur== 1 && Pls().lInsM==-1) ||
+				(cur-Pls().lCur==-1 && Pls().lInsM== 1)))  Pls().lInsPos = -1;  // not near sel1
+		}
+	}*/
 					/*int m = shift? -2: ctrl? 2: Pls().lInsM;
 					if (m == Pls().lInsM && Pls().lInsPos == -1)
 						return;  //restr*/
@@ -202,11 +202,11 @@ void App::MouseUpdate()
 					#if 0
 					if (/*plFrom->numSel > 0 ||/**/ plsSel && plsSel != pls)
 						Pls().MoveSel(m, dest, plsSel);
-					else if (Pls().numSel > 0)
+					else if (Pls().CountSelected()  > 0)
 						Pls().MoveSel(m, dest, 0);
 					else
+						Pls().Move1(/*m*/0, dest);
 					#endif
-						//Pls().Move1(m, dest);
 				}
 				else if (shift)  Pls().SelRange(cur, ctrl);  //  select range
 				else if (ctrl)  Pls().Select1(cur);  //  select 1

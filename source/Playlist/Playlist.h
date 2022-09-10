@@ -8,6 +8,9 @@
 #include <map>
 
 
+enum EInsert
+{  Ins_Cursor, Ins_Top, Ins_End  };
+
 class Audio;
 
 class Playlist : public Logger
@@ -81,9 +84,6 @@ public:
 	Stats stats, statsAll, statsSel;  // filtered, All not filtered, Selected
 	// statsAll updated only in Load()..
 	
-	enum EInsert
-	{  Ins_Cursor, Ins_Top, Ins_End  };
-
 	
 //  ctor, main  ------------
 public:
@@ -113,6 +113,8 @@ public:
 	void DeleteCur();
 	void DuplicateCur();
 	void HideCur(EHide hide);
+	
+	void InsertCurToPls(Playlist& pls, const EInsert& where = Ins_End);
 
 	
 	//  Change  ----
@@ -136,11 +138,12 @@ public:
 	//  Operation  ----
 	//  todo:  copy, move selected tracks, from other ..
 	#if 0
-	void // Move1(int m, pTrk npos), MoveSel(int m, pTrk npos, CList* pL=NULL/*from*/),  // npos,cur = destin
-		Del(bool disk=false), DelSel(bool disk=false), del(pTrk q,bool disk=false),  //from disk
-		Insert1(int m, pTrk nt), ins(int m, pTrk cur, pTrk n/*what*/),
-		insertList(int m, pTrk npos, pTrk first,pTrk last),
-		CopySelFiles();
+	void Move1(int m, int npos);
+	//void MoveSel(int m, pTrk npos, CList* pL=NULL/*from*/);  // npos,cur = destin
+	void Del(bool disk=false), DelSel(bool disk=false), del(pTrk q,bool disk=false),  //from disk
+	void Insert1(int m, pTrk nt), ins(int m, pTrk cur, pTrk n/*what*/),
+	void insertList(int m, pTrk npos, pTrk first,pTrk last),
+	void CopySelFiles();
 	#endif
 
 	
@@ -157,6 +160,7 @@ public:
 	//----------------------------------------------------------------------------------------
 	bool IsEmpty() const	{	return tracks.empty();  }
 	bool HasSelected() const{	return statsSel.GetFiles() > 0;  }
+	int CountSelected() const{	return statsSel.GetFiles();  }
 
 	int LengthAll() const	{	return (int)tracks.size();  }
 	int LengthVis() const	{	return (int)visible.size();  }

@@ -18,6 +18,7 @@ const STexUV ciTexUV[TX_ALL+1] =
 	33, 16,		0, 50,		// tab_cur
 	33, 13,		40, 50,		// tab_play
 	33, 13,		80, 50,		// tab_sel
+	33, 13,		120, 50,	// tab_que
 
 	16, 96,		260, 170,	// back_plr
 	16, 40,		260, 80,	// back_btm

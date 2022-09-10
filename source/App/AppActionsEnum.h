@@ -57,6 +57,10 @@ enum EAction
 	Act_InsertDir, Act_InsertFiles,
 	Act_ClearPls, Act_DeleteCurFile, Act_DeleteCur,
 
+	//  queue
+	Act_SetTabAsQue,
+	Act_AddTrkToQue,
+
 
 	///  gui wnd   same as in EWndOpt  . . . . . . 
 	Act_WO_Main=500,

@@ -13,20 +13,26 @@ void ActionsMap::FillGroupNames()
 	groups[Act_VolumeUp    ] = "Volume";
 	groups[Act_GotoPlay    ] = "Go to";
 	groups[Act_PlsUp       ] = "Move Playlist cursor";
+	
 	groups[Act_RateInc     ] = "Rating";
 	groups[Act_FilterLowUp ] = "Filtering";
 	groups[Act_BookmInc    ] = "Bookmarks";
+	
 	groups[Act_TabNext     ] = "Tab current";
 	groups[Act_TabNew      ] = "New Tab";
 	groups[Act_RepeatTrack ] = "Repeat";
 	groups[Act_Fps         ] = "Test";
 	groups[Act_AllStats    ] = "View toggle";
+	
 	groups[Act_FindHide    ] = "Find";
 	groups[Act_DuplicateCur] = "Advanced";
 	groups[Act_HideCur     ] = "Hide/Show";
+	
 	groups[Act_SaveAll     ] = "Save/Load";
 	groups[Act_InsertDir   ] = "Insert";
 	groups[Act_ClearPls    ] = "Delete";
+	groups[Act_SetTabAsQue ] = "Queue";
+	
 	groups[Act_WO_Main     ] = "GUI Windows";
 	groups[Act_SaveCurView ] = "Views";
 }
@@ -174,6 +180,10 @@ void ActionsMap::FillNames()
 	names[Act_ClearPls		  ] = "Clear Whole Playlist";
 	names[Act_DeleteCurFile	  ] = "Delete File at cursor";
 	names[Act_DeleteCur		  ] = "Delete at cursor";
+
+	//  queue
+	names[Act_SetTabAsQue	  ] = "Set tab as Queue";
+	names[Act_AddTrkToQue	  ] = "Add current track to Queue";
 
 
 	///  gui wnd  ----
@@ -347,6 +357,10 @@ void ActionsMap::FillMethods()
 
 	methods[Act_PrevPls			] = &App::PrevPls;
 	methods[Act_NextPls			] = &App::NextPls;
+
+	//  queue
+	methods[Act_SetTabAsQue		] = &App::SetTabAsQue;
+	methods[Act_AddTrkToQue		] = &App::AddTrkToQue;
 
 	
 	///  gui wnd  -----

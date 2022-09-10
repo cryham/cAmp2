@@ -118,7 +118,10 @@ void App::NextVis()			{  NextVisual();  }
 
 //  debug
 void App::Fps()				{  bFps = !bFps;      Osd("Fps: " + b2on(bFps));  }
-void App::Debug()			{  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  }
+void App::Debug()			{  bDebug = !bDebug;  Osd("Debug: " + b2on(bDebug));  
+	if (bDebug)
+		Pls().UpdateVis(1, false);
+}
 void App::Times()			{  ++eTimeTest;  if (eTimeTest >= TimT_ALL)  eTimeTest = TimT_Off;
 								Osd(string("Time test: ") + csTimesTest[eTimeTest]);  Redraw();  }
 //  view
@@ -151,6 +154,16 @@ void App::ClearPls()		{  Pls().Clear();  Osd("Playlist cleared.");  }
 void App::DeleteCurFile()	{  if (Pls().DeleteCurFile(plsId == plsPlId))  Osd("File deleted.");  }
 void App::DeleteCur()		{  Pls().DeleteCur();  }
 
+//  queue
+void App::SetTabAsQue()     {  queId = plsId;  Osd("Set tab as Queue.");  }
+void App::AddTrkToQue()     {
+	if (queId >= vPls.size())
+	{	queId = -1;  Osd("Queue outside, reset.");  return;  }
+	if (queId < 0){  Osd("Queue tab not set.");  return;  }
+	
+	Pls().InsertCurToPls(vPls[queId], Ins_End);
+	Osd("Added to Queue at end.");  }
+
 
 ///  gui wnd  -----
 void App::GUIMain()         {  WndOpen((EWndOpt)set.iLastWnd);  }
@@ -176,26 +189,16 @@ void App::GUIAppTest()      {  WndOpen(WO_AppTest);  }
 
 ///  views
 void App::SaveCurView()     {  UpdateView(false, set.iLastView);  }
-void App::LoadCurView0()    {  UpdateView(true, 0);  }
-void App::LoadCurView1()    {  UpdateView(true, 1);  }
-void App::LoadCurView2()    {  UpdateView(true, 2);  }
-void App::LoadCurView3()    {  UpdateView(true, 3);  }
-void App::LoadCurView4()    {  UpdateView(true, 4);  }
-void App::LoadCurView5()    {  UpdateView(true, 5);  }
-void App::LoadCurView6()    {  UpdateView(true, 6);  }
-void App::LoadCurView7()    {  UpdateView(true, 7);  }
-void App::LoadCurView8()    {  UpdateView(true, 8);  }
-void App::LoadCurView9()    {  UpdateView(true, 9);  }
-void App::LoadCurView10()   {  UpdateView(true, 10);  }
-void App::LoadCurView11()   {  UpdateView(true, 11);  }
-void App::LoadCurView12()   {  UpdateView(true, 12);  }
-void App::LoadCurView13()   {  UpdateView(true, 13);  }
-void App::LoadCurView14()   {  UpdateView(true, 14);  }
-void App::LoadCurView15()   {  UpdateView(true, 15);  }
-void App::LoadCurView16()   {  UpdateView(true, 16);  }
-void App::LoadCurView17()   {  UpdateView(true, 17);  }
-void App::LoadCurView18()   {  UpdateView(true, 18);  }
-void App::LoadCurView19()   {  UpdateView(true, 19);  }
+void App::LoadCurView0()    {  UpdateView(true, 0);  }      void App::LoadCurView10()   {  UpdateView(true, 10);  }
+void App::LoadCurView1()    {  UpdateView(true, 1);  }      void App::LoadCurView11()   {  UpdateView(true, 11);  }
+void App::LoadCurView2()    {  UpdateView(true, 2);  }      void App::LoadCurView12()   {  UpdateView(true, 12);  }
+void App::LoadCurView3()    {  UpdateView(true, 3);  }      void App::LoadCurView13()   {  UpdateView(true, 13);  }
+void App::LoadCurView4()    {  UpdateView(true, 4);  }      void App::LoadCurView14()   {  UpdateView(true, 14);  }
+void App::LoadCurView5()    {  UpdateView(true, 5);  }      void App::LoadCurView15()   {  UpdateView(true, 15);  }
+void App::LoadCurView6()    {  UpdateView(true, 6);  }      void App::LoadCurView16()   {  UpdateView(true, 16);  }
+void App::LoadCurView7()    {  UpdateView(true, 7);  }      void App::LoadCurView17()   {  UpdateView(true, 17);  }
+void App::LoadCurView8()    {  UpdateView(true, 8);  }      void App::LoadCurView18()   {  UpdateView(true, 18);  }
+void App::LoadCurView9()    {  UpdateView(true, 9);  }      void App::LoadCurView19()   {  UpdateView(true, 19);  }
 
 
 //  Key press

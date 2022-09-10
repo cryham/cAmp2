@@ -130,7 +130,7 @@ bool Playlist::Save()
 
 		of << '|'<< t.time <<'|'<< t.size;
 		of << '|'<< (int)t.hide << '|'<< (int)t.rate <<'|'<< (int)t.bookm;
-		of << '|'<< t.mod ? '1':'0';
+		of << '|'<< (t.mod ? '1':'0');
 		of << "\n";
 	}
 	of.close();
@@ -217,4 +217,28 @@ void Playlist::HideCur(EHide hide)
 		UpdateVis(0, true);
 	else
 		bDraw = true;
+}
+
+
+//  Insert cur trk to other pls
+//------------------------------------------------
+void Playlist::InsertCurToPls(Playlist& pls, const EInsert& where)
+{
+	// todo: if sel ..
+	const auto& id = visible[iCur];
+	if (id.dir)  return;
+	const auto& track = GetTrackAll(id.iAll);
+	Track dupl = Track(track);
+	
+	switch (where)
+	{
+	case Ins_End:  pls.tracks.push_back(dupl);   pls.End(2);  break;
+	case Ins_Top:  pls.tracks.push_front(dupl);  pls.Home(2);  break;
+	case Ins_Cursor:
+	{	const auto& idp = pls.visible[pls.iCur];
+		if (idp.dir)  return;
+		pls.tracks.insert(pls.tracks.begin() + idp.iAll, dupl);
+	}	break;
+	}
+	pls.UpdateVis(0, false);
 }

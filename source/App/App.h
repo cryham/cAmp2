@@ -44,13 +44,13 @@ protected:
 	int plsId = 0, plsPlId = 0,  // current, playing
 		plsSelId = -1,  // selected, copy from
 		nTabMov = -1;
+	
+	int queId = 0;  // queue, to add
+	EInsert queIns = Ins_End;
 
 	void updSelId(int clear);
 	void clrSelId();
 
-	void LoadState(), SaveState();  // set.st
-	bool Play(bool set);
-	
 	void TabNext(int i, bool row, bool ofs);
 	void TabMove(int n);
 	void TabNew(int m);
@@ -63,13 +63,16 @@ protected:
 	bool bFind = false;  // hide
 	int iFoundSee = 0, iFoundAll = 0;
 	void Find();
+	
+	bool Play(bool set);
 	void Save();
+	void LoadState(), SaveState();  // set.st
 
 	//  File Operations
-	void OpenDirFile(bool files, Playlist::EInsert where = Playlist::Ins_End);
+	void OpenDirFile(bool files, EInsert where = Ins_End);
 	int RenameRate(bool allPls=false);
 	void OpenBrowserUrl(std::string url);
-	
+
 	
 	///  Input
 	//------------------------------------------------
@@ -205,6 +208,8 @@ protected:  //  actions for key binds
 	
 	InsertDir(), InsertFiles(),
 	ClearPls(), DeleteCurFile(), DeleteCur(),
+
+	SetTabAsQue(), AddTrkToQue(),
 	
 	//  ----
 	GUIMain(), GUIAppAudio(), GUIAppKeys(),	GUIAppAbout(), GUIAppHelp(),

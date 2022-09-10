@@ -15,7 +15,7 @@ struct SetState
 	bool bPlay = false;
 	int iVolume = 500;
 
-	int idPls = 0, idPlay = 0;
+	int idPls = 0, idPlay = 0, idQue = -1;
 
 	bool bRepPls = true;
 	bool bDirNext = true;
