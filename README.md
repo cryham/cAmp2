@@ -8,6 +8,7 @@ Currently needs building from sources.
 * Gui with options in few own windows (for find, tab, etc.)
 * All program keys bindable
 * Visualization themes with options and sliders in Gui
+* Queue tab (set tab as Queue Alt-E, add to queue key: E)
 
 ### To do
 #### restore old
@@ -15,11 +16,10 @@ Currently needs building from sources.
 * move track, selection (critical), insert at cursor
 * hotkeys (how?)
 * threads for spectrogram, insert files, etc.
-* use shaders for visualizations
+* use shaders for visualizations (not very needed)
 
 #### add new
 
-* queue (set tab, add to, keys)
 * rename files, dirs
 * skins, xml
 

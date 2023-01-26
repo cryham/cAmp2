@@ -153,8 +153,8 @@ void Playlist::Clear()  // defaults
 	iLinVis = 10;  bDraw = true;
 	filterLow = Ratings::valMin;
 	filterHigh = Ratings::valMax;
-	bookm = 0;
-	hue = 0.f;  sat = 0.f;  val = 0.f;
+	// bookm = 0;  // no
+	// hue = 0.f;  sat = 0.f;  val = 0.f;
 	iFound = 0;
 }
 
@@ -225,6 +225,9 @@ void Playlist::HideCur(EHide hide)
 void Playlist::InsertCurToPls(Playlist& pls, const EInsert& where)
 {
 	// todo: if sel ..
+	// bool sel = HasSelected();
+	// if (sel)
+
 	const auto& id = visible[iCur];
 	if (id.dir)  return;
 	const auto& track = GetTrackAll(id.iAll);

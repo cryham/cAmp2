@@ -114,8 +114,6 @@ public:
 	void DuplicateCur();
 	void HideCur(EHide hide);
 	
-	void InsertCurToPls(Playlist& pls, const EInsert& where = Ins_End);
-
 	
 	//  Change  ----
 	void Bookm(bool pls, int add);  //  bookmarks
@@ -136,6 +134,8 @@ public:
 	void Unsel0(), UnSel();
 
 	//  Operation  ----
+	void InsertCurToPls(Playlist& pls, const EInsert& where = Ins_End);
+	// void MoveCurToPls(Playlist* pls /*= nullptr*/, int cur, const EInsert& where);
 	//  todo:  copy, move selected tracks, from other ..
 	#if 0
 	void Move1(int m, int npos);
