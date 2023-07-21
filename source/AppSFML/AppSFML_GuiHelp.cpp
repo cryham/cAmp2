@@ -28,7 +28,7 @@ void AppSFMLDraw::WndDraw_AppAbout()
 
 	Sep(10);
 	TextG("Project description");
-	auto url2 = "https://cryham.tuxfamily.org/portfolio/2010_camp/";
+	auto url2 = "https://cryham.tuxfamily.org/portfolio/2020-camp2/";
 	if (Button(url2))  OpenBrowserUrl(url2);
 	
 	PopItemWidth();
