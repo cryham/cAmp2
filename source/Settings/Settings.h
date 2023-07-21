@@ -39,7 +39,7 @@ struct SetFind
 class Settings : public Logger
 {
 public:
-	const static int version = 216;  // version of file
+	const static int version = 220;  // version of file
 
 	//  main  -----
 	Settings();
