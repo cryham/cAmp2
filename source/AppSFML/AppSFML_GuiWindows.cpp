@@ -10,7 +10,7 @@ using namespace sf;  using namespace std;  using namespace ImGui;
 //  const windows data
 const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 {
-	{"Main", "All Options",    420,400, Act_WO_Main},
+	{"Main", "All Options",    420,400, Act_WO_Main},  //-
 
 	{"Player", "Audio",        600,350, Act_WO_AppAudio},
 	{"Player", "Keyboard",     650,855, Act_WO_AppKeys},
@@ -21,7 +21,7 @@ const AppSFMLDraw::SWndConst AppSFMLDraw::wndConst[WO_ALL] =
 	{"View", "View Fonts",     600,750, Act_WO_ViewFonts},
 	{"View", "Visualization",  900,750, Act_WO_Vis},
 	{"View", "Visual Themes",  900,750, Act_WO_VisThemes},
-	{"View", "Times Coloring", 600,750, Act_WO_ViewTimes},
+	{"View", "Times Coloring", 600,750, Act_WO_ViewTimes},  //-
 
 	{"Tabs", "Current",        420,600, Act_WO_Tab},
 	{"Tabs", "All",            420,370, Act_WO_TabsAll},

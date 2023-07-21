@@ -83,5 +83,5 @@ void AppSFMLDraw::WndDraw_ViewFonts()
 //------------------------------------------------------------------
 void AppSFMLDraw::WndDraw_ViewTimes()
 {
-	
+	// todo
 }

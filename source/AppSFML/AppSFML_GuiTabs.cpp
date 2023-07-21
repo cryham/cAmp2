@@ -60,7 +60,7 @@ void AppSFMLDraw::WndDraw_TabsAll()
 	e = SliderInt("Tbo", &i, 0, vPls.size()-1, "");
 	if (e) {  t.ofs = i;  Redraw();  }
 
-	auto fp = [](int i){  return f2s(100.f*i/16.f,0,3) + " %%";  };
+	auto fp = [](int i){  return f2s(100.f*i/16.f,0,3) + " %";  };
 	Sep(10);
 	i = set.dimTabBck;  s = "Dim background: " + fp(i);  TextG(s);
 	e = SliderInt("Tdb", &i, 1, 16, "");
