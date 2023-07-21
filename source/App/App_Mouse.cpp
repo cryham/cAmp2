@@ -100,11 +100,11 @@ void App::MouseUpdate()
 			{	//  dec/inc tab x,y Num
 				if (ctrl) {  if (v.tabs.yRows > 1)  v.tabs.yRows--;  } else
 				if (shift){  if (v.tabs.xCols > 1)  v.tabs.xCols--;  }
-				else  {  TabNext(-1,0,1);  return;  }
+				else  {  TabNext(-1, alt ? 1:0, 1);  return;  }
 			}else
 				if (ctrl)  v.tabs.yRows++;  else
 				if (shift)  v.tabs.xCols++;
-				else  {  TabNext( 1,0,1);  return;  }
+				else  {  TabNext( 1, alt ? 1:0, 1);  return;  }
 			UpdDim();
 		}else
 		{	// change Tab
@@ -207,6 +207,8 @@ void App::MouseUpdate()
 					else
 						Pls().Move1(/*m*/0, dest);
 					#endif
+					Pls().MoveCurToPls(&Pls(), cur,
+						shift ? Ins_Top : ctrl ? Ins_End : Ins_Cursor);
 				}
 				else if (shift)  Pls().SelRange(cur, ctrl);  //  select range
 				else if (ctrl)  Pls().Select1(cur);  //  select 1

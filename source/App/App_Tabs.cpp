@@ -6,10 +6,11 @@
 void App::TabNext(int i, bool row, bool ofs)
 {
 	Pls().Save();
-	const ViewSet& v = set.view;
+	ViewSet& v = set.view;
 	const int l = vPls.size()-1;
 	if (ofs)
 	{	int d = row ? i : v.tabs.xCols*i;
+		v.tabs.ofs = std::max(0, v.tabs.ofs + d);
 		return;
 	}
 	//Pls().Save();
