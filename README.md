@@ -77,7 +77,7 @@ cmake ..
 make -j
 ```
 
-Then to start, just run the binary `cAmp2``.
+Then to start, just run the binary `cAmp2`.
 
 I tested on Debian 11 and 12 only.  
 
