@@ -207,8 +207,8 @@ void App::MouseUpdate()
 					else
 						Pls().Move1(/*m*/0, dest);
 					#endif
-					Pls().MoveCurToPls(&Pls(), cur,
-						shift ? Ins_Top : ctrl ? Ins_End : Ins_Cursor);
+					// Pls().MoveCurToPls(&Pls(), cur,  // todo
+					// 	shift ? Ins_Top : ctrl ? Ins_End : Ins_Cursor);
 				}
 				else if (shift)  Pls().SelRange(cur, ctrl);  //  select range
 				else if (ctrl)  Pls().Select1(cur);  //  select 1

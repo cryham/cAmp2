@@ -51,16 +51,21 @@ Basic setup (on Debian like):
 ```
 sudo apt-get install g++ git cmake make binutils
 ```
-Extras:
+Extras (not needed to build):
 ```
-sudo apt-get install gdb clangd
+sudo apt-get install gdb clangd clang
 ```
-Then install SFML:
+Then install SFML and Gtk3:
 ```
-sudo apt-get install libsfml-dev 
+sudo apt-get install libsfml-dev libgtk-3-dev
 ```
 
-To get sources:
+Now inside some folder, let's call it `dev/`.  
+To setup bass, download [bass24-linux.zip](https://www.un4seen.com/download.php?bass24-linux) (clicked Linux [there](https://www.un4seen.com/])).  
+I unpacked it into `dev/bass/` subdir, then created `x64` dir like so: `dev/bass/src/x64/` and copied `libbass.so` there, from `/bass/libs/x86_64/`.  
+These paths can be changed in `CMakeLists.txt`, top under `#  bass`
+
+To get sources, back inside `dev/`:
 ```
 git clone https://github.com/cryham/cAmp2.git cAmp2
 cd cAmp2
@@ -72,6 +77,10 @@ cmake ..
 make -j
 ```
 
-I'm testing on Debian 11 only.  
+Then to start, just run the binary `cAmp2``.
+
+I tested on Debian 11 and 12 only.  
+
 Building with CMake in Qt Creator is easy.  
-Building in VSCodium / VS Code is possible too, with some more effort. Needs C++ and CMake extensions at least.
+Building in VSCodium / VS Code is possible too, with some more effort.  
+More info in my [C++ guide](https://cryham.tuxfamily.org/cpp-guide/#IDEs) under IDEs.
