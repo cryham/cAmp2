@@ -1,8 +1,8 @@
 ## About cAmp2
 
-Reimplementation of my Audio Player [Crystal AMP (cAmp)](https://cryham.tuxfamily.org/portfolio/2010_camp/) for GNU/Linux (and Windows).  
+Reimplementation of my Audio Player [Crystal AMP (cAmp)](https://cryham.org/portfolio/2009-crystal-amp/) for GNU/Linux (and Windows).
 
-Website with some more description of [cAmp2 here](https://cryham.tuxfamily.org/portfolio/2020-camp2/).  
+Website with some more description of [cAmp2 here](https://cryham.org/portfolio/2020-camp2/).
 Screenshots [gallery here](https://photos.app.goo.gl/xKwuNdeLnh1d5NAW9).
 
 Currently needs building from sources.  
@@ -28,6 +28,7 @@ Mostly working well, with few new things, but still some missing.
 
 #### add new
 
+* refresh dir F6, or whole playlist, find missing file after rename
 * rename files, dirs
 * skins, xml
 
@@ -47,7 +48,7 @@ and also included in `libs/`:
 ## Building
 Uses C++17 and CMake to build.
 
-Basic setup (on Debian like):
+Basic setup (on Debian-based):
 ```
 sudo apt-get install g++ git cmake make binutils
 ```
@@ -83,4 +84,4 @@ I tested on Debian 11 and 12 only.
 
 Building with CMake in Qt Creator is easy.  
 Building in VSCodium / VS Code is possible too, with some more effort.  
-More info in my [C++ guide](https://cryham.tuxfamily.org/cpp-guide/#IDEs) under IDEs.
+More info in my [C++ guide](https://cryham.org/cpp-guide//#IDEs) under IDEs.

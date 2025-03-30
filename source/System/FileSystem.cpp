@@ -1,5 +1,5 @@
 //  Original file comes from Stunt Rally (pathmanager.cpp),
-//  under GPLv3, http://stuntrally.tuxfamily.org/
+//  under GPLv3, http://cryham.org/stuntrally/
 //  which came from Performous, under GPL, http://performous.org
 //  It now uses C++17 and no Boost
 
