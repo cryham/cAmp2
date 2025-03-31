@@ -32,3 +32,5 @@ bin*/
 #.vscode
 .cache
 CMakeLists.txt.user
+
+doxygen*
